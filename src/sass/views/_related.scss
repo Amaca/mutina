@@ -1,0 +1,15 @@
+.related {
+	padding: 0 0 120px 0;
+
+	@include sm-down {
+		padding: 0 0 80px 0;
+	}
+
+	.container--big {
+		max-width: calc(100% - #{$col-gutter});
+
+		@include sm-down {
+			max-width: calc(100% - #{$col-width});
+		}
+	}
+}

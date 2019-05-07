@@ -1,0 +1,12 @@
+.grid {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 100%;
+}
+
+.grid-col {
+	height: 100%;
+	width: $col-width;
+	background: rgba(red, 0.2);
+}

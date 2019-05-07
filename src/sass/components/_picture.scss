@@ -1,0 +1,78 @@
+@import "../mixins";
+
+.picture {
+	display: flex;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+
+	img,
+	video {
+		display: block;
+		width: 100%;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
+	}
+
+	&:not(.picture--full-height) {
+		@include aspect-clip(10, 6);
+
+		img,
+		video {
+			position: absolute;
+			object-fit: cover;
+		}
+	}
+
+	&.picture--cover {
+		@include aspect-clip(16, 8);
+	}
+}
+
+.picture+.picture__caption {
+	margin-top: 20px;
+}
+
+// .picture {
+// 	display: block;
+// 	position: relative;
+// 	overflow: hidden;
+// 	width: 100%;
+// 	padding-bottom: 61%;
+
+// 	img {
+// 		display: block;
+// 		position: absolute;
+// 		width: 100%;
+// 		height: 140%;
+// 		object-fit: cover;
+// 		top: 50%;
+// 		left: 50%;
+// 		transform: translateX(-50%) translateY(-50%);
+// 	}
+// }
+
+
+/*
+.picture {
+	display: block;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	padding-bottom: 61%;
+	// 330 / 534 * 100
+
+	img,
+	video {
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 140%;
+		object-fit: cover;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
+	}
+}
+*/

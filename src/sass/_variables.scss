@@ -1,0 +1,51 @@
+//css vars
+:root {
+	--color-white: #ffffff;
+	--color-dark: #121212;
+	--color-grey: #808080;
+	--font-primary: 'Futura LT Book', sans-serif;
+	--font-secondary: 'Futura LT Heavy', sans-serif;
+	--btn-radius: 0px;
+	--card-radius: 0px;
+	--bullet-size: 12px;
+	--max-width: 1440px;
+	--padding-primary: 40px;
+	--padding-secondary: 20px;
+}
+
+//grid
+$col-width: 8.333vw;
+$col-width-6: 50vw;
+$col-width-5: 41.666vw;
+$col-width-4: 33.333vw;
+$col-width-3: 25vw;
+$col-width-2: 16.666vw;
+$col-gutter: 4.166vw;
+$col-gutter-half: 2.083vw;
+
+// $col-width: 8.333%
+// $col-width-6:
+
+//layout
+$header-height: 81px;
+
+//main colors
+$white: var(--color-white);
+$dark: var(--color-dark);
+$grey: var(--color-grey);
+
+//font
+$font-size: 20px;
+$font-size-md: 16px;
+$font-size-sm: 14px;
+$font-primary: var(--font-primary);
+$font-secondary: var(--font-secondary);
+
+//buttons
+$btn-radius: var(--btn-radius);
+$card-radius: var(--card-radius);
+$bullet-size: var(--bullet-size);
+
+//animations
+$expo: cubic-bezier(1.000, 0.000, 0.000, 1.000);
+$smooth: cubic-bezier(.49, .06, .21, .98);

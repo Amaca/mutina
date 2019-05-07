@@ -1,0 +1,29 @@
+.downloads {
+	padding: 0 0 120px 0;
+
+	@include sm-down {
+		padding: 0 0 80px 0;
+	}
+}
+
+.downloads__list {
+
+	&>a,
+	&>div {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+}
+
+.downloads__item {
+	padding: 20px;
+	border-bottom: 2px solid $dark;
+}
+
+.downloads__button {
+	font-family: $font-secondary;
+	font-size: 0.7rem;
+	text-transform: uppercase;
+}
