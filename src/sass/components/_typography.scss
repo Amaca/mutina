@@ -2,18 +2,18 @@
 
 body,
 html {
-	font-size: $font-size;
-	font-weight: 200;
-	line-height: 32px;
-	color: $dark;
+    @include font($style:book);
+    font-size: $font-size;
+    line-height: 32px;
+    color: $dark;
 
-	@include md-down {
-		font-size: $font-size-md;
-	}
+    @include md-down {
+        font-size: $font-size-md;
+    }
 
-	@include sm-down {
-		font-size: $font-size-sm;
-	}
+    @include sm-down {
+        font-size: $font-size-sm;
+    }
 }
 
 h1,
@@ -28,37 +28,37 @@ h6,
 .h4,
 .h5,
 .h6 {
-	margin: 0;
+    margin: 0;
 }
 
 .h1 {
-	font-size: 3.2rem;
+    font-size: 3.2rem;
 }
 
 .h2 {
-	font-size: 2.9rem;
+    font-size: 2.9rem;
 
-	@include md-down {
-		font-size: 2.6rem;
-	}
+    @include md-down {
+        font-size: 2.6rem;
+    }
 
-	@include sm-down {
-		font-size: 2.3rem;
-	}
+    @include sm-down {
+        font-size: 2.3rem;
+    }
 }
 
 .h3 {
-	font-size: 1.6rem;
+    font-size: 1.6rem;
 
-	@include sm-down {
-		font-size: 1.4rem;
-	}
+    @include sm-down {
+        font-size: 1.4rem;
+    }
 }
 
 .h4 {
-	font-size: 1.2rem;
+    font-size: 1.2rem;
 }
 
 .h5 {
-	font-size: 1.1rem;
+    font-size: 1.1rem;
 }

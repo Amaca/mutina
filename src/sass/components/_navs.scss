@@ -1,9 +1,9 @@
 .nav {
-	font-family: $font-secondary;
-	font-size: 0.9rem;
+    @include font($style:heavy);
+    font-size: 0.9rem;
 
-	a {
-		color: $dark;
-		text-transform: uppercase;
-	}
+    a {
+        color: $dark;
+        text-transform: uppercase;
+    }
 }

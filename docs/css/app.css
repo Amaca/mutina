@@ -1,27 +1,4 @@
-@font-face {
-  font-family: 'Futura LT Regular';
-  font-style: normal;
-  font-weight: normal;
-  src: local("Futura LT Regular"), url("../assets/font/FuturaLT.woff") format("woff"); }
-
-@font-face {
-  font-family: 'Futura LT Bold';
-  font-style: normal;
-  font-weight: normal;
-  src: local("Futura LT Bold"), url("../assets/font/FuturaLT-Bold.woff") format("woff"); }
-
-@font-face {
-  font-family: 'Futura LT Book';
-  font-style: normal;
-  font-weight: normal;
-  src: local("Futura LT Book"), url("../assets/font/FuturaLT-Book.woff") format("woff"); }
-
-@font-face {
-  font-family: 'Futura LT Heavy';
-  font-style: normal;
-  font-weight: normal;
-  src: local("Futura LT Heavy"), url("../assets/font/FuturaLT-Heavy.woff") format("woff"); }
-
+@import url("https://use.typekit.net/tcl0ywe.css");
 /*
 @function pow($number, $exp) {
     $value: 1;
@@ -44,8 +21,6 @@
   --color-white: #ffffff;
   --color-dark: #121212;
   --color-grey: #808080;
-  --font-primary: 'Futura LT Book', sans-serif;
-  --font-secondary: 'Futura LT Heavy', sans-serif;
   --btn-radius: 0px;
   --card-radius: 0px;
   --bullet-size: 12px;
@@ -62,6 +37,9 @@ body {
   overflow-x: hidden; }
 
 body {
+  font-family: 'futura-pt', sans-serif;
+  font-style: normal;
+  font-weight: 400;
   background: var(--color-white);
   color: var(--color-dark);
   -webkit-overflow-scrolling: touch; }
@@ -226,8 +204,10 @@ body {
 */
 body,
 html {
+  font-family: 'futura-pt', sans-serif;
+  font-style: normal;
+  font-weight: 400;
   font-size: 20px;
-  font-weight: 200;
   line-height: 32px;
   color: var(--color-dark); }
   @media (max-width: 991px) {
@@ -350,13 +330,17 @@ a {
       font-size: 0.8rem;
       text-align: center; } }
   .btn--primary {
-    font-family: var(--font-secondary);
+    font-family: 'futura-pt', sans-serif;
+    font-style: normal;
+    font-weight: 700;
     border: 2px solid var(--color-dark);
     padding: 25px 38px;
     text-transform: uppercase; }
 
 .nav {
-  font-family: var(--font-secondary);
+  font-family: 'futura-pt', sans-serif;
+  font-style: normal;
+  font-weight: 700;
   font-size: 0.9rem; }
   .nav a {
     color: var(--color-dark);
@@ -382,17 +366,32 @@ a {
 */
 .cover {
   margin-bottom: 130px; }
+  @media (max-width: 767px) {
+    .cover {
+      margin-bottom: 80px; } }
   .cover .h1 {
     font-size: 4.5rem; }
+    @media (max-width: 767px) {
+      .cover .h1 {
+        font-size: 3.8rem; } }
   .cover .eyelet {
     margin-bottom: 40px;
     text-transform: uppercase;
     font-size: 0.65rem;
-    font-family: var(--font-secondary); }
+    font-family: 'futura-pt', sans-serif;
+    font-style: normal;
+    font-weight: 700; }
+    @media (max-width: 767px) {
+      .cover .eyelet {
+        font-size: 0.8rem;
+        margin-bottom: 10px; } }
   .cover--text {
     text-align: center; }
     .cover--text .box {
       padding: 100px 0; }
+      @media (max-width: 767px) {
+        .cover--text .box {
+          padding: 50px 0; } }
 
 /*
 @function pow($number, $exp) {
@@ -462,6 +461,22 @@ a {
       height: 100%;
       -o-object-fit: cover;
          object-fit: cover; }
+    @media (max-width: 767px) {
+      .picture.picture--cover {
+        position: relative;
+        width: 100%;
+        padding-top: 133.33333%;
+        overflow: hidden; }
+        .picture.picture--cover img,
+        .picture.picture--cover video,
+        .picture.picture--cover canvas {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          -o-object-fit: cover;
+             object-fit: cover; } }
 
 .picture + .picture__caption {
   margin-top: 20px; }
@@ -753,6 +768,25 @@ fieldset {
   font-weight: 600;
   color: #db001d; }
 
+.slider .swiper-wrapper {
+  -webkit-transition-timing-function: cubic-bezier(0, 0.97, 0.43, 1);
+          transition-timing-function: cubic-bezier(0, 0.97, 0.43, 1); }
+
+.slider .swiper-slide img {
+  max-width: 100%; }
+
+.slider--carousel .swiper-container {
+  width: 100%;
+  height: 100%; }
+
+.slider--carousel .swiper-slide {
+  width: auto;
+  text-align: center;
+  font-size: 18px;
+  background: #fff; }
+  .slider--carousel .swiper-slide img {
+    height: 700px; }
+
 .page {
   display: block;
   position: fixed;
@@ -825,7 +859,9 @@ fieldset {
     padding: 0;
     margin: 0; }
   .footer .h5 {
-    font-family: var(--font-secondary);
+    font-family: 'futura-pt', sans-serif;
+    font-style: normal;
+    font-weight: 700;
     margin-bottom: 30px; }
     @media (max-width: 767px) {
       .footer .h5 {
@@ -931,7 +967,9 @@ fieldset {
           padding: 8px 0px; } }
     .footer__primary .form button {
       text-transform: uppercase;
-      font-family: var(--font-secondary);
+      font-family: 'futura-pt', sans-serif;
+      font-style: normal;
+      font-weight: 700;
       padding: 8px 10px; }
       @media (max-width: 767px) {
         .footer__primary .form button {
@@ -1261,7 +1299,9 @@ fieldset {
   border-bottom: 2px solid var(--color-dark); }
 
 .downloads__button {
-  font-family: var(--font-secondary);
+  font-family: 'futura-pt', sans-serif;
+  font-style: normal;
+  font-weight: 700;
   font-size: 0.7rem;
   text-transform: uppercase; }
 

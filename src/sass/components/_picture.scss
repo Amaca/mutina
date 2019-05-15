@@ -1,37 +1,41 @@
 @import "../mixins";
 
 .picture {
-	display: flex;
-	position: relative;
-	overflow: hidden;
-	width: 100%;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
 
-	img,
-	video {
-		display: block;
-		width: 100%;
-		top: 50%;
-		left: 50%;
-		transform: translateX(-50%) translateY(-50%);
-	}
+    img,
+    video {
+        display: block;
+        width: 100%;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
 
-	&:not(.picture--full-height) {
-		@include aspect-clip(10, 6);
+    &:not(.picture--full-height) {
+        @include aspect-clip(10, 6);
 
-		img,
-		video {
-			position: absolute;
-			object-fit: cover;
-		}
-	}
+        img,
+        video {
+            position: absolute;
+            object-fit: cover;
+        }
+    }
 
-	&.picture--cover {
-		@include aspect-clip(16, 8);
-	}
+    &.picture--cover {
+        @include aspect-clip(16, 8);
+
+        @include sm-down {
+            @include aspect-clip(3, 4);
+        }
+    }
 }
 
 .picture+.picture__caption {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
 // .picture {

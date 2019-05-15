@@ -2,51 +2,51 @@
 [link-to],
 button,
 a {
-	cursor: pointer;
-	@include transition();
+    cursor: pointer;
+    @include transition();
 
-	&,
-	&:hover,
-	&:active,
-	&:focus,
-	&:visited {
-		text-decoration: none;
-	}
+    &,
+    &:hover,
+    &:active,
+    &:focus,
+    &:visited {
+        text-decoration: none;
+    }
 }
 
 button {
-	background: transparent;
-	padding: 0;
-	border: none;
-	outline: 0;
-	-webkit-appearance: none;
+    background: transparent;
+    padding: 0;
+    border: none;
+    outline: 0;
+    -webkit-appearance: none;
 
-	&:focus,
-	&:active {
-		outline: none;
-	}
+    &:focus,
+    &:active {
+        outline: none;
+    }
 }
 
 [type=reset],
 [type=submit],
 button,
 html [type=button] {
-	-webkit-appearance: none;
+    -webkit-appearance: none;
 }
 
 .btn {
-	display: inline-block;
-	line-height: 1;
-	vertical-align: middle;
+    display: inline-block;
+    line-height: 1;
+    vertical-align: middle;
 
-	@include transition();
+    @include transition();
 
-	i,
-	span {
-		height: auto;
-		line-height: 1;
-		vertical-align: middle;
-	}
+    i,
+    span {
+        height: auto;
+        line-height: 1;
+        vertical-align: middle;
+    }
 }
 
 a,
@@ -54,33 +54,33 @@ a,
 [type=submit],
 button,
 .btn {
-	&:disabled {
-		cursor: auto;
-		pointer-events: none;
-	}
+    &:disabled {
+        cursor: auto;
+        pointer-events: none;
+    }
 }
 
 a {
-	color: var(--color-dark);
+    color: var(--color-dark);
 
-	&:hover {
-		color: black;
-	}
+    &:hover {
+        color: black;
+    }
 }
 
 .btn {
-	font-size: 0.65rem;
+    font-size: 0.65rem;
 
-	@include sm-down {
-		display: block;
-		font-size: 0.8rem;
-		text-align: center;
-	}
+    @include sm-down {
+        display: block;
+        font-size: 0.8rem;
+        text-align: center;
+    }
 
-	&--primary {
-		font-family: $font-secondary;
-		border: 2px solid $dark;
-		padding: 25px 38px;
-		text-transform: uppercase;
-	}
+    &--primary {
+        @include font($style:heavy);
+        border: 2px solid $dark;
+        padding: 25px 38px;
+        text-transform: uppercase;
+    }
 }

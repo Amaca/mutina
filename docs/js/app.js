@@ -12036,6 +12036,8 @@ var _dom = _interopRequireDefault(require("./shared/dom"));
 
 var _rect = _interopRequireDefault(require("./shared/rect"));
 
+var _sliders = _interopRequireDefault(require("./shared/sliders"));
+
 var _utils = _interopRequireDefault(require("./shared/utils"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -12113,6 +12115,8 @@ function () {
     value: function onPageInit() {
       this.appears = _appears.default.init();
       Splitting();
+
+      _sliders.default.init();
     }
   }, {
     key: "addListeners",
@@ -12322,7 +12326,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/appears":311,"./shared/dom":312,"./shared/rect":313,"./shared/utils":314,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],311:[function(require,module,exports){
+},{"./shared/appears":311,"./shared/dom":312,"./shared/rect":313,"./shared/sliders":314,"./shared/utils":315,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],311:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12506,7 +12510,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":314}],313:[function(require,module,exports){
+},{"./utils":315}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12626,6 +12630,126 @@ function () {
 exports.default = Rect;
 
 },{}],314:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* jshint esversion: 6 */
+var Sliders =
+/*#__PURE__*/
+function () {
+  function Sliders() {
+    _classCallCheck(this, Sliders);
+  }
+
+  _createClass(Sliders, null, [{
+    key: "init",
+    value: function init() {
+      var sliders = document.querySelectorAll('.swiper-container');
+
+      if (sliders !== null) {
+        Array.prototype.forEach.call(sliders, function (slider, i) {
+          var parentWrap = slider.parentNode; //Slider Carousel
+
+          if (parentWrap.classList.contains('slider--carousel') === true) {
+            //Init Swiper
+            var options = {
+              grabCursor: true,
+              watchOverflow: true,
+              centeredSlides: true,
+              loop: true,
+              //initialSlide: 1,
+              //slidesPerView: 1.8,
+              slidesPerView: 'auto',
+              spaceBetween: 60,
+              freeMode: true,
+              freeModeMomentumRatio: 1,
+              freeModeMomentumVelocityRatio: 0.3,
+              speed: 400 // breakpoints: {
+              //     575: {
+              //         slidesPerView: 1,
+              //         spaceBetween: 15,
+              //     },
+              //     768: {
+              //         slidesPerView: 2,
+              //         spaceBetween: 30
+              //     }
+              // }
+              //Cover Slider
+
+            };
+          } else if (parentWrap.classList.contains('cover__slider') === true) {// //init Dots
+            // let sliderDots = 'swiper-pagination-' + i;
+            // let dotsContainer = document.createElement('div');
+            // dotsContainer.className = sliderDots;
+            // parentWrap.appendChild(dotsContainer);
+            // //Init Swiper
+            // const options = {
+            //     direction: 'horizontal',
+            //     loop: true,
+            //     spaceBetween: 0,
+            //     dynamicBullets: true,
+            //     watchOverflow: true,
+            //     parallax: true,
+            //     speed: 1000,
+            //     slidesPerView: 1,
+            //     autoplay: {
+            //         delay: 4000,
+            //     },
+            //     allowTouchMove: true,
+            //     pagination: {
+            //         el: '.' + sliderDots,
+            //         clickable: true
+            //     },
+            //     navigation: {
+            //         nextEl: '.swiper-button-next',
+            //         prevEl: '.swiper-button-prev',
+            //     },
+            //     on: {
+            //         init: function () {
+            //             animationStart();
+            //         },
+            //         transitionEnd: function () {
+            //             animationStart();
+            //         }
+            //     },
+            // }
+            // function animationStart() {
+            //     var othersChar = document.querySelectorAll('.swiper-slide .char'),
+            //         otherWords = document.querySelectorAll('.swiper-slide .text span'),
+            //         activeChar = document.querySelectorAll('.swiper-slide-active .char'),
+            //         activeWord = document.querySelectorAll('.swiper-slide-active .text span');
+            //     TweenMax.set(othersChar, { yPercent: +100, scaleY: 0 });
+            //     TweenMax.set(otherWords, { yPercent: -100 });
+            //     TweenMax.staggerTo(activeChar, 1.5, { yPercent: -100, scaleY: 1, ease: Power3.easeInOut }, 0.05);
+            //     TweenMax.staggerTo(activeChar, 1.5, { scaleY: 1, delay: .3, ease: Power3.easeInOut }, 0.05);
+            //     TweenMax.staggerTo(activeWord, 1.0, { delay: .5, yPercent: +100, ease: Power3.easeInOut });
+            // }
+          }
+
+          try {
+            new Swiper(slider, options);
+          } catch (e) {}
+        });
+      }
+    }
+  }]);
+
+  return Sliders;
+}();
+
+exports.default = Sliders;
+
+},{}],315:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

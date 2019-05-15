@@ -1,188 +1,188 @@
 .footer {
-	border-top: 2px solid $dark;
-	padding: 90px 0 40px 0;
+    border-top: 2px solid $dark;
+    padding: 90px 0 40px 0;
 
-	.container--big {
-		@include sm-down {
-			max-width: none;
-		}
-	}
+    .container--big {
+        @include sm-down {
+            max-width: none;
+        }
+    }
 
-	ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
-	.h5 {
-		font-family: $font-secondary;
-		margin-bottom: 30px;
+    .h5 {
+        @include font($style:heavy);
+        margin-bottom: 30px;
 
-		@include sm-down {
-			margin-bottom: 10px;
-		}
-	}
+        @include sm-down {
+            margin-bottom: 10px;
+        }
+    }
 }
 
 .footer__primary {
-	font-size: 0.88rem;
-	display: flex;
-	flex-direction: row;
-	margin-bottom: 116px;
+    font-size: 0.88rem;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 116px;
 
-	@include sm-down {
-		display: block;
-		padding: 0 $col-width;
-		margin-bottom: 80px;
-	}
+    @include sm-down {
+        display: block;
+        padding: 0 $col-width;
+        margin-bottom: 80px;
+    }
 
-	.footer__nav {
-		flex: 1 0 auto;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
+    .footer__nav {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
 
-		.footer__item {
-			flex: 1 0 auto;
+        .footer__item {
+            flex: 1 0 auto;
 
-			@include sm-down {
-				flex: 0 0 50%;
-				max-width: 50%;
-				margin-bottom: 30px;
-			}
-		}
+            @include sm-down {
+                flex: 0 0 50%;
+                max-width: 50%;
+                margin-bottom: 30px;
+            }
+        }
 
-		.footer__item--logo {
-			flex: 0 0 calc(#{$col-width-2} + #{$col-gutter});
-			max-width: calc(#{$col-width-2} + #{$col-gutter});
+        .footer__item--logo {
+            flex: 0 0 calc(#{$col-width-2} + #{$col-gutter});
+            max-width: calc(#{$col-width-2} + #{$col-gutter});
 
-			@include sm-down {
-				flex: 0 0 50%;
-				max-width: 50%;
-			}
+            @include sm-down {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
 
-			img {
-				max-width: 70px;
-			}
-		}
+            img {
+                max-width: 70px;
+            }
+        }
 
-		.h5 {
-			@include sm-down {
-				display: none;
-			}
-		}
-	}
+        .h5 {
+            @include sm-down {
+                display: none;
+            }
+        }
+    }
 
-	.footer__newsletter {
-		flex: 0 0 calc(#{$col-width-4} + #{$col-gutter});
-		max-width: calc(#{$col-width-4} + #{$col-gutter});
+    .footer__newsletter {
+        flex: 0 0 calc(#{$col-width-4} + #{$col-gutter});
+        max-width: calc(#{$col-width-4} + #{$col-gutter});
 
-		@include sm-down {
-			max-width: none;
-			margin-top: 20px;
-		}
-	}
+        @include sm-down {
+            max-width: none;
+            margin-top: 20px;
+        }
+    }
 
-	.form {
-		position: relative;
-		z-index: 1;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
+    .form {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
 
-		&:after {
-			content: '';
-			position: absolute;
-			z-index: 1;
-			bottom: 0;
-			left: 0;
-			height: 2px;
-			width: 100%;
-			background: $dark;
+        &:after {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background: $dark;
 
-			@include sm-down {
-				background: #808080;
-			}
-		}
+            @include sm-down {
+                background: #808080;
+            }
+        }
 
-		input {
-			border: 0;
-			padding: 8px 10px;
-			flex: 1 0 auto;
+        input {
+            border: 0;
+            padding: 8px 10px;
+            flex: 1 0 auto;
 
-			@include sm-down {
-				padding: 8px 0px;
-			}
-		}
+            @include sm-down {
+                padding: 8px 0px;
+            }
+        }
 
-		button {
-			text-transform: uppercase;
-			font-family: $font-secondary;
-			padding: 8px 10px;
+        button {
+            text-transform: uppercase;
+            @include font($style:heavy);
+            padding: 8px 10px;
 
-			@include sm-down {
-				display: none;
-			}
-		}
-	}
+            @include sm-down {
+                display: none;
+            }
+        }
+    }
 }
 
 .footer__secondary {
-	font-size: 0.75rem;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 
-	@include sm-down {
-		flex-direction: column;
-		padding: 50px 0 0 0;
-		border-top: 2px solid $dark;
-	}
+    @include sm-down {
+        flex-direction: column;
+        padding: 50px 0 0 0;
+        border-top: 2px solid $dark;
+    }
 
-	.footer__copyright {
-		flex: 0 0 25%;
-		max-width: 25%;
+    .footer__copyright {
+        flex: 0 0 25%;
+        max-width: 25%;
 
-		@include sm-down {
-			flex: 0 0 auto;
-			max-width: 100%;
-			text-align: center;
-			order: 2;
-		}
-	}
+        @include sm-down {
+            flex: 0 0 auto;
+            max-width: 100%;
+            text-align: center;
+            order: 2;
+        }
+    }
 
-	.footer__privacy {
-		flex: 0 0 50%;
-		max-width: 50%;
-		text-align: center;
+    .footer__privacy {
+        flex: 0 0 50%;
+        max-width: 50%;
+        text-align: center;
 
-		@include sm-down {
-			flex: 0 0 auto;
-			max-width: 100%;
-			text-align: center;
-			order: 1;
-		}
+        @include sm-down {
+            flex: 0 0 auto;
+            max-width: 100%;
+            text-align: center;
+            order: 1;
+        }
 
-		ul {
-			margin: 0 -15px;
+        ul {
+            margin: 0 -15px;
 
-			li {
-				padding: 0 15px;
-				display: inline-block;
-			}
-		}
-	}
+            li {
+                padding: 0 15px;
+                display: inline-block;
+            }
+        }
+    }
 
-	.footer__credits {
-		flex: 0 0 25%;
-		max-width: 25%;
-		text-align: right;
+    .footer__credits {
+        flex: 0 0 25%;
+        max-width: 25%;
+        text-align: right;
 
-		@include sm-down {
-			flex: 0 0 auto;
-			max-width: 100%;
-			text-align: center;
-			order: 3;
-		}
-	}
+        @include sm-down {
+            flex: 0 0 auto;
+            max-width: 100%;
+            text-align: center;
+            order: 3;
+        }
+    }
 }

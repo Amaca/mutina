@@ -1,16 +1,14 @@
 //css vars
 :root {
-	--color-white: #ffffff;
-	--color-dark: #121212;
-	--color-grey: #808080;
-	--font-primary: 'Futura LT Book', sans-serif;
-	--font-secondary: 'Futura LT Heavy', sans-serif;
-	--btn-radius: 0px;
-	--card-radius: 0px;
-	--bullet-size: 12px;
-	--max-width: 1440px;
-	--padding-primary: 40px;
-	--padding-secondary: 20px;
+    --color-white: #ffffff;
+    --color-dark: #121212;
+    --color-grey: #808080;
+    --btn-radius: 0px;
+    --card-radius: 0px;
+    --bullet-size: 12px;
+    --max-width: 1440px;
+    --padding-primary: 40px;
+    --padding-secondary: 20px;
 }
 
 //grid
@@ -38,8 +36,6 @@ $grey: var(--color-grey);
 $font-size: 20px;
 $font-size-md: 16px;
 $font-size-sm: 14px;
-$font-primary: var(--font-primary);
-$font-secondary: var(--font-secondary);
 
 //buttons
 $btn-radius: var(--btn-radius);
