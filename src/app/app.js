@@ -6,6 +6,7 @@ import barba from '@barba/core';
 import "css-vars-ponyfill";
 import Appears from './shared/appears';
 import Dom from './shared/dom';
+import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
 import Sliders from "./shared/sliders";
 import Utils from './shared/utils';
@@ -73,9 +74,14 @@ export default class App {
         this.appears = Appears.init();
         Splitting();
         Sliders.init();
+        Navigation.init();
     }
 
     addListeners() {
+        window.addEventListener('resize', () => {
+            this.onResize();
+        });
+
         window.addEventListener('scroll', Utils.throttle(() => {
             this.onScroll();
         }, 1000 / 25));
@@ -96,9 +102,11 @@ export default class App {
             width: window.innerWidth,
             height: window.innerHeight,
         });
+        Navigation.closeNav();
     }
 
     onScroll(e) {
+        Navigation.closeNav();
         const scrollTop = Dom.scrollTop();
         // fastscroll mobile
         if (Dom.fastscroll) {

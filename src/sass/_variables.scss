@@ -9,6 +9,7 @@
     --max-width: 1440px;
     --padding-primary: 40px;
     --padding-secondary: 20px;
+    --close-nav-speed: 800ms;
 }
 
 //grid
@@ -26,6 +27,7 @@ $col-gutter-half: 2.083vw;
 
 //layout
 $header-height: 81px;
+$header-height-mobile: 60px;
 
 //main colors
 $white: var(--color-white);

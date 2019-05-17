@@ -12034,6 +12034,8 @@ var _appears = _interopRequireDefault(require("./shared/appears"));
 
 var _dom = _interopRequireDefault(require("./shared/dom"));
 
+var _navigation = _interopRequireDefault(require("./shared/navigation"));
+
 var _rect = _interopRequireDefault(require("./shared/rect"));
 
 var _sliders = _interopRequireDefault(require("./shared/sliders"));
@@ -12117,12 +12119,17 @@ function () {
       Splitting();
 
       _sliders.default.init();
+
+      _navigation.default.init();
     }
   }, {
     key: "addListeners",
     value: function addListeners() {
       var _this = this;
 
+      window.addEventListener('resize', function () {
+        _this.onResize();
+      });
       window.addEventListener('scroll', _utils.default.throttle(function () {
         _this.onScroll();
       }, 1000 / 25));
@@ -12142,10 +12149,14 @@ function () {
         width: window.innerWidth,
         height: window.innerHeight
       });
+
+      _navigation.default.closeNav();
     }
   }, {
     key: "onScroll",
     value: function onScroll(e) {
+      _navigation.default.closeNav();
+
       var scrollTop = _dom.default.scrollTop(); // fastscroll mobile
 
 
@@ -12326,7 +12337,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/appears":311,"./shared/dom":312,"./shared/rect":313,"./shared/sliders":314,"./shared/utils":315,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],311:[function(require,module,exports){
+},{"./shared/appears":311,"./shared/dom":312,"./shared/navigation":313,"./shared/rect":314,"./shared/sliders":315,"./shared/utils":316,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],311:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12510,7 +12521,200 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":315}],313:[function(require,module,exports){
+},{"./utils":316}],313:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* jshint esversion: 6 */
+var body = document.querySelector('body');
+var header = document.querySelector('header');
+var parents = document.querySelectorAll('.nav__parent');
+var subnavOpen = false;
+
+var Navigation =
+/*#__PURE__*/
+function () {
+  function Navigation() {
+    _classCallCheck(this, Navigation);
+  }
+
+  _createClass(Navigation, null, [{
+    key: "init",
+    value: function init() {
+      var closeNavSlow = getComputedStyle(document.documentElement).getPropertyValue('--close-nav-speed');
+      var closeNavFast = 400;
+      parents.forEach(function (parent) {
+        parent.addEventListener('click', function (e) {
+          var activeNav = e.path[3]; //seleziono ul li attiva appena cliccata
+
+          var subnavItemHeight = activeNav.querySelector('.subnav__item').clientHeight;
+          var height = subnavItemHeight + subnavItemHeight / 2 + 'px';
+          var thisParent = parent.parentNode;
+
+          if (!subnavOpen) {
+            //se i sottomenu sono chiusi
+            document.documentElement.style.setProperty('--close-nav-speed', closeNavSlow);
+            body.classList.add('subnav-open');
+            thisParent.classList.add('active');
+            activeNav.querySelector('.subnav').style.height = height;
+            activeNav.querySelector('.subnav__wrapper').style.top = subnavItemHeight / 4 + 'px';
+            Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
+
+            subnavOpen = true;
+          } else {
+            if (thisParent.classList.contains('active')) {
+              //se un sottomenu è da aprire, verifico prima se ho gia aperto un sottomenu
+              document.documentElement.style.setProperty('--close-nav-speed', closeNavSlow);
+              body.classList.remove('subnav-open');
+              document.querySelectorAll('.subnav').forEach(function (x) {
+                return x.style.height = '0';
+              });
+              document.querySelectorAll('.nav ul li.active').forEach(function (x) {
+                return x.classList.remove('active');
+              });
+              subnavOpen = false;
+            } else {
+              //un sottomenu è stato già aperto
+              document.documentElement.style.setProperty('--close-nav-speed', closeNavFast + 'ms');
+              document.querySelectorAll('.subnav').forEach(function (x) {
+                return x.style.height = '0';
+              });
+              document.querySelectorAll('.nav ul li.active').forEach(function (x) {
+                return x.classList.remove('active');
+              });
+              setTimeout(function (x) {
+                //timeout per definite l'animazione di chiusura del sottomenu gia aperto per mostrare il successivo
+                body.classList.add('subnav-open');
+                thisParent.classList.add('active');
+                activeNav.querySelector('.subnav').style.height = height;
+                activeNav.querySelector('.subnav__wrapper').style.top = subnavItemHeight / 4 + 'px';
+                Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
+              }, closeNavFast);
+              subnavOpen = true;
+            }
+          }
+
+          e.preventDefault();
+        });
+      });
+    }
+  }, {
+    key: "closeNav",
+    value: function closeNav() {
+      //chiudo il sottomenu
+      if (body.classList.contains('subnav-open')) {
+        body.classList.remove('subnav-open');
+        document.querySelectorAll('.nav ul li').forEach(function (x) {
+          return x.classList.remove('active');
+        });
+        document.querySelectorAll('.subnav').forEach(function (x) {
+          return x.style.height = '0';
+        });
+        subnavOpen = false;
+      }
+    }
+  }, {
+    key: "closeOnOutsideClick",
+    value: function closeOnOutsideClick() {
+      //chiudo il sottomenu se clicco fuori
+      document.addEventListener('click', function (e) {
+        if (!header.contains(e.target)) {
+          Navigation.closeNav();
+        }
+      });
+    } // static splitButtons() {
+    //     const buttons = document.querySelectorAll('.btn--split');
+    //     buttons.forEach(button => {
+    //         const words = Array.from(button.children).filter(function (item) {
+    //             return item.matches('.word');
+    //         });
+    //         words.forEach(word => {
+    //             let text = document.createElement('span');
+    //             text.classList.add('full-text');
+    //             text.innerHTML = word.getAttribute('data-word');
+    //             word.appendChild(text);
+    //         });
+    //     });
+    // }
+    // static mainSearch() {
+    //     let searchButton = document.querySelector('.nav__search'),
+    //         closeSearch = document.querySelector('.main-search__close'),
+    //         mobileCloseSearch = document.querySelector('.mobile-search__close'),
+    //         mobileButton = document.querySelector('.mobile-search__icon');
+    //     searchButton.addEventListener('click', (e) => {
+    //         body.classList.add('main-search-open');
+    //         closePanelFilter();
+    //         e.preventDefault();
+    //     })
+    //     closeSearch.addEventListener('click', (e) => {
+    //         body.classList.remove('main-search-open');
+    //         e.preventDefault();
+    //     })
+    //     mobileButton.addEventListener('click', (e) => {
+    //         body.classList.add('main-search-open');
+    //         e.preventDefault();
+    //     })
+    //     mobileCloseSearch.addEventListener('click', (e) => {
+    //         body.classList.remove('main-search-open');
+    //         e.preventDefault();
+    //     })
+    // }
+
+  }]);
+
+  return Navigation;
+}(); // class Toggle {
+//     constructor(node) {
+//         this.node = node;
+//         this.onClick = (event) => {
+//             this.onClick_(event);
+//         };
+//         node.addEventListener('click', this.onClick);
+//         console.log(this);
+//         /*
+//         {
+//             constructor: function
+//             onClick: function
+//             close: function
+//         } 
+//         */
+//     }
+//     onClick_(event) {
+//         console.log('onClick');
+//         Toggle.items.forEach(x => x === this ? x.open() : x.close());
+//     }
+//     close() {
+//     }
+//     destroy() {
+//         this.node.removeEventListener('click', this.onClick);
+//     }
+//     static init() {
+//         if (Toggle.items) {
+//             Toggle.items.forEach(x => x.destroy());
+//         }
+//         Toggle.items = [...document.querySelectorAll('[toggle]')].map(x => new Toggle(x));
+//     }
+// }
+// console.log(Toggle);
+// {
+//     init: function
+//     items: [Toggle, Toggle, Toggle, Toggle]
+// } 
+
+
+exports.default = Navigation;
+
+},{}],314:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12629,7 +12833,7 @@ function () {
 
 exports.default = Rect;
 
-},{}],314:[function(require,module,exports){
+},{}],315:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12667,26 +12871,21 @@ function () {
               watchOverflow: true,
               centeredSlides: true,
               loop: true,
-              //initialSlide: 1,
-              //slidesPerView: 1.8,
               slidesPerView: 'auto',
               spaceBetween: 60,
               freeMode: true,
               freeModeMomentumRatio: 1,
               freeModeMomentumVelocityRatio: 0.3,
-              speed: 400 // breakpoints: {
-              //     575: {
-              //         slidesPerView: 1,
-              //         spaceBetween: 15,
-              //     },
-              //     768: {
-              //         slidesPerView: 2,
-              //         spaceBetween: 30
-              //     }
-              // }
-              //Cover Slider
-
-            };
+              speed: 400,
+              breakpoints: {
+                576: {
+                  spaceBetween: 20
+                },
+                768: {
+                  spaceBetween: 40
+                }
+              }
+            }; //Cover Slider
           } else if (parentWrap.classList.contains('cover__slider') === true) {// //init Dots
             // let sliderDots = 'swiper-pagination-' + i;
             // let dotsContainer = document.createElement('div');
@@ -12749,7 +12948,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],315:[function(require,module,exports){
+},{}],316:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

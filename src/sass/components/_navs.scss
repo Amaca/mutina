@@ -1,9 +1,164 @@
 .nav {
     @include font($style:heavy);
-    font-size: 0.9rem;
+    font-size: 0.7rem;
 
     a {
         color: $dark;
         text-transform: uppercase;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 -27px;
+
+        @include md-down {
+            margin: 0 -15px;
+        }
+
+        @include sm-down {
+            display: none;
+        }
+
+        li {
+            display: inline-block;
+            padding: 0 27px;
+
+            @include md-down {
+                margin: 0 -15px;
+            }
+
+            &>a {
+                transition: color .3s cubic-bezier(0, 0.97, 0.43, 1);
+            }
+
+            &.active {
+                &>a {
+                    color: #a6a6a6;
+                }
+            }
+        }
+    }
+}
+
+
+// SUB NAV ANIMATION SETTINGS:
+$subnav-start: all 1000ms cubic-bezier(0, 0.97, 0.43, 1);
+$subnav-end: all var(--close-nav-speed) cubic-bezier(0, 0.97, 0.43, 1) 50ms;
+$subnav-item-start: all 800ms cubic-bezier(0, 0.97, 0.43, 1) 185ms;
+$subnav-item-end: all var(--close-nav-speed) cubic-bezier(0, 0.97, 0.43, 1);
+$subnav-item-top: 25px;
+$subnav-bg-transition: all var(--close-nav-speed) cubic-bezier(0, 0.97, 0.43, 1);
+
+// body.subnav-open ul li.active .subnav .subnav__wrapper {
+//     @for $i from 1 to 10 {
+//         a:nth-child(#{$i}) {
+//             transition-delay: $i * 0.06s;
+//         }
+//     }
+// }
+
+//subnav
+.subnav {
+    width: 100%;
+    height: 0;
+    background: $white;
+    //border-bottom: 2px solid $dark;
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+    top: calc(#{$header-height} - 2px);
+    left: 0;
+    transition: $subnav-end;
+    overflow: hidden;
+
+    &:after {
+        content: '';
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        height: 2px;
+        background: $dark;
+        bottom: 0;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    .container--big {
+        height: 100%;
+    }
+
+    .subnav__wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin: 0 -30px;
+        position: relative;
+        z-index: 1;
+
+        @include sm-down {
+            margin: 0 -15px;
+        }
+
+        a {
+            position: relative;
+            top: $subnav-item-top;
+            opacity: 0;
+            transition: $subnav-item-end;
+        }
+    }
+
+    .subnav__wrapper>a {
+        flex: 0 0 25%;
+        max-width: 25%;
+        padding: 0 30px;
+        display: block;
+
+        @include sm-down {
+            padding: 0 15px;
+        }
+    }
+}
+
+body {
+
+    &:after {
+        content: '';
+        width: 100vw;
+        height: 130vh;
+        background: black;
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: $subnav-bg-transition;
+    }
+}
+
+//subnav open
+body.subnav-open {
+
+    &:after {
+        opacity: .3;
+    }
+
+    ul li.active {
+
+        .subnav {
+            pointer-events: all;
+            transition: $subnav-start;
+        }
+
+        .subnav__wrapper {
+            a {
+                top: 0;
+                opacity: 1;
+                transition: $subnav-item-start;
+            }
+        }
     }
 }

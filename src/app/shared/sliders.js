@@ -19,25 +19,21 @@ export default class Sliders {
                         watchOverflow: true,
                         centeredSlides: true,
                         loop: true,
-                        //initialSlide: 1,
-                        //slidesPerView: 1.8,
                         slidesPerView: 'auto',
                         spaceBetween: 60,
                         freeMode: true,
                         freeModeMomentumRatio: 1,
                         freeModeMomentumVelocityRatio: 0.3,
                         speed: 400,
-                        // breakpoints: {
-                        //     575: {
-                        //         slidesPerView: 1,
-                        //         spaceBetween: 15,
-                        //     },
-                        //     768: {
-                        //         slidesPerView: 2,
-                        //         spaceBetween: 30
-                        //     }
-                        // }
-                    }
+                        breakpoints: {
+                            576: {
+                                spaceBetween: 20,
+                            },
+                            768: {
+                                spaceBetween: 40,
+                            }
+                        }
+                    };
 
                     //Cover Slider
                 } else if (parentWrap.classList.contains('cover__slider') === true) {

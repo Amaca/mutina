@@ -32,24 +32,103 @@
 
     <header class="header">
         <div class="container--big">
+            <div class="header__logo">
+                <a href="#"><img src="assets/img/logo.svg"></a>
+            </div>
             <div class="header__wrapper">
                 <nav class="nav nav--primary">
                     <ul>
-                        <li><a href="/prodotto.html">design</a></li>
-                        <li><a href="/listing.html">art</a></li>
-                        <li><a href="/listing.html">journal</a></li>
+                        <li>
+                            <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>Design</a>
+                            <div class="subnav">
+                                <div class="container--big">
+                                    <div class="subnav__wrapper">
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-01.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Collections</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-02.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Designers</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-03.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Accents</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-04.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">In use</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>Art</a>
+                            <div class="subnav">
+                                <div class="container--big">
+                                    <div class="subnav__wrapper">
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-04.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Collections</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-03.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Designers</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-02.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Accents</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-01.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">In use</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li><a href="/listing.html" class="btn--split" data-splitting>journal</a></li>
                     </ul>
                 </nav>
-            </div>
-            <div class="header__logo">
-                <a href="#"><img src="assets/img/logo.svg" /></a>
-            </div>
-            <div class="header__wrapper">
                 <nav class="nav nav--secondary">
                     <ul>
-                        <li><a href="/prodotto.html">about</a></li>
-                        <li><a href="/listing.html">dealers</a></li>
-                        <li><a href="/listing.html">samples</a></li>
+                        <li><a href="/prodotto.html" class="btn--split" data-splitting>about</a></li>
+                        <li><a href="/listing.html" class="btn--split" data-splitting>dealers</a></li>
+                        <li style="display: none"><button>search</button></li>
+                        <li><a href="/listing.html" class="btn--split" data-splitting>samples</a></li>
                     </ul>
                 </nav>
             </div>
@@ -68,7 +147,7 @@
                         </div>
                     </div>
                     <div class="picture picture--cover" data-appear>
-                        <img src="/assets/img/cover-01.jpg" alt="" data-parallax="3">
+                        <img src="assets/img/cover-01.jpg" alt="" data-parallax="3">
                     </div>
                 </section>
                 <section class="editorial">
@@ -112,7 +191,7 @@
                         <div class="container--big">
                             <div class="editorial__box-picture" data-appear>
                                 <div class="picture">
-                                    <img src="/assets/img/editorial-horizontal-full-02.jpg" alt="" data-parallax="5">
+                                    <img src="assets/img/editorial-horizontal-full-02.jpg" alt="" data-parallax="5">
                                 </div>
                                 <div class="picture__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                             </div>
@@ -135,7 +214,7 @@
                                 </div>
                                 <div class="editorial__box-picture" data-appear>
                                     <div class="picture picture--full-height">
-                                        <img src="/assets/img/editorial-vertical-02.jpg" alt="" data-parallax="5">
+                                        <img src="assets/img/editorial-vertical-02.jpg" alt="" data-parallax="5">
                                     </div>
                                     <div class="picture__caption">Azulej Grigio – combination, cubo</div>
                                 </div>
@@ -146,7 +225,7 @@
                         <div class="container--big">
                             <div class="editorial__box-picture" data-appear>
                                 <div class="picture">
-                                    <img src="/assets/img/editorial-horizontal-full-01.jpg" alt="" data-parallax="5">
+                                    <img src="assets/img/editorial-horizontal-full-01.jpg" alt="" data-parallax="5">
                                 </div>
                                 <div class="picture__caption">Azulej Nero – Azulej Nero / trevo, trama, estrela</div>
                             </div>
@@ -157,28 +236,40 @@
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
-                                <img src="/assets/img/slider-carousel-01.jpg" alt="">
-                                <div class="picture__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-01.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                             </div>
                             <div class="swiper-slide">
-                                <img src="/assets/img/slider-carousel-02.jpg" alt="">
-                                <div class="picture__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-02.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                             </div>
                             <div class="swiper-slide">
-                                <img src="/assets/img/slider-carousel-01.jpg" alt="">
-                                <div class="picture__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-01.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                             </div>
                             <div class="swiper-slide">
-                                <img src="/assets/img/slider-carousel-02.jpg" alt="">
-                                <div class="picture__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-02.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                             </div>
                             <div class="swiper-slide">
-                                <img src="/assets/img/slider-carousel-01.jpg" alt="">
-                                <div class="picture__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-01.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                             </div>
                             <div class="swiper-slide">
-                                <img src="/assets/img/slider-carousel-02.jpg" alt="">
-                                <div class="picture__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-02.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                             </div>
                         </div>
                     </div>
@@ -215,7 +306,7 @@
                                 </div>
                                 <div class="editorial__box-picture">
                                     <div class="picture picture--full-height" data-appear>
-                                        <img src="/assets/img/editorial-vertical-01.jpg" alt="" data-parallax="5">
+                                        <img src="assets/img/editorial-vertical-01.jpg" alt="" data-parallax="5">
                                     </div>
                                 </div>
                             </div>
@@ -255,7 +346,7 @@
                             <div class="specs__secondary" data-appear>
                                 <a href="#" class="specs__picture">
                                     <div class="picture picture--full-height">
-                                        <img src="/assets/img/specs-thumb-01.jpg" alt="" data-parallax="5">
+                                        <img src="assets/img/specs-thumb-01.jpg" alt="" data-parallax="5">
                                     </div>
                                 </a>
                                 <a href="#" class="btn btn--primary">View all colors & combinations</a>
@@ -303,7 +394,7 @@
                             <a href="#">
                                 <div class="listing__item" data-appear>
                                     <div class="picture">
-                                        <img src="/assets/img/related-thumb-01.jpg" alt="" data-parallax="8">
+                                        <img src="assets/img/related-thumb-01.jpg" alt="" data-parallax="8">
                                     </div>
                                     <div class="box">
                                         <h3 class="h3">Puzzle by Barber & Osgerby</h3>
@@ -313,7 +404,7 @@
                             <a href="#">
                                 <div class="listing__item" data-appear>
                                     <div class="picture">
-                                        <img src="/assets/img/related-thumb-02.jpg" alt="" data-parallax="8">
+                                        <img src="assets/img/related-thumb-02.jpg" alt="" data-parallax="8">
                                     </div>
                                     <div class="box">
                                         <h3 class="h3">Bas-Relief by Patricia Urquiola</h3>
