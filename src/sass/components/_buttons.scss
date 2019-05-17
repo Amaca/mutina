@@ -77,13 +77,6 @@ a {
         text-align: center;
     }
 
-    &--primary {
-        @include font($style:heavy);
-        border: 2px solid $dark;
-        padding: 25px 38px;
-        text-transform: uppercase;
-    }
-
     &--split {
         display: inline-block;
         line-height: 1;
@@ -130,8 +123,14 @@ a {
                 width: 100%;
                 left: 0;
             }
-
         }
     }
 
+    &--primary {
+        @include font($style:heavy);
+        @extend .btn--split;
+        border: 2px solid $dark;
+        padding: 25px 38px;
+        text-transform: uppercase;
+    }
 }
