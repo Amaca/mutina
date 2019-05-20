@@ -12551,6 +12551,15 @@ function () {
   _createClass(Navigation, null, [{
     key: "init",
     value: function init() {
+      if (window.innerWidth > 768) {
+        Navigation.desktopNav();
+      } else {
+        Navigation.mobileNav();
+      }
+    }
+  }, {
+    key: "desktopNav",
+    value: function desktopNav() {
       var closeNavSlow = getComputedStyle(document.documentElement).getPropertyValue('--close-nav-speed');
       var closeNavFast = 400;
       parents.forEach(function (parent) {
@@ -12604,6 +12613,33 @@ function () {
             }
           }
 
+          e.preventDefault();
+        });
+      });
+    }
+  }, {
+    key: "mobileNav",
+    value: function mobileNav() {
+      var toggle = document.querySelector('.nav__toggle');
+      var backs = document.querySelectorAll('.subnav__mobile-back');
+      var actualSubNav;
+      toggle.addEventListener('click', function (e) {
+        if (body.classList.contains('subnav-mobile-open')) {
+          body.classList.remove('subnav-mobile-open');
+        } else {
+          body.classList.add('subnav-mobile-open');
+        }
+      });
+      parents.forEach(function (parent) {
+        parent.addEventListener('click', function (e) {
+          actualSubNav = parent.parentNode;
+          actualSubNav.classList.add('active');
+          e.preventDefault();
+        });
+      });
+      backs.forEach(function (back) {
+        back.addEventListener('click', function (e) {
+          actualSubNav.classList.remove('active');
           e.preventDefault();
         });
       });

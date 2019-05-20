@@ -32,16 +32,39 @@
 
     <header class="header">
         <div class="container--big">
+            <a class="nav__toggle">
+                <svg class="nav__open">
+                    <use xlink:href="#svg-open"></use>
+                </svg>
+                <svg class="nav__close">
+                    <use xlink:href="#svg-close"></use>
+                </svg>
+            </a>
             <div class="header__logo">
                 <a href="#"><img src="assets/img/logo.svg"></a>
             </div>
+            <a class="nav__counter">
+                0
+            </a>
             <div class="header__wrapper">
+                <div class="header__search"><input type="text" placeholder="Search for anything"></div>
                 <nav class="nav nav--primary">
                     <ul>
                         <li>
-                            <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>Design</a>
+                            <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>
+                                Design
+                                <svg>
+                                    <use xlink:href="#svg-next"></use>
+                                </svg>
+                            </a>
                             <div class="subnav">
                                 <div class="container--big">
+                                    <a href="#" class="subnav__mobile-back">
+                                        <svg>
+                                            <use xlink:href="#svg-prev"></use>
+                                        </svg>
+                                        <span>Design</span>
+                                    </a>
                                     <div class="subnav__wrapper">
                                         <a href="#">
                                             <div class="subnav__item">
@@ -80,9 +103,17 @@
                             </div>
                         </li>
                         <li>
-                            <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>Art</a>
+                            <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>
+                                Art
+                                <svg>
+                                    <use xlink:href="#svg-next"></use>
+                                </svg>
+                            </a>
                             <div class="subnav">
                                 <div class="container--big">
+                                    <a href="#" class="subnav__mobile-back">
+                                        Art
+                                    </a>
                                     <div class="subnav__wrapper">
                                         <a href="#">
                                             <div class="subnav__item">
@@ -120,15 +151,65 @@
                                 </div>
                             </div>
                         </li>
-                        <li><a href="/listing.html" class="btn--split" data-splitting>journal</a></li>
+                        <li>
+                            <a href="/listing.html" class="btn--split" data-splitting>
+                                journal
+                                <svg>
+                                    <use xlink:href="#svg-next"></use>
+                                </svg>
+                            </a>
+                            <div class="subnav">
+                                <div class="container--big">
+                                    <a href="#" class="subnav__mobile-back">
+                                        journal
+                                    </a>
+                                    <div class="subnav__wrapper">
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-03.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Collections</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-02.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Designers</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-01.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Accents</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-04.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">In use</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
                 </nav>
                 <nav class="nav nav--secondary">
                     <ul>
-                        <li><a href="/prodotto.html" class="btn--split" data-splitting>about</a></li>
-                        <li><a href="/listing.html" class="btn--split" data-splitting>dealers</a></li>
-                        <li style="display: none"><button>search</button></li>
-                        <li><a href="/listing.html" class="btn--split" data-splitting>samples</a></li>
+                        <li><a href="/prodotto.html" class="btn--split" data-splitting>About</a></li>
+                        <li><a href="/listing.html" class="btn--split" data-splitting>Dealers</a></li>
+                        <li class="nav__mobile-hidden" style="display: none"><button>Search</button></li>
+                        <li class="nav__mobile-hidden"><a href="/listing.html" class="btn--split" data-splitting>Samples</a></li>
+                        <li class="nav__mobile-only"><a href="/prodotto.html" class="btn--split">Press</a></li>
+                        <li class="nav__mobile-only"><a href="/prodotto.html" class="btn--split">Contacts</a></li>
                     </ul>
                 </nav>
             </div>
@@ -142,7 +223,7 @@
                 <section class="cover cover--text">
                     <div class="container--big">
                         <div class="box">
-                            <div class="eyelet" data-splitting data-appear>All collections</div>
+                            <div class="eyelet" data-splitting data-appear><a href="#">All collections</a></div>
                             <h1 class="h1" data-splitting data-appear>Azulej by Patricia Urquiola</h1>
                         </div>
                     </div>
@@ -479,6 +560,33 @@
     <div class="preloader">
         <img class="brand" src="assets/img/logo.svg" />
     </div>
+
+
+    <svg display="none" width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true">
+        <defs>
+            <symbol id="svg-close" viewbox="0 0 16 16">
+                <polygon points="15.82,14.45 9.45,8.08 15.96,1.58 14.45,0.06 7.94,6.57 1.57,0.2 0.06,1.71 6.43,8.08 0.2,14.31 1.71,15.83 
+                    7.94,9.6 14.31,15.96 " />
+                <line class="st0" x1="1.35" y1="1.31" x2="14.7" y2="14.65" />
+                <line class="st0" x1="14.5" y1="1.35" x2="1.33" y2="14.52" />
+            </symbol>
+            <symbol id="svg-open" viewbox="0 0 16 16">
+                <g>
+                    <rect y="-0.05" width="16" height="1.7" />
+                    <rect y="14.35" width="16" height="1.7" />
+                    <rect y="7.33" width="16" height="1.7" />
+                </g>
+                <line class="st0" x1="1.35" y1="1.31" x2="14.7" y2="14.65" />
+                <line class="st0" x1="14.5" y1="1.35" x2="1.33" y2="14.52" />
+            </symbol>
+            <symbol id="svg-next" viewBox="0 0 8.01 16">
+                <polygon points="2.69,0 0.12,1.68 4.36,8.01 0,14.21 2.49,16 8.01,7.99 " />
+            </symbol>
+            <symbol id="svg-prev" viewBox="0 0 8.01 16">
+                <polygon points="5.32,16 7.89,14.32 3.65,7.99 8.01,1.79 5.52,0 0,8.01 " />
+            </symbol>
+        </defs>
+    </svg>
 
     <script src="js/vendors.js"></script>
     <script src="js/app.js"></script>

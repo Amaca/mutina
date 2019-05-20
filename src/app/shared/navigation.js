@@ -1,5 +1,6 @@
 /* jshint esversion: 6 */
 
+
 const body = document.querySelector('body');
 const header = document.querySelector('header');
 const parents = document.querySelectorAll('.nav__parent');
@@ -8,6 +9,14 @@ let subnavOpen = false;
 export default class Navigation {
 
     static init() {
+        if (window.innerWidth > 768) {
+            Navigation.desktopNav();
+        } else {
+            Navigation.mobileNav();
+        }
+    }
+
+    static desktopNav() {
         const closeNavSlow = getComputedStyle(document.documentElement).getPropertyValue('--close-nav-speed');
         const closeNavFast = 400;
 
@@ -47,6 +56,35 @@ export default class Navigation {
                         subnavOpen = true;
                     }
                 }
+                e.preventDefault();
+            });
+        });
+    }
+
+    static mobileNav() {
+        const toggle = document.querySelector('.nav__toggle');
+        const backs = document.querySelectorAll('.subnav__mobile-back');
+        let actualSubNav;
+
+        toggle.addEventListener('click', (e) => {
+            if (body.classList.contains('subnav-mobile-open')) {
+                body.classList.remove('subnav-mobile-open');
+            } else {
+                body.classList.add('subnav-mobile-open');
+            }
+        });
+
+        parents.forEach(parent => {
+            parent.addEventListener('click', (e) => {
+                actualSubNav = parent.parentNode;
+                actualSubNav.classList.add('active');
+                e.preventDefault();
+            });
+        });
+
+        backs.forEach(back => {
+            back.addEventListener('click', (e) => {
+                actualSubNav.classList.remove('active');
                 e.preventDefault();
             });
         });
