@@ -12624,22 +12624,40 @@ function () {
       var backs = document.querySelectorAll('.subnav__mobile-back');
       var actualSubNav;
       toggle.addEventListener('click', function (e) {
-        if (body.classList.contains('subnav-mobile-open')) {
-          body.classList.remove('subnav-mobile-open');
+        if (body.classList.contains('nav-mobile-open')) {
+          var subNavActive = false;
+          parents.forEach(function (x) {
+            if (x.parentNode.classList.contains('active')) {
+              x.parentNode.classList.remove('active');
+              subNavActive = true;
+            }
+          });
+
+          if (!subNavActive) {
+            body.classList.remove('nav-mobile-open');
+          } else {
+            setTimeout(function () {
+              body.classList.remove('nav-mobile-open');
+            }, 420);
+          }
         } else {
-          body.classList.add('subnav-mobile-open');
+          body.classList.add('nav-mobile-open');
         }
       });
       parents.forEach(function (parent) {
         parent.addEventListener('click', function (e) {
           actualSubNav = parent.parentNode;
           actualSubNav.classList.add('active');
+          actualSubNav.style.zIndex = 2;
           e.preventDefault();
         });
       });
       backs.forEach(function (back) {
         back.addEventListener('click', function (e) {
           actualSubNav.classList.remove('active');
+          setTimeout(function () {
+            actualSubNav.style.zIndex = 1;
+          }, 500);
           e.preventDefault();
         });
       });

@@ -29,7 +29,6 @@
 </head>
 
 <body>
-
     <header class="header">
         <div class="container--big">
             <a class="nav__toggle">
@@ -47,21 +46,26 @@
                 0
             </a>
             <div class="header__wrapper">
-                <div class="header__search"><input type="text" placeholder="Search for anything"></div>
+                <div class="header__search">
+                    <input type="text" placeholder="Search for anything">
+                    <svg>
+                        <use xlink:href="#svg-search"></use>
+                    </svg>
+                </div>
                 <nav class="nav nav--primary">
                     <ul>
                         <li>
                             <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>
                                 Design
                                 <svg>
-                                    <use xlink:href="#svg-next"></use>
+                                    <use xlink:href="#svg-arrow-right"></use>
                                 </svg>
                             </a>
                             <div class="subnav">
                                 <div class="container--big">
                                     <a href="#" class="subnav__mobile-back">
                                         <svg>
-                                            <use xlink:href="#svg-prev"></use>
+                                            <use xlink:href="#svg-arrow-left"></use>
                                         </svg>
                                         <span>Design</span>
                                     </a>
@@ -106,12 +110,15 @@
                             <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>
                                 Art
                                 <svg>
-                                    <use xlink:href="#svg-next"></use>
+                                    <use xlink:href="#svg-arrow-right"></use>
                                 </svg>
                             </a>
                             <div class="subnav">
                                 <div class="container--big">
                                     <a href="#" class="subnav__mobile-back">
+                                        <svg>
+                                            <use xlink:href="#svg-arrow-left"></use>
+                                        </svg>
                                         Art
                                     </a>
                                     <div class="subnav__wrapper">
@@ -155,12 +162,15 @@
                             <a href="/listing.html" class="btn--split" data-splitting>
                                 journal
                                 <svg>
-                                    <use xlink:href="#svg-next"></use>
+                                    <use xlink:href="#svg-arrow-right"></use>
                                 </svg>
                             </a>
                             <div class="subnav">
                                 <div class="container--big">
                                     <a href="#" class="subnav__mobile-back">
+                                        <svg>
+                                            <use xlink:href="#svg-arrow-left"></use>
+                                        </svg>
                                         journal
                                     </a>
                                     <div class="subnav__wrapper">
@@ -206,8 +216,14 @@
                     <ul>
                         <li><a href="/prodotto.html" class="btn--split" data-splitting>About</a></li>
                         <li><a href="/listing.html" class="btn--split" data-splitting>Dealers</a></li>
-                        <li class="nav__mobile-hidden" style="display: none"><button>Search</button></li>
-                        <li class="nav__mobile-hidden"><a href="/listing.html" class="btn--split" data-splitting>Samples</a></li>
+                        <li class="nav__mobile-hidden">
+                            <button>
+                                <svg>
+                                    <use xlink:href="#svg-search"></use>
+                                </svg>
+                            </button>
+                        </li>
+                        <li class="nav__mobile-hidden"><a href="/listing.html" class="btn--split">Samples</a></li>
                         <li class="nav__mobile-only"><a href="/prodotto.html" class="btn--split">Press</a></li>
                         <li class="nav__mobile-only"><a href="/prodotto.html" class="btn--split">Contacts</a></li>
                     </ul>
@@ -223,7 +239,14 @@
                 <section class="cover cover--text">
                     <div class="container--big">
                         <div class="box">
-                            <div class="eyelet" data-splitting data-appear><a href="#">All collections</a></div>
+                            <div class="eyelet" data-splitting data-appear>
+                                <a href="#">
+                                    <svg>
+                                        <use xlink:href="#svg-arrow-left"></use>
+                                    </svg>
+                                    All collections
+                                </a>
+                            </div>
                             <h1 class="h1" data-splitting data-appear>Azulej by Patricia Urquiola</h1>
                         </div>
                     </div>
@@ -565,25 +588,32 @@
     <svg display="none" width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true">
         <defs>
             <symbol id="svg-close" viewbox="0 0 16 16">
-                <polygon points="15.82,14.45 9.45,8.08 15.96,1.58 14.45,0.06 7.94,6.57 1.57,0.2 0.06,1.71 6.43,8.08 0.2,14.31 1.71,15.83 
-                    7.94,9.6 14.31,15.96 " />
-                <line class="st0" x1="1.35" y1="1.31" x2="14.7" y2="14.65" />
-                <line class="st0" x1="14.5" y1="1.35" x2="1.33" y2="14.52" />
+                <path d="M16,14.5L14.5,16L8,9.5L1.5,16L0,14.5L6.5,8L0,1.5L1.5,0L8,6.5L14.5,0L16,1.5L9.5,8L16,14.5z" />
             </symbol>
             <symbol id="svg-open" viewbox="0 0 16 16">
-                <g>
-                    <rect y="-0.05" width="16" height="1.7" />
-                    <rect y="14.35" width="16" height="1.7" />
-                    <rect y="7.33" width="16" height="1.7" />
-                </g>
-                <line class="st0" x1="1.35" y1="1.31" x2="14.7" y2="14.65" />
-                <line class="st0" x1="14.5" y1="1.35" x2="1.33" y2="14.52" />
+                <path d="M0,8V6.4h16V8H0z M0,0h16v1.6H0V0z M16,14.4H0v-1.6h16V14.4z" />
             </symbol>
-            <symbol id="svg-next" viewBox="0 0 8.01 16">
-                <polygon points="2.69,0 0.12,1.68 4.36,8.01 0,14.21 2.49,16 8.01,7.99 " />
+            <symbol id="svg-next" viewBox="0 0 8.9 16">
+                <path d="M0,0.9L0.9,0l8,8l-8,8L0,15.1L7.1,8L0,0.9z" />
             </symbol>
-            <symbol id="svg-prev" viewBox="0 0 8.01 16">
-                <polygon points="5.32,16 7.89,14.32 3.65,7.99 8.01,1.79 5.52,0 0,8.01 " />
+            <symbol id="svg-prev" viewBox="0 0 8.9 16">
+                <path d="M8.9,15.1L8,16L0,8l8-8l0.9,0.9L1.8,8L8.9,15.1z" />
+            </symbol>
+            <symbol id="svg-arrow-left" viewBox="0 0 8.4 16">
+                <path class="st0" d="M3.3,8.1l5.1,6.3l-2,1.6L0,8.1L6.4,0l2,1.6L3.3,8.1z" />
+            </symbol>
+            <symbol id="svg-arrow-right" viewBox="0 0 8.4 16">
+                <path class="st0" d="M5.1,7.9L0,1.6L2,0l6.4,7.9L2,16l-2-1.6L5.1,7.9z" />
+            </symbol>
+            <symbol id="svg-arrow-top" viewBox="0 0  16 8.1">
+                <path class="st0" d="M1.9,0L0,2.9l8,5.3l8-5.3L14.1,0L8,4.1L1.9,0z" />
+            </symbol>
+            <symbol id="svg-arrow-bottom" viewBox="0 0 16 8.2">
+                <path class="st0" d="M14.1,8.2L16,5.3L8,0L0,5.3l1.9,2.9L8,4.1L14.1,8.2z" />
+            </symbol>
+            <symbol id="svg-search" viewBox="0 0 16 16">
+                <path class="st0" d="M9.3,13.5c-3.7,0-6.7-3-6.7-6.8C2.5,3,5.5,0,9.2,0S16,3,16,6.8C16,10.5,13,13.5,9.3,13.5z M9.2,1.7
+                    c-2.8,0-5,2.3-5,5c0,2.8,2.2,5,5,5s5-2.3,5-5S12,1.7,9.2,1.7z M4.2,13.3L1.6,16L0,14.4l2.7-2.7C3.1,12.4,3.6,12.9,4.2,13.3z" />
             </symbol>
         </defs>
     </svg>

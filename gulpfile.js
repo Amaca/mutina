@@ -419,13 +419,13 @@ function serveTask() {
         port: 6001,
         fallback: 'index.html',
         open: true,
-        livereload: false,
+        livereload: true,
         directoryListing: false,
     }, configuration.options.server || {});
     return src(options.src)
         .pipe(webserver(options));
 }
-
+ 
 // UTILS
 function getCompilers(ext) {
     const options = configuration.targets[target];
