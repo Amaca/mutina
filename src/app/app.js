@@ -6,6 +6,7 @@ import barba from '@barba/core';
 import "css-vars-ponyfill";
 import Appears from './shared/appears';
 import Dom from './shared/dom';
+import Anchors from './shared/anchors';
 import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
 import Sliders from "./shared/sliders";
@@ -21,6 +22,9 @@ export default class App {
     init() {
         const body = document.querySelector('body');
         const page = document.querySelector('.page');
+        const header = document.querySelector('.header');
+        const smooth = 'cubic-bezier(0, 0.97, 0.43, 1)';
+        const anchorPanel = document.querySelector('.anchors');
         const parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
         Dom.detect(body);
         const mouse = {
@@ -29,12 +33,35 @@ export default class App {
         };
         this.body = body;
         this.page = page;
+        this.header = header;
+        this.smooth= smooth;
+        this.anchorPanel = anchorPanel;
         this.appears = [];
         this.parallaxes = parallaxes;
         this.onResize();
         this.addListeners();
         this.transitions();
         this.onPageInit();
+
+        Element.prototype.scrollIntoView_ = Element.prototype.scrollIntoView;
+		Element.prototype.scrollIntoView = function() {
+			if (Dom.fastscroll) {
+				return this.scrollIntoView_.apply(this, arguments);
+			} else {
+				let rect = Rect.fromNode(this);
+				const scrollTop = Dom.scrollTop();
+				window.scrollTo(0, Math.max(0, scrollTop + rect.top - 120));
+			}
+		};
+
+        // const anchor = document.querySelector('.anchors li.active');
+
+        // anchor.addEventListener('click', e => {
+        //     const designer = document.querySelector('[data-anchor="Designer"]');    
+        //     window.scrollTo(0, designer.offsetTop);
+        //     e.preventDefault();
+        // });
+
         body.classList.add('ready');
     }
 
@@ -75,6 +102,7 @@ export default class App {
         Splitting();
         Sliders.init();
         Navigation.init();
+        Anchors.init(document.querySelector('.anchors__wrapper'));
     }
 
     addListeners() {
@@ -103,11 +131,15 @@ export default class App {
             height: window.innerHeight,
         });
         Navigation.closeNav();
+        Navigation.closeSearch();
     }
 
     onScroll(e) {
-        Navigation.closeNav();
         const scrollTop = Dom.scrollTop();
+        
+        Navigation.closeNav();
+        Navigation.closeSearch();
+
         // fastscroll mobile
         if (Dom.fastscroll) {
             const newTop = Math.round(scrollTop * 10) / 5;
@@ -125,10 +157,28 @@ export default class App {
                 Dom.scrolling = false;
             }
         }
-        if (scrollTop > 80) {
-            this.body.classList.add('fixed');
-        } else if (menuStyle === 1) {
-            this.body.classList.remove('fixed');
+
+        //header animation
+        if (scrollTop > 300 && !this.body.classList.contains('nav-mobile-open')) {
+            this.header.style.top = -this.header.clientHeight + 'px';
+            this.header.style.transition = 'top .5s ' + this.smooth;
+
+            if (this.anchorPanel) {
+                this.anchorPanel.style.top = -this.anchorPanel.clientHeight + 'px';
+                this.anchorPanel.style.transition = 'top .5s ' + this.smooth;
+            }
+            
+            if (this.body.classList.contains('scroll-down')) {
+                this.header.style.top = 0;
+                if (this.anchorPanel) {
+                    this.anchorPanel.style.top = -this.anchorPanel.clientHeight + 'px';
+                }
+            } else {
+                this.header.style.top = -this.header.clientHeight + 'px';
+                if (this.anchorPanel) { 
+                    this.anchorPanel.style.top = 0;
+                }
+            }
         }
     }
 

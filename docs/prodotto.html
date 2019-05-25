@@ -43,14 +43,19 @@
                 <a href="#"><img src="assets/img/logo.svg"></a>
             </div>
             <a class="nav__counter">
-                0
+                <span>10</span>
             </a>
             <div class="header__wrapper">
                 <div class="header__search">
                     <input type="text" placeholder="Search for anything">
-                    <svg>
+                    <svg class="header__search-btn">
                         <use xlink:href="#svg-search"></use>
                     </svg>
+                    <button class="header__search-close">
+                        <svg >
+                            <use xlink:href="#svg-close"></use>
+                        </svg>
+                    </button>
                 </div>
                 <nav class="nav nav--primary">
                     <ul>
@@ -217,13 +222,13 @@
                         <li><a href="/prodotto.html" class="btn--split" data-splitting>About</a></li>
                         <li><a href="/listing.html" class="btn--split" data-splitting>Dealers</a></li>
                         <li class="nav__mobile-hidden">
-                            <button>
+                            <button class="nav__search">
                                 <svg>
                                     <use xlink:href="#svg-search"></use>
                                 </svg>
                             </button>
                         </li>
-                        <li class="nav__mobile-hidden"><a href="/listing.html" class="btn--split">Samples</a></li>
+                        <li class="nav__mobile-hidden"><a href="/listing.html" class="btn--split">Samples (0)</a></li>
                         <li class="nav__mobile-only"><a href="/prodotto.html" class="btn--split">Press</a></li>
                         <li class="nav__mobile-only"><a href="/prodotto.html" class="btn--split">Contacts</a></li>
                     </ul>
@@ -232,11 +237,19 @@
         </div>
     </header>
 
+    <section class="anchors">
+        <div class="anchors__wrapper"></div>
+        <div class="anchors__buttons">
+            <button class="anchors__button">Contact</button>
+            <button class="anchors__button">Request sample</button>
+        </div>
+    </section>
+
     <div class="page" data-barba="wrapper">
 
         <div data-barba="container" data-barba-namespace="prodotto">
             <main class="main">
-                <section class="cover cover--text">
+                <section class="cover cover--text" data-anchor="Overview" data-gutter="-100">
                     <div class="container--big">
                         <div class="box">
                             <div class="eyelet" data-splitting data-appear>
@@ -255,7 +268,7 @@
                     </div>
                 </section>
                 <section class="editorial">
-                    <div class="editorial__2col-text-sidebar">
+                    <div class="editorial__2col-text-sidebar" >
                         <div class="container--mid">
                             <div class="editorial__wrapper">
                                 <div class="editorial__primary">
@@ -291,7 +304,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="editorial__1col-full-img">
+                    <div class="editorial__1col-full-img" data-anchor="In use" data-gutter="-150">
                         <div class="container--big">
                             <div class="editorial__box-picture" data-appear>
                                 <div class="picture">
@@ -378,7 +391,7 @@
                         </div>
                     </div>
                 </section>
-                <section class="editorial">
+                <section class="editorial" data-anchor="Designer" data-gutter="250">
                     <div class="editorial__2col-text-img">
                         <div class="container--big">
                             <div class="editorial__wrapper">
@@ -417,7 +430,7 @@
                         </div>
                     </div>
                 </section>
-                <section class="specs">
+                <section class="specs" data-anchor="Sizes & Colors" data-gutter="200">
                     <div class="container--mid">
                         <div class="specs__wrapper">
                             <div class="specs__primary">
@@ -458,7 +471,7 @@
                         </div>
                     </div>
                 </section>
-                <section class="downloads">
+                <section class="downloads" data-anchor="Downloads" data-gutter="220">
                     <div class="container--small">
                         <div class="box box--title">
                             <h2 class="h2" data-splitting data-appear>Downloads</h2>

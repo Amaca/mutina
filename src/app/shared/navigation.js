@@ -1,16 +1,19 @@
 /* jshint esversion: 6 */
 
+import Utils from './utils';
 
 const body = document.querySelector('body');
 const header = document.querySelector('header');
 const parents = document.querySelectorAll('.nav__parent');
 let subnavOpen = false;
+let searchOpen = false;
 
 export default class Navigation {
 
     static init() {
         if (window.innerWidth > 768) {
             Navigation.desktopNav();
+            Navigation.initSearch();
         } else {
             Navigation.mobileNav();
         }
@@ -27,13 +30,26 @@ export default class Navigation {
                 const height = subnavItemHeight + (subnavItemHeight / 2) + 'px';
                 const thisParent = parent.parentNode;
                 if (!subnavOpen) { //se i sottomenu sono chiusi
-                    document.documentElement.style.setProperty('--close-nav-speed', closeNavSlow);
-                    body.classList.add('subnav-open');
-                    thisParent.classList.add('active');
-                    activeNav.querySelector('.subnav').style.height = height;
-                    activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
-                    Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
-                    subnavOpen = true;
+                    if (searchOpen) { //se la ricerca è aperta
+                        document.documentElement.style.setProperty('--close-nav-speed', closeNavFast + 'ms');
+                        Navigation.toggleSearch();
+                        setTimeout(x => { //timeout per definite l'animazione di chiusura della ricerca per mostrare il sottomenu
+                            body.classList.add('subnav-open');
+                            thisParent.classList.add('active');
+                            activeNav.querySelector('.subnav').style.height = height;
+                            activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
+                            Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
+                            subnavOpen = true;
+                        }, closeNavFast);
+                    } else {
+                        document.documentElement.style.setProperty('--close-nav-speed', closeNavSlow);
+                        body.classList.add('subnav-open');
+                        thisParent.classList.add('active');
+                        activeNav.querySelector('.subnav').style.height = height;
+                        activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
+                        Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
+                        subnavOpen = true;
+                    }
                 } else {
                     if (thisParent.classList.contains('active')) { //se un sottomenu è da aprire, verifico prima se ho gia aperto un sottomenu
                         document.documentElement.style.setProperty('--close-nav-speed', closeNavSlow);
@@ -59,6 +75,71 @@ export default class Navigation {
                 e.preventDefault();
             });
         });
+    }
+
+    static closeNav(delay) { //chiudo il sottomenu
+        if (body.classList.contains('subnav-open')) {
+            if (delay) {
+                document.documentElement.style.setProperty('--close-nav-speed', delay + 'ms');
+            }
+            body.classList.remove('subnav-open');
+            document.querySelectorAll('.nav ul li').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.subnav').forEach(x => x.style.height = '0');
+            subnavOpen = false;
+        }
+    }
+
+    static closeOnOutsideClick() { //chiudo il sottomenu se clicco fuori
+        document.addEventListener('click', (e) => {
+            if (!header.contains(e.target)) {
+                Navigation.closeNav();
+            }
+        });
+    }
+
+    static initSearch() {
+        const searchButton = document.querySelector('.nav__search'),
+        closeSearch = document.querySelector('.header__search-close'),
+        animOnSubNavOpen = 400;
+
+        searchButton.addEventListener('click', (e) => {
+            if (subnavOpen) {
+                Navigation.closeNav(animOnSubNavOpen);
+                setTimeout(e => {
+                    Navigation.toggleSearch();
+                }, animOnSubNavOpen);
+            } else {
+                Navigation.toggleSearch();
+            }
+            e.preventDefault();
+        });
+
+        closeSearch.addEventListener('click', (e) => {
+            Navigation.toggleSearch();
+            e.preventDefault();
+        });
+    }
+
+    static toggleSearch() {
+        const inputText = document.querySelector('.header__search input');
+        Utils.toggleClass(body, 'search-bar-open');
+        searchOpen = body.classList.contains('search-bar-open') ? true : false;
+        if (searchOpen) {
+            inputText.focus();
+        } else {
+            setTimeout(e=>{
+                inputText.value = '';
+            },400);
+        }
+    }
+
+    static closeSearch() {
+        const inputText = document.querySelector('.header__search input');
+        body.classList.remove('search-bar-open');
+        searchOpen = false;
+        setTimeout(e=>{
+            inputText.value = '';
+        },400);
     }
 
     static mobileNav() {
@@ -107,22 +188,6 @@ export default class Navigation {
         });
     }
 
-    static closeNav() { //chiudo il sottomenu
-        if (body.classList.contains('subnav-open')) {
-            body.classList.remove('subnav-open');
-            document.querySelectorAll('.nav ul li').forEach(x => x.classList.remove('active'));
-            document.querySelectorAll('.subnav').forEach(x => x.style.height = '0');
-            subnavOpen = false;
-        }
-    }
-
-    static closeOnOutsideClick() { //chiudo il sottomenu se clicco fuori
-        document.addEventListener('click', (e) => {
-            if (!header.contains(e.target)) {
-                Navigation.closeNav();
-            }
-        });
-    }
 
     // static splitButtons() {
     //     const buttons = document.querySelectorAll('.btn--split');
@@ -138,36 +203,6 @@ export default class Navigation {
     //         });
     //     });
     // }
-
-    // static mainSearch() {
-    //     let searchButton = document.querySelector('.nav__search'),
-    //         closeSearch = document.querySelector('.main-search__close'),
-    //         mobileCloseSearch = document.querySelector('.mobile-search__close'),
-    //         mobileButton = document.querySelector('.mobile-search__icon');
-
-
-    //     searchButton.addEventListener('click', (e) => {
-    //         body.classList.add('main-search-open');
-    //         closePanelFilter();
-    //         e.preventDefault();
-    //     })
-
-    //     closeSearch.addEventListener('click', (e) => {
-    //         body.classList.remove('main-search-open');
-    //         e.preventDefault();
-    //     })
-
-    //     mobileButton.addEventListener('click', (e) => {
-    //         body.classList.add('main-search-open');
-    //         e.preventDefault();
-    //     })
-
-    //     mobileCloseSearch.addEventListener('click', (e) => {
-    //         body.classList.remove('main-search-open');
-    //         e.preventDefault();
-    //     })
-    // }
-
 }
 
 
