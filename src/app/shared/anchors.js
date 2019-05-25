@@ -1,33 +1,58 @@
 /* jshint esversion: 6 */
 
-import Utils from './utils';
 import Dom from './dom';
 
 const body = document.querySelector('body');
 const header = document.querySelector('header');
-const anchors = document.querySelectorAll('[data-anchor]');
 
 export default class Anchors {
 
     constructor(node, wrapper, index) {
+        const list = document.querySelector('ul.anchor-nav');
+        const navItem = document.createElement('li');
+        const anchor = document.createElement('a');
+
         this.id = index;
         this.node = node;
         this.wrapper = wrapper;
         this.name = this.getName();
         this.offset = this.getOffset();
         this.gutter = this.getGutter();
-        //this.anchor = this.getAnchor();
+        
+        navItem.className = 'anchor-' + this.name.replace(/[^\w\s]/g, '').toLowerCase();
+        list.appendChild(navItem);
+        
+        anchor.textContent = this.name;
+        anchor.className = 'scroll-to-' + this.id;
+        anchor.setAttribute('href', '#');
+        navItem.appendChild(anchor); 
 
-        this.onResize = (event) => {
-            this.onResize_(event);
+        this.anchor = anchor;
+
+        this.addListeners();
+    }
+
+    addListeners() {
+        const click = (e) => {
+            window.scrollTo(0, this.offset + this.gutter);
+            e.preventDefault();
         };
-        node.addEventListener('resize', (e) => {
-            this.onResize();
-        });
+        const scroll = (e) => {
+            const scrollTop = Dom.scrollTop();
+            if ((scrollTop >= (this.offset + this.gutter)) && scrollTop < Anchors.items[this.id + 1].offset) {
+                this.anchor.classList.add('active');
+            } else {
+                this.anchor.classList.remove('active');
+            }
+        };
+        this.anchor.addEventListener('click', click);
+        window.addEventListener('scroll', scroll);
+    }
 
-        // node.addEventListener('scroll', (e) => {
-        //     this.onScroll();
-        // });
+    destroy() {
+        // this.anchor.removeEventListener('click', click);
+        // window.removeEventListener('scroll', scroll);
+        document.querySelector('ul.anchor-nav').remove();
     }
 
     getName() {
@@ -35,108 +60,21 @@ export default class Anchors {
     }
 
     getOffset() {
-        return this.node.offsetTop;
+        return this.node.getBoundingClientRect().top;
     }
 
     getGutter() {
         return Number(this.node.getAttribute('data-gutter'));
     }
 
-    // getAnchor() {
-    //     return document.querySelector('[data-scroll-to=' + this.id + ']');
-    // }
-
-    // onScroll(e) {
-    //     const scrollTop = Dom.scrollTop();
-    //     if (scrollTop >= this.node.offset) {
-    //         this.anchor.classList.add('active');
-    //     } 
-    // }
-
-    onResize_(e) {
-        this.offset = this.getOffset();
-    }
-
-    destroy() {
-        this.node.removeEventListener('resize', this.onResize);
-    }
-
     static init(wrapper) {
-        Anchors.items = [...document.querySelectorAll('[data-anchor]')].map((element, index) => new Anchors(element, wrapper, index));
-        Anchors.createNav(Anchors.items, wrapper);
-    }
-
-    static createNav(anchors, wrapper) {
-        let list = document.createElement('ul');
-        list.className = 'anchor-nav';
-        anchors.forEach( item => {
-            let navItem = document.createElement('li');
-            let anchor = document.createElement('a');
-            let attr = document.createAttribute('data-scroll-to');  
-            
-            navItem.className = 'anchor-' + item.name.replace(/[^\w\s]/g, '').toLowerCase();
-            list.appendChild(navItem);
-            
-            anchor.textContent = item.name;
-            attr.value = item.id;
-            anchor.setAttributeNode(attr);
-            anchor.setAttribute('href', '#');
-            navItem.appendChild(anchor);
-
-            navItem.addEventListener('click', (e) => {
-                window.scrollTo(0, item.offset + item.gutter);
-                e.preventDefault();
-            });
-        }); 
-        wrapper.appendChild(list);
+        if (wrapper) {
+            let list = document.createElement('ul');
+            list.className = 'anchor-nav';
+            wrapper.appendChild(list);
+            Anchors.items = [...document.querySelectorAll('[data-anchor]')].map((element, index) => new Anchors(element, wrapper, index));
+            console.log(Anchors.items);
+        } 
     }
 
 }
-
-
-// class Toggle {
-
-//     constructor(node) {
-//         this.node = node;
-//         this.onClick = (event) => {
-//             this.onClick_(event);
-//         };
-//         node.addEventListener('click', this.onClick);
-//         console.log(this);
-//         /*
-//         {
-//             constructor: function
-//             onClick: function
-//             close: function
-//         } 
-//         */
-//     }
-
-//     onClick_(event) {
-//         console.log('onClick');
-//         Toggle.items.forEach(x => x === this ? x.open() : x.close());
-//     }
-
-//     close() {
-
-//     }
-
-//     destroy() {
-//         this.node.removeEventListener('click', this.onClick);
-//     }
-
-//     static init() {
-//         if (Toggle.items) {
-//             Toggle.items.forEach(x => x.destroy());
-//         }
-//         Toggle.items = [...document.querySelectorAll('[toggle]')].map(x => new Toggle(x));
-//     }
-
-// }
-
-// console.log(Toggle);
-
-// {
-//     init: function
-//     items: [Toggle, Toggle, Toggle, Toggle]
-// } 

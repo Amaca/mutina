@@ -12124,6 +12124,7 @@ function () {
                 trigger = _ref.trigger;
             // Do something with `current.container` for your leave transition
             // then return a promise or use `this.async()`
+            //app.destroyAll();
             console.log('leaving');
             return Promise.resolve(); // this.async();
           },
@@ -12151,6 +12152,11 @@ function () {
       _navigation.default.init();
 
       _anchors.default.init(document.querySelector('.anchors__wrapper'));
+    }
+  }, {
+    key: "destroyAll",
+    value: function destroyAll() {
+      _anchors.default.destroy();
     }
   }, {
     key: "addListeners",
@@ -12398,8 +12404,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _utils = _interopRequireDefault(require("./utils"));
-
 var _dom = _interopRequireDefault(require("./dom"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -12420,35 +12424,63 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var body = document.querySelector('body');
 var header = document.querySelector('header');
-var anchors = document.querySelectorAll('[data-anchor]');
 
 var Anchors =
 /*#__PURE__*/
 function () {
   function Anchors(node, wrapper, index) {
-    var _this = this;
-
     _classCallCheck(this, Anchors);
 
+    var list = document.querySelector('ul.anchor-nav');
+    var navItem = document.createElement('li');
+    var anchor = document.createElement('a');
     this.id = index;
     this.node = node;
     this.wrapper = wrapper;
     this.name = this.getName();
     this.offset = this.getOffset();
-    this.gutter = this.getGutter(); //this.anchor = this.getAnchor();
-
-    this.onResize = function (event) {
-      _this.onResize_(event);
-    };
-
-    node.addEventListener('resize', function (e) {
-      _this.onResize();
-    }); // node.addEventListener('scroll', (e) => {
-    //     this.onScroll();
-    // });
+    this.gutter = this.getGutter();
+    navItem.className = 'anchor-' + this.name.replace(/[^\w\s]/g, '').toLowerCase();
+    list.appendChild(navItem);
+    anchor.textContent = this.name;
+    anchor.className = 'scroll-to-' + this.id;
+    anchor.setAttribute('href', '#');
+    navItem.appendChild(anchor);
+    this.anchor = anchor;
+    this.addListeners();
   }
 
   _createClass(Anchors, [{
+    key: "addListeners",
+    value: function addListeners() {
+      var _this = this;
+
+      var click = function click(e) {
+        window.scrollTo(0, _this.offset + _this.gutter);
+        e.preventDefault();
+      };
+
+      var scroll = function scroll(e) {
+        var scrollTop = _dom.default.scrollTop();
+
+        if (scrollTop >= _this.offset + _this.gutter && scrollTop < Anchors.items[_this.id + 1].offset) {
+          _this.anchor.classList.add('active');
+        } else {
+          _this.anchor.classList.remove('active');
+        }
+      };
+
+      this.anchor.addEventListener('click', click);
+      window.addEventListener('scroll', scroll);
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      // this.anchor.removeEventListener('click', click);
+      // window.removeEventListener('scroll', scroll);
+      document.querySelector('ul.anchor-nav').remove();
+    }
+  }, {
     key: "getName",
     value: function getName() {
       return this.node.getAttribute('data-anchor');
@@ -12456,108 +12488,34 @@ function () {
   }, {
     key: "getOffset",
     value: function getOffset() {
-      return this.node.offsetTop;
+      return this.node.getBoundingClientRect().top;
     }
   }, {
     key: "getGutter",
     value: function getGutter() {
       return Number(this.node.getAttribute('data-gutter'));
-    } // getAnchor() {
-    //     return document.querySelector('[data-scroll-to=' + this.id + ']');
-    // }
-    // onScroll(e) {
-    //     const scrollTop = Dom.scrollTop();
-    //     if (scrollTop >= this.node.offset) {
-    //         this.anchor.classList.add('active');
-    //     } 
-    // }
-
-  }, {
-    key: "onResize_",
-    value: function onResize_(e) {
-      this.offset = this.getOffset();
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.node.removeEventListener('resize', this.onResize);
     }
   }], [{
     key: "init",
     value: function init(wrapper) {
-      Anchors.items = _toConsumableArray(document.querySelectorAll('[data-anchor]')).map(function (element, index) {
-        return new Anchors(element, wrapper, index);
-      });
-      Anchors.createNav(Anchors.items, wrapper);
-    }
-  }, {
-    key: "createNav",
-    value: function createNav(anchors, wrapper) {
-      var list = document.createElement('ul');
-      list.className = 'anchor-nav';
-      anchors.forEach(function (item) {
-        var navItem = document.createElement('li');
-        var anchor = document.createElement('a');
-        var attr = document.createAttribute('data-scroll-to');
-        navItem.className = 'anchor-' + item.name.replace(/[^\w\s]/g, '').toLowerCase();
-        list.appendChild(navItem);
-        anchor.textContent = item.name;
-        attr.value = item.id;
-        anchor.setAttributeNode(attr);
-        anchor.setAttribute('href', '#');
-        navItem.appendChild(anchor);
-        navItem.addEventListener('click', function (e) {
-          window.scrollTo(0, item.offset + item.gutter);
-          e.preventDefault();
+      if (wrapper) {
+        var list = document.createElement('ul');
+        list.className = 'anchor-nav';
+        wrapper.appendChild(list);
+        Anchors.items = _toConsumableArray(document.querySelectorAll('[data-anchor]')).map(function (element, index) {
+          return new Anchors(element, wrapper, index);
         });
-      });
-      wrapper.appendChild(list);
+        console.log(Anchors.items);
+      }
     }
   }]);
 
   return Anchors;
-}(); // class Toggle {
-//     constructor(node) {
-//         this.node = node;
-//         this.onClick = (event) => {
-//             this.onClick_(event);
-//         };
-//         node.addEventListener('click', this.onClick);
-//         console.log(this);
-//         /*
-//         {
-//             constructor: function
-//             onClick: function
-//             close: function
-//         } 
-//         */
-//     }
-//     onClick_(event) {
-//         console.log('onClick');
-//         Toggle.items.forEach(x => x === this ? x.open() : x.close());
-//     }
-//     close() {
-//     }
-//     destroy() {
-//         this.node.removeEventListener('click', this.onClick);
-//     }
-//     static init() {
-//         if (Toggle.items) {
-//             Toggle.items.forEach(x => x.destroy());
-//         }
-//         Toggle.items = [...document.querySelectorAll('[toggle]')].map(x => new Toggle(x));
-//     }
-// }
-// console.log(Toggle);
-// {
-//     init: function
-//     items: [Toggle, Toggle, Toggle, Toggle]
-// } 
-
+}();
 
 exports.default = Anchors;
 
-},{"./dom":313,"./utils":317}],312:[function(require,module,exports){
+},{"./dom":313}],312:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12893,22 +12851,28 @@ function () {
       var searchButton = document.querySelector('.nav__search'),
           closeSearch = document.querySelector('.header__search-close'),
           animOnSubNavOpen = 400;
-      searchButton.addEventListener('click', function (e) {
-        if (subnavOpen) {
-          Navigation.closeNav(animOnSubNavOpen);
-          setTimeout(function (e) {
-            Navigation.toggleSearch();
-          }, animOnSubNavOpen);
-        } else {
-          Navigation.toggleSearch();
-        }
 
-        e.preventDefault();
-      });
-      closeSearch.addEventListener('click', function (e) {
-        Navigation.toggleSearch();
-        e.preventDefault();
-      });
+      if (searchButton) {
+        searchButton.addEventListener('click', function (e) {
+          if (subnavOpen) {
+            Navigation.closeNav(animOnSubNavOpen);
+            setTimeout(function (e) {
+              Navigation.toggleSearch();
+            }, animOnSubNavOpen);
+          } else {
+            Navigation.toggleSearch();
+          }
+
+          e.preventDefault();
+        });
+      }
+
+      if (closeSearch) {
+        closeSearch.addEventListener('click', function (e) {
+          Navigation.toggleSearch();
+          e.preventDefault();
+        });
+      }
     }
   }, {
     key: "toggleSearch",

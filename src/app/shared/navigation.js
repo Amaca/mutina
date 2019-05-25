@@ -102,22 +102,26 @@ export default class Navigation {
         closeSearch = document.querySelector('.header__search-close'),
         animOnSubNavOpen = 400;
 
-        searchButton.addEventListener('click', (e) => {
-            if (subnavOpen) {
-                Navigation.closeNav(animOnSubNavOpen);
-                setTimeout(e => {
+        if (searchButton) {
+            searchButton.addEventListener('click', (e) => {
+                if (subnavOpen) {
+                    Navigation.closeNav(animOnSubNavOpen);
+                    setTimeout(e => {
+                        Navigation.toggleSearch();
+                    }, animOnSubNavOpen);
+                } else {
                     Navigation.toggleSearch();
-                }, animOnSubNavOpen);
-            } else {
-                Navigation.toggleSearch();
-            }
-            e.preventDefault();
-        });
+                }
+                e.preventDefault();
+            });
+        }
 
-        closeSearch.addEventListener('click', (e) => {
-            Navigation.toggleSearch();
-            e.preventDefault();
-        });
+        if (closeSearch) {
+            closeSearch.addEventListener('click', (e) => {
+                Navigation.toggleSearch();
+                e.preventDefault();
+            });
+        }
     }
 
     static toggleSearch() {

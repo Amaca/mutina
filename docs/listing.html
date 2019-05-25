@@ -2,86 +2,463 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" ng-app>
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>Mutina</title>
-	<meta name="Content-Language" content="en" />
-	<meta name="robots" content="noindex,nofollow" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-	<meta name="apple-mobile-web-app-title" content="HRSflow">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-	<meta name="mobile-web-app-capable" content="yes">
-	<!-- <link href="favicon.ico" rel="shortcut icon" type="image/ico" /> -->
-	<style>
-		[ng\:cloak],
-		[ng-cloak],
-		[data-ng-cloak],
-		[x-ng-cloak],
-		.ng-cloak,
-		.x-ng-cloak {
-			display: none !important;
-		}
-
-	</style>
-	<link rel="stylesheet" href="css/bootstrap.css" />
-	<link rel="stylesheet" href="css/vendors.css" />
-	<link rel="stylesheet" href="css/app.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Mutina</title>
+    <meta name="Content-Language" content="en" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="HRSflow">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- <link href="favicon.ico" rel="shortcut icon" type="image/ico" /> -->
+    <style>
+        [ng\:cloak],
+        [ng-cloak],
+        [data-ng-cloak],
+        [x-ng-cloak],
+        .ng-cloak,
+        .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/vendors.css" />
+    <link rel="stylesheet" href="css/app.css" />
 </head>
 
 <body>
+    <header class="header">
+        <div class="container--big">
+            <a class="nav__toggle">
+                <svg class="nav__open">
+                    <use xlink:href="#svg-open"></use>
+                </svg>
+                <svg class="nav__close">
+                    <use xlink:href="#svg-close"></use>
+                </svg>
+            </a>
+            <div class="header__logo">
+                <a href="#"><img src="assets/img/logo.svg"></a>
+            </div>
+            <a class="nav__counter">
+                <span>10</span>
+            </a>
+            <div class="header__wrapper">
+                <div class="header__search">
+                    <input type="text" placeholder="Search for anything">
+                    <svg class="header__search-btn">
+                        <use xlink:href="#svg-search"></use>
+                    </svg>
+                    <button class="header__search-close">
+                        <svg >
+                            <use xlink:href="#svg-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <nav class="nav nav--primary">
+                    <ul>
+                        <li>
+                            <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>
+                                Design
+                                <svg>
+                                    <use xlink:href="#svg-arrow-right"></use>
+                                </svg>
+                            </a>
+                            <div class="subnav">
+                                <div class="container--big">
+                                    <a href="#" class="subnav__mobile-back">
+                                        <svg>
+                                            <use xlink:href="#svg-arrow-left"></use>
+                                        </svg>
+                                        <span>Design</span>
+                                    </a>
+                                    <div class="subnav__wrapper">
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-01.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Collections</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-02.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Designers</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-03.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Accents</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-04.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">In use</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>
+                                Art
+                                <svg>
+                                    <use xlink:href="#svg-arrow-right"></use>
+                                </svg>
+                            </a>
+                            <div class="subnav">
+                                <div class="container--big">
+                                    <a href="#" class="subnav__mobile-back">
+                                        <svg>
+                                            <use xlink:href="#svg-arrow-left"></use>
+                                        </svg>
+                                        Art
+                                    </a>
+                                    <div class="subnav__wrapper">
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-04.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Collections</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-03.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Designers</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-02.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Accents</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-01.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">In use</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="/listing.html" class="btn--split" data-splitting>
+                                journal
+                                <svg>
+                                    <use xlink:href="#svg-arrow-right"></use>
+                                </svg>
+                            </a>
+                            <div class="subnav">
+                                <div class="container--big">
+                                    <a href="#" class="subnav__mobile-back">
+                                        <svg>
+                                            <use xlink:href="#svg-arrow-left"></use>
+                                        </svg>
+                                        journal
+                                    </a>
+                                    <div class="subnav__wrapper">
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-03.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Collections</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-02.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Designers</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-01.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">Accents</div>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="subnav__item">
+                                                <div class="subnav__picture">
+                                                    <img src="assets/img/nav-04.jpg" alt="">
+                                                </div>
+                                                <div class="subnav__caption">In use</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <nav class="nav nav--secondary">
+                    <ul>
+                        <li><a href="/prodotto.html" class="btn--split" data-splitting>About</a></li>
+                        <li><a href="/listing.html" class="btn--split" data-splitting>Dealers</a></li>
+                        <li class="nav__mobile-hidden">
+                            <button class="nav__search">
+                                <svg>
+                                    <use xlink:href="#svg-search"></use>
+                                </svg>
+                            </button>
+                        </li>
+                        <li class="nav__mobile-hidden"><a href="/listing.html" class="btn--split">Samples (0)</a></li>
+                        <li class="nav__mobile-only"><a href="/prodotto.html" class="btn--split">Press</a></li>
+                        <li class="nav__mobile-only"><a href="/prodotto.html" class="btn--split">Contacts</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
 
-	<header class="header">
-		<div class="container--big">
-			<div class="header__wrapper">
-				<nav class="nav nav--primary">
-					<ul>
-						<li><a href="/prodotto.html">design</a></li>
-						<li><a href="/listing.html">art</a></li>
-						<li><a href="/listing.html">journal</a></li>
-					</ul>
-				</nav>
-			</div>
-			<div class="header__logo">
-				<a href="#"><img src="assets/img/logo.svg" /></a>
-			</div>
-			<div class="header__wrapper">
-				<nav class="nav nav--secondary">
-					<ul>
-						<li><a href="/prodotto.html">about</a></li>
-						<li><a href="/listing.html">dealers</a></li>
-						<li><a href="/listing.html">samples</a></li>
-					</ul>
-				</nav>
-			</div>
-		</div>
-	</header>
+    <div class="page" data-barba="wrapper">
 
-	<div class="page" data-barba="wrapper">
+        <div data-barba="container" data-barba-namespace="prodotto">
+            <main class="main">
+                
+                <section class="slider slider--carousel" data-appear>
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-01.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-02.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-01.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-02.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-01.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="slider__picture">
+                                    <img src="assets/img/slider-carousel-02.jpg" alt="">
+                                </div>
+                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+    
+                <section class="specs" data-anchor="Sizes & Colors" data-gutter="200">
+                    <div class="container--mid">
+                        <div class="specs__wrapper">
+                            <div class="specs__primary">
+                                <div class="box box--title">
+                                    <h2 class="h2" data-splitting data-appear>Sizes & Colors</h2>
+                                </div>
+                                <div class="specs__list" data-appear>
+                                    <div class="specs__item">
+                                        <div class="specs__title">Tiles</div>
+                                        <div class="specs__data">20x20cm - 8"·8"</div>
+                                    </div>
+                                    <div class="specs__item">
+                                        <div class="specs__title">Skirting</div>
+                                        <div class="specs__data">4,7x20cm - 2"·8"</div>
+                                    </div>
+                                    <div class="specs__item">
+                                        <div class="specs__title">Production</div>
+                                        <div class="specs__data">Industrial</div>
+                                    </div>
+                                    <div class="specs__item">
+                                        <div class="specs__title">Material</div>
+                                        <div class="specs__data">Rectifified porcelain stoneware with cold digital printing glazing</div>
+                                    </div>
+                                    <div class="specs__item">
+                                        <div class="specs__title">Thickness</div>
+                                        <div class="specs__data">10mm</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="specs__secondary" data-appear>
+                                <a href="#" class="specs__picture">
+                                    <div class="picture picture--full-height">
+                                        <img src="assets/img/specs-thumb-01.jpg" alt="" data-parallax="5">
+                                    </div>
+                                </a>
+                                <a href="#" class="btn btn--primary">View all colors & combinations</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="related">
+                    <div class="container--small">
+                        <div class="box box--title">
+                            <h2 class="h2" data-splitting data-appear>You may also like</h2>
+                        </div>
+                    </div>
+                    <div class="container--big">
+                        <div class="listing">
+                            <a href="#">
+                                <div class="listing__item" data-appear>
+                                    <div class="picture">
+                                        <img src="assets/img/related-thumb-01.jpg" alt="" data-parallax="8">
+                                    </div>
+                                    <div class="box">
+                                        <h3 class="h3">Puzzle by Barber & Osgerby</h3>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#">
+                                <div class="listing__item" data-appear>
+                                    <div class="picture">
+                                        <img src="assets/img/related-thumb-02.jpg" alt="" data-parallax="8">
+                                    </div>
+                                    <div class="box">
+                                        <h3 class="h3">Bas-Relief by Patricia Urquiola</h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <footer class="footer">
+                <div class="container--big">
+                    <div class="footer__primary">
+                        <div class="footer__nav">
+                            <div class="footer__item footer__item--logo">
+                                <a href="#"><img src="assets/img/logo-compact.svg" /></a>
+                            </div>
+                            <div class="footer__item">
+                                <h5 class="h5">Info</h5>
+                                <ul>
+                                    <li><a href="#">Downloads</a></li>
+                                    <li><a href="#">Press</a></li>
+                                    <li><a href="#">Contacts</a></li>
+                                </ul>
+                            </div>
+                            <div class="footer__item">
+                                <h5 class="h5">Follow us</h5>
+                                <ul>
+                                    <li><a href="#">Instagram</a></li>
+                                    <li><a href="#">Facebook</a></li>
+                                    <li><a href="#">Linkedin</a></li>
+                                </ul>
+                            </div>
+                            <div class="footer__item">
+                                <h5 class="h5">Language</h5>
+                                <ul>
+                                    <li><a href="#">Italian</a></li>
+                                    <li><a href="#">English</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="footer__newsletter">
+                            <h5 class="h5">Want to stay up to date?</h5>
+                            <div class="form">
+                                <input type="text" placeholder="Enter your email address">
+                                <button>subscribe</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer__secondary">
+                        <div class="footer__copyright">
+                            © 2019 Mutina S.p.a. - P.I. 00336880364
+                        </div>
+                        <div class="footer__privacy">
+                            <ul>
+                                <li><a href="#">Privacy</a></li>
+                                <li><a href="#">Terms</a></li>
+                                <li><a href="#">Cookie</a></li>
+                                <li><a href="#">Sitemap</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer__credits">
+                            <a href="#">Credits</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
 
-		<div data-barba="container" data-barba-namespace="prodotto">
-			<main>
-				<div class="picture">
-					<img src="/assets/img/test-2.jpg" alt="" data-appear>
-				</div>
-				<div class="picture">
-					<img src="/assets/img/test-1.jpg" alt="" data-appear>
-				</div>
+    </div>
 
-			</main>
-			<footer>
-				footer
-			</footer>
-		</div>
+    <div class="preloader">
+        <img class="brand" src="assets/img/logo.svg" />
+    </div>
 
-	</div>
 
-	<div class="preloader">
-		<img class="brand" src="assets/img/logo.svg" />
-	</div>
+    <svg display="none" width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true">
+        <defs>
+            <symbol id="svg-close" viewbox="0 0 16 16">
+                <path d="M16,14.5L14.5,16L8,9.5L1.5,16L0,14.5L6.5,8L0,1.5L1.5,0L8,6.5L14.5,0L16,1.5L9.5,8L16,14.5z" />
+            </symbol>
+            <symbol id="svg-open" viewbox="0 0 16 16">
+                <path d="M0,8V6.4h16V8H0z M0,0h16v1.6H0V0z M16,14.4H0v-1.6h16V14.4z" />
+            </symbol>
+            <symbol id="svg-next" viewBox="0 0 8.9 16">
+                <path d="M0,0.9L0.9,0l8,8l-8,8L0,15.1L7.1,8L0,0.9z" />
+            </symbol>
+            <symbol id="svg-prev" viewBox="0 0 8.9 16">
+                <path d="M8.9,15.1L8,16L0,8l8-8l0.9,0.9L1.8,8L8.9,15.1z" />
+            </symbol>
+            <symbol id="svg-arrow-left" viewBox="0 0 8.4 16">
+                <path class="st0" d="M3.3,8.1l5.1,6.3l-2,1.6L0,8.1L6.4,0l2,1.6L3.3,8.1z" />
+            </symbol>
+            <symbol id="svg-arrow-right" viewBox="0 0 8.4 16">
+                <path class="st0" d="M5.1,7.9L0,1.6L2,0l6.4,7.9L2,16l-2-1.6L5.1,7.9z" />
+            </symbol>
+            <symbol id="svg-arrow-top" viewBox="0 0  16 8.1">
+                <path class="st0" d="M1.9,0L0,2.9l8,5.3l8-5.3L14.1,0L8,4.1L1.9,0z" />
+            </symbol>
+            <symbol id="svg-arrow-bottom" viewBox="0 0 16 8.2">
+                <path class="st0" d="M14.1,8.2L16,5.3L8,0L0,5.3l1.9,2.9L8,4.1L14.1,8.2z" />
+            </symbol>
+            <symbol id="svg-search" viewBox="0 0 16 16">
+                <path class="st0" d="M9.3,13.5c-3.7,0-6.7-3-6.7-6.8C2.5,3,5.5,0,9.2,0S16,3,16,6.8C16,10.5,13,13.5,9.3,13.5z M9.2,1.7
+                    c-2.8,0-5,2.3-5,5c0,2.8,2.2,5,5,5s5-2.3,5-5S12,1.7,9.2,1.7z M4.2,13.3L1.6,16L0,14.4l2.7-2.7C3.1,12.4,3.6,12.9,4.2,13.3z" />
+            </symbol>
+        </defs>
+    </svg>
 
-	<script src="js/vendors.js"></script>
-	<script src="js/app.js"></script>
+    <script src="js/vendors.js"></script>
+    <script src="js/app.js"></script>
 
 </body>
 

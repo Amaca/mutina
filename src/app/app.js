@@ -77,6 +77,7 @@ export default class App {
                 }) {
                     // Do something with `current.container` for your leave transition
                     // then return a promise or use `this.async()`
+                    //app.destroyAll();
                     console.log('leaving');
                     return Promise.resolve();
                     // this.async();
@@ -103,6 +104,10 @@ export default class App {
         Sliders.init();
         Navigation.init();
         Anchors.init(document.querySelector('.anchors__wrapper'));
+    }
+
+    destroyAll() {
+        Anchors.destroy();
     }
 
     addListeners() {

@@ -37,10 +37,8 @@
             
             a {
                 color: $grey;
-            }
 
-            &.active {
-                a {
+                &.active {
                     color: $dark;
                 }
             }
