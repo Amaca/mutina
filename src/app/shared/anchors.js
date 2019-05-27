@@ -1,13 +1,12 @@
 /* jshint esversion: 6 */
 
-import Dom from './dom';
 
 const body = document.querySelector('body');
 const header = document.querySelector('header');
 
 export default class Anchors {
 
-    constructor(node, wrapper, index) {
+    constructor(node, wrapper, gutter, index) {
         const list = document.querySelector('ul.anchor-nav');
         const navItem = document.createElement('li');
         const anchor = document.createElement('a');
@@ -15,17 +14,17 @@ export default class Anchors {
         this.id = index;
         this.node = node;
         this.wrapper = wrapper;
+        this.gutter = window.innerWidth > 768 ? gutter : gutter / 2;
         this.name = this.getName();
         this.offset = this.getOffset();
-        this.gutter = this.getGutter();
-        
+
         navItem.className = 'anchor-' + this.name.replace(/[^\w\s]/g, '').toLowerCase();
         list.appendChild(navItem);
-        
+
         anchor.textContent = this.name;
         anchor.className = 'scroll-to-' + this.id;
         anchor.setAttribute('href', '#');
-        navItem.appendChild(anchor); 
+        navItem.appendChild(anchor);
 
         this.anchor = anchor;
 
@@ -37,22 +36,12 @@ export default class Anchors {
             window.scrollTo(0, this.offset + this.gutter);
             e.preventDefault();
         };
-        const scroll = (e) => {
-            const scrollTop = Dom.scrollTop();
-            if ((scrollTop >= (this.offset + this.gutter)) && scrollTop < Anchors.items[this.id + 1].offset) {
-                this.anchor.classList.add('active');
-            } else {
-                this.anchor.classList.remove('active');
-            }
-        };
-        this.anchor.addEventListener('click', click);
-        window.addEventListener('scroll', scroll);
+        this.click = click;
+        this.anchor.addEventListener('click', this.click);
     }
 
     destroy() {
-        // this.anchor.removeEventListener('click', click);
-        // window.removeEventListener('scroll', scroll);
-        document.querySelector('ul.anchor-nav').remove();
+        this.anchor.removeEventListener('click', this.click);
     }
 
     getName() {
@@ -63,18 +52,41 @@ export default class Anchors {
         return this.node.getBoundingClientRect().top;
     }
 
-    getGutter() {
-        return Number(this.node.getAttribute('data-gutter'));
-    }
-
-    static init(wrapper) {
+    static init(wrapper, gutter) {
+        if (Anchors.items > 0) {
+            Anchors.destroyAll();
+        }
         if (wrapper) {
             let list = document.createElement('ul');
+            Anchors.gutter = gutter;
             list.className = 'anchor-nav';
             wrapper.appendChild(list);
-            Anchors.items = [...document.querySelectorAll('[data-anchor]')].map((element, index) => new Anchors(element, wrapper, index));
-            console.log(Anchors.items);
-        } 
+            Anchors.items = [...document.querySelectorAll('[data-anchor]')].map((element, index) => new Anchors(element, wrapper, gutter, index));
+            console.log('Anchors: ', Anchors.items);
+
+            window.addEventListener('scroll', Anchors.onScroll);
+        }
+    }
+
+    static onScroll() {
+        const anchor = Anchors.items.find((anchor, i, anchors) => {
+            const top = anchor.node.getBoundingClientRect().top;
+            const bottom = i < anchors.length - 1 ? anchors[i + 1].node.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
+            anchors.forEach((elem, i) => {
+                elem.anchor.classList.remove('active');
+            });
+            if (top < Anchors.gutter && bottom > Anchors.gutter) {
+                anchors[i].anchor.classList.add('active');
+                return anchor;
+            }
+        });
+    }
+
+    static destroyAll() {
+        Anchors.items.forEach(anchor => {
+            anchor.destroy();
+        });
+        document.querySelector('ul.anchor-nav').remove();
     }
 
 }

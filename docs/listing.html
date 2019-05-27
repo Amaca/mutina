@@ -52,7 +52,7 @@
                         <use xlink:href="#svg-search"></use>
                     </svg>
                     <button class="header__search-close">
-                        <svg >
+                        <svg>
                             <use xlink:href="#svg-close"></use>
                         </svg>
                     </button>
@@ -60,7 +60,7 @@
                 <nav class="nav nav--primary">
                     <ul>
                         <li>
-                            <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>
+                            <a href="#" class="btn--split nav__parent" data-splitting>
                                 Design
                                 <svg>
                                     <use xlink:href="#svg-arrow-right"></use>
@@ -112,7 +112,7 @@
                             </div>
                         </li>
                         <li>
-                            <a href="/prodotto.html" class="btn--split nav__parent" data-splitting>
+                            <a href="#" class="btn--split nav__parent" data-splitting>
                                 Art
                                 <svg>
                                     <use xlink:href="#svg-arrow-right"></use>
@@ -237,11 +237,36 @@
         </div>
     </header>
 
+    <section class="anchors">
+        <div class="anchors__wrapper"></div>
+        <div class="anchors__buttons">
+            <button class="anchors__button">Contact</button>
+            <button class="anchors__button">Request sample</button>
+        </div>
+    </section>
+
     <div class="page" data-barba="wrapper">
 
-        <div data-barba="container" data-barba-namespace="prodotto">
+        <div class="barba-container" data-barba="container" data-barba-namespace="prodotto">
             <main class="main">
-                
+                <section class="cover cover--text" data-anchor="Overview">
+                    <div class="container--big">
+                        <div class="box">
+                            <div class="eyelet" data-splitting data-appear>
+                                <a href="#">
+                                    <svg>
+                                        <use xlink:href="#svg-arrow-left"></use>
+                                    </svg>
+                                    All collections
+                                </a>
+                            </div>
+                            <h1 class="h1" data-splitting data-appear>Azulej by Patricia Urquiola</h1>
+                        </div>
+                    </div>
+                    <div class="picture picture--cover" data-appear>
+                        <img src="assets/img/cover-01.jpg" alt="" data-parallax="3">
+                    </div>
+                </section>
                 <section class="slider slider--carousel" data-appear>
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
@@ -284,8 +309,45 @@
                         </div>
                     </div>
                 </section>
-    
-                <section class="specs" data-anchor="Sizes & Colors" data-gutter="200">
+                <section class="editorial">
+                    <div class="editorial__2col-text-sidebar">
+                        <div class="container--mid">
+                            <div class="editorial__wrapper">
+                                <div class="editorial__primary">
+                                    <div class="box">
+                                        <div class="text" data-appear>
+                                            <p>
+                                                Azulej, the new tiles collection designed by Patricia Urquiola for Mutina, reminds of the ancient handcrafted majolica, made of hydraulic cement. This tradition - revised with a contemporary look -
+                                                is serially realized in 20x20 cm.
+                                            </p>
+                                            <p>It is a strong review of the patchwork composition: an innovative mix and patch, deliberately random, which combines abstract patterns and subtle, neutral colors, a little used. </p>
+                                            <p>The colors are fixed on the material in an irregular and natural way.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="editorial__secondary">
+                                    <div class="box">
+                                        <h3 class="h3" data-splitting data-appear>Awards</h3>
+                                        <div class="text" data-appear>
+                                            <ul>
+                                                <li>Wallpaper Design Award 2013</li>
+                                                <li>Interior Innovation Award 2014</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="box">
+                                        <h3 class="h3" data-splitting data-appear>Sustainability</h3>
+                                        <div class="text" data-appear>
+                                            Azulej respects the environment<br />
+                                            and it doesn’t contain V.O.C.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="specs" data-anchor="Sizes & Colors">
                     <div class="container--mid">
                         <div class="specs__wrapper">
                             <div class="specs__primary">
@@ -323,6 +385,35 @@
                                 </a>
                                 <a href="#" class="btn btn--primary">View all colors & combinations</a>
                             </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="downloads" data-anchor="Downloads">
+                    <div class="container--small">
+                        <div class="box box--title">
+                            <h2 class="h2" data-splitting data-appear>Downloads</h2>
+                        </div>
+                        <div class="downloads__list" data-appear>
+                            <a href="#" class="downloads__item">
+                                <div class="downloads__title">Catalogue</div>
+                                <div class="downloads__button">Download .pdf</div>
+                            </a>
+                            <a href="#" class="downloads__item">
+                                <div class="downloads__title">High resolution images</div>
+                                <div class="downloads__button">Download .zip</div>
+                            </a>
+                            <a href="#" class="downloads__item">
+                                <div class="downloads__title">3d cad library</div>
+                                <div class="downloads__button">Download .bim</div>
+                            </a>
+                            <a href="#" class="downloads__item">
+                                <div class="downloads__title">Technical Specifications</div>
+                                <div class="downloads__button">Download .pdf</div>
+                            </a>
+                            <a href="#" class="downloads__item">
+                                <div class="downloads__title">Certificates</div>
+                                <div class="downloads__button">Download .pdf</div>
+                            </a>
                         </div>
                     </div>
                 </section>
@@ -423,6 +514,9 @@
         <img class="brand" src="assets/img/logo.svg" />
     </div>
 
+    <div class="transition">
+        <img src="assets/img/logo.svg" />
+    </div>
 
     <svg display="none" width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true">
         <defs>

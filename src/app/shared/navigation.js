@@ -25,6 +25,7 @@ export default class Navigation {
 
         parents.forEach(parent => {
             parent.addEventListener('click', (e) => {
+                e.preventDefault();
                 const activeNav = e.path[3]; //seleziono ul li attiva appena cliccata
                 const subnavItemHeight = activeNav.querySelector('.subnav__item').clientHeight;
                 const height = subnavItemHeight + (subnavItemHeight / 2) + 'px';
@@ -72,7 +73,7 @@ export default class Navigation {
                         subnavOpen = true;
                     }
                 }
-                e.preventDefault();
+
             });
         });
     }
@@ -99,8 +100,8 @@ export default class Navigation {
 
     static initSearch() {
         const searchButton = document.querySelector('.nav__search'),
-        closeSearch = document.querySelector('.header__search-close'),
-        animOnSubNavOpen = 400;
+            closeSearch = document.querySelector('.header__search-close'),
+            animOnSubNavOpen = 400;
 
         if (searchButton) {
             searchButton.addEventListener('click', (e) => {
@@ -131,9 +132,9 @@ export default class Navigation {
         if (searchOpen) {
             inputText.focus();
         } else {
-            setTimeout(e=>{
+            setTimeout(e => {
                 inputText.value = '';
-            },400);
+            }, 400);
         }
     }
 
@@ -141,9 +142,9 @@ export default class Navigation {
         const inputText = document.querySelector('.header__search input');
         body.classList.remove('search-bar-open');
         searchOpen = false;
-        setTimeout(e=>{
+        setTimeout(e => {
             inputText.value = '';
-        },400);
+        }, 400);
     }
 
     static mobileNav() {

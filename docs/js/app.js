@@ -12030,11 +12030,11 @@ var _core = _interopRequireDefault(require("@barba/core"));
 
 require("css-vars-ponyfill");
 
+var _anchors = _interopRequireDefault(require("./shared/anchors"));
+
 var _appears = _interopRequireDefault(require("./shared/appears"));
 
 var _dom = _interopRequireDefault(require("./shared/dom"));
-
-var _anchors = _interopRequireDefault(require("./shared/anchors"));
 
 var _navigation = _interopRequireDefault(require("./shared/navigation"));
 
@@ -12070,7 +12070,6 @@ function () {
       var header = document.querySelector('.header');
       var smooth = 'cubic-bezier(0, 0.97, 0.43, 1)';
       var anchorPanel = document.querySelector('.anchors');
-      var parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
 
       _dom.default.detect(body);
 
@@ -12084,7 +12083,7 @@ function () {
       this.smooth = smooth;
       this.anchorPanel = anchorPanel;
       this.appears = [];
-      this.parallaxes = parallaxes;
+      this.parallaxes = [];
       this.onResize();
       this.addListeners();
       this.transitions();
@@ -12101,42 +12100,58 @@ function () {
 
           window.scrollTo(0, Math.max(0, scrollTop + rect.top - 120));
         }
-      }; // const anchor = document.querySelector('.anchors li.active');
-      // anchor.addEventListener('click', e => {
-      //     const designer = document.querySelector('[data-anchor="Designer"]');    
-      //     window.scrollTo(0, designer.offsetTop);
-      //     e.preventDefault();
-      // });
+      };
 
+      _navigation.default.init();
 
       body.classList.add('ready');
     }
   }, {
     key: "transitions",
     value: function transitions() {
-      // Basic default transition, with no rules and minimal hooks…
+      var transitionLayer = document.querySelector('.transition'); // Basic default transition, with no rules and minimal hooks…
+
       _core.default.init({
         debug: true,
         transitions: [{
-          leave: function leave(_ref) {
-            var current = _ref.current,
-                next = _ref.next,
-                trigger = _ref.trigger;
-            // Do something with `current.container` for your leave transition
-            // then return a promise or use `this.async()`
-            //app.destroyAll();
-            console.log('leaving');
-            return Promise.resolve(); // this.async();
+          leave: function leave(data) {
+            var done = this.async();
+            var current = data.current.container;
+
+            _navigation.default.closeNav();
+
+            _navigation.default.closeSearch();
+
+            current.classList.add('starting-leave');
+            setTimeout(function (y) {
+              current.classList.add('end-leave');
+              transitionLayer.classList.add('intro');
+              setTimeout(function (x) {
+                done();
+              }, 1600);
+            }, 1000);
           },
-          enter: function enter(_ref2) {
-            var current = _ref2.current,
-                next = _ref2.next,
-                trigger = _ref2.trigger;
-            // Do something with `next.container` for your enter transition
-            // then return a promise or use `this.async()`
-            console.log('entering');
+          afterLeave: function afterLeave(data) {
+            var done = this.async();
+            var next = data.next.container;
+            app.destroyAll(data.current.container);
+            next.classList.add('starting-enter');
+            transitionLayer.classList.add('outro');
+            done();
+          },
+          enter: function enter(data) {
+            var done = this.async();
+            var next = data.next.container;
             app.onPageInit();
-            return Promise.resolve(); // this.async();
+            console.log('enter');
+            setTimeout(function (x) {
+              transitionLayer.classList.remove('intro');
+              transitionLayer.classList.remove('outro');
+              next.classList.remove('starting-enter');
+              setTimeout(function (y) {
+                done();
+              }, 800);
+            }, 1000);
           }
         }]
       });
@@ -12144,19 +12159,22 @@ function () {
   }, {
     key: "onPageInit",
     value: function onPageInit() {
+      this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
       this.appears = _appears.default.init();
       Splitting();
 
       _sliders.default.init();
 
-      _navigation.default.init();
-
-      _anchors.default.init(document.querySelector('.anchors__wrapper'));
+      _anchors.default.init(document.querySelector('.anchors__wrapper'), 200);
     }
   }, {
     key: "destroyAll",
-    value: function destroyAll() {
-      _anchors.default.destroy();
+    value: function destroyAll(container) {
+      _anchors.default.destroyAll();
+
+      _sliders.default.destroyAll();
+
+      container.remove();
     }
   }, {
     key: "addListeners",
@@ -12404,10 +12422,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _dom = _interopRequireDefault(require("./dom"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -12422,13 +12436,14 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+/* jshint esversion: 6 */
 var body = document.querySelector('body');
 var header = document.querySelector('header');
 
 var Anchors =
 /*#__PURE__*/
 function () {
-  function Anchors(node, wrapper, index) {
+  function Anchors(node, wrapper, gutter, index) {
     _classCallCheck(this, Anchors);
 
     var list = document.querySelector('ul.anchor-nav');
@@ -12437,9 +12452,9 @@ function () {
     this.id = index;
     this.node = node;
     this.wrapper = wrapper;
+    this.gutter = window.innerWidth > 768 ? gutter : gutter / 2;
     this.name = this.getName();
     this.offset = this.getOffset();
-    this.gutter = this.getGutter();
     navItem.className = 'anchor-' + this.name.replace(/[^\w\s]/g, '').toLowerCase();
     list.appendChild(navItem);
     anchor.textContent = this.name;
@@ -12460,25 +12475,13 @@ function () {
         e.preventDefault();
       };
 
-      var scroll = function scroll(e) {
-        var scrollTop = _dom.default.scrollTop();
-
-        if (scrollTop >= _this.offset + _this.gutter && scrollTop < Anchors.items[_this.id + 1].offset) {
-          _this.anchor.classList.add('active');
-        } else {
-          _this.anchor.classList.remove('active');
-        }
-      };
-
-      this.anchor.addEventListener('click', click);
-      window.addEventListener('scroll', scroll);
+      this.click = click;
+      this.anchor.addEventListener('click', this.click);
     }
   }, {
     key: "destroy",
     value: function destroy() {
-      // this.anchor.removeEventListener('click', click);
-      // window.removeEventListener('scroll', scroll);
-      document.querySelector('ul.anchor-nav').remove();
+      this.anchor.removeEventListener('click', this.click);
     }
   }, {
     key: "getName",
@@ -12490,23 +12493,48 @@ function () {
     value: function getOffset() {
       return this.node.getBoundingClientRect().top;
     }
-  }, {
-    key: "getGutter",
-    value: function getGutter() {
-      return Number(this.node.getAttribute('data-gutter'));
-    }
   }], [{
     key: "init",
-    value: function init(wrapper) {
+    value: function init(wrapper, gutter) {
+      if (Anchors.items > 0) {
+        Anchors.destroyAll();
+      }
+
       if (wrapper) {
         var list = document.createElement('ul');
+        Anchors.gutter = gutter;
         list.className = 'anchor-nav';
         wrapper.appendChild(list);
         Anchors.items = _toConsumableArray(document.querySelectorAll('[data-anchor]')).map(function (element, index) {
-          return new Anchors(element, wrapper, index);
+          return new Anchors(element, wrapper, gutter, index);
         });
-        console.log(Anchors.items);
+        console.log('Anchors: ', Anchors.items);
+        window.addEventListener('scroll', Anchors.onScroll);
       }
+    }
+  }, {
+    key: "onScroll",
+    value: function onScroll() {
+      var anchor = Anchors.items.find(function (anchor, i, anchors) {
+        var top = anchor.node.getBoundingClientRect().top;
+        var bottom = i < anchors.length - 1 ? anchors[i + 1].node.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
+        anchors.forEach(function (elem, i) {
+          elem.anchor.classList.remove('active');
+        });
+
+        if (top < Anchors.gutter && bottom > Anchors.gutter) {
+          anchors[i].anchor.classList.add('active');
+          return anchor;
+        }
+      });
+    }
+  }, {
+    key: "destroyAll",
+    value: function destroyAll() {
+      Anchors.items.forEach(function (anchor) {
+        anchor.destroy();
+      });
+      document.querySelector('ul.anchor-nav').remove();
     }
   }]);
 
@@ -12515,7 +12543,7 @@ function () {
 
 exports.default = Anchors;
 
-},{"./dom":313}],312:[function(require,module,exports){
+},{}],312:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12747,6 +12775,7 @@ function () {
       var closeNavFast = 400;
       parents.forEach(function (parent) {
         parent.addEventListener('click', function (e) {
+          e.preventDefault();
           var activeNav = e.path[3]; //seleziono ul li attiva appena cliccata
 
           var subnavItemHeight = activeNav.querySelector('.subnav__item').clientHeight;
@@ -12811,8 +12840,6 @@ function () {
               subnavOpen = true;
             }
           }
-
-          e.preventDefault();
         });
       });
     }
@@ -13131,6 +13158,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -13138,98 +13173,87 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 /* jshint esversion: 6 */
+var slidersArray = [];
+
 var Sliders =
 /*#__PURE__*/
 function () {
-  function Sliders() {
+  function Sliders(slider, index) {
     _classCallCheck(this, Sliders);
+
+    this.slider = slider;
+    this.index = index;
+    this.options = this.setOptions();
+    this.setOptions();
+    this.initSlider();
   }
 
-  _createClass(Sliders, null, [{
+  _createClass(Sliders, [{
+    key: "setOptions",
+    value: function setOptions() {
+      var parentWrap = this.slider.parentNode;
+      var options = {}; //Slider Carousel
+
+      if (parentWrap.classList.contains('slider--carousel') === true) {
+        options = {
+          grabCursor: true,
+          watchOverflow: true,
+          centeredSlides: true,
+          loop: true,
+          slidesPerView: 'auto',
+          spaceBetween: 60,
+          freeMode: true,
+          freeModeMomentumRatio: 1,
+          freeModeMomentumVelocityRatio: 0.3,
+          speed: 400,
+          breakpoints: {
+            576: {
+              spaceBetween: 20
+            },
+            768: {
+              spaceBetween: 40
+            }
+          }
+        }; //Cover Slider
+      } else if (parentWrap.classList.contains('slider--test') === true) {
+        options = {
+          grabCursor: true,
+          watchOverflow: true,
+          centeredSlides: false,
+          loop: true,
+          slidesPerView: 5,
+          spaceBetween: 100
+        };
+      }
+
+      return options;
+    }
+  }, {
+    key: "initSlider",
+    value: function initSlider() {
+      var swiperInstance = new Swiper(this.slider, this.options);
+      swiperInstance.init();
+      this.swiperInstance = swiperInstance;
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.swiperInstance.destroy();
+    }
+  }], [{
     key: "init",
     value: function init() {
-      var sliders = document.querySelectorAll('.swiper-container');
-
-      if (sliders !== null) {
-        Array.prototype.forEach.call(sliders, function (slider, i) {
-          var parentWrap = slider.parentNode; //Slider Carousel
-
-          if (parentWrap.classList.contains('slider--carousel') === true) {
-            //Init Swiper
-            var options = {
-              grabCursor: true,
-              watchOverflow: true,
-              centeredSlides: true,
-              loop: true,
-              slidesPerView: 'auto',
-              spaceBetween: 60,
-              freeMode: true,
-              freeModeMomentumRatio: 1,
-              freeModeMomentumVelocityRatio: 0.3,
-              speed: 400,
-              breakpoints: {
-                576: {
-                  spaceBetween: 20
-                },
-                768: {
-                  spaceBetween: 40
-                }
-              }
-            }; //Cover Slider
-          } else if (parentWrap.classList.contains('cover__slider') === true) {// //init Dots
-            // let sliderDots = 'swiper-pagination-' + i;
-            // let dotsContainer = document.createElement('div');
-            // dotsContainer.className = sliderDots;
-            // parentWrap.appendChild(dotsContainer);
-            // //Init Swiper
-            // const options = {
-            //     direction: 'horizontal',
-            //     loop: true,
-            //     spaceBetween: 0,
-            //     dynamicBullets: true,
-            //     watchOverflow: true,
-            //     parallax: true,
-            //     speed: 1000,
-            //     slidesPerView: 1,
-            //     autoplay: {
-            //         delay: 4000,
-            //     },
-            //     allowTouchMove: true,
-            //     pagination: {
-            //         el: '.' + sliderDots,
-            //         clickable: true
-            //     },
-            //     navigation: {
-            //         nextEl: '.swiper-button-next',
-            //         prevEl: '.swiper-button-prev',
-            //     },
-            //     on: {
-            //         init: function () {
-            //             animationStart();
-            //         },
-            //         transitionEnd: function () {
-            //             animationStart();
-            //         }
-            //     },
-            // }
-            // function animationStart() {
-            //     var othersChar = document.querySelectorAll('.swiper-slide .char'),
-            //         otherWords = document.querySelectorAll('.swiper-slide .text span'),
-            //         activeChar = document.querySelectorAll('.swiper-slide-active .char'),
-            //         activeWord = document.querySelectorAll('.swiper-slide-active .text span');
-            //     TweenMax.set(othersChar, { yPercent: +100, scaleY: 0 });
-            //     TweenMax.set(otherWords, { yPercent: -100 });
-            //     TweenMax.staggerTo(activeChar, 1.5, { yPercent: -100, scaleY: 1, ease: Power3.easeInOut }, 0.05);
-            //     TweenMax.staggerTo(activeChar, 1.5, { scaleY: 1, delay: .3, ease: Power3.easeInOut }, 0.05);
-            //     TweenMax.staggerTo(activeWord, 1.0, { delay: .5, yPercent: +100, ease: Power3.easeInOut });
-            // }
-          }
-
-          try {
-            new Swiper(slider, options);
-          } catch (e) {}
-        });
-      }
+      Sliders.items = _toConsumableArray(document.querySelectorAll('.swiper-container')).map(function (slider, index) {
+        return new Sliders(slider, index);
+      });
+      console.log('sliders: ', Sliders.items);
+    }
+  }, {
+    key: "destroyAll",
+    value: function destroyAll() {
+      Sliders.items.forEach(function (slider) {
+        slider.destroy();
+      });
     }
   }]);
 

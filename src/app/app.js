@@ -4,12 +4,12 @@
 import "@babel/polyfill";
 import barba from '@barba/core';
 import "css-vars-ponyfill";
+import Anchors from './shared/anchors';
 import Appears from './shared/appears';
 import Dom from './shared/dom';
-import Anchors from './shared/anchors';
 import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
-import Sliders from "./shared/sliders";
+import Sliders from './shared/sliders';
 import Utils from './shared/utils';
 
 let menuStyle = 1;
@@ -25,7 +25,6 @@ export default class App {
         const header = document.querySelector('.header');
         const smooth = 'cubic-bezier(0, 0.97, 0.43, 1)';
         const anchorPanel = document.querySelector('.anchors');
-        const parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
         Dom.detect(body);
         const mouse = {
             x: 0,
@@ -34,80 +33,87 @@ export default class App {
         this.body = body;
         this.page = page;
         this.header = header;
-        this.smooth= smooth;
+        this.smooth = smooth;
         this.anchorPanel = anchorPanel;
         this.appears = [];
-        this.parallaxes = parallaxes;
+        this.parallaxes = [];
         this.onResize();
         this.addListeners();
         this.transitions();
         this.onPageInit();
 
         Element.prototype.scrollIntoView_ = Element.prototype.scrollIntoView;
-		Element.prototype.scrollIntoView = function() {
-			if (Dom.fastscroll) {
-				return this.scrollIntoView_.apply(this, arguments);
-			} else {
-				let rect = Rect.fromNode(this);
-				const scrollTop = Dom.scrollTop();
-				window.scrollTo(0, Math.max(0, scrollTop + rect.top - 120));
-			}
-		};
-
-        // const anchor = document.querySelector('.anchors li.active');
-
-        // anchor.addEventListener('click', e => {
-        //     const designer = document.querySelector('[data-anchor="Designer"]');    
-        //     window.scrollTo(0, designer.offsetTop);
-        //     e.preventDefault();
-        // });
-
+        Element.prototype.scrollIntoView = function () {
+            if (Dom.fastscroll) {
+                return this.scrollIntoView_.apply(this, arguments);
+            } else {
+                let rect = Rect.fromNode(this);
+                const scrollTop = Dom.scrollTop();
+                window.scrollTo(0, Math.max(0, scrollTop + rect.top - 120));
+            }
+        };
+        Navigation.init();
         body.classList.add('ready');
     }
 
     transitions() {
+        const transitionLayer = document.querySelector('.transition');
         // Basic default transition, with no rules and minimal hooks…
         barba.init({
             debug: true,
             transitions: [{
-                leave({
-                    current,
-                    next,
-                    trigger
-                }) {
-                    // Do something with `current.container` for your leave transition
-                    // then return a promise or use `this.async()`
-                    //app.destroyAll();
-                    console.log('leaving');
-                    return Promise.resolve();
-                    // this.async();
+                leave(data) {
+                    const done = this.async();
+                    const current = data.current.container;
+                    Navigation.closeNav();
+                    Navigation.closeSearch();
+                    current.classList.add('starting-leave');
+                    setTimeout(y => {
+                        current.classList.add('end-leave');
+                        transitionLayer.classList.add('intro');
+                        setTimeout(x => {
+                            done();
+                        }, 1600);
+                    }, 1000);
                 },
-                enter({
-                    current,
-                    next,
-                    trigger
-                }) {
-                    // Do something with `next.container` for your enter transition
-                    // then return a promise or use `this.async()`
-                    console.log('entering');
+                afterLeave(data) {
+                    const done = this.async();
+                    const next = data.next.container;
+                    app.destroyAll(data.current.container);
+                    next.classList.add('starting-enter');
+                    transitionLayer.classList.add('outro');
+                    done();
+                },
+                enter(data) {
+                    const done = this.async();
+                    const next = data.next.container;
                     app.onPageInit();
-                    return Promise.resolve();
-                    // this.async();
-                },
+                    console.log('enter');
+                    setTimeout(x => {
+                        transitionLayer.classList.remove('intro');
+                        transitionLayer.classList.remove('outro');
+                        next.classList.remove('starting-enter');
+                        setTimeout(y => {
+                            done();
+                        }, 800);
+                    }, 1000);
+                }
             }, ],
         });
     }
 
     onPageInit() {
+        this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
         this.appears = Appears.init();
         Splitting();
         Sliders.init();
-        Navigation.init();
-        Anchors.init(document.querySelector('.anchors__wrapper'));
+        Anchors.init(document.querySelector('.anchors__wrapper'), 200);
     }
 
-    destroyAll() {
-        Anchors.destroy();
+    destroyAll(container) {
+        Anchors.destroyAll();
+        Sliders.destroyAll();
+        container.remove();
     }
 
     addListeners() {
@@ -141,7 +147,7 @@ export default class App {
 
     onScroll(e) {
         const scrollTop = Dom.scrollTop();
-        
+
         Navigation.closeNav();
         Navigation.closeSearch();
 
@@ -172,7 +178,7 @@ export default class App {
                 this.anchorPanel.style.top = -this.anchorPanel.clientHeight + 'px';
                 this.anchorPanel.style.transition = 'top .5s ' + this.smooth;
             }
-            
+
             if (this.body.classList.contains('scroll-down')) {
                 this.header.style.top = 0;
                 if (this.anchorPanel) {
@@ -180,7 +186,7 @@ export default class App {
                 }
             } else {
                 this.header.style.top = -this.header.clientHeight + 'px';
-                if (this.anchorPanel) { 
+                if (this.anchorPanel) {
                     this.anchorPanel.style.top = 0;
                 }
             }
