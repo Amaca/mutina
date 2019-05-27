@@ -1,0 +1,119 @@
+
+
+
+body {
+    background: black;
+}
+
+.transition {
+    position: fixed;
+    z-index: 3;
+    bottom: 0;
+    transform-origin: bottom;
+    left: 0;
+    width: 100vw;
+    height: 0;
+    //background: white;
+    //background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 20%, rgba(255,255,255,1) 80%, rgba(255,255,255,0) 100%);
+    //background: #8a8a8a;
+    background: #252525;
+    overflow: hidden;
+   
+    &.transition-1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+        img {
+            width: 120px;
+            height: 120px;
+        }
+    }
+
+    &.transition-2 {
+
+        .logo__primary {
+            width: 0vw;
+            height: auto;
+            overflow: hidden;
+            position: absolute;
+            z-index: 2;
+            bottom: -60px;
+        }
+
+        .logo__secondary {
+            width: 0vw;
+            height: auto;
+            overflow: hidden;
+            position: absolute;
+            z-index: 2;
+            bottom: -60px;
+        }
+
+        .logo-black {
+            width: 100vw;   
+            opacity: 0.3;
+        }
+
+        .logo-white {
+            width: 100vw;
+            opacity: 0.2;
+        }
+    }
+}
+
+
+
+// .transition {
+//     position: fixed;
+//     z-index: 9999;
+//     bottom: 0;
+//     transform-origin: bottom;
+//     left: 0;
+//     width: 100vw;
+//     height: 0;
+//     background: $dark;
+//     overflow: hidden;
+
+//     img {
+//         width: 100vw;
+//         height: auto;
+//         position: relative;
+//         z-index: 2;
+//         bottom: -10%;
+//         opacity: 0.4;
+//         top: 60%;
+//     }
+
+//     &.intro {
+//         height: 100vh;
+//         transition: all 1000ms $smooth;
+//     }
+
+//     &.outro {
+//         top: 0;
+//         bottom: auto;
+//         height: 0;
+//         transform-origin: top;
+//         transition: all 1000ms $smooth;
+//     }
+// }
+
+
+// .barba-container {
+//     transition: all 800ms ease-in-out;
+
+//     &.starting-leave {
+//         //filter: grayscale(100%);
+//         filter: blur(5px);
+//     }
+
+//     &.end-leave {
+//         transform: translateY(-30vh);
+//     }
+
+//     &.starting-enter {
+//         //filter: grayscale(100%);
+//         filter: blur(5px);
+//     }
+// }

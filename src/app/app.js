@@ -58,56 +58,60 @@ export default class App {
 
     transitions() {
         const transitionLayer = document.querySelector('.transition');
+        const transitionLogo = document.querySelector('.transition img');
+        const transitionLogo1 = document.querySelector('.transition .logo__primary');
+        const transitionLogo2 = document.querySelector('.transition .logo__secondary');
+
         // Basic default transition, with no rules and minimal hooks…
         barba.init({
             debug: true,
             transitions: [{
                 leave(data) {
                     const done = this.async();
-                    const current = data.current.container;
-                    Navigation.closeNav();
-                    Navigation.closeSearch();
-                    current.classList.add('starting-leave');
-                    setTimeout(y => {
-                        current.classList.add('end-leave');
-                        transitionLayer.classList.add('intro');
-                        setTimeout(x => {
-                            done();
-                        }, 1600);
-                    }, 1000);
+                    TweenMax.set(transitionLayer, {bottom: 0, top: 'auto'});
+                    //TweenMax.set(transitionLogo, {transform: 'translateY(-20px)', opacity: 0}); //transition-1
+                    TweenMax.set(transitionLogo1, {width: 0, bottom: -100}); //transition-2
+                    TweenMax.set(transitionLogo2, {width: 0, bottom: -60}); //transition-2
+                    TweenMax.to(data.current.container, 1, {transform: 'translateY(-60px)', ease: Expo.easeInOut});
+                    TweenMax.to(transitionLayer, 1, {height: window.innerHeight, ease: Expo.easeInOut});
+                    TweenMax.to(transitionLogo1, 1, {width: '100vw', bottom: -60, ease: Expo.easeInOut}).delay(0.2); //transition-2
+                    TweenMax.to(transitionLogo2, 1, {width: '100vw', ease: Expo.easeInOut, onComplete: (e) => { 
+                        done();
+                    }}).delay(0.8); //transition-2   
+                    // TweenMax.to(transitionLogo, 1, {transform: 'translateY(0)', opacity: 1, ease: Expo.easeInOut, onComplete: (e) => { 
+                    //     done();
+                    // }}).delay(0.3); //transition-1
                 },
-                afterLeave(data) {
+               afterLeave(data) {
                     const done = this.async();
-                    const next = data.next.container;
                     app.destroyAll(data.current.container);
-                    next.classList.add('starting-enter');
-                    transitionLayer.classList.add('outro');
                     done();
-                },
-                enter(data) {
-                    const done = this.async();
-                    const next = data.next.container;
-                    app.onPageInit();
-                    console.log('enter');
-                    setTimeout(x => {
-                        transitionLayer.classList.remove('intro');
-                        transitionLayer.classList.remove('outro');
-                        next.classList.remove('starting-enter');
-                        setTimeout(y => {
-                            done();
-                        }, 800);
-                    }, 1000);
-                }
+               },
+               enter(data) {
+                   const done = this.async();
+                   app.onPageInit();
+                    //    TweenMax.to(transitionLogo, 1, {transform: 'translateY(20px)', opacity: 0, ease: Expo.easeInOut}).delay(0.3); //transition-1
+                //    TweenMax.to(transitionLayer, 1, {height: 0, top: 0, bottom: 'auto', ease: Expo.easeInOut, onComplete: (e) => {
+                //       done();
+                //    }}).delay(0.3); //transition-1
+                    TweenMax.to(transitionLogo1, 1, {bottom: -100, ease: Expo.easeInOut}); //transition-2
+                    TweenMax.to(transitionLogo2, 1, {bottom: -100, ease: Expo.easeInOut}); //transition-2
+                    TweenMax.to(transitionLayer, 1, {height: 0, ease: Expo.easeInOut, onComplete: (e) => {
+                        done();
+                    }}); //transition-2
+               }
             }, ],
         });
     }
 
     onPageInit() {
         this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
-        this.appears = Appears.init();
-        Splitting();
         Sliders.init();
         Anchors.init(document.querySelector('.anchors__wrapper'), 200);
+        setTimeout(x=> {
+            this.appears = Appears.init();
+            Splitting();
+        }, 600);
     }
 
     destroyAll(container) {

@@ -12109,49 +12109,85 @@ function () {
   }, {
     key: "transitions",
     value: function transitions() {
-      var transitionLayer = document.querySelector('.transition'); // Basic default transition, with no rules and minimal hooks…
+      var transitionLayer = document.querySelector('.transition');
+      var transitionLogo = document.querySelector('.transition img');
+      var transitionLogo1 = document.querySelector('.transition .logo__primary');
+      var transitionLogo2 = document.querySelector('.transition .logo__secondary'); // Basic default transition, with no rules and minimal hooks…
 
       _core.default.init({
         debug: true,
         transitions: [{
           leave: function leave(data) {
             var done = this.async();
-            var current = data.current.container;
+            TweenMax.set(transitionLayer, {
+              bottom: 0,
+              top: 'auto'
+            }); //TweenMax.set(transitionLogo, {transform: 'translateY(-20px)', opacity: 0}); //transition-1
 
-            _navigation.default.closeNav();
+            TweenMax.set(transitionLogo1, {
+              width: 0,
+              bottom: -100
+            }); //transition-2
 
-            _navigation.default.closeSearch();
+            TweenMax.set(transitionLogo2, {
+              width: 0,
+              bottom: -60
+            }); //transition-2
 
-            current.classList.add('starting-leave');
-            setTimeout(function (y) {
-              current.classList.add('end-leave');
-              transitionLayer.classList.add('intro');
-              setTimeout(function (x) {
+            TweenMax.to(data.current.container, 1, {
+              transform: 'translateY(-60px)',
+              ease: Expo.easeInOut
+            });
+            TweenMax.to(transitionLayer, 1, {
+              height: window.innerHeight,
+              ease: Expo.easeInOut
+            });
+            TweenMax.to(transitionLogo1, 1, {
+              width: '100vw',
+              bottom: -60,
+              ease: Expo.easeInOut
+            }).delay(0.2); //transition-2
+
+            TweenMax.to(transitionLogo2, 1, {
+              width: '100vw',
+              ease: Expo.easeInOut,
+              onComplete: function onComplete(e) {
                 done();
-              }, 1600);
-            }, 1000);
+              }
+            }).delay(0.8); //transition-2   
+            // TweenMax.to(transitionLogo, 1, {transform: 'translateY(0)', opacity: 1, ease: Expo.easeInOut, onComplete: (e) => { 
+            //     done();
+            // }}).delay(0.3); //transition-1
           },
           afterLeave: function afterLeave(data) {
             var done = this.async();
-            var next = data.next.container;
             app.destroyAll(data.current.container);
-            next.classList.add('starting-enter');
-            transitionLayer.classList.add('outro');
             done();
           },
           enter: function enter(data) {
             var done = this.async();
-            var next = data.next.container;
-            app.onPageInit();
-            console.log('enter');
-            setTimeout(function (x) {
-              transitionLayer.classList.remove('intro');
-              transitionLayer.classList.remove('outro');
-              next.classList.remove('starting-enter');
-              setTimeout(function (y) {
+            app.onPageInit(); //    TweenMax.to(transitionLogo, 1, {transform: 'translateY(20px)', opacity: 0, ease: Expo.easeInOut}).delay(0.3); //transition-1
+            //    TweenMax.to(transitionLayer, 1, {height: 0, top: 0, bottom: 'auto', ease: Expo.easeInOut, onComplete: (e) => {
+            //       done();
+            //    }}).delay(0.3); //transition-1
+
+            TweenMax.to(transitionLogo1, 1, {
+              bottom: -100,
+              ease: Expo.easeInOut
+            }); //transition-2
+
+            TweenMax.to(transitionLogo2, 1, {
+              bottom: -100,
+              ease: Expo.easeInOut
+            }); //transition-2
+
+            TweenMax.to(transitionLayer, 1, {
+              height: 0,
+              ease: Expo.easeInOut,
+              onComplete: function onComplete(e) {
                 done();
-              }, 800);
-            }, 1000);
+              }
+            }); //transition-2
           }
         }]
       });
@@ -12159,13 +12195,18 @@ function () {
   }, {
     key: "onPageInit",
     value: function onPageInit() {
+      var _this = this;
+
       this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
-      this.appears = _appears.default.init();
-      Splitting();
 
       _sliders.default.init();
 
       _anchors.default.init(document.querySelector('.anchors__wrapper'), 200);
+
+      setTimeout(function (x) {
+        _this.appears = _appears.default.init();
+        Splitting();
+      }, 600);
     }
   }, {
     key: "destroyAll",
@@ -12179,16 +12220,16 @@ function () {
   }, {
     key: "addListeners",
     value: function addListeners() {
-      var _this = this;
+      var _this2 = this;
 
       window.addEventListener('resize', function () {
-        _this.onResize();
+        _this2.onResize();
       });
       window.addEventListener('scroll', _utils.default.throttle(function () {
-        _this.onScroll();
+        _this2.onScroll();
       }, 1000 / 25));
       window.addEventListener('wheel', function (e) {
-        _this.onWheel(e);
+        _this2.onWheel(e);
       });
     }
   }, {
@@ -12276,7 +12317,7 @@ function () {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       // smoothscroll desktop
       // if (!Dom.overscroll && !Dom.touch) {
@@ -12333,7 +12374,7 @@ function () {
           width: rect.width,
           height: rect.height
         });
-        var intersection = rect.intersection(_this2.windowRect);
+        var intersection = rect.intersection(_this3.windowRect);
         /*
         if (fullHeight) {
         	console.log(intersection);
@@ -12361,7 +12402,7 @@ function () {
       this.appears.forEach(function (node, i) {
         var rect = _rect.default.fromNode(node);
 
-        var intersection = rect.intersection(_this2.windowRect);
+        var intersection = rect.intersection(_this3.windowRect);
 
         if (intersection.y > 0.0) {
           if (!node.to) {
@@ -12380,13 +12421,13 @@ function () {
   }, {
     key: "loop",
     value: function loop() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.render();
 
       if (this.playing) {
         window.requestAnimationFrame(function () {
-          _this3.loop();
+          _this4.loop();
         });
       }
     }
