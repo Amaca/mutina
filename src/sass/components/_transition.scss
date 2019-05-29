@@ -10,54 +10,46 @@
     //background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 20%, rgba(255,255,255,1) 80%, rgba(255,255,255,0) 100%);
     //background: #f0f0f0;
     //background: #e1e1e1;
-    background: #b5b5b5;
+    //background: #f7f7f7;
+    background: white;
     overflow: hidden;
+    pointer-events: none;
 
-    &.transition-1 {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    &:after {
+        content: '';
+        background: $dark;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 2px;
+        position: absolute;
+        z-index: 2;
+    }
 
-        img {
-            width: 100px;
-            height: 100px;
+    &.transition--no-top-line {
+        &:after {
+            display: none;
         }
     }
 
-    &.transition-2 {
-
-        .logo__primary {
-            width: 0vw;
-            height: auto;
-            overflow: hidden;
-            position: absolute;
-            z-index: 2;
-            bottom: -60px;
-        }
-
-        .logo__secondary {
-            width: 0vw;
-            height: auto;
-            overflow: hidden;
-            position: absolute;
-            z-index: 2;
-            bottom: -60px;
-        }
-
-        .logo-black {
-            width: 100vw;
-            opacity: 0.3;
-        }
-
-        .logo-white {
-            width: 100vw;
-            opacity: 0.2;
-        }
+    .transition__line {
+        position: absolute;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        height: 2px;
+        width: 0;
+        background: $dark;
     }
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    .logo__wrapper {
+        position: fixed;
+        z-index: 4;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        overflow: hidden;
+    }
 
     svg {
         width: 110px;
@@ -65,12 +57,12 @@
     }
 
     .logo__square-primary {
-        fill: #ECECEC;
+        fill: #CFCFCF;
         width: 0;
     }
 
     .logo__square-secondary {
-        fill: #CFCFCF;
+        fill: #ECECEC;
         width: 0;
     }
 
@@ -93,75 +85,54 @@
     .logo__group-a {
         opacity: 0;
     }
+
+    .transition__text {
+        position: absolute;
+        z-index: 5;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        .box {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            left: 0;
+            bottom: 0;
+        }
+
+        .box--front {
+            .text {
+                font-size: 5rem;
+                color: #fff;
+                line-height: 1;
+                padding: 5px 0;
+                position: relative;
+                bottom: 0;
+                display: inline-block;
+            }
+        }
+
+        .box--back {
+            position: absolute;
+            z-index: 2;
+            left: 0;
+            bottom: 0;
+            height: 100%;
+            width: 0;
+
+            .text {
+                font-size: 5rem;
+                color: $dark;
+                line-height: 1;
+                padding: 5px 0;
+                position: relative;
+                z-index: 3;
+                bottom: 0;
+                display: inline-block;
+            }
+        }
+    }
+
 }
-
-
-
-// .barba-container {
-//     transition: all 800ms ease-in-out;
-
-//     &.starting-leave {
-//         //filter: grayscale(100%);
-//         filter: blur(5px);
-//     }
-
-//     &.starting-enter {
-//         //filter: grayscale(100%);
-//         filter: blur(5px);
-//     }
-// }
-
-
-// .transition {
-//     position: fixed;
-//     z-index: 9999;
-//     bottom: 0;
-//     transform-origin: bottom;
-//     left: 0;
-//     width: 100vw;
-//     height: 0;
-//     background: $dark;
-//     overflow: hidden;
-
-//     img {
-//         width: 100vw;
-//         height: auto;
-//         position: relative;
-//         z-index: 2;
-//         bottom: -10%;
-//         opacity: 0.4;
-//         top: 60%;
-//     }
-
-//     &.intro {
-//         height: 100vh;
-//         transition: all 1000ms $smooth;
-//     }
-
-//     &.outro {
-//         top: 0;
-//         bottom: auto;
-//         height: 0;
-//         transform-origin: top;
-//         transition: all 1000ms $smooth;
-//     }
-// }
-
-
-// .barba-container {
-//     transition: all 800ms ease-in-out;
-
-//     &.starting-leave {
-//         //filter: grayscale(100%);
-//         filter: blur(5px);
-//     }
-
-//     &.end-leave {
-//         transform: translateY(-30vh);
-//     }
-
-//     &.starting-enter {
-//         //filter: grayscale(100%);
-//         filter: blur(5px);
-//     }
-// }
