@@ -96,6 +96,28 @@ body {
   position: absolute;
   visibility: hidden; }
 
+.templates-list {
+  width: 100vw;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .templates-list .box img {
+    margin-bottom: 30px; }
+  .templates-list .box ul {
+    padding: 0;
+    margin: 0;
+    text-align: center; }
+    .templates-list .box ul li {
+      font-size: 24px;
+      display: block; }
+
 .grid {
   display: -webkit-box;
   display: -ms-flexbox;
