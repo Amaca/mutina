@@ -12036,6 +12036,8 @@ var _appears = _interopRequireDefault(require("./shared/appears"));
 
 var _dom = _interopRequireDefault(require("./shared/dom"));
 
+var _fancy = _interopRequireDefault(require("./shared/fancy"));
+
 var _navigation = _interopRequireDefault(require("./shared/navigation"));
 
 var _rect = _interopRequireDefault(require("./shared/rect"));
@@ -12113,7 +12115,7 @@ function () {
       var textBack = document.querySelector('.transition__text .box--back .text');
       var boxBack = document.querySelector('.transition__text .box--back');
       var line = document.querySelector('.transition__line');
-      var activateIntro = true;
+      var activateIntro = false;
 
       _core.default.init({
         timeout: 5000,
@@ -12333,6 +12335,8 @@ function () {
 
       _anchors.default.init(document.querySelector('.anchors__wrapper'), 200);
 
+      _fancy.default.init();
+
       setTimeout(function (x) {
         _this.appears = _appears.default.init();
         Splitting();
@@ -12411,11 +12415,11 @@ function () {
 
       if (scrollTop > 300 && !this.body.classList.contains('nav-mobile-open')) {
         this.header.style.top = -this.header.clientHeight + 'px';
-        this.header.style.transition = 'top .5s ' + this.smooth;
+        this.header.style.transition = 'top .15s linear';
 
         if (this.anchorPanel) {
           this.anchorPanel.style.top = -this.anchorPanel.clientHeight + 'px';
-          this.anchorPanel.style.transition = 'top .5s ' + this.smooth;
+          this.anchorPanel.style.transition = 'top .15s linear';
         }
 
         if (this.body.classList.contains('scroll-down')) {
@@ -12585,7 +12589,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":311,"./shared/appears":312,"./shared/dom":313,"./shared/navigation":314,"./shared/rect":315,"./shared/sliders":316,"./shared/utils":317,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],311:[function(require,module,exports){
+},{"./shared/anchors":311,"./shared/appears":312,"./shared/dom":313,"./shared/fancy":314,"./shared/navigation":315,"./shared/rect":316,"./shared/sliders":317,"./shared/utils":318,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],311:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12898,7 +12902,252 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":317}],314:[function(require,module,exports){
+},{"./utils":318}],314:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* jshint esversion: 6 */
+var clickClose;
+var swiperInstance;
+
+var Fancy =
+/*#__PURE__*/
+function () {
+  function Fancy(node, id) {
+    _classCallCheck(this, Fancy);
+
+    this.node = node;
+    this.id = id;
+    this.smallImageUrl = node.getAttribute('src');
+    this.bigImageUrl = node.getAttribute('data-fancy-img');
+    this.caption = node.getAttribute('data-fancy-caption');
+    this.addListener();
+  }
+
+  _createClass(Fancy, [{
+    key: "addListener",
+    value: function addListener() {
+      var _this = this;
+
+      var click = function click(e) {
+        _this.openDetailGallery();
+
+        e.preventDefault();
+      };
+
+      this.click = click;
+      this.node.addEventListener('click', this.click);
+    }
+  }, {
+    key: "openDetailGallery",
+    value: function openDetailGallery() {
+      Fancy.initDetailGallery();
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.node.removeEventListener('click', this.click);
+    }
+  }], [{
+    key: "init",
+    value: function init() {
+      Fancy.items = _toConsumableArray(document.querySelectorAll('[data-fancy-img]')).map(function (element, id) {
+        return new Fancy(element, id);
+      });
+      console.log('Fancy: ', Fancy.items);
+    }
+  }, {
+    key: "destroyAll",
+    value: function destroyAll() {
+      Fancy.items.forEach(function (node) {
+        node.destroy();
+      });
+      swiperInstance.destroy();
+      document.querySelector('detail-gallery').remove();
+      document.querySelector('full-gallery').remove();
+    }
+  }, {
+    key: "initDetailGallery",
+    value: function initDetailGallery() {
+      var detailGallery = document.createElement('div');
+      var detailGalleryClose = document.createElement('div');
+      var detailGalleryBg = document.createElement('div');
+      var detailGalleryWrapper = document.createElement('div');
+      var detailGalleryFooter = document.createElement('div');
+      detailGallery.classList.add('detail-gallery');
+      detailGalleryClose.classList.add('detail-gallery__close');
+      detailGalleryBg.classList.add('detail-gallery__bg');
+      detailGalleryWrapper.classList.add('detail-gallery__wrapper');
+      detailGalleryFooter.classList.add('detail-gallery__footer');
+      detailGalleryClose.innerHTML = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
+
+      clickClose = function clickClose(e) {
+        Fancy.closeLayer(detailGallery, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter);
+        e.preventDefault();
+      };
+
+      detailGalleryClose.addEventListener('click', clickClose);
+      document.body.appendChild(detailGallery);
+      detailGallery.appendChild(detailGalleryClose);
+      detailGallery.appendChild(detailGalleryBg);
+      detailGallery.appendChild(detailGalleryWrapper);
+      detailGallery.appendChild(detailGalleryFooter);
+      Fancy.openLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter);
+    }
+  }, {
+    key: "initSwiper",
+    value: function initSwiper(wrapper) {
+      var sliderItems = Fancy.items.map(function (item) {
+        return {
+          id: item.id,
+          caption: item.caption,
+          url: item.bigImageUrl
+        };
+      });
+      var slidersHtml = '';
+      sliderItems.forEach(function (slider) {
+        slidersHtml += "\n            <div class=\"swiper-slide\">\n                <div class=\"swiper-zoom-container\"><img src=\"".concat(slider.url, "\"></div>\n                <div class=\"caption\">").concat(slider.caption, "</div>\n            </div>");
+      });
+      var swiperMarkup = "\n        <div class=\"swiper-container\">\n            <div class=\"swiper-wrapper\">".concat(slidersHtml, "</div>\n            <div class=\"swiper-pagination\"></div>   \n            <div class=\"swiper-button-prev\"></div>\n            <div class=\"swiper-button-next\"></div>  \n        </div>");
+      var detailGallerySwiper = document.createElement('div');
+      detailGallerySwiper.classList.add('detail-gallery__swiper');
+      detailGallerySwiper.innerHTML = swiperMarkup;
+      wrapper.appendChild(detailGallerySwiper);
+      var options = {
+        watchOverflow: true,
+        centeredSlides: true,
+        loop: true,
+        slidesPerView: 1,
+        spaceBetween: 60,
+        speed: 400,
+        zoom: true
+      };
+      swiperInstance = new Swiper(document.querySelector('.detail-gallery__swiper .swiper-container'), options);
+      swiperInstance.init();
+    }
+  }, {
+    key: "openLayer",
+    value: function openLayer(layer, close, wrapper, footer) {
+      var closeHeight = close.clientHeight;
+      var footerHeight = footer ? footer.clientHeight : null;
+      TweenMax.set(layer, {
+        bottom: 0,
+        top: 'auto',
+        height: 0
+      });
+      TweenMax.set(close, {
+        height: 0
+      });
+
+      if (wrapper && footer) {
+        TweenMax.set(wrapper, {
+          opacity: 0
+        });
+        TweenMax.set(footer, {
+          height: 0
+        });
+      }
+
+      TweenMax.to(layer, 1, {
+        height: window.innerHeight,
+        ease: Expo.easeInOut
+      });
+
+      if (wrapper && footer) {
+        TweenMax.to(close, 1, {
+          height: closeHeight,
+          ease: Expo.easeInOut
+        });
+        TweenMax.to(footer, 1, {
+          height: footerHeight,
+          ease: Expo.easeInOut,
+          onComplete: function onComplete() {
+            Fancy.initSwiper(wrapper);
+          }
+        }).delay(1);
+        TweenMax.to(wrapper, 1, {
+          opacity: 1,
+          ease: Expo.easeInOut
+        }).delay(2);
+      } else {
+        TweenMax.to(close, 1, {
+          height: closeHeight,
+          ease: Expo.easeInOut
+        });
+      }
+    }
+  }, {
+    key: "closeLayer",
+    value: function closeLayer(layer, close, wrapper, footer) {
+      var footerHeight = footer ? footer.clientHeight : null;
+      TweenMax.set(layer, {
+        bottom: 'auto',
+        top: 0,
+        height: window.innerHeight
+      });
+
+      if (wrapper && footer) {
+        TweenMax.set(wrapper, {
+          opacity: 1
+        });
+        TweenMax.set(footer, {
+          height: footerHeight
+        });
+      }
+
+      if (wrapper && footer) {
+        TweenMax.to(wrapper, 1, {
+          opacity: 0,
+          ease: Expo.easeInOut
+        });
+        TweenMax.to(footer, 1, {
+          height: 0,
+          ease: Expo.easeInOut
+        });
+      }
+
+      var delay = wrapper && footer ? 1000 : 0;
+      setTimeout(function (x) {
+        TweenMax.to(layer, 1, {
+          height: 0,
+          ease: Expo.easeInOut
+        });
+        TweenMax.to(close, 1, {
+          height: 0,
+          ease: Expo.easeInOut,
+          onComplete: function onComplete() {
+            swiperInstance.destroy();
+            layer.remove();
+          }
+        });
+      }, delay);
+    }
+  }]);
+
+  return Fancy;
+}();
+
+exports.default = Fancy;
+
+},{}],315:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13202,7 +13451,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":317}],315:[function(require,module,exports){
+},{"./utils":318}],316:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13321,7 +13570,7 @@ function () {
 
 exports.default = Rect;
 
-},{}],316:[function(require,module,exports){
+},{}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13433,7 +13682,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],317:[function(require,module,exports){
+},{}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

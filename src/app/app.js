@@ -7,6 +7,7 @@ import "css-vars-ponyfill";
 import Anchors from './shared/anchors';
 import Appears from './shared/appears';
 import Dom from './shared/dom';
+import Fancy from "./shared/fancy";
 import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
 import Sliders from './shared/sliders';
@@ -62,7 +63,7 @@ export default class App {
         const boxBack = document.querySelector('.transition__text .box--back');
         const line = document.querySelector('.transition__line');
 
-        const activateIntro = true;
+        const activateIntro = false;
 
         barba.init({
             timeout: 5000,
@@ -287,6 +288,7 @@ export default class App {
         this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
         Sliders.init();
         Anchors.init(document.querySelector('.anchors__wrapper'), 200);
+        Fancy.init();
         setTimeout(x => {
             this.appears = Appears.init();
             Splitting();
@@ -355,11 +357,11 @@ export default class App {
         //header animation
         if (scrollTop > 300 && !this.body.classList.contains('nav-mobile-open')) {
             this.header.style.top = -this.header.clientHeight + 'px';
-            this.header.style.transition = 'top .5s ' + this.smooth;
+            this.header.style.transition = 'top .15s linear';
 
             if (this.anchorPanel) {
                 this.anchorPanel.style.top = -this.anchorPanel.clientHeight + 'px';
-                this.anchorPanel.style.transition = 'top .5s ' + this.smooth;
+                this.anchorPanel.style.transition = 'top .15s linear';
             }
 
             if (this.body.classList.contains('scroll-down')) {
