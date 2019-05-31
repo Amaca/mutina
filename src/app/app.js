@@ -63,7 +63,7 @@ export default class App {
         const boxBack = document.querySelector('.transition__text .box--back');
         const line = document.querySelector('.transition__line');
 
-        const activateIntro = true;
+        const activateIntro = false;
 
         barba.init({
             timeout: 5000,

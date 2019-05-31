@@ -12925,8 +12925,16 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 /* jshint esversion: 6 */
+
+/* tweenmax & swiper needed */
 var clickClose;
 var swiperInstance;
+var body = document.querySelector('body');
+var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
+var prevIcon = "<svg><use xlink:href=\"#svg-prev\"></use></svg>";
+var nextIcon = "<svg><use xlink:href=\"#svg-next\"></use></svg>";
+var fullGalleryIcon = "<svg><use xlink:href=\"#svg-grid3x3\"></use></svg>";
+var slideAnimationSpeed = 1000;
 
 var Fancy =
 /*#__PURE__*/
@@ -12997,7 +13005,7 @@ function () {
       detailGalleryBg.classList.add('detail-gallery__bg');
       detailGalleryWrapper.classList.add('detail-gallery__wrapper');
       detailGalleryFooter.classList.add('detail-gallery__footer');
-      detailGalleryClose.innerHTML = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
+      detailGalleryClose.innerHTML = closeIcon;
 
       clickClose = function clickClose(e) {
         Fancy.closeLayer(detailGallery, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter);
@@ -13010,6 +13018,7 @@ function () {
       detailGallery.appendChild(detailGalleryBg);
       detailGallery.appendChild(detailGalleryWrapper);
       detailGallery.appendChild(detailGalleryFooter);
+      detailGalleryFooter.innerHTML = "\n            <div class=\"detail-gallery__cta\">".concat(fullGalleryIcon, "</div>\n            <div class=\"detail-gallery__caption\"><span></span></div>\n            <div class=\"detail-gallery__pagination\"></div>\n        ");
       Fancy.openLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter);
     }
   }, {
@@ -13024,9 +13033,9 @@ function () {
       });
       var slidersHtml = '';
       sliderItems.forEach(function (slider) {
-        slidersHtml += "\n            <div class=\"swiper-slide\">\n                <div class=\"swiper-zoom-container\"><img src=\"".concat(slider.url, "\"></div>\n                <div class=\"caption\">").concat(slider.caption, "</div>\n            </div>");
+        slidersHtml += "\n            <div class=\"swiper-slide\">\n                <div class=\"swiper-zoom-container\"><img  class=\"swiper-lazy\" data-src=\"".concat(slider.url, "\"></div>\n                <div class=\"swiper-lazy-preloader\"></div>\n            </div>");
       });
-      var swiperMarkup = "\n        <div class=\"swiper-container\">\n            <div class=\"swiper-wrapper\">".concat(slidersHtml, "</div>\n            <div class=\"swiper-pagination\"></div>   \n            <div class=\"swiper-button-prev\"></div>\n            <div class=\"swiper-button-next\"></div>  \n        </div>");
+      var swiperMarkup = "\n        <div class=\"swiper-container\">\n            <div class=\"swiper-wrapper\">".concat(slidersHtml, "</div>\n            <div class=\"swiper-button-prev\">").concat(prevIcon, "</div>\n            <div class=\"swiper-button-next\">").concat(nextIcon, "</div>  \n        </div>");
       var detailGallerySwiper = document.createElement('div');
       detailGallerySwiper.classList.add('detail-gallery__swiper');
       detailGallerySwiper.innerHTML = swiperMarkup;
@@ -13034,11 +13043,61 @@ function () {
       var options = {
         watchOverflow: true,
         centeredSlides: true,
-        loop: true,
         slidesPerView: 1,
         spaceBetween: 60,
-        speed: 400,
-        zoom: true
+        speed: slideAnimationSpeed,
+        zoom: true,
+        preloadImages: false,
+        lazy: true,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+          el: '.detail-gallery__pagination',
+          clickable: true,
+          renderBullet: function renderBullet(index, className) {
+            var actualIndex = Number(index + 1);
+            return "<span class=\"detail-gallery__pagination-item ".concat(className, "\">").concat(actualIndex, "/").concat(sliderItems.length, "</span>");
+          }
+        },
+        on: {
+          doubleTap: function doubleTap() {
+            Fancy.toggleClass(body, 'fancy-zoom');
+
+            if (body.classList.contains('fancy-zoom')) {
+              this.allowSlidePrev = false;
+              this.allowSlideNext = false;
+            } else {
+              this.allowSlidePrev = true;
+              this.allowSlideNext = true;
+            }
+          },
+          init: function init() {
+            var caption = sliderItems[this.activeIndex].caption;
+            var captionWrapper = document.querySelector('.detail-gallery__caption span');
+            captionWrapper.innerHTML = caption;
+          },
+          slideChange: function slideChange() {
+            var captionSpeed = slideAnimationSpeed / 1000 / 2;
+            var caption = sliderItems[this.activeIndex].caption;
+            var captionWrapper = document.querySelector('.detail-gallery__caption span');
+            TweenMax.set(captionWrapper, {
+              bottom: 0
+            });
+            TweenMax.to(captionWrapper, captionSpeed, {
+              bottom: -captionWrapper.offsetHeight,
+              ease: Expo.easeInOut,
+              onComplete: function onComplete() {
+                captionWrapper.innerHTML = caption;
+                TweenMax.to(captionWrapper, captionSpeed, {
+                  bottom: 0,
+                  ease: Expo.easeInOut
+                });
+              }
+            });
+          }
+        }
       };
       swiperInstance = new Swiper(document.querySelector('.detail-gallery__swiper .swiper-container'), options);
       swiperInstance.init();
@@ -13048,6 +13107,8 @@ function () {
     value: function openLayer(layer, close, wrapper, footer) {
       var closeHeight = close.clientHeight;
       var footerHeight = footer ? footer.clientHeight : null;
+      var wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
+      Fancy.initSwiper(wrapper);
       TweenMax.set(layer, {
         bottom: 0,
         top: 'auto',
@@ -13059,10 +13120,10 @@ function () {
 
       if (wrapper && footer) {
         TweenMax.set(wrapper, {
-          opacity: 0
+          bottom: -wrapperHeight
         });
         TweenMax.set(footer, {
-          height: 0
+          bottom: -footerHeight
         });
       }
 
@@ -13070,23 +13131,27 @@ function () {
         height: window.innerHeight,
         ease: Expo.easeInOut
       });
+      TweenMax.to(layer, 0.8, {
+        backgroundColor: '#ffffff',
+        ease: Power1.easeOut
+      }).delay(0.4);
 
       if (wrapper && footer) {
+        TweenMax.to(wrapper, 1, {
+          bottom: footerHeight,
+          ease: Expo.easeInOut
+        }).delay(0.1);
         TweenMax.to(close, 1, {
           height: closeHeight,
           ease: Expo.easeInOut
         });
         TweenMax.to(footer, 1, {
-          height: footerHeight,
-          ease: Expo.easeInOut,
-          onComplete: function onComplete() {
-            Fancy.initSwiper(wrapper);
-          }
-        }).delay(1);
-        TweenMax.to(wrapper, 1, {
-          opacity: 1,
-          ease: Expo.easeInOut
-        }).delay(2);
+          bottom: 0,
+          ease: Expo.easeInOut // onComplete: () => {
+          //     Fancy.initSwiper(wrapper);
+          // }
+
+        }).delay(0.2);
       } else {
         TweenMax.to(close, 1, {
           height: closeHeight,
@@ -13098,6 +13163,7 @@ function () {
     key: "closeLayer",
     value: function closeLayer(layer, close, wrapper, footer) {
       var footerHeight = footer ? footer.clientHeight : null;
+      var captionWrapper = document.querySelector('.detail-gallery__caption span');
       TweenMax.set(layer, {
         bottom: 'auto',
         top: 0,
@@ -13109,17 +13175,25 @@ function () {
           opacity: 1
         });
         TweenMax.set(footer, {
-          height: footerHeight
+          bottom: 0
+        });
+        TweenMax.set(captionWrapper, {
+          bottom: 0
         });
       }
 
       if (wrapper && footer) {
+        var captionSpeed = slideAnimationSpeed / 1000 / 2;
+        TweenMax.to(captionWrapper, captionSpeed, {
+          bottom: -captionWrapper.offsetHeight,
+          ease: Expo.easeInOut
+        });
         TweenMax.to(wrapper, 1, {
           opacity: 0,
           ease: Expo.easeInOut
         });
         TweenMax.to(footer, 1, {
-          height: 0,
+          height: -footerHeight,
           ease: Expo.easeInOut
         });
       }
@@ -13139,6 +13213,15 @@ function () {
           }
         });
       }, delay);
+    }
+  }, {
+    key: "toggleClass",
+    value: function toggleClass(target, cssClass) {
+      if (target.classList.contains(cssClass)) {
+        target.classList.remove(cssClass);
+      } else {
+        target.classList.add(cssClass);
+      }
     }
   }]);
 
