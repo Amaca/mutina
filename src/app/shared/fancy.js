@@ -81,7 +81,7 @@ export default class Fancy {
         detailGalleryClose.innerHTML = closeIcon;
 
         clickClose = (e) => {
-            FancyTransition.closeLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery);
+            FancyTransition.closeLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery);
             e.preventDefault();
         };
         detailGalleryClose.addEventListener('click', clickClose);
@@ -98,7 +98,10 @@ export default class Fancy {
             <div class="detail-gallery__pagination"></div>
         `;
 
-        FancyTransition.openLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, id);
+        body.classList.add('detail-gallery-open');
+        Fancy.initSwiper(detailGalleryWrapper, id);
+
+        FancyTransition.openLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, id);
     }
 
     // INIT SWIPER WITH OPTIONS AND EVENTS
@@ -225,6 +228,10 @@ export default class Fancy {
 
     static destroySwiper() {
         swiperInstance.destroy();
+    }
+
+    static getImages() {
+        return Fancy.items;
     }
 
     static toggleClass(target, cssClass) {

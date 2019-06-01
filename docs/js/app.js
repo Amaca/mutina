@@ -12117,7 +12117,7 @@ function () {
       var textBack = document.querySelector('.transition__text .box--back .text');
       var boxBack = document.querySelector('.transition__text .box--back');
       var line = document.querySelector('.transition__line');
-      var activateIntro = false;
+      var activateIntro = true;
 
       _core.default.init({
         timeout: 5000,
@@ -13029,7 +13029,7 @@ function () {
       detailGalleryClose.innerHTML = closeIcon;
 
       clickClose = function clickClose(e) {
-        _fancy.default.closeLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery);
+        _fancy.default.closeLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery);
 
         e.preventDefault();
       };
@@ -13041,8 +13041,10 @@ function () {
       detailGallery.appendChild(detailGalleryWrapper);
       detailGallery.appendChild(detailGalleryFooter);
       detailGalleryFooter.innerHTML = "\n            <div class=\"detail-gallery__cta\">".concat(fullGalleryIcon, "</div>\n            <div class=\"detail-gallery__caption\"><span></span></div>\n            <div class=\"detail-gallery__pagination\"></div>\n        ");
+      body.classList.add('detail-gallery-open');
+      Fancy.initSwiper(detailGalleryWrapper, id);
 
-      _fancy.default.openLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, id);
+      _fancy.default.openLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, id);
     } // INIT SWIPER WITH OPTIONS AND EVENTS
 
   }, {
@@ -13158,6 +13160,11 @@ function () {
       swiperInstance.destroy();
     }
   }, {
+    key: "getImages",
+    value: function getImages() {
+      return Fancy.items;
+    }
+  }, {
     key: "toggleClass",
     value: function toggleClass(target, cssClass) {
       if (target.classList.contains(cssClass)) {
@@ -13204,18 +13211,27 @@ function () {
   _createClass(FancyTransition, null, [{
     key: "openLayer",
     //OPEN LAYER ON IMAGE CLICK
-    value: function openLayer(layer, close, wrapper, footer, id) {
+    value: function openLayer(type, layer, close, wrapper, footer, id) {
       var closeHeight = close.clientHeight;
       var footerHeight = footer ? footer.clientHeight : null;
       var wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
+      var isDetailGallery = false,
+          isFullGallery = false;
+
+      switch (type) {
+        case 'detailGallery':
+          isDetailGallery = true;
+          break;
+
+        case 'fullGallery':
+          isFullGallery = true;
+          break;
+      }
+
       var arrowLeft;
       var arrowRight;
 
-      if (wrapper && footer) {
-        body.classList.add('detail-gallery-open');
-
-        _fancy.default.initSwiper(wrapper, id);
-
+      if (isDetailGallery) {
         arrowLeft = document.querySelector('.swiper-button-prev');
         arrowRight = document.querySelector('.swiper-button-next');
       }
@@ -13229,7 +13245,7 @@ function () {
         height: 0
       });
 
-      if (wrapper && footer) {
+      if (isDetailGallery) {
         TweenMax.set(arrowLeft, {
           left: -100
         });
@@ -13244,6 +13260,12 @@ function () {
         });
       }
 
+      if (isFullGallery) {
+        TweenMax.set(wrapper, {
+          bottom: -wrapperHeight
+        });
+      }
+
       TweenMax.to(layer, 1, {
         height: window.innerHeight,
         ease: Expo.easeInOut
@@ -13253,7 +13275,7 @@ function () {
         ease: Power1.easeOut
       }).delay(0.4);
 
-      if (wrapper && footer) {
+      if (isDetailGallery) {
         TweenMax.to(wrapper, 0.8, {
           bottom: footerHeight,
           ease: Expo.easeIn
@@ -13274,6 +13296,15 @@ function () {
           right: 0,
           ease: Expo.easeInOut
         }).delay(0.5);
+      } else if (isFullGallery) {
+        TweenMax.to(wrapper, 0.8, {
+          bottom: 0,
+          ease: Expo.easeIn
+        });
+        TweenMax.to(close, 1, {
+          height: closeHeight,
+          ease: Expo.easeInOut
+        });
       } else {
         TweenMax.to(close, 1, {
           height: closeHeight,
@@ -13284,7 +13315,7 @@ function () {
 
   }, {
     key: "closeLayer",
-    value: function closeLayer(layer, close, wrapper, footer, mainWrapper) {
+    value: function closeLayer(type, layer, close, wrapper, footer, mainWrapper) {
       var captionWrapper = document.querySelector('.detail-gallery__caption span');
       var footerHeight = footer ? footer.clientHeight : null;
       var wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
@@ -13292,22 +13323,39 @@ function () {
       var arrowLeft = document.querySelector('.swiper-button-prev');
       var arrowRight = document.querySelector('.swiper-button-next');
       var delayAll = 0;
+      var delay = 0;
+      var isDetailGallery = false,
+          isFullGallery = false;
 
-      if (wrapper && footer) {
-        body.classList.remove('detail-gallery-open');
+      switch (type) {
+        case 'detailGallery':
+          delay = 500;
+          body.classList.remove('detail-gallery-open');
+          isDetailGallery = true;
+          break;
 
-        if (body.classList.contains('fancy-zoom')) {
-          TweenMax.to(detailGalleryWrapper, 0.5, {
-            height: window.innerHeight - 65 - 60,
-            ease: Expo.easeInOut
-          });
+        case 'fullGallery':
+          delay = 500;
+          body.classList.remove('full-gallery-open');
+          isFullGallery = true;
+          break;
 
-          _fancy.default.toggleClass(body, 'fancy-zoom');
+        default:
+          delay = 0;
+          break;
+      }
 
-          _fancy.default.zoomOutOnClose();
+      if (isDetailGallery && body.classList.contains('fancy-zoom')) {
+        TweenMax.to(detailGalleryWrapper, 0.5, {
+          height: window.innerHeight - 65 - 60,
+          ease: Expo.easeInOut
+        });
 
-          delayAll = 500;
-        }
+        _fancy.default.toggleClass(body, 'fancy-zoom');
+
+        _fancy.default.zoomOutOnClose();
+
+        delayAll = 500;
       }
 
       setTimeout(function (x) {
@@ -13317,17 +13365,14 @@ function () {
           height: window.innerHeight
         });
 
-        if (wrapper && footer) {
+        if (isDetailGallery) {
+          var captionSpeed = slideAnimationSpeed / 1000 / 2;
           TweenMax.set(footer, {
             bottom: 0
           });
           TweenMax.set(captionWrapper, {
             bottom: 0
           });
-        }
-
-        if (wrapper && footer) {
-          var captionSpeed = slideAnimationSpeed / 1000 / 2;
           TweenMax.set(arrowLeft, {
             left: 0
           });
@@ -13360,13 +13405,23 @@ function () {
           }).delay(0.2);
         }
 
-        var delay = wrapper && footer ? 500 : 0;
+        if (isFullGallery) {
+          TweenMax.to(close, 1, {
+            height: 0,
+            ease: Expo.easeInOut
+          });
+          TweenMax.to(wrapper, 0.8, {
+            bottom: -wrapperHeight,
+            ease: Expo.easeIn
+          }).delay(0.1);
+        }
+
         setTimeout(function (x) {
           TweenMax.to(layer, 1, {
             height: 0,
             ease: Expo.easeInOut,
             onComplete: function onComplete() {
-              if (wrapper && footer) {
+              if (isDetailGallery) {
                 _fancy.default.destroySwiper();
               }
 
@@ -13475,13 +13530,17 @@ function () {
       var fullGallery = document.createElement('div');
       var fullGalleryClose = document.createElement('div');
       var fullGalleryBg = document.createElement('div');
+      var fullGalleryWrapper = document.createElement('div');
+      var fullGalleryContainer = document.createElement('div');
       fullGallery.classList.add('full-gallery');
       fullGalleryClose.classList.add('full-gallery__close');
       fullGalleryBg.classList.add('full-gallery__bg');
+      fullGalleryWrapper.classList.add('full-gallery__wrapper');
+      fullGalleryContainer.classList.add('full-gallery__container');
       fullGalleryClose.innerHTML = closeIcon;
 
       clickClose = function clickClose(e) {
-        _fancy2.default.closeLayer(fullGalleryBg, fullGalleryClose, null, null, fullGallery);
+        _fancy2.default.closeLayer('fullGallery', fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, fullGallery);
 
         e.preventDefault();
       };
@@ -13490,8 +13549,30 @@ function () {
       document.body.appendChild(fullGallery);
       fullGallery.appendChild(fullGalleryClose);
       fullGallery.appendChild(fullGalleryBg);
+      fullGallery.appendChild(fullGalleryWrapper);
+      fullGalleryWrapper.appendChild(fullGalleryContainer);
+      body.classList.add('full-gallery-open');
+      FancyViewAll.addImages(fullGalleryContainer);
 
-      _fancy2.default.openLayer(fullGalleryBg, fullGalleryClose, null, null, id);
+      _fancy2.default.openLayer('fullGallery', fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, id);
+    }
+  }, {
+    key: "addImages",
+    value: function addImages(container) {
+      var fancyImages = _fancy.default.getImages();
+
+      var thumbItems = fancyImages.map(function (item) {
+        return {
+          id: item.id,
+          caption: item.caption,
+          url: item.bigImageUrl
+        };
+      });
+      var thumbHtml = '';
+      thumbItems.forEach(function (thumb) {
+        thumbHtml += "<div class=\"full-gallery__thumb\"><img src=\"".concat(thumb.url, "\" alt=\"").concat(thumb.caption, "\"></div>");
+      });
+      container.innerHTML = "<div class=\"full-gallery__list\">".concat(thumbHtml, "</div>");
     }
   }]);
 

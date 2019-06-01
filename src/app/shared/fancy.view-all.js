@@ -55,15 +55,19 @@ export default class FancyViewAll {
         let fullGallery = document.createElement('div');
         let fullGalleryClose = document.createElement('div');
         let fullGalleryBg = document.createElement('div');
+        let fullGalleryWrapper = document.createElement('div');
+        let fullGalleryContainer = document.createElement('div');
        
         fullGallery.classList.add('full-gallery');
         fullGalleryClose.classList.add('full-gallery__close');
         fullGalleryBg.classList.add('full-gallery__bg');
+        fullGalleryWrapper.classList.add('full-gallery__wrapper');
+        fullGalleryContainer.classList.add('full-gallery__container');
 
         fullGalleryClose.innerHTML = closeIcon;
 
         clickClose = (e) => {
-            FancyTransition.closeLayer(fullGalleryBg, fullGalleryClose, null, null, fullGallery);
+            FancyTransition.closeLayer('fullGallery',fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, fullGallery);
             e.preventDefault();
         };
         fullGalleryClose.addEventListener('click', clickClose);
@@ -71,8 +75,31 @@ export default class FancyViewAll {
         document.body.appendChild(fullGallery);
         fullGallery.appendChild(fullGalleryClose);
         fullGallery.appendChild(fullGalleryBg);
+        fullGallery.appendChild(fullGalleryWrapper);
+        fullGalleryWrapper.appendChild(fullGalleryContainer);
 
-        FancyTransition.openLayer(fullGalleryBg, fullGalleryClose, null, null, id);
+        body.classList.add('full-gallery-open');
+        FancyViewAll.addImages(fullGalleryContainer);
+
+        FancyTransition.openLayer('fullGallery', fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, id);
     }
 
+    static addImages(container) {
+        let fancyImages = Fancy.getImages();
+        let thumbItems = fancyImages.map((item) => {
+            return {
+                id: item.id,
+                caption: item.caption,
+                url: item.bigImageUrl
+            };
+        });
+
+        let thumbHtml = '';
+        thumbItems.forEach(thumb => {
+            thumbHtml += `<div class="full-gallery__thumb"><img src="${thumb.url}" alt="${thumb.caption}"></div>`;
+        });
+
+        container.innerHTML = `<div class="full-gallery__list">${thumbHtml}</div>`;
+
+    }
 }
