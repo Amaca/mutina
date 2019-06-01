@@ -12046,6 +12046,8 @@ var _sliders = _interopRequireDefault(require("./shared/sliders"));
 
 var _utils = _interopRequireDefault(require("./shared/utils"));
 
+var _fancy2 = _interopRequireDefault(require("./shared/fancy.view-all"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -12337,6 +12339,8 @@ function () {
 
       _fancy.default.init();
 
+      _fancy2.default.init();
+
       setTimeout(function (x) {
         _this.appears = _appears.default.init();
         Splitting();
@@ -12348,6 +12352,10 @@ function () {
       _anchors.default.destroyAll();
 
       _sliders.default.destroyAll();
+
+      _fancy.default.destroyAll();
+
+      _fancy2.default.destroyAll();
 
       container.remove();
     }
@@ -12589,7 +12597,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":311,"./shared/appears":312,"./shared/dom":313,"./shared/fancy":314,"./shared/navigation":315,"./shared/rect":316,"./shared/sliders":317,"./shared/utils":318,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],311:[function(require,module,exports){
+},{"./shared/anchors":311,"./shared/appears":312,"./shared/dom":313,"./shared/fancy":314,"./shared/fancy.view-all":316,"./shared/navigation":317,"./shared/rect":318,"./shared/sliders":319,"./shared/utils":320,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],311:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12902,13 +12910,17 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":318}],314:[function(require,module,exports){
+},{"./utils":320}],314:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+
+var _fancy = _interopRequireDefault(require("./fancy.transition"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -12924,9 +12936,6 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-/* jshint esversion: 6 */
-
-/* tweenmax & swiper needed */
 var clickClose;
 var swiperInstance;
 var body = document.querySelector('body');
@@ -12967,13 +12976,14 @@ function () {
   }, {
     key: "openDetailGallery",
     value: function openDetailGallery() {
-      Fancy.initDetailGallery();
+      Fancy.initDetailGallery(this.id);
     }
   }, {
     key: "destroy",
     value: function destroy() {
       this.node.removeEventListener('click', this.click);
-    }
+    } //INIT
+
   }], [{
     key: "init",
     value: function init() {
@@ -12981,20 +12991,31 @@ function () {
         return new Fancy(element, id);
       });
       console.log('Fancy: ', Fancy.items);
-    }
+    } //DESTROY ALL NODES AND CREATED CONTAINER ELEMENTS
+
   }, {
     key: "destroyAll",
     value: function destroyAll() {
       Fancy.items.forEach(function (node) {
         node.destroy();
       });
-      swiperInstance.destroy();
-      document.querySelector('detail-gallery').remove();
-      document.querySelector('full-gallery').remove();
-    }
+
+      if (swiperInstance) {
+        swiperInstance.destroy();
+      }
+
+      if (document.querySelector('detail-gallery')) {
+        document.querySelector('detail-gallery').remove();
+      }
+
+      if (document.querySelector('full-gallery')) {
+        document.querySelector('full-gallery').remove();
+      }
+    } //CREATE MARKUP FOR DETAIL GALLERY AND ADD CLOSE LISTENER
+
   }, {
     key: "initDetailGallery",
-    value: function initDetailGallery() {
+    value: function initDetailGallery(id) {
       var detailGallery = document.createElement('div');
       var detailGalleryClose = document.createElement('div');
       var detailGalleryBg = document.createElement('div');
@@ -13008,7 +13029,8 @@ function () {
       detailGalleryClose.innerHTML = closeIcon;
 
       clickClose = function clickClose(e) {
-        Fancy.closeLayer(detailGallery, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter);
+        _fancy.default.closeLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery);
+
         e.preventDefault();
       };
 
@@ -13019,11 +13041,13 @@ function () {
       detailGallery.appendChild(detailGalleryWrapper);
       detailGallery.appendChild(detailGalleryFooter);
       detailGalleryFooter.innerHTML = "\n            <div class=\"detail-gallery__cta\">".concat(fullGalleryIcon, "</div>\n            <div class=\"detail-gallery__caption\"><span></span></div>\n            <div class=\"detail-gallery__pagination\"></div>\n        ");
-      Fancy.openLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter);
-    }
+
+      _fancy.default.openLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, id);
+    } // INIT SWIPER WITH OPTIONS AND EVENTS
+
   }, {
     key: "initSwiper",
-    value: function initSwiper(wrapper) {
+    value: function initSwiper(wrapper, id) {
       var sliderItems = Fancy.items.map(function (item) {
         return {
           id: item.id,
@@ -13046,7 +13070,11 @@ function () {
         slidesPerView: 1,
         spaceBetween: 60,
         speed: slideAnimationSpeed,
-        zoom: true,
+        allowTouchMove: false,
+        zoom: {
+          maxRatio: 4,
+          toggle: true
+        },
         preloadImages: false,
         lazy: true,
         navigation: {
@@ -13061,22 +13089,37 @@ function () {
             return "<span class=\"detail-gallery__pagination-item ".concat(className, "\">").concat(actualIndex, "/").concat(sliderItems.length, "</span>");
           }
         },
+        breakpoints: {
+          768: {
+            allowTouchMove: true
+          }
+        },
         on: {
           doubleTap: function doubleTap() {
+            var detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper ');
             Fancy.toggleClass(body, 'fancy-zoom');
 
             if (body.classList.contains('fancy-zoom')) {
               this.allowSlidePrev = false;
               this.allowSlideNext = false;
+              TweenMax.to(detailGalleryWrapper, 0.5, {
+                height: window.innerHeight - 60,
+                ease: Expo.easeInOut
+              });
             } else {
               this.allowSlidePrev = true;
               this.allowSlideNext = true;
+              TweenMax.to(detailGalleryWrapper, 0.5, {
+                height: window.innerHeight - 65 - 60,
+                ease: Expo.easeInOut
+              });
             }
           },
           init: function init() {
             var caption = sliderItems[this.activeIndex].caption;
             var captionWrapper = document.querySelector('.detail-gallery__caption span');
             captionWrapper.innerHTML = caption;
+            this.slideTo(id, 0);
           },
           slideChange: function slideChange() {
             var captionSpeed = slideAnimationSpeed / 1000 / 2;
@@ -13103,12 +13146,80 @@ function () {
       swiperInstance.init();
     }
   }, {
+    key: "zoomOutOnClose",
+    value: function zoomOutOnClose() {
+      swiperInstance.allowSlidePrev = true;
+      swiperInstance.allowSlideNext = true;
+      swiperInstance.zoom.out();
+    }
+  }, {
+    key: "destroySwiper",
+    value: function destroySwiper() {
+      swiperInstance.destroy();
+    }
+  }, {
+    key: "toggleClass",
+    value: function toggleClass(target, cssClass) {
+      if (target.classList.contains(cssClass)) {
+        target.classList.remove(cssClass);
+      } else {
+        target.classList.add(cssClass);
+      }
+    }
+  }]);
+
+  return Fancy;
+}();
+
+exports.default = Fancy;
+
+},{"./fancy.transition":315}],315:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _fancy = _interopRequireDefault(require("./fancy"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var body = document.querySelector('body');
+var slideAnimationSpeed = 1000;
+
+var FancyTransition =
+/*#__PURE__*/
+function () {
+  function FancyTransition() {
+    _classCallCheck(this, FancyTransition);
+  }
+
+  _createClass(FancyTransition, null, [{
     key: "openLayer",
-    value: function openLayer(layer, close, wrapper, footer) {
+    //OPEN LAYER ON IMAGE CLICK
+    value: function openLayer(layer, close, wrapper, footer, id) {
       var closeHeight = close.clientHeight;
       var footerHeight = footer ? footer.clientHeight : null;
       var wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
-      Fancy.initSwiper(wrapper);
+      var arrowLeft;
+      var arrowRight;
+
+      if (wrapper && footer) {
+        body.classList.add('detail-gallery-open');
+
+        _fancy.default.initSwiper(wrapper, id);
+
+        arrowLeft = document.querySelector('.swiper-button-prev');
+        arrowRight = document.querySelector('.swiper-button-next');
+      }
+
       TweenMax.set(layer, {
         bottom: 0,
         top: 'auto',
@@ -13119,6 +13230,12 @@ function () {
       });
 
       if (wrapper && footer) {
+        TweenMax.set(arrowLeft, {
+          left: -100
+        });
+        TweenMax.set(arrowRight, {
+          right: -100
+        });
         TweenMax.set(wrapper, {
           bottom: -wrapperHeight
         });
@@ -13137,100 +13254,253 @@ function () {
       }).delay(0.4);
 
       if (wrapper && footer) {
-        TweenMax.to(wrapper, 1, {
+        TweenMax.to(wrapper, 0.8, {
           bottom: footerHeight,
-          ease: Expo.easeInOut
-        }).delay(0.1);
+          ease: Expo.easeIn
+        });
         TweenMax.to(close, 1, {
           height: closeHeight,
           ease: Expo.easeInOut
         });
         TweenMax.to(footer, 1, {
           bottom: 0,
-          ease: Expo.easeInOut // onComplete: () => {
-          //     Fancy.initSwiper(wrapper);
-          // }
-
+          ease: Expo.easeInOut
         }).delay(0.2);
+        TweenMax.to(arrowLeft, 1, {
+          left: 0,
+          ease: Expo.easeInOut
+        }).delay(0.5);
+        TweenMax.to(arrowRight, 1, {
+          right: 0,
+          ease: Expo.easeInOut
+        }).delay(0.5);
       } else {
         TweenMax.to(close, 1, {
           height: closeHeight,
           ease: Expo.easeInOut
         });
       }
-    }
+    } //CLOSE LAYER ON CLOSE CLICK
+
   }, {
     key: "closeLayer",
-    value: function closeLayer(layer, close, wrapper, footer) {
-      var footerHeight = footer ? footer.clientHeight : null;
+    value: function closeLayer(layer, close, wrapper, footer, mainWrapper) {
       var captionWrapper = document.querySelector('.detail-gallery__caption span');
-      TweenMax.set(layer, {
-        bottom: 'auto',
-        top: 0,
-        height: window.innerHeight
-      });
+      var footerHeight = footer ? footer.clientHeight : null;
+      var wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
+      var detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper');
+      var arrowLeft = document.querySelector('.swiper-button-prev');
+      var arrowRight = document.querySelector('.swiper-button-next');
+      var delayAll = 0;
 
       if (wrapper && footer) {
-        TweenMax.set(wrapper, {
-          opacity: 1
-        });
-        TweenMax.set(footer, {
-          bottom: 0
-        });
-        TweenMax.set(captionWrapper, {
-          bottom: 0
-        });
+        body.classList.remove('detail-gallery-open');
+
+        if (body.classList.contains('fancy-zoom')) {
+          TweenMax.to(detailGalleryWrapper, 0.5, {
+            height: window.innerHeight - 65 - 60,
+            ease: Expo.easeInOut
+          });
+
+          _fancy.default.toggleClass(body, 'fancy-zoom');
+
+          _fancy.default.zoomOutOnClose();
+
+          delayAll = 500;
+        }
       }
 
-      if (wrapper && footer) {
-        var captionSpeed = slideAnimationSpeed / 1000 / 2;
-        TweenMax.to(captionWrapper, captionSpeed, {
-          bottom: -captionWrapper.offsetHeight,
-          ease: Expo.easeInOut
-        });
-        TweenMax.to(wrapper, 1, {
-          opacity: 0,
-          ease: Expo.easeInOut
-        });
-        TweenMax.to(footer, 1, {
-          height: -footerHeight,
-          ease: Expo.easeInOut
-        });
-      }
-
-      var delay = wrapper && footer ? 1000 : 0;
       setTimeout(function (x) {
-        TweenMax.to(layer, 1, {
-          height: 0,
-          ease: Expo.easeInOut
+        TweenMax.set(layer, {
+          bottom: 0,
+          top: 'auto',
+          height: window.innerHeight
         });
-        TweenMax.to(close, 1, {
-          height: 0,
-          ease: Expo.easeInOut,
-          onComplete: function onComplete() {
-            swiperInstance.destroy();
-            layer.remove();
-          }
-        });
-      }, delay);
-    }
-  }, {
-    key: "toggleClass",
-    value: function toggleClass(target, cssClass) {
-      if (target.classList.contains(cssClass)) {
-        target.classList.remove(cssClass);
-      } else {
-        target.classList.add(cssClass);
-      }
+
+        if (wrapper && footer) {
+          TweenMax.set(footer, {
+            bottom: 0
+          });
+          TweenMax.set(captionWrapper, {
+            bottom: 0
+          });
+        }
+
+        if (wrapper && footer) {
+          var captionSpeed = slideAnimationSpeed / 1000 / 2;
+          TweenMax.set(arrowLeft, {
+            left: 0
+          });
+          TweenMax.set(arrowRight, {
+            right: 0
+          });
+          TweenMax.to(captionWrapper, captionSpeed, {
+            bottom: -captionWrapper.offsetHeight,
+            ease: Expo.easeInOut
+          });
+          TweenMax.to(close, 1, {
+            height: 0,
+            ease: Expo.easeInOut
+          });
+          TweenMax.to(arrowLeft, 1, {
+            left: -100,
+            ease: Expo.easeInOut
+          });
+          TweenMax.to(arrowRight, 1, {
+            right: -100,
+            ease: Expo.easeInOut
+          });
+          TweenMax.to(wrapper, 0.8, {
+            bottom: -wrapperHeight,
+            ease: Expo.easeIn
+          }).delay(0.1);
+          TweenMax.to(footer, 1, {
+            bottom: -footerHeight,
+            ease: Expo.easeInOut
+          }).delay(0.2);
+        }
+
+        var delay = wrapper && footer ? 500 : 0;
+        setTimeout(function (x) {
+          TweenMax.to(layer, 1, {
+            height: 0,
+            ease: Expo.easeInOut,
+            onComplete: function onComplete() {
+              if (wrapper && footer) {
+                _fancy.default.destroySwiper();
+              }
+
+              mainWrapper.remove();
+            }
+          });
+        }, delay);
+      }, delayAll);
     }
   }]);
 
-  return Fancy;
+  return FancyTransition;
 }();
 
-exports.default = Fancy;
+exports.default = FancyTransition;
 
-},{}],315:[function(require,module,exports){
+},{"./fancy":314}],316:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _fancy = _interopRequireDefault(require("./fancy"));
+
+var _fancy2 = _interopRequireDefault(require("./fancy.transition"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var clickClose;
+var body = document.querySelector('body');
+var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
+var slideAnimationSpeed = 1000;
+
+var FancyViewAll =
+/*#__PURE__*/
+function () {
+  function FancyViewAll(node, id) {
+    _classCallCheck(this, FancyViewAll);
+
+    this.node = node;
+    this.id = id;
+    this.addListener();
+  }
+
+  _createClass(FancyViewAll, [{
+    key: "addListener",
+    value: function addListener() {
+      var _this = this;
+
+      var click = function click(e) {
+        _this.openFullGallery();
+
+        e.preventDefault();
+      };
+
+      this.click = click;
+      this.node.addEventListener('click', this.click);
+    }
+  }, {
+    key: "openFullGallery",
+    value: function openFullGallery() {
+      FancyViewAll.initFullGallery(this.id);
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.node.removeEventListener('click', this.click);
+    } //INIT
+
+  }], [{
+    key: "init",
+    value: function init() {
+      FancyViewAll.items = _toConsumableArray(document.querySelectorAll('[data-fancy-view-all]')).map(function (element, id) {
+        return new FancyViewAll(element, id);
+      });
+      console.log('FancyViewAll: ', FancyViewAll.items);
+    } //DESTROY ALL NODES AND CREATED CONTAINER ELEMENTS
+
+  }, {
+    key: "destroyAll",
+    value: function destroyAll() {
+      FancyViewAll.items.forEach(function (node) {
+        node.destroy();
+      });
+    } //CREATE MARKUP FOR FULL GALLERY AND ADD CLOSE LISTENER
+
+  }, {
+    key: "initFullGallery",
+    value: function initFullGallery(id) {
+      var fullGallery = document.createElement('div');
+      var fullGalleryClose = document.createElement('div');
+      var fullGalleryBg = document.createElement('div');
+      fullGallery.classList.add('full-gallery');
+      fullGalleryClose.classList.add('full-gallery__close');
+      fullGalleryBg.classList.add('full-gallery__bg');
+      fullGalleryClose.innerHTML = closeIcon;
+
+      clickClose = function clickClose(e) {
+        _fancy2.default.closeLayer(fullGalleryBg, fullGalleryClose, null, null, fullGallery);
+
+        e.preventDefault();
+      };
+
+      fullGalleryClose.addEventListener('click', clickClose);
+      document.body.appendChild(fullGallery);
+      fullGallery.appendChild(fullGalleryClose);
+      fullGallery.appendChild(fullGalleryBg);
+
+      _fancy2.default.openLayer(fullGalleryBg, fullGalleryClose, null, null, id);
+    }
+  }]);
+
+  return FancyViewAll;
+}();
+
+exports.default = FancyViewAll;
+
+},{"./fancy":314,"./fancy.transition":315}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13534,7 +13804,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":318}],316:[function(require,module,exports){
+},{"./utils":320}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13653,7 +13923,7 @@ function () {
 
 exports.default = Rect;
 
-},{}],317:[function(require,module,exports){
+},{}],319:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13765,7 +14035,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],318:[function(require,module,exports){
+},{}],320:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -12,6 +12,7 @@ import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
 import Sliders from './shared/sliders';
 import Utils from './shared/utils';
+import FancyViewAll from "./shared/fancy.view-all";
 
 let menuStyle = 1;
 let scrollSpeed = 8;
@@ -289,6 +290,7 @@ export default class App {
         Sliders.init();
         Anchors.init(document.querySelector('.anchors__wrapper'), 200);
         Fancy.init();
+        FancyViewAll.init();
         setTimeout(x => {
             this.appears = Appears.init();
             Splitting();
@@ -298,6 +300,8 @@ export default class App {
     destroyAll(container) {
         Anchors.destroyAll();
         Sliders.destroyAll();
+        Fancy.destroyAll();
+        FancyViewAll.destroyAll();
         container.remove();
     }
 

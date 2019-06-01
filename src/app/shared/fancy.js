@@ -1,6 +1,8 @@
 /* jshint esversion: 6 */
 /* tweenmax & swiper needed */
 
+import FancyTransition from "./fancy.transition";
+
 let clickClose;
 let swiperInstance;
 
@@ -33,28 +35,37 @@ export default class Fancy {
     }
 
     openDetailGallery() {
-        Fancy.initDetailGallery();
+        Fancy.initDetailGallery(this.id);
     }
 
     destroy() {
         this.node.removeEventListener('click', this.click);
     }
 
+    //INIT
     static init() {
         Fancy.items = [...document.querySelectorAll('[data-fancy-img]')].map((element, id) => new Fancy(element, id));
         console.log('Fancy: ', Fancy.items);
     }
 
+    //DESTROY ALL NODES AND CREATED CONTAINER ELEMENTS
     static destroyAll() {
         Fancy.items.forEach(node => {
             node.destroy();
         });
-        swiperInstance.destroy();
-        document.querySelector('detail-gallery').remove();
-        document.querySelector('full-gallery').remove();
+        if (swiperInstance) {
+            swiperInstance.destroy();
+        }
+        if (document.querySelector('detail-gallery')) {
+            document.querySelector('detail-gallery').remove();
+        }
+        if (document.querySelector('full-gallery')) {
+            document.querySelector('full-gallery').remove();
+        }   
     }
 
-    static initDetailGallery() {
+    //CREATE MARKUP FOR DETAIL GALLERY AND ADD CLOSE LISTENER
+    static initDetailGallery(id) {
         let detailGallery = document.createElement('div');
         let detailGalleryClose = document.createElement('div');
         let detailGalleryBg = document.createElement('div');
@@ -70,7 +81,7 @@ export default class Fancy {
         detailGalleryClose.innerHTML = closeIcon;
 
         clickClose = (e) => {
-            Fancy.closeLayer(detailGallery, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter);
+            FancyTransition.closeLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery);
             e.preventDefault();
         };
         detailGalleryClose.addEventListener('click', clickClose);
@@ -87,10 +98,11 @@ export default class Fancy {
             <div class="detail-gallery__pagination"></div>
         `;
 
-        Fancy.openLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter);
+        FancyTransition.openLayer(detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, id);
     }
 
-    static initSwiper(wrapper) {
+    // INIT SWIPER WITH OPTIONS AND EVENTS
+    static initSwiper(wrapper, id) {
         let sliderItems = Fancy.items.map((item) => {
             return {
                 id: item.id,
@@ -126,7 +138,11 @@ export default class Fancy {
             slidesPerView: 1,
             spaceBetween: 60,
             speed: slideAnimationSpeed,
-            zoom: true,
+            allowTouchMove: false,
+            zoom: {
+                maxRatio: 4,
+                toggle: true
+            },
             preloadImages: false,
             lazy: true,
             navigation: {
@@ -141,21 +157,38 @@ export default class Fancy {
                     return `<span class="detail-gallery__pagination-item ${className}">${actualIndex}/${sliderItems.length}</span>`;
                 },
             },
+            breakpoints: {
+                768: {
+                    allowTouchMove: true,
+                }
+              },
             on: {
                 doubleTap: function () {
+                    const detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper ');
                     Fancy.toggleClass(body, 'fancy-zoom');
+
                     if (body.classList.contains('fancy-zoom')) {
                         this.allowSlidePrev = false;
                         this.allowSlideNext = false;
+                        TweenMax.to(detailGalleryWrapper, 0.5, {
+                            height: window.innerHeight - 60,
+                            ease: Expo.easeInOut
+                        });
                     } else {
                         this.allowSlidePrev = true;
                         this.allowSlideNext = true;
+                        TweenMax.to(detailGalleryWrapper, 0.5, {
+                            height: window.innerHeight - 65 - 60,
+                            ease: Expo.easeInOut
+                        });
                     }
                 },
                 init: function () {
                     const caption = sliderItems[this.activeIndex].caption;
                     const captionWrapper = document.querySelector('.detail-gallery__caption span');
+                   
                     captionWrapper.innerHTML = caption;
+                    this.slideTo(id, 0);
                 },
                 slideChange: function () {
                     const captionSpeed = (slideAnimationSpeed / 1000) / 2;
@@ -184,111 +217,14 @@ export default class Fancy {
 
     }
 
-    static openLayer(layer, close, wrapper, footer) {
-        const closeHeight = close.clientHeight;
-        const footerHeight = footer ? footer.clientHeight : null;
-        const wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
-
-        Fancy.initSwiper(wrapper);
-        TweenMax.set(layer, {
-            bottom: 0,
-            top: 'auto',
-            height: 0,
-        });
-        TweenMax.set(close, {
-            height: 0,
-        });
-        if (wrapper && footer) {
-            TweenMax.set(wrapper, {
-                bottom: -wrapperHeight,
-            });
-            TweenMax.set(footer, {
-                bottom: -footerHeight,
-            });
-        }
-        TweenMax.to(layer, 1, {
-            height: window.innerHeight,
-            ease: Expo.easeInOut
-        });
-        TweenMax.to(layer, 0.8, {
-            backgroundColor: '#ffffff',
-            ease: Power1.easeOut
-        }).delay(0.4);
-        if (wrapper && footer) {
-            TweenMax.to(wrapper, 1, {
-                bottom: footerHeight,
-                ease: Expo.easeInOut
-            }).delay(0.1);
-            TweenMax.to(close, 1, {
-                height: closeHeight,
-                ease: Expo.easeInOut
-            });
-            TweenMax.to(footer, 1, {
-                bottom: 0,
-                ease: Expo.easeInOut,
-                // onComplete: () => {
-                //     Fancy.initSwiper(wrapper);
-                // }
-            }).delay(0.2);
-        } else {
-            TweenMax.to(close, 1, {
-                height: closeHeight,
-                ease: Expo.easeInOut
-            });
-        }
+    static zoomOutOnClose() {
+        swiperInstance.allowSlidePrev = true;
+        swiperInstance.allowSlideNext = true;
+        swiperInstance.zoom.out();
     }
 
-    static closeLayer(layer, close, wrapper, footer) {
-        const footerHeight = footer ? footer.clientHeight : null;
-        const captionWrapper = document.querySelector('.detail-gallery__caption span');
-        TweenMax.set(layer, {
-            bottom: 'auto',
-            top: 0,
-            height: window.innerHeight,
-        });
-        if (wrapper && footer) {
-            TweenMax.set(wrapper, {
-                opacity: 1,
-            });
-            TweenMax.set(footer, {
-                bottom: 0,
-            });
-            TweenMax.set(captionWrapper, {
-                bottom: 0,
-            });
-        }
-        if (wrapper && footer) {
-            const captionSpeed = (slideAnimationSpeed / 1000) / 2;
-            TweenMax.to(captionWrapper, captionSpeed, {
-                bottom: -captionWrapper.offsetHeight,
-                ease: Expo.easeInOut,
-            });
-            TweenMax.to(wrapper, 1, {
-                opacity: 0,
-                ease: Expo.easeInOut
-            });
-            TweenMax.to(footer, 1, {
-                height: -footerHeight,
-                ease: Expo.easeInOut
-            });
-        }
-
-        let delay = wrapper && footer ? 1000 : 0;
-
-        setTimeout(x => {
-            TweenMax.to(layer, 1, {
-                height: 0,
-                ease: Expo.easeInOut,
-            });
-            TweenMax.to(close, 1, {
-                height: 0,
-                ease: Expo.easeInOut,
-                onComplete: () => {
-                    swiperInstance.destroy();
-                    layer.remove();
-                }
-            });
-        }, delay);
+    static destroySwiper() {
+        swiperInstance.destroy();
     }
 
     static toggleClass(target, cssClass) {

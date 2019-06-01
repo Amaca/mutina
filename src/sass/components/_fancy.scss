@@ -89,6 +89,10 @@ $slider-arrow-close-zoom-fill: white;
         left: 40px;
         transform: translateY(-50%);
 
+        @include xs-down {
+            left: 20px;
+        }
+
         svg {
             width: 20px;
             height: 20px;
@@ -103,10 +107,21 @@ $slider-arrow-close-zoom-fill: white;
         transform: translate(-50%, -50%);
         overflow: hidden;
 
+        @include xs-down {
+            width: calc(100vw - 100px);
+            text-align: center;
+        }
+
         span {
             position: relative;
             z-index: 1;
-            bottom: 0
+            bottom: 0;
+            display: inline-block;
+
+            @include xs-down {
+                font-size: 0.8rem;
+                line-height: 1.2;    
+            }
         }
     }
 
@@ -116,6 +131,10 @@ $slider-arrow-close-zoom-fill: white;
         top: 50%;
         right: 40px;
         transform: translateY(-50%);
+
+        @include xs-down {
+            right: 20px;
+        }
 
         .swiper-pagination-bullet,
         .swiper-pagination-bullet-active {
@@ -159,13 +178,19 @@ $slider-arrow-close-zoom-fill: white;
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
 
+        @include xs-down {
+            display: none;
+        }
 
         svg {
+            position: relative;
+            z-index: 50;
             width: 25px;
             height: 25px;
             fill: $slider-arrow-close-fill;
-            transition: fill .6s $smooth;
+            transition: all .6s $smooth;
         }
     }
 
@@ -184,9 +209,6 @@ $slider-arrow-close-zoom-fill: white;
 
 //zoom animation
 body.fancy-zoom {
-    .detail-gallery__wrapper {
-        height: calc(100vh - 60px);
-    }
 
     .detail-gallery__close {
         svg {
@@ -200,7 +222,8 @@ body.fancy-zoom {
         .swiper-button-next {
 
             svg {
-                fill: $slider-arrow-close-zoom-fill;
+                // fill: $slider-arrow-close-zoom-fill;
+                opacity: 0;
             }
         }
     }
