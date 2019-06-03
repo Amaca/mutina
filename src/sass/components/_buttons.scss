@@ -69,11 +69,9 @@ a {
 }
 
 .btn {
-    font-size: 0.65rem;
-
+    
     @include sm-down {
         display: block;
-        font-size: 0.8rem;
         text-align: center;
     }
 
@@ -129,8 +127,18 @@ a {
     &--primary {
         @include font($style:heavy);
         @extend .btn--split;
+        font-size: 0.65rem;
         border: 2px solid $dark;
         padding: 25px 38px;
         text-transform: uppercase;
+
+        @include sm-down {
+            font-size: 0.8rem;
+        }
+    }
+
+    &--inline {
+        @include font($style:heavy);
+        @extend .btn--split;
     }
 }
