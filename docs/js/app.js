@@ -12077,6 +12077,7 @@ function () {
       var header = document.querySelector('.header');
       var smooth = 'cubic-bezier(0, 0.97, 0.43, 1)';
       var anchorPanel = document.querySelector('.anchors');
+      var filterPanel = document.querySelector('.filters');
 
       _dom.default.detect(body);
 
@@ -12089,6 +12090,7 @@ function () {
       this.header = header;
       this.smooth = smooth;
       this.anchorPanel = anchorPanel;
+      this.filterPanel = filterPanel;
       this.appears = [];
       this.parallaxes = [];
       this.onResize();
@@ -12343,6 +12345,8 @@ function () {
 
       _fancy2.default.init();
 
+      _utils.default.toggleGrid();
+
       setTimeout(function (x) {
         _this.appears = _appears.default.init();
         Splitting();
@@ -12430,7 +12434,11 @@ function () {
         if (this.anchorPanel) {
           this.anchorPanel.style.top = -this.anchorPanel.clientHeight + 'px';
           this.anchorPanel.style.transition = 'top .15s linear';
-        }
+        } // if (this.filtersPanel) {
+        //     this.filtersPanel.style.top = -this.filtersPanel.clientHeight + 'px';
+        //     this.filtersPanel.style.transition = 'top .15s linear';
+        // }
+
 
         if (this.body.classList.contains('scroll-down')) {
           this.header.style.top = 0;
@@ -13352,7 +13360,6 @@ function () {
       var isDetailGallery = false,
           isFullGallery = false,
           isDetailAndFullGallery = body.classList.contains('full-gallery-open') && body.classList.contains('detail-gallery-open');
-      console.log('isDetailAndFullGallery', isDetailAndFullGallery);
 
       switch (type) {
         case 'detailGallery':
@@ -13471,7 +13478,6 @@ function () {
             }
 
             if (isDetailGallery) {
-              console.log('isDetailGallery end');
               setTimeout(function (y) {
                 _fancy.default.destroySwiper();
 
@@ -14315,6 +14321,37 @@ function () {
         target.classList.remove(cssClass);
       } else {
         target.classList.add(cssClass);
+      }
+    }
+  }, {
+    key: "toggleGrid",
+    value: function toggleGrid() {
+      var grid2x2 = document.querySelector('.toggle-grid-2');
+      var grid3x3 = document.querySelector('.toggle-grid-3');
+      var listing = document.querySelector('.listing');
+
+      var setGrid3x3 = function setGrid3x3(e) {
+        Utils.toggleClass(grid2x2, 'active');
+        Utils.toggleClass(grid3x3, 'active');
+        Utils.toggleClass(listing, 'listing--grid-3');
+        Utils.toggleClass(listing, 'listing--grid-2');
+        grid3x3.removeEventListener('click', setGrid3x3);
+        grid2x2.addEventListener('click', setGrid2x2);
+      };
+
+      var setGrid2x2 = function setGrid2x2(e) {
+        Utils.toggleClass(grid2x2, 'active');
+        Utils.toggleClass(grid3x3, 'active');
+        Utils.toggleClass(listing, 'listing--grid-3');
+        Utils.toggleClass(listing, 'listing--grid-2');
+        grid3x3.addEventListener('click', setGrid3x3);
+        grid2x2.removeEventListener('click', setGrid2x2);
+      };
+
+      if (grid2x2 && grid3x3 && listing) {
+        grid2x2.classList.add('active');
+        Utils.toggleClass(listing, 'listing--grid-2');
+        grid3x3.addEventListener('click', setGrid3x3);
       }
     }
   }]);

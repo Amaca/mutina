@@ -127,8 +127,6 @@ export default class FancyTransition {
             isFullGallery = false,
             isDetailAndFullGallery = body.classList.contains('full-gallery-open') && body.classList.contains('detail-gallery-open')
 
-        console.log('isDetailAndFullGallery', isDetailAndFullGallery)
-
         switch (type) {
             case 'detailGallery':
                 delay = 500;
@@ -237,7 +235,6 @@ export default class FancyTransition {
                         });
                     }
                     if (isDetailGallery) {
-                        console.log('isDetailGallery end')
                         setTimeout(y => {
                             Fancy.destroySwiper();
                             mainWrapper.remove();

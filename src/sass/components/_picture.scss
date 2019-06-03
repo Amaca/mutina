@@ -32,6 +32,10 @@
             @include aspect-clip(3, 4);
         }
     }
+
+    &.picture--frame {
+        padding: 0 $col-gutter;
+    }
 }
 
 .picture+.picture__caption {

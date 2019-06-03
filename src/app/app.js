@@ -31,6 +31,8 @@ export default class App {
         const header = document.querySelector('.header');
         const smooth = 'cubic-bezier(0, 0.97, 0.43, 1)';
         const anchorPanel = document.querySelector('.anchors');
+        const filterPanel = document.querySelector('.filters');
+
         Dom.detect(body);
         const mouse = {
             x: 0,
@@ -41,6 +43,7 @@ export default class App {
         this.header = header;
         this.smooth = smooth;
         this.anchorPanel = anchorPanel;
+        this.filterPanel = filterPanel;
         this.appears = [];
         this.parallaxes = [];
         this.onResize();
@@ -293,6 +296,7 @@ export default class App {
         Anchors.init(document.querySelector('.anchors__wrapper'), 200);
         Fancy.init();
         FancyViewAll.init();
+        Utils.toggleGrid();
         setTimeout(x => {
             this.appears = Appears.init();
             Splitting();
@@ -369,6 +373,11 @@ export default class App {
                 this.anchorPanel.style.top = -this.anchorPanel.clientHeight + 'px';
                 this.anchorPanel.style.transition = 'top .15s linear';
             }
+
+            // if (this.filtersPanel) {
+            //     this.filtersPanel.style.top = -this.filtersPanel.clientHeight + 'px';
+            //     this.filtersPanel.style.transition = 'top .15s linear';
+            // }
 
             if (this.body.classList.contains('scroll-down')) {
                 this.header.style.top = 0;

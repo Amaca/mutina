@@ -1,11 +1,6 @@
 @import "../mixins";
 
 .cover {
-    margin-bottom: 130px;
-
-    @include sm-down {
-        margin-bottom: 80px;
-    }
 
     .h1 {
         font-size: 4.5rem;
@@ -44,6 +39,80 @@
             @include sm-down {
                 padding: 50px 0;
             }
+
+            .text {
+                font-size: 1.4rem;
+            }
+
+            .h1+.text {
+                margin-top: 20px;
+            }
         }
+    }
+
+    &--background {
+        background-size: cover;
+        background-position: center center;
+        height: 50vh;
+        width: 100vw;
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 0;
+
+        .box {
+            color: white;
+        }
+    }
+
+    &--primary {
+        text-align: center;
+        margin-bottom: 0;
+
+        .h1 {
+            font-size: 3.2rem;
+            padding-bottom: 30px;
+
+            @include sm-down {
+                font-size: 2.8rem;
+                padding-bottom: 15px;
+            }
+        }
+
+        .box {
+            padding: 120px 0;
+            font-size: 1.1rem;
+            max-width: 35%;
+            margin: 0 auto;
+
+            @include lg-down {
+                max-width: 60%;
+            }
+
+            @include sm-down {
+                max-width: 70%;
+                padding: 50px 0;
+            }
+
+            @include xs-down {
+                max-width: 100%;
+            }
+        }
+    }
+}
+
+.cover--primary+.filters {
+    &:before {
+        display: block;
+    }
+}
+
+.cover--text+.image-content {
+    margin-top: 30px;
+
+    @include sm-down {
+        margin-top: 15px;
     }
 }

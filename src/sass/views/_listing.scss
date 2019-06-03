@@ -1,35 +1,117 @@
 .listing {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 
-	@include sm-down {
-		display: block;
-	}
+    @include sm-down {
+        display: block;
+    }
 
-	&>a,
-	&>div {
-		display: block;
-		flex: 0 0 50%;
-		max-width: 50%;
-		padding: 0 calc(#{$col-gutter} / 2);
+    &--grid-2 {
 
-		@include sm-down {
-			padding: 0;
-			max-width: none;
-			margin-bottom: 40px;
+        &>a,
+        &>div {
+            display: block;
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 calc(#{$col-gutter} / 2);
+            margin-bottom: $col-gutter;
 
-			&:last-child {
-				margin-bottom: 0;
-			}
-		}
-	}
+            @include sm-down {
+                padding: 0;
+                max-width: none;
+                margin-bottom: 40px;
 
-	.picture {
-		margin-bottom: 40px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
 
-		@include sm-down {
-			margin-bottom: 10px;
-		}
-	}
+        .listing__item--double {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+
+    &--grid-3 {
+
+        &>a,
+        &>div {
+            display: block;
+            flex: 0 0 33.333%;
+            max-width: 33.333%;
+            padding: 0 calc(#{$col-gutter} / 2);
+            margin-bottom: $col-gutter;
+
+            @include sm-down {
+                padding: 0;
+                max-width: none;
+                margin-bottom: 40px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        .listing__item--double {
+            flex: 0 0 66.666%;
+            max-width: 66.666%;
+        }
+    }
+
+    .picture {
+        margin-bottom: 40px;
+
+        @include sm-down {
+            margin-bottom: 10px;
+        }
+    }
+
+    &>a,
+    &>div {
+
+        .picture {
+
+            .picture__primary {
+                opacity: 1;
+                transition: opacity .3s $smooth;
+                z-index: 2;
+                height: 100%;
+                top: 50%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                z-index: 2;
+            }
+
+            .picture__secondary {
+                height: 100%;
+                top: 50%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                z-index: 1;
+            }
+
+            &:hover {
+
+                .picture__primary {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+}
+
+.archive {
+    margin-top: $col-gutter;
+    margin-bottom: $col-gutter;
+
+    .container--big {
+        max-width: calc(100% - #{$col-gutter});
+
+        @include sm-down {
+            max-width: calc(100% - #{$col-width});
+        }
+    }
 }
