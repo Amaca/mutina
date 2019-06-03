@@ -15,7 +15,7 @@ export default class FancyViewAll {
     constructor(node, id) {
         this.node = node;
         this.id = id;
-       
+
 
         this.addListener();
     }
@@ -48,6 +48,7 @@ export default class FancyViewAll {
         FancyViewAll.items.forEach(node => {
             node.destroy();
         });
+        [...document.querySelectorAll('.full-gallery__thumb')].forEach(thumb => thumb.removeEventListener('click', FancyViewAll.onThumbClick));
     }
 
     //CREATE MARKUP FOR FULL GALLERY AND ADD CLOSE LISTENER
@@ -57,7 +58,7 @@ export default class FancyViewAll {
         let fullGalleryBg = document.createElement('div');
         let fullGalleryWrapper = document.createElement('div');
         let fullGalleryContainer = document.createElement('div');
-       
+
         fullGallery.classList.add('full-gallery');
         fullGalleryClose.classList.add('full-gallery__close');
         fullGalleryBg.classList.add('full-gallery__bg');
@@ -67,7 +68,7 @@ export default class FancyViewAll {
         fullGalleryClose.innerHTML = closeIcon;
 
         clickClose = (e) => {
-            FancyTransition.closeLayer('fullGallery',fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, fullGallery);
+            FancyTransition.closeLayer('fullGallery', false, fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, fullGallery);
             e.preventDefault();
         };
         fullGalleryClose.addEventListener('click', clickClose);
@@ -81,25 +82,36 @@ export default class FancyViewAll {
         body.classList.add('full-gallery-open');
         FancyViewAll.addImages(fullGalleryContainer);
 
+
         FancyTransition.openLayer('fullGallery', fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, id);
     }
 
     static addImages(container) {
-        let fancyImages = Fancy.getImages();
+        const fancyImages = Fancy.getImages();
+
         let thumbItems = fancyImages.map((item) => {
             return {
                 id: item.id,
                 caption: item.caption,
-                url: item.bigImageUrl
+                url: item.bigImageUrl,
+                html: `<div class="full-gallery__thumb" data-index="${item.id}"><img src="${item.bigImageUrl}" alt="${item.caption}"></div>`
             };
         });
 
         let thumbHtml = '';
         thumbItems.forEach(thumb => {
-            thumbHtml += `<div class="full-gallery__thumb"><img src="${thumb.url}" alt="${thumb.caption}"></div>`;
+            thumbHtml += thumb.html;
         });
+
 
         container.innerHTML = `<div class="full-gallery__list">${thumbHtml}</div>`;
 
+        [...container.querySelectorAll('.full-gallery__thumb')].forEach(thumb => thumb.addEventListener('click', FancyViewAll.onThumbClick));
+
+    }
+
+    static onThumbClick(event) {
+        const index = this.getAttribute('data-index');
+        Fancy.initDetailGallery(index);
     }
 }

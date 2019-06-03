@@ -12038,6 +12038,8 @@ var _dom = _interopRequireDefault(require("./shared/dom"));
 
 var _fancy = _interopRequireDefault(require("./shared/fancy"));
 
+var _fancy2 = _interopRequireDefault(require("./shared/fancy.view-all"));
+
 var _navigation = _interopRequireDefault(require("./shared/navigation"));
 
 var _rect = _interopRequireDefault(require("./shared/rect"));
@@ -12045,8 +12047,6 @@ var _rect = _interopRequireDefault(require("./shared/rect"));
 var _sliders = _interopRequireDefault(require("./shared/sliders"));
 
 var _utils = _interopRequireDefault(require("./shared/utils"));
-
-var _fancy2 = _interopRequireDefault(require("./shared/fancy.view-all"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12057,7 +12057,10 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var menuStyle = 1;
-var scrollSpeed = 8;
+var scrollSpeed = 8; //settings
+
+var activateIntro = false;
+var barbaDebug = true;
 
 var App =
 /*#__PURE__*/
@@ -12117,11 +12120,10 @@ function () {
       var textBack = document.querySelector('.transition__text .box--back .text');
       var boxBack = document.querySelector('.transition__text .box--back');
       var line = document.querySelector('.transition__line');
-      var activateIntro = true;
 
       _core.default.init({
         timeout: 5000,
-        debug: true,
+        debug: barbaDebug,
         transitions: [{
           appear: function appear(data) {
             var done = this.async();
@@ -12937,6 +12939,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var clickClose;
+var clickSwitch;
 var swiperInstance;
 var body = document.querySelector('body');
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
@@ -13004,12 +13007,20 @@ function () {
         swiperInstance.destroy();
       }
 
-      if (document.querySelector('detail-gallery')) {
-        document.querySelector('detail-gallery').remove();
+      if (document.querySelector('.detail-gallery')) {
+        document.querySelector('.detail-gallery').remove();
       }
 
-      if (document.querySelector('full-gallery')) {
-        document.querySelector('full-gallery').remove();
+      if (document.querySelector('.full-gallery')) {
+        document.querySelector('.full-gallery').remove();
+      }
+
+      if (document.querySelector('.detail-gallery__close')) {
+        document.querySelector('.detail-gallery__close').removeEventListener('click', clickClose);
+      }
+
+      if (document.querySelector('.detail-gallery__cta')) {
+        document.querySelector('.detail-gallery__cta').removeEventListener('click', clickSwitch);
       }
     } //CREATE MARKUP FOR DETAIL GALLERY AND ADD CLOSE LISTENER
 
@@ -13029,9 +13040,7 @@ function () {
       detailGalleryClose.innerHTML = closeIcon;
 
       clickClose = function clickClose(e) {
-        _fancy.default.closeLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery);
-
-        e.preventDefault();
+        Fancy.close(e, 'detailGallery', false, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery);
       };
 
       detailGalleryClose.addEventListener('click', clickClose);
@@ -13041,10 +13050,24 @@ function () {
       detailGallery.appendChild(detailGalleryWrapper);
       detailGallery.appendChild(detailGalleryFooter);
       detailGalleryFooter.innerHTML = "\n            <div class=\"detail-gallery__cta\">".concat(fullGalleryIcon, "</div>\n            <div class=\"detail-gallery__caption\"><span></span></div>\n            <div class=\"detail-gallery__pagination\"></div>\n        ");
+      var detailGallerySwitch = document.querySelector('.detail-gallery__cta');
+
+      clickSwitch = function clickSwitch(e) {
+        Fancy.close(e, 'detailGallery', true, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery);
+      };
+
+      detailGallerySwitch.addEventListener('click', clickSwitch);
       body.classList.add('detail-gallery-open');
       Fancy.initSwiper(detailGalleryWrapper, id);
 
       _fancy.default.openLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, id);
+    }
+  }, {
+    key: "close",
+    value: function close(e, type, isSwitch, bg, _close, wrapper, footer, container) {
+      _fancy.default.closeLayer(type, isSwitch, bg, _close, wrapper, footer, container);
+
+      e.preventDefault();
     } // INIT SWIPER WITH OPTIONS AND EVENTS
 
   }, {
@@ -13190,6 +13213,8 @@ exports.default = void 0;
 
 var _fancy = _interopRequireDefault(require("./fancy"));
 
+var _fancy2 = _interopRequireDefault(require("./fancy.view-all"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13315,7 +13340,7 @@ function () {
 
   }, {
     key: "closeLayer",
-    value: function closeLayer(type, layer, close, wrapper, footer, mainWrapper) {
+    value: function closeLayer(type, isSwitch, layer, close, wrapper, footer, mainWrapper) {
       var captionWrapper = document.querySelector('.detail-gallery__caption span');
       var footerHeight = footer ? footer.clientHeight : null;
       var wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
@@ -13359,11 +13384,21 @@ function () {
       }
 
       setTimeout(function (x) {
-        TweenMax.set(layer, {
-          bottom: 0,
-          top: 'auto',
-          height: window.innerHeight
-        });
+        if (!isSwitch) {
+          TweenMax.set(layer, {
+            bottom: 0,
+            top: 'auto',
+            height: window.innerHeight
+          });
+        }
+
+        if (isSwitch && isFullGallery) {
+          TweenMax.set(layer, {
+            bottom: 0,
+            top: 'auto',
+            height: window.innerHeight
+          });
+        }
 
         if (isDetailGallery) {
           var captionSpeed = slideAnimationSpeed / 1000 / 2;
@@ -13417,17 +13452,43 @@ function () {
         }
 
         setTimeout(function (x) {
-          TweenMax.to(layer, 1, {
-            height: 0,
-            ease: Expo.easeInOut,
-            onComplete: function onComplete() {
-              if (isDetailGallery) {
-                _fancy.default.destroySwiper();
-              }
+          if (!isSwitch) {
+            TweenMax.to(layer, 1, {
+              height: 0,
+              ease: Expo.easeInOut,
+              onComplete: function onComplete() {
+                if (isDetailGallery) {
+                  _fancy.default.destroySwiper();
 
-              mainWrapper.remove();
+                  mainWrapper.remove();
+                }
+
+                if (isFullGallery) {
+                  mainWrapper.remove();
+                }
+              }
+            });
+          } else {
+            if (isDetailGallery) {
+              console.log('isDetailGallery end');
+              setTimeout(function (y) {
+                _fancy.default.destroySwiper();
+
+                mainWrapper.remove();
+              }, 1000);
+
+              if (!document.querySelector('.full-gallery')) {
+                _fancy2.default.initFullGallery(0);
+              }
             }
-          });
+
+            if (isFullGallery) {
+              console.log('isfullgallery end');
+              setTimeout(function (y) {
+                mainWrapper.remove();
+              }, 1000); //Fancy.initDetailGallery(0);
+            }
+          }
         }, delay);
       }, delayAll);
     }
@@ -13438,7 +13499,7 @@ function () {
 
 exports.default = FancyTransition;
 
-},{"./fancy":314}],316:[function(require,module,exports){
+},{"./fancy":314,"./fancy.view-all":316}],316:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13522,6 +13583,10 @@ function () {
       FancyViewAll.items.forEach(function (node) {
         node.destroy();
       });
+
+      _toConsumableArray(document.querySelectorAll('.full-gallery__thumb')).forEach(function (thumb) {
+        return thumb.removeEventListener('click', FancyViewAll.onThumbClick);
+      });
     } //CREATE MARKUP FOR FULL GALLERY AND ADD CLOSE LISTENER
 
   }, {
@@ -13540,7 +13605,7 @@ function () {
       fullGalleryClose.innerHTML = closeIcon;
 
       clickClose = function clickClose(e) {
-        _fancy2.default.closeLayer('fullGallery', fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, fullGallery);
+        _fancy2.default.closeLayer('fullGallery', false, fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, fullGallery);
 
         e.preventDefault();
       };
@@ -13565,14 +13630,26 @@ function () {
         return {
           id: item.id,
           caption: item.caption,
-          url: item.bigImageUrl
+          url: item.bigImageUrl,
+          html: "<div class=\"full-gallery__thumb\" data-index=\"".concat(item.id, "\"><img src=\"").concat(item.bigImageUrl, "\" alt=\"").concat(item.caption, "\"></div>")
         };
       });
       var thumbHtml = '';
       thumbItems.forEach(function (thumb) {
-        thumbHtml += "<div class=\"full-gallery__thumb\"><img src=\"".concat(thumb.url, "\" alt=\"").concat(thumb.caption, "\"></div>");
+        thumbHtml += thumb.html;
       });
       container.innerHTML = "<div class=\"full-gallery__list\">".concat(thumbHtml, "</div>");
+
+      _toConsumableArray(container.querySelectorAll('.full-gallery__thumb')).forEach(function (thumb) {
+        return thumb.addEventListener('click', FancyViewAll.onThumbClick);
+      });
+    }
+  }, {
+    key: "onThumbClick",
+    value: function onThumbClick(event) {
+      var index = this.getAttribute('data-index');
+
+      _fancy.default.initDetailGallery(index);
     }
   }]);
 

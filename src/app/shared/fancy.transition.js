@@ -2,30 +2,31 @@
 /* tweenmax needed */
 
 import Fancy from './fancy';
+import FancyViewAll from './fancy.view-all';
 
 const body = document.querySelector('body');
 const slideAnimationSpeed = 1000;
 
 export default class FancyTransition {
-    
+
     //OPEN LAYER ON IMAGE CLICK
     static openLayer(type, layer, close, wrapper, footer, id) {
         const closeHeight = close.clientHeight;
         const footerHeight = footer ? footer.clientHeight : null;
         const wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
-        
+
         let isDetailGallery = false,
             isFullGallery = false;
-        
+
         switch (type) {
             case 'detailGallery':
                 isDetailGallery = true;
-            break;
+                break;
             case 'fullGallery':
                 isFullGallery = true;
-            break;
+                break;
         }
-            
+
         let arrowLeft;
         let arrowRight;
 
@@ -44,10 +45,10 @@ export default class FancyTransition {
         });
 
         if (isDetailGallery) {
-            TweenMax.set(arrowLeft,{
+            TweenMax.set(arrowLeft, {
                 left: -100,
             });
-            TweenMax.set(arrowRight,{
+            TweenMax.set(arrowRight, {
                 right: -100,
             });
             TweenMax.set(wrapper, {
@@ -94,7 +95,7 @@ export default class FancyTransition {
                 right: 0,
                 ease: Expo.easeInOut
             }).delay(0.5);
-        } else if(isFullGallery) {
+        } else if (isFullGallery) {
             TweenMax.to(wrapper, 0.8, {
                 bottom: 0,
                 ease: Expo.easeIn
@@ -112,7 +113,7 @@ export default class FancyTransition {
     }
 
     //CLOSE LAYER ON CLOSE CLICK
-    static closeLayer(type, layer, close, wrapper, footer, mainWrapper) {
+    static closeLayer(type, isSwitch, layer, close, wrapper, footer, mainWrapper) {
         const captionWrapper = document.querySelector('.detail-gallery__caption span');
         const footerHeight = footer ? footer.clientHeight : null;
         const wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
@@ -124,24 +125,24 @@ export default class FancyTransition {
 
         let isDetailGallery = false,
             isFullGallery = false;
-        
+
         switch (type) {
             case 'detailGallery':
                 delay = 500;
                 body.classList.remove('detail-gallery-open');
                 isDetailGallery = true;
-            break;
+                break;
             case 'fullGallery':
                 delay = 500;
                 body.classList.remove('full-gallery-open');
                 isFullGallery = true;
-            break;
+                break;
             default:
                 delay = 0;
-            break;
+                break;
         }
 
-        if (isDetailGallery && body.classList.contains('fancy-zoom')){
+        if (isDetailGallery && body.classList.contains('fancy-zoom')) {
             TweenMax.to(detailGalleryWrapper, 0.5, {
                 height: window.innerHeight - 65 - 60,
                 ease: Expo.easeInOut
@@ -150,13 +151,22 @@ export default class FancyTransition {
             Fancy.zoomOutOnClose();
             delayAll = 500;
         }
-        
-        setTimeout( x => {
-            TweenMax.set(layer, {
-                bottom: 0,
-                top: 'auto',
-                height: window.innerHeight,
-            });
+
+        setTimeout(x => {
+            if (!isSwitch) {
+                TweenMax.set(layer, {
+                    bottom: 0,
+                    top: 'auto',
+                    height: window.innerHeight,
+                });
+            }
+            if (isSwitch && isFullGallery) {
+                TweenMax.set(layer, {
+                    bottom: 0,
+                    top: 'auto',
+                    height: window.innerHeight,
+                });
+            }
             if (isDetailGallery) {
                 const captionSpeed = (slideAnimationSpeed / 1000) / 2;
                 TweenMax.set(footer, {
@@ -165,10 +175,10 @@ export default class FancyTransition {
                 TweenMax.set(captionWrapper, {
                     bottom: 0,
                 });
-                TweenMax.set(arrowLeft,{
+                TweenMax.set(arrowLeft, {
                     left: 0,
                 });
-                TweenMax.set(arrowRight,{
+                TweenMax.set(arrowRight, {
                     right: 0,
                 });
                 TweenMax.to(captionWrapper, captionSpeed, {
@@ -209,17 +219,42 @@ export default class FancyTransition {
             }
 
             setTimeout(x => {
-                TweenMax.to(layer, 1, {
-                    height: 0,
-                    ease: Expo.easeInOut,
-                    onComplete: () => {
-                        if (isDetailGallery) {
-                            Fancy.destroySwiper();
+                if (!isSwitch) {
+                    TweenMax.to(layer, 1, {
+                        height: 0,
+                        ease: Expo.easeInOut,
+                        onComplete: () => {
+                            if (isDetailGallery) {
+                                Fancy.destroySwiper();
+                                mainWrapper.remove();
+                            }
+                            if (isFullGallery) {
+                                mainWrapper.remove();
+                            }
                         }
-                        mainWrapper.remove();
+                    });
+                } else {
+                    if (isDetailGallery) {
+                        console.log('isDetailGallery end')
+                        setTimeout(y => {
+                            Fancy.destroySwiper();
+                            mainWrapper.remove();
+                        }, 1000);
+                        if (!document.querySelector('.full-gallery')) {
+                            FancyViewAll.initFullGallery(0);
+                        }
                     }
-                });
+                    if (isFullGallery) {
+                        console.log('isfullgallery end')
+                        setTimeout(y => {
+                            mainWrapper.remove();
+                        }, 1000);
+                        //Fancy.initDetailGallery(0);
+                    }
+                }
+
             }, delay);
         }, delayAll);
     }
+
 }

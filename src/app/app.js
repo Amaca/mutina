@@ -8,14 +8,18 @@ import Anchors from './shared/anchors';
 import Appears from './shared/appears';
 import Dom from './shared/dom';
 import Fancy from "./shared/fancy";
+import FancyViewAll from "./shared/fancy.view-all";
 import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
 import Sliders from './shared/sliders';
 import Utils from './shared/utils';
-import FancyViewAll from "./shared/fancy.view-all";
 
 let menuStyle = 1;
 let scrollSpeed = 8;
+
+//settings
+const activateIntro = false;
+const barbaDebug = true;
 
 export default class App {
 
@@ -64,11 +68,9 @@ export default class App {
         const boxBack = document.querySelector('.transition__text .box--back');
         const line = document.querySelector('.transition__line');
 
-        const activateIntro = true;
-
         barba.init({
             timeout: 5000,
-            debug: true,
+            debug: barbaDebug,
             transitions: [{
                 appear(data) {
                     const done = this.async();

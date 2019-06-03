@@ -4,6 +4,7 @@
 import FancyTransition from "./fancy.transition";
 
 let clickClose;
+let clickSwitch;
 let swiperInstance;
 
 const body = document.querySelector('body');
@@ -56,12 +57,18 @@ export default class Fancy {
         if (swiperInstance) {
             swiperInstance.destroy();
         }
-        if (document.querySelector('detail-gallery')) {
-            document.querySelector('detail-gallery').remove();
+        if (document.querySelector('.detail-gallery')) {
+            document.querySelector('.detail-gallery').remove();
         }
-        if (document.querySelector('full-gallery')) {
-            document.querySelector('full-gallery').remove();
-        }   
+        if (document.querySelector('.full-gallery')) {
+            document.querySelector('.full-gallery').remove();
+        }
+        if (document.querySelector('.detail-gallery__close')) {
+            document.querySelector('.detail-gallery__close').removeEventListener('click', clickClose);
+        }
+        if (document.querySelector('.detail-gallery__cta')) {
+            document.querySelector('.detail-gallery__cta').removeEventListener('click', clickSwitch);
+        }
     }
 
     //CREATE MARKUP FOR DETAIL GALLERY AND ADD CLOSE LISTENER
@@ -81,9 +88,9 @@ export default class Fancy {
         detailGalleryClose.innerHTML = closeIcon;
 
         clickClose = (e) => {
-            FancyTransition.closeLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery);
-            e.preventDefault();
-        };
+            Fancy.close(e, 'detailGallery', false, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery)
+        }
+
         detailGalleryClose.addEventListener('click', clickClose);
 
         document.body.appendChild(detailGallery);
@@ -98,10 +105,23 @@ export default class Fancy {
             <div class="detail-gallery__pagination"></div>
         `;
 
+        const detailGallerySwitch = document.querySelector('.detail-gallery__cta');
+
+        clickSwitch = (e) => {
+            Fancy.close(e, 'detailGallery', true, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery)
+        }
+
+        detailGallerySwitch.addEventListener('click', clickSwitch);
+
         body.classList.add('detail-gallery-open');
         Fancy.initSwiper(detailGalleryWrapper, id);
 
         FancyTransition.openLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, id);
+    }
+
+    static close(e, type, isSwitch, bg, close, wrapper, footer, container) {
+        FancyTransition.closeLayer(type, isSwitch, bg, close, wrapper, footer, container);
+        e.preventDefault();
     }
 
     // INIT SWIPER WITH OPTIONS AND EVENTS
@@ -164,7 +184,7 @@ export default class Fancy {
                 768: {
                     allowTouchMove: true,
                 }
-              },
+            },
             on: {
                 doubleTap: function () {
                     const detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper ');
@@ -189,7 +209,7 @@ export default class Fancy {
                 init: function () {
                     const caption = sliderItems[this.activeIndex].caption;
                     const captionWrapper = document.querySelector('.detail-gallery__caption span');
-                   
+
                     captionWrapper.innerHTML = caption;
                     this.slideTo(id, 0);
                 },
