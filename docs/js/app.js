@@ -13350,7 +13350,9 @@ function () {
       var delayAll = 0;
       var delay = 0;
       var isDetailGallery = false,
-          isFullGallery = false;
+          isFullGallery = false,
+          isDetailAndFullGallery = body.classList.contains('full-gallery-open') && body.classList.contains('detail-gallery-open');
+      console.log('isDetailAndFullGallery', isDetailAndFullGallery);
 
       switch (type) {
         case 'detailGallery':
@@ -13385,14 +13387,6 @@ function () {
 
       setTimeout(function (x) {
         if (!isSwitch) {
-          TweenMax.set(layer, {
-            bottom: 0,
-            top: 'auto',
-            height: window.innerHeight
-          });
-        }
-
-        if (isSwitch && isFullGallery) {
           TweenMax.set(layer, {
             bottom: 0,
             top: 'auto',
@@ -13469,6 +13463,13 @@ function () {
               }
             });
           } else {
+            if (isDetailAndFullGallery) {
+              TweenMax.to(layer, 1, {
+                height: 0,
+                ease: Expo.easeInOut
+              });
+            }
+
             if (isDetailGallery) {
               console.log('isDetailGallery end');
               setTimeout(function (y) {
@@ -13480,13 +13481,6 @@ function () {
               if (!document.querySelector('.full-gallery')) {
                 _fancy2.default.initFullGallery(0);
               }
-            }
-
-            if (isFullGallery) {
-              console.log('isfullgallery end');
-              setTimeout(function (y) {
-                mainWrapper.remove();
-              }, 1000); //Fancy.initDetailGallery(0);
             }
           }
         }, delay);

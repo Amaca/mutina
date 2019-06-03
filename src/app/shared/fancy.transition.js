@@ -124,7 +124,10 @@ export default class FancyTransition {
         let delay = 0;
 
         let isDetailGallery = false,
-            isFullGallery = false;
+            isFullGallery = false,
+            isDetailAndFullGallery = body.classList.contains('full-gallery-open') && body.classList.contains('detail-gallery-open')
+
+        console.log('isDetailAndFullGallery', isDetailAndFullGallery)
 
         switch (type) {
             case 'detailGallery':
@@ -154,13 +157,6 @@ export default class FancyTransition {
 
         setTimeout(x => {
             if (!isSwitch) {
-                TweenMax.set(layer, {
-                    bottom: 0,
-                    top: 'auto',
-                    height: window.innerHeight,
-                });
-            }
-            if (isSwitch && isFullGallery) {
                 TweenMax.set(layer, {
                     bottom: 0,
                     top: 'auto',
@@ -234,6 +230,12 @@ export default class FancyTransition {
                         }
                     });
                 } else {
+                    if (isDetailAndFullGallery) {
+                        TweenMax.to(layer, 1, {
+                            height: 0,
+                            ease: Expo.easeInOut,
+                        });
+                    }
                     if (isDetailGallery) {
                         console.log('isDetailGallery end')
                         setTimeout(y => {
@@ -243,13 +245,6 @@ export default class FancyTransition {
                         if (!document.querySelector('.full-gallery')) {
                             FancyViewAll.initFullGallery(0);
                         }
-                    }
-                    if (isFullGallery) {
-                        console.log('isfullgallery end')
-                        setTimeout(y => {
-                            mainWrapper.remove();
-                        }, 1000);
-                        //Fancy.initDetailGallery(0);
                     }
                 }
 
