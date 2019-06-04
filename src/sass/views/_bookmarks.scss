@@ -1,0 +1,40 @@
+@import "../mixins";
+
+.bookmarks {
+    padding-bottom: 100px;
+    margin-bottom: 140px;
+    border-bottom: 2px solid $dark;
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 -5px;
+
+        li {
+            display: inline-block;
+            margin: 0;
+            padding: 0 5px;
+
+            a {
+                font-size: 1.3rem;
+
+                &:after {
+                    display: none;
+                }
+            }
+        }
+
+        &.socials {
+            margin: 46px -20px 0 -20px;
+
+            li {
+                padding: 0 20px;
+
+                .ico {
+                    width: 26px;
+                    height: 26px;
+                }
+            }
+        }
+    }
+}

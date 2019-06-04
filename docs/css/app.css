@@ -90,6 +90,11 @@ body {
   background: #dadada;
   border-radius: 2px; }
 
+.ico {
+  width: 16px;
+  height: 16px;
+  fill: var(--color-dark); }
+
 .svg-sprites {
   height: 0;
   width: 0;
@@ -2800,6 +2805,48 @@ body.fixed .header {
     @media (max-width: 768px) {
       .related .container--big {
         max-width: calc(100% - 8.333vw); } }
+
+/*
+@function pow($number, $exp) {
+    $value: 1;
+
+    @if $exp > 0 {
+        @for $i from 1 through $exp {
+            $value: $value * $number;
+        }
+    }
+    @else if $exp < 0 {
+        @for $i from 1 through -$exp {
+            $value: $value / $number;
+        }
+    }
+
+    @return $value;
+}
+*/
+.bookmarks {
+  padding-bottom: 100px;
+  margin-bottom: 140px;
+  border-bottom: 2px solid var(--color-dark); }
+  .bookmarks ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 -5px; }
+    .bookmarks ul li {
+      display: inline-block;
+      margin: 0;
+      padding: 0 5px; }
+      .bookmarks ul li a {
+        font-size: 1.3rem; }
+        .bookmarks ul li a:after {
+          display: none; }
+    .bookmarks ul.socials {
+      margin: 46px -20px 0 -20px; }
+      .bookmarks ul.socials li {
+        padding: 0 20px; }
+        .bookmarks ul.socials li .ico {
+          width: 26px;
+          height: 26px; }
 
 .downloads {
   padding: 0 0 120px 0; }
