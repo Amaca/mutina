@@ -1,264 +1,357 @@
 @import "../mixins";
 
 .editorial {
-	padding-bottom: 190px;
+    padding-bottom: 190px;
 
-	@include md-down {
-		padding-bottom: 120px;
-	}
+    @include md-down {
+        padding-bottom: 120px;
+    }
 
-	@include sm-down {
-		padding-bottom: 80px;
-	}
+    @include sm-down {
+        padding-bottom: 80px;
+    }
 
-	&>div {
-		margin-bottom: 100px;
+    &>div {
+        margin-bottom: 100px;
 
-		@include md-down {
-			margin-bottom: 80px;
-		}
+        @include md-down {
+            margin-bottom: 80px;
+        }
 
-		@include sm-down {
-			margin-bottom: 60px;
-		}
+        @include sm-down {
+            margin-bottom: 60px;
+        }
 
-		&:last-child {
-			margin-bottom: 0;
-		}
-	}
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
 }
 
 // 2col-text-img
 .editorial__2col-text-img {
 
-	.editorial__wrapper {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		align-items: center;
-	}
+    .editorial__wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+    }
 
-	.editorial__box-text {
-		flex: 0 0 $col-width-4;
-		max-width: $col-width-4;
-		margin-right: $col-width;
-		margin-left: $col-gutter;
+    .editorial__box-text {
+        flex: 0 0 $col-width-4;
+        max-width: $col-width-4;
+        margin-right: $col-width;
+        margin-left: $col-gutter;
 
-		@include xl-down {
-			flex: 0 0 $col-width-5;
-			max-width: $col-width-5;
-			margin-right: $col-gutter;
-			margin-left: 0;
-		}
+        @include xl-down {
+            flex: 0 0 $col-width-5;
+            max-width: $col-width-5;
+            margin-right: $col-gutter;
+            margin-left: 0;
+        }
 
-		@include md-down {
-			flex: 0 0 70%;
-			max-width: 70%;
-			margin: 80px auto 0 auto;
-			padding-right: $col-gutter;
-			padding-left: $col-gutter;
-			order: 2;
-		}
+        @include md-down {
+            flex: 0 0 70%;
+            max-width: 70%;
+            margin: 80px auto 0 auto;
+            padding-right: $col-gutter;
+            padding-left: $col-gutter;
+            order: 2;
+        }
 
-		@include xs-down {
-			flex: 0 0 100%;
-			max-width: 100%;
-			padding-right: 0;
-			padding-left: 0;
-			margin: 40px auto 0 auto;
-		}
+        @include xs-down {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding-right: 0;
+            padding-left: 0;
+            margin: 40px auto 0 auto;
+        }
 
-		ul {
-			list-style: none;
-			margin: 0 -5px;
-			padding: 0;
+        ul {
+            list-style: none;
+            margin: 0 -5px;
+            padding: 0;
 
-			@include xs-down {
-				display: inline;
-			}
+            @include xs-down {
+                display: inline;
+            }
 
-			li {
-				display: inline-block;
-				padding: 0 5px;
+            li {
+                display: inline-block;
+                padding: 0 5px;
 
-				a {
-					color: $grey;
-					position: relative;
-					z-index: 1;
+                a {
+                    color: $grey;
+                    position: relative;
+                    z-index: 1;
 
-					&:after {
-						content: '';
-						position: absolute;
-						z-index: 1;
-						bottom: 0;
-						left: 0;
-						width: 100%;
-						height: 2px;
-						background: $grey;
-					}
-				}
-			}
-		}
-	}
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        z-index: 1;
+                        bottom: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 2px;
+                        background: $grey;
+                    }
+                }
+            }
+        }
+    }
 
-	.editorial__box-picture {
-		flex: 0 0 calc(#{$col-width-5} + #{$col-gutter});
-		max-width: calc(#{$col-width-5} + #{$col-gutter});
+    .editorial__box-picture {
+        flex: 0 0 calc(#{$col-width-5} + #{$col-gutter});
+        max-width: calc(#{$col-width-5} + #{$col-gutter});
 
-		@include md-down {
-			flex: 0 0 70%;
-			max-width: 70%;
-			padding-right: $col-gutter;
-			padding-left: $col-gutter;
-			margin: 0 auto;
-			order: 1;
-		}
+        @include md-down {
+            flex: 0 0 70%;
+            max-width: 70%;
+            padding-right: $col-gutter;
+            padding-left: $col-gutter;
+            margin: 0 auto;
+            order: 1;
+        }
 
-		@include xs-down {
-			flex: 0 0 100%;
-			max-width: 100%;
-			padding-right: 0;
-			padding-left: 0;
-		}
-	}
+        @include xs-down {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
 }
 
 // 2col-text-sidebar
 .editorial__2col-text-sidebar {
 
-	.editorial__wrapper {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-	}
+    .editorial__wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
 
-	.editorial__primary {
-		flex: 0 0 $col-width-5;
-		max-width: $col-width-5;
-		margin-right: $col-width-2;
+    .editorial__primary {
+        flex: 0 0 $col-width-5;
+        max-width: $col-width-5;
+        margin-right: $col-width-2;
 
-		@include md-down {
-			flex: 0 0 $col-width-6;
-			max-width: $col-width-6;
-			margin-right: $col-width;
-		}
+        @include md-down {
+            flex: 0 0 $col-width-6;
+            max-width: $col-width-6;
+            margin-right: $col-width;
+        }
 
-		@include xs-down {
-			flex: 0 0 100%;
-			max-width: 100%;
-			margin-right: 0;
-			margin-bottom: 30px;
-		}
-	}
+        @include xs-down {
+            flex: 0 0 100%;
+            max-width: 100%;
+            margin-right: 0;
+            margin-bottom: 30px;
+        }
+    }
 
-	.editorial__secondary {
-		flex: 0 0 $col-width-3;
-		max-width: $col-width-3;
+    .editorial__secondary {
+        flex: 0 0 $col-width-3;
+        max-width: $col-width-3;
 
-		@include xs-down {
-			flex: 0 0 100%;
-			max-width: 100%;
-		}
+        @include xs-down {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
 
-		ul {
-			list-style: none;
-			padding: 0;
-			margin: 0;
-		}
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-		.h3 {
-			margin-bottom: 25px;
-		}
+        .h3 {
+            margin-bottom: 25px;
+        }
 
-		.box {
-			margin-bottom: 100px;
+        .box {
+            margin-bottom: 100px;
 
-			@include xs-down {
-				margin-bottom: 40px;
-			}
+            @include xs-down {
+                margin-bottom: 40px;
+            }
 
-			&:last-child {
-				margin-bottom: 0;
-			}
-		}
-	}
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
 }
 
-// editorial__1col-mid-text
+.editorial__2col-img {
+
+    .editorial__wrapper {
+        display: flex;
+        flex-direction: row;
+        margin: 0 -#{$col-gutter-half};
+    }
+
+    .editorial__box-picture {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding: 0 $col-gutter-half;
+    }
+
+
+}
+
+// 1col-mid-text
 .editorial__1col-mid-text {
-	text-align: left;
-	font-size: 1.5rem;
-	line-height: 1.6;
-	
-	.box {
-		padding: 0 100px;
+    text-align: left;
+    font-size: 1.5rem;
+    line-height: 1.6;
 
-		@include lg-down {
-			padding: 0 60px;
-		}
+    .box {
+        padding: 0 100px;
 
-		@include md-down {
-			padding: 0 40px;
-		}
-	}
+        @include xl-down {
+            padding: 0px;
+        }
+    }
 }
 
+// 1col-img-lateral-caption
 .editorial__1col-img-lateral-caption {
-	
-	.editorial__wrapper {
-		display: flex;
-		flex-direction: row;
-		align-items: flex-end;
-	}
 
-	.editorial__box-picture {
-		flex: 0 0 calc(#{$col-width-8} + #{$col-gutter});
-		max-width: calc(#{$col-width-8} + #{$col-gutter});
-		
-		.picture {
-			@include aspect-clip(16, 9);
-		}		
-	}
+    .editorial__wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-end;
 
-	.editorial__caption {
-		flex: 0 0 $col-width-2;
-		max-width: $col-width-2;
-		margin-left: $col-gutter;
-		margin-bottom: $col-gutter;
-		font-size: 0.8rem;
+        @include md-down {
+            justify-content: flex-end;
+        }
 
-		.text + .cta {
-			margin-top: 30px;
-		}
+    }
 
-		.btn--inline {
-			text-transform: uppercase;
-			font-size: 0.9rem;
-		}
-	}
+    .editorial__box-picture {
+        flex: 0 0 calc(#{$col-width-8} + #{$col-gutter});
+        max-width: calc(#{$col-width-8} + #{$col-gutter});
+
+        @include md-down {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        .picture {
+            @include aspect-clip(16, 9);
+        }
+    }
+
+    .editorial__caption {
+        flex: 0 0 $col-width-2;
+        max-width: $col-width-2;
+        margin-left: $col-gutter;
+        margin-bottom: $col-gutter;
+
+        @include md-down {
+            flex: 0 0 60%;
+            max-width: 60%;
+            margin: 20px 0 0;
+        }
+
+        .box {
+            line-height: 1.2;
+            font-size: 0.8rem;
+
+            @include md-down {
+                text-align: right;
+            }
+        }
+
+        .text+.cta {
+            margin-top: 30px;
+
+            @include md-down {
+                margin-top: 10px;
+            }
+        }
+
+        .btn--inline {
+            text-transform: uppercase;
+            font-size: 0.9rem;
+
+            @include md-down {
+                display: inline-block;
+            }
+        }
+    }
 }
 
+// 1col-img-lateral-caption--switch 
 .editorial__1col-img-lateral-caption--switch {
-	@extend .editorial__1col-img-lateral-caption;
+    @extend .editorial__1col-img-lateral-caption;
 
-	.editorial__box-picture {
-		order: 2;
-	}
+    .editorial__box-picture {
+        order: 2;
 
-	.editorial__caption {
-		order: 1;
-		text-align: right;
-		margin-left: 0;
-		margin-right: $col-gutter;
-	}
+        @include md-down {
+            order: 1;
+        }
+    }
+
+    .editorial__caption {
+        text-align: right;
+        margin-left: 0;
+        margin-right: $col-gutter;
+        order: 1;
+
+        @include md-down {
+            margin: 20px 0 0;
+            order: 2;
+        }
+    }
 }
 
-.editorial__1col-full-img {
-	margin-bottom: $col-width;
-}
+// 1col full img caption
+.editorial__1col-full-img-caption {
 
-.editorial__1col-full-img--switch {
-	@extend .editorial__1col-full-img;
+    .editorial__wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: flex-end;
+    }
 
-	text-align: right;
+    .editorial__box-picture {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .editorial__caption {
+        flex: 0 0 60%;
+        max-width: 60%;
+        margin: 20px 0 0;
+
+        .box {
+            line-height: 1.2;
+            font-size: 0.8rem;
+            text-align: right;
+        }
+
+        .text+.cta {
+            margin-top: 30px;
+
+            @include md-down {
+                margin-top: 10px;
+            }
+        }
+
+        .btn--inline {
+            text-transform: uppercase;
+            font-size: 0.9rem;
+
+            @include md-down {
+                display: inline-block;
+            }
+        }
+    }
 }
