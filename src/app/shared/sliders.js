@@ -40,14 +40,20 @@ export default class Sliders {
                 }
             };
             //Cover Slider
-        } else if (parentWrap.classList.contains('slider--test') === true) {
+        } else if (parentWrap.classList.contains('slider--fullscreen') === true) {
             options = {
                 grabCursor: true,
                 watchOverflow: true,
                 centeredSlides: false,
                 loop: true,
-                slidesPerView: 5,
-                spaceBetween: 100,
+                slidesPerView: 1,
+                spaceBetween: 60,
+                speed: 800,
+                autoHeight: 'auto',
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
             };
         }
 

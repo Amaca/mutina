@@ -7,11 +7,11 @@
             }, {
                 "input": "src/sass/app.scss",
                 "output": "docs/css/app.css",
-                "minify": true
+                "minify": false
             }, {
                 "input": "src/app/app.js",
                 "output": "docs/js/app.js",
-                "minify": true
+                "minify": false
             }],
             "bundle": [{
                 "input": [
@@ -24,20 +24,20 @@
                     "node_modules/swiper/dist/js/swiper.js"
                 ],
                 "output": "docs/js/vendors.js",
-                "minify": true
+                "minify": false
             }, {
                 "input": [
                     "node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css",
                     "node_modules/swiper/dist/css/swiper.css"
                 ],
                 "output": "docs/css/vendors.css",
-                "minify": true
+                "minify": false
             }, {
                 "input": [
                     "docs/css/bootstrap.css"
                 ],
                 "output": "docs/css/bootstrap.css",
-                "minify": true
+                "minify": false
             }]
         }
     },

@@ -1,6 +1,9 @@
 .box {
     .text {
+        
         p {
+            margin-bottom: 3rem;
+
             &:last-child {
                 margin-bottom: 0;
             }

@@ -64,7 +64,13 @@ export default class Anchors {
             Anchors.items = [...document.querySelectorAll('[data-anchor]')].map((element, index) => new Anchors(element, wrapper, gutter, index));
             console.log('Anchors: ', Anchors.items);
 
-            window.addEventListener('scroll', Anchors.onScroll);
+            if (Anchors.items.length > 0) {
+                wrapper.parentElement.style.display = 'flex';
+                window.addEventListener('scroll', Anchors.onScroll);
+            } else {
+                wrapper.parentElement.style.display = 'none';
+            }
+
         }
     }
 
@@ -83,10 +89,13 @@ export default class Anchors {
     }
 
     static destroyAll() {
-        Anchors.items.forEach(anchor => {
-            anchor.destroy();
-        });
-        document.querySelector('ul.anchor-nav').remove();
+        if (Anchors.items) {
+            Anchors.items.forEach(anchor => {
+                anchor.destroy();
+            });
+        }
+        if (document.querySelector('ul.anchor-nav')) {
+            document.querySelector('ul.anchor-nav').remove();
+        }
     }
-
 }
