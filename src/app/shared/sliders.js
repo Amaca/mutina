@@ -55,6 +55,21 @@ export default class Sliders {
                     prevEl: '.swiper-button-prev',
                 },
             };
+            //Lateral Slider
+        } else if (parentWrap.classList.contains('slider--lateral') === true) {
+            options = {
+                grabCursor: true,
+                watchOverflow: true,
+                centeredSlides: false,
+                loop: true,
+                slidesPerView: 1,
+                spaceBetween: 60,
+                speed: 800,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            };
         }
 
         return options;

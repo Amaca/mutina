@@ -383,7 +383,10 @@ h6,
       font-size: 1.4rem; } }
 
 .h4 {
-  font-size: 1.2rem; }
+  font-size: 1.4rem; }
+  @media (max-width: 768px) {
+    .h4 {
+      font-size: 1.2rem; } }
 
 .h5 {
   font-size: 1.1rem; }
@@ -1366,8 +1369,16 @@ body.full-gallery-open {
         padding: 50px 0; } }
     .cover--text .box .text {
       font-size: 1.4rem; }
+    .cover--text .box .text:not([data-splitting]) {
+      max-width: 60%;
+      margin: 0 auto; }
+      @media (max-width: 576px) {
+        .cover--text .box .text:not([data-splitting]) {
+          max-width: 80%; } }
     .cover--text .box .h1 + .text {
       margin-top: 20px; }
+    .cover--text .box .h1 + .text:not([data-splitting]) {
+      margin-top: 30px; }
 
 .cover--text-variant {
   text-align: center;
@@ -1949,6 +1960,31 @@ fieldset {
 
 .slider--carousel .slider__caption {
   margin-top: 5px; }
+
+.slider--lateral {
+  overflow: hidden;
+  width: 100vw; }
+  .slider--lateral .swiper-container {
+    width: 70%;
+    height: 100%;
+    margin: 0; }
+  .slider--lateral .swiper-wrapper {
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center; }
+  .slider--lateral .swiper-slide {
+    width: auto;
+    height: auto;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center; }
 
 .slider--fullscreen .swiper-container {
   width: 100%;
@@ -2714,6 +2750,29 @@ body.fixed .header {
           flex: 0 0 50%;
   max-width: 50%;
   padding: 0 2.083vw; }
+
+.editorial__2col-text-slider .editorial__wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row; }
+  .editorial__2col-text-slider .editorial__wrapper .editorial__box-text {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 25vw;
+            flex: 0 0 25vw;
+    max-width: 25vw;
+    margin-right: 8.333vw;
+    margin-left: 8.333vw; }
+    .editorial__2col-text-slider .editorial__wrapper .editorial__box-text .box .h4 {
+      margin-bottom: 45px; }
+  .editorial__2col-text-slider .editorial__wrapper .editorial__box-slider {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 58.333vw;
+            flex: 0 0 58.333vw;
+    max-width: 58.333vw; }
 
 .editorial__1col-mid-text, .editorial__1col-mid-text--centered, .editorial__1col-mid-text--lines {
   text-align: left;

@@ -61,8 +61,21 @@
                 font-size: 1.4rem;
             }
 
+            .text:not([data-splitting]) {
+                max-width: 60%;
+                margin: 0 auto;
+
+                @include xs-down {
+                    max-width: 80%;
+                }
+            }
+
             .h1+.text {
                 margin-top: 20px;
+            }
+
+            .h1+.text:not([data-splitting]) {
+                margin-top: 30px;
             }
         }
     }
@@ -108,11 +121,3 @@
         display: block;
     }
 }
-
-// .cover--text+.image-content {
-//     margin-top: 30px;
-
-//     @include sm-down {
-//         margin-top: 15px;
-//     }
-// }
