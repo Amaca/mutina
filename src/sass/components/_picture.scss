@@ -28,7 +28,7 @@
     &.picture--cover {
         @include aspect-clip(16, 8);
 
-        @include sm-down {
+        @include xs-down {
             @include aspect-clip(3, 4);
         }
     }

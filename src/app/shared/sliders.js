@@ -60,15 +60,25 @@ export default class Sliders {
             options = {
                 grabCursor: true,
                 watchOverflow: true,
-                centeredSlides: false,
-                loop: true,
-                slidesPerView: 1,
+                slidesPerView: 'auto',
                 spaceBetween: 60,
-                speed: 800,
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
+                freeMode: true,
+                freeModeMomentumRatio: 1,
+                freeModeMomentumVelocityRatio: 0.3,
+                speed: 400,
+                breakpoints: {
+                    768: {
+                        spaceBetween: 40,
+                    }
                 },
+                on: {
+                    init: function () {
+                        console.log(parentWrap.parentNode)
+                        if (parentWrap.classList.contains('slider--lateral-switch')) {
+                            this.slideTo(this.slides.length - 1, 0);
+                        }
+                    },
+                }
             };
         }
 

@@ -206,12 +206,27 @@
     .editorial__wrapper {
         display: flex;
         flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
 
         .editorial__box-text {
             flex: 0 0 $col-width-3;
             max-width: $col-width-3;
             margin-right: $col-width;
             margin-left: $col-width;
+
+            @include md-down {
+                flex: 0 0 $col-width-5;
+                max-width: $col-width-5;
+            }
+
+            @include sm-down {
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin: 0;
+                margin-bottom: 40px;
+                padding: 0 $col-width;
+            }
 
             .box {
                 .h4 {
@@ -223,6 +238,38 @@
         .editorial__box-slider {
             flex: 0 0 $col-width-7;
             max-width: $col-width-7;
+
+            @include md-down {
+                flex: 0 0 $col-width-5;
+                max-width: $col-width-5;
+            }
+
+            @include sm-down {
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin-right: $col-width;
+                margin-left: $col-width;
+            }
+        }
+    }
+}
+
+.editorial__2col-text-slider--switch {
+    @extend .editorial__2col-text-slider;
+
+    .editorial__box-text {
+        order: 2;
+
+        @include sm-down {
+            order: 1;
+        }
+    }
+
+    .editorial__box-slider {
+        order: 1;
+
+        @include sm-down {
+            order: 2;
         }
     }
 }
