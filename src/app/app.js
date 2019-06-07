@@ -11,6 +11,7 @@ import Fancy from "./shared/fancy";
 import FancyViewAll from "./shared/fancy.view-all";
 import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
+import Samples from "./shared/samples";
 import Sliders from './shared/sliders';
 import Utils from './shared/utils';
 
@@ -31,7 +32,7 @@ export default class App {
         const page = document.querySelector('.page');
         const header = document.querySelector('.header');
         const smooth = 'cubic-bezier(0, 0.97, 0.43, 1)';
-        
+
         Dom.detect(body);
         const mouse = {
             x: 0,
@@ -68,7 +69,7 @@ export default class App {
         const boxBack = document.querySelector('.transition__text .box--back');
         const line = document.querySelector('.transition__line');
 
-        if (!disableBarba){
+        if (!disableBarba) {
             barba.init({
                 timeout: 5000,
                 debug: barbaDebug,
@@ -82,7 +83,7 @@ export default class App {
                             const speed = 0.5;
                             const transform = -10;
                             tl.timeScale(0.9);
-    
+
                             const logo = [{
                                     name: 'charM',
                                     selector: document.querySelector('.logo__char-m'),
@@ -131,11 +132,11 @@ export default class App {
                                     width: null,
                                 }
                             ];
-    
+
                             tl.set(transitionLayer, {
                                 height: window.innerHeight + 2,
                             });
-    
+
                             logo.forEach(item => {
                                 if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
                                     tl.set(item.selector, {
@@ -150,7 +151,7 @@ export default class App {
                                     });
                                 }
                             });
-    
+
                             logo.forEach((item, index) => {
                                 let delay = '-=0.4';
                                 if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
@@ -174,12 +175,12 @@ export default class App {
                                     }, delay);
                                 }
                             });
-    
+
                             tl.to(logoWrapper, 0.8, {
                                 height: 0,
                                 ease: Expo.easeInOut,
                             }, '+=0.5');
-    
+
                             tl.to(transitionLayer, 1, {
                                 height: 2,
                                 top: app.header.clientHeight - 2,
@@ -206,65 +207,78 @@ export default class App {
                     leave(data) {
                         const done = this.async();
                         const title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'Mutina';
-                        
+
                         textFront.innerHTML = '';
-                            textBack.innerHTML = '';
-                            textFront.innerHTML = title;
-                            textBack.innerHTML = title;
-                            Navigation.closeNav();
-                            Navigation.closeSearch();
-                            TweenMax.set(transitionLayer, {
-                                backgroundColor: '#CFCFCF',
-                                bottom: 0,
-                                opacity: 1,
-                                top: 'auto',
-                                height: 0,
-                            });
-                            TweenMax.set(textFront, {
-                                transform: 'translateY(100%)',
-                                opacity: 1
-                            });
-                            TweenMax.set(textBack, {
-                                transform: 'translateY(0)',
-                            });
-                            TweenMax.set(boxBack, {
-                                width: 0,
-                            });
-                            TweenMax.set(line, {
-                                width: 0,
-                            });
-                            TweenMax.to(data.current.container, 1, {
-                                transform: 'translateY(-60px)',
-                                ease: Expo.easeInOut
-                            }).delay(0.3);
-                            TweenMax.to(transitionLayer, 1, {
-                                height: window.innerHeight,
-                                ease: Expo.easeInOut
-                            }).delay(0.3);
-                            TweenMax.to(textFront, 1, {
-                                transform: 'translateY(0)',
-                                ease: Expo.easeInOut,
-                            }).delay(0.4);
-                            TweenMax.to(line, 1, {
-                                width: '100%',
-                                ease: Expo.easeInOut,
-                            }).delay(1.2);
-                            TweenMax.to(boxBack, 1, {
-                                width: '100%',
-                                ease: Expo.easeInOut,
-                                onComplete: (e) => {
-                                    done();
-                                }
-                            }).delay(1.2);
+                        textBack.innerHTML = '';
+                        textFront.innerHTML = title;
+                        textBack.innerHTML = title;
+                        Navigation.closeNav();
+                        Navigation.closeSearch();
+                        TweenMax.set(transitionLayer, {
+                            backgroundColor: '#CFCFCF',
+                            bottom: 0,
+                            opacity: 1,
+                            top: 'auto',
+                            height: 0,
+                        });
+                        TweenMax.set(textFront, {
+                            transform: 'translateY(100%)',
+                            opacity: 1
+                        });
+                        TweenMax.set(textBack, {
+                            transform: 'translateY(0)',
+                        });
+                        TweenMax.set(boxBack, {
+                            width: 0,
+                        });
+                        TweenMax.set(line, {
+                            width: 0,
+                        });
+                        TweenMax.to(data.current.container, 1, {
+                            transform: 'translateY(-60px)',
+                            ease: Expo.easeInOut
+                        }).delay(0.3);
+                        TweenMax.to(transitionLayer, 1, {
+                            height: window.innerHeight,
+                            ease: Expo.easeInOut
+                        }).delay(0.3);
+                        TweenMax.to(textFront, 1, {
+                            transform: 'translateY(0)',
+                            ease: Expo.easeInOut,
+                        }).delay(0.4);
+                        TweenMax.to(line, 1, {
+                            width: '100%',
+                            ease: Expo.easeInOut,
+                        }).delay(1.2);
+                        TweenMax.to(boxBack, 1, {
+                            width: '100%',
+                            ease: Expo.easeInOut,
+                            onComplete: (e) => {
+                                done();
+                            }
+                        }).delay(1.2);
                     },
                     afterLeave(data) {
                         const done = this.async();
                         app.destroyAll(data.current.container);
                         done();
                     },
-                    enter(data) {
+                    beforeEnter(data) {
                         const done = this.async();
                         app.onPageInit();
+                        /*
+                        window.daraLayer.push({
+
+                        })
+                        gtm.push({
+                            title: document.title,
+                            href: window.href
+                        })
+                        */
+                        done();
+                    },
+                    enter(data) {
+                        const done = this.async();
                         window.scrollTo(0, 0);
                         TweenMax.to(textBack, 1, {
                             transform: 'translateY(-100%)',
@@ -292,9 +306,7 @@ export default class App {
             transition.remove();
             this.onPageInit();
         }
-        
     }
-
 
     onPageInit() {
         this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
@@ -302,6 +314,7 @@ export default class App {
         Anchors.init(document.querySelector('.anchors__wrapper'), 200);
         Fancy.init();
         FancyViewAll.init();
+        Samples.init();
         Utils.toggleGrid();
         setTimeout(x => {
             this.appears = Appears.init();

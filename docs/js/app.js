@@ -12044,6 +12044,8 @@ var _navigation = _interopRequireDefault(require("./shared/navigation"));
 
 var _rect = _interopRequireDefault(require("./shared/rect"));
 
+var _samples = _interopRequireDefault(require("./shared/samples"));
+
 var _sliders = _interopRequireDefault(require("./shared/sliders"));
 
 var _utils = _interopRequireDefault(require("./shared/utils"));
@@ -12304,9 +12306,22 @@ function () {
               app.destroyAll(data.current.container);
               done();
             },
-            enter: function enter(data) {
+            beforeEnter: function beforeEnter(data) {
               var done = this.async();
               app.onPageInit();
+              /*
+              window.daraLayer.push({
+                })
+              gtm.push({
+                  title: document.title,
+                  href: window.href
+              })
+              */
+
+              done();
+            },
+            enter: function enter(data) {
+              var done = this.async();
               window.scrollTo(0, 0);
               TweenMax.to(textBack, 1, {
                 transform: 'translateY(-100%)',
@@ -12348,6 +12363,8 @@ function () {
       _fancy.default.init();
 
       _fancy2.default.init();
+
+      _samples.default.init();
 
       _utils.default.toggleGrid();
 
@@ -12614,7 +12631,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":311,"./shared/appears":312,"./shared/dom":313,"./shared/fancy":314,"./shared/fancy.view-all":316,"./shared/navigation":317,"./shared/rect":318,"./shared/sliders":319,"./shared/utils":320,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],311:[function(require,module,exports){
+},{"./shared/anchors":311,"./shared/appears":312,"./shared/dom":313,"./shared/fancy":314,"./shared/fancy.view-all":316,"./shared/navigation":317,"./shared/rect":318,"./shared/samples":319,"./shared/sliders":320,"./shared/utils":321,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],311:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12938,7 +12955,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":320}],314:[function(require,module,exports){
+},{"./utils":321}],314:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13980,7 +13997,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":320}],318:[function(require,module,exports){
+},{"./utils":321}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14100,6 +14117,159 @@ function () {
 exports.default = Rect;
 
 },{}],319:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _fancy = _interopRequireDefault(require("./fancy.transition"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var clickClose;
+var body = document.querySelector('body');
+var header = document.querySelector('header');
+var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
+
+var Samples =
+/*#__PURE__*/
+function () {
+  function Samples(node, index) {
+    _classCallCheck(this, Samples);
+
+    this.node = node;
+    this.index = index;
+    this.jsonUrl = node.getAttribute('data-samples');
+    this.addListeners();
+  }
+
+  _createClass(Samples, [{
+    key: "getData",
+    value: function getData() {
+      var _this = this;
+
+      var req = new XMLHttpRequest();
+      req.overrideMimeType("application/json");
+      req.open('GET', this.jsonUrl, true);
+
+      req.onload = function () {
+        var jsonResponse = JSON.parse(req.responseText);
+        _this.data = jsonResponse;
+
+        _this.initFullSamplesGallery();
+      };
+
+      req.send(null);
+    }
+  }, {
+    key: "initFullSamplesGallery",
+    value: function initFullSamplesGallery() {
+      var fullSamplesGallery = document.createElement('div');
+      var fullSamplesClose = document.createElement('div');
+      var fullSamplesHeader = document.createElement('div');
+      var fullSamplesBg = document.createElement('div');
+      var fullSamplesWrapper = document.createElement('div');
+      var fullSamplesContainer = document.createElement('div');
+      fullSamplesGallery.classList.add('full-samples-gallery');
+      fullSamplesClose.classList.add('full-samples-gallery__close');
+      fullSamplesHeader.classList.add('full-samples-gallery__header');
+      fullSamplesBg.classList.add('full-samples-gallery__bg');
+      fullSamplesWrapper.classList.add('full-samples-gallery__wrapper');
+      fullSamplesContainer.classList.add('full-samples-gallery__container');
+      fullSamplesClose.innerHTML = closeIcon;
+
+      clickClose = function clickClose(e) {
+        _fancy.default.closeLayer('fullGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, fullSamplesGallery);
+
+        e.preventDefault();
+      };
+
+      fullSamplesClose.addEventListener('click', clickClose);
+      document.body.appendChild(fullSamplesGallery);
+      fullSamplesGallery.appendChild(fullSamplesClose);
+      fullSamplesGallery.appendChild(fullSamplesHeader);
+      fullSamplesGallery.appendChild(fullSamplesBg);
+      fullSamplesGallery.appendChild(fullSamplesWrapper);
+      fullSamplesWrapper.appendChild(fullSamplesContainer);
+      body.classList.add('samples-gallery-open');
+      this.addImages(fullSamplesContainer);
+
+      _fancy.default.openLayer('fullGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, this.id);
+
+      history.pushState({
+        id: 'fullsamplesgallery'
+      }, 'Full Samples Gallery | Mutina', 'http://localhost:9999/prodotto.html?p=homepage');
+      window.addEventListener('popstate', function (event) {
+        console.log(event);
+
+        if (event.state && event.state.id === 'fullsamplesgallery') {
+          _fancy.default.closeLayer('fullGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, fullSamplesGallery);
+
+          event.preventDefault();
+        }
+      }, false);
+    } //https://gomakethings.com/how-to-update-a-url-without-reloading-the-page-using-vanilla-javascript/
+
+  }, {
+    key: "addImages",
+    value: function addImages(wrapper) {
+      var fullSamplesHtml = '';
+      this.data.samples.forEach(function (data) {
+        fullSamplesHtml += "\n                <img src=\"".concat(data.img, "\">\n            ");
+      });
+      wrapper.innerHTML = fullSamplesHtml;
+    }
+  }, {
+    key: "addListeners",
+    value: function addListeners() {
+      var _this2 = this;
+
+      var click = function click(e) {
+        _this2.getData();
+
+        e.preventDefault();
+      };
+
+      this.click = click;
+      this.node.addEventListener('click', this.click);
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.node.removeEventListener('click', this.click);
+    }
+  }], [{
+    key: "init",
+    value: function init() {
+      Samples.items = _toConsumableArray(document.querySelectorAll('[data-samples]')).map(function (element, id) {
+        return new Samples(element, id);
+      });
+      console.log('Samples: ', Samples.items);
+    }
+  }]);
+
+  return Samples;
+}();
+
+exports.default = Samples;
+
+},{"./fancy.transition":315}],320:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14242,7 +14412,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],320:[function(require,module,exports){
+},{}],321:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

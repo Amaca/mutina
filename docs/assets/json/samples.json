@@ -1,0 +1,114 @@
+{
+    "samples": [{
+            "id": "0",
+            "color": "nero",
+            "title": "Combination nero",
+            "size": "180cm 60cm",
+            "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-cover-01.jpg",
+            "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-cover-01.jpg",
+            "items": [{
+                    "id": "0",
+                    "title": "Estrela nero",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                },
+                {
+                    "id": "1",
+                    "title": "Estrela nero",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                },
+                {
+                    "id": "2",
+                    "title": "Estrela nero",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                },
+                {
+                    "id": "3",
+                    "title": "Estrela nero",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                }
+            ]
+        },
+        {
+            "id": "1",
+            "color": "grigio",
+            "title": "Combination nero",
+            "size": "180cm 60cm",
+            "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+            "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+            "items": [{
+                    "id": "0",
+                    "title": "Estrela grigio",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                },
+                {
+                    "id": "1",
+                    "title": "Estrela nero",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                },
+                {
+                    "id": "2",
+                    "title": "Estrela nero",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                },
+                {
+                    "id": "3",
+                    "title": "Estrela nero",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "color": "bianco",
+            "title": "Combination bianco",
+            "size": "180cm 60cm",
+            "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+            "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+            "items": [{
+                    "id": "0",
+                    "title": "Estrela nero",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                },
+                {
+                    "id": "1",
+                    "title": "Estrela nero",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                },
+                {
+                    "id": "2",
+                    "title": "Estrela nero",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                },
+                {
+                    "id": "3",
+                    "title": "Estrela nero",
+                    "size": "20cm 20cm",
+                    "img": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg",
+                    "imgHd": "https://raw.githubusercontent.com/Amaca/mutina/master/docs/assets/img/samples-item-01.jpg"
+                }
+            ]
+        }
+    ]
+}
