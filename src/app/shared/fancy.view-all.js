@@ -68,7 +68,7 @@ export default class FancyViewAll {
         fullGalleryClose.innerHTML = closeIcon;
 
         clickClose = (e) => {
-            FancyTransition.closeLayer('fullGallery', false, fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, fullGallery);
+            FancyTransition.closeLayer('fullGallery', false, fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, null, fullGallery);
             e.preventDefault();
         };
         fullGalleryClose.addEventListener('click', clickClose);
@@ -83,7 +83,7 @@ export default class FancyViewAll {
         FancyViewAll.addImages(fullGalleryContainer);
 
 
-        FancyTransition.openLayer('fullGallery', fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, id);
+        FancyTransition.openLayer('fullGallery', fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, null, id);
     }
 
     static addImages(container) {

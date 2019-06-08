@@ -88,7 +88,7 @@ export default class Fancy {
         detailGalleryClose.innerHTML = closeIcon;
 
         clickClose = (e) => {
-            Fancy.close(e, 'detailGallery', false, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery)
+            Fancy.close(e, 'detailGallery', false, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, detailGallery);
         }
 
         detailGalleryClose.addEventListener('click', clickClose);
@@ -108,19 +108,19 @@ export default class Fancy {
         const detailGallerySwitch = document.querySelector('.detail-gallery__cta');
 
         clickSwitch = (e) => {
-            Fancy.close(e, 'detailGallery', true, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, detailGallery)
-        }
+            Fancy.close(e, 'detailGallery', true, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, detailGallery);
+        };
 
         detailGallerySwitch.addEventListener('click', clickSwitch);
 
         body.classList.add('detail-gallery-open');
         Fancy.initSwiper(detailGalleryWrapper, id);
 
-        FancyTransition.openLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, detailGalleryFooter, id);
+        FancyTransition.openLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id);
     }
 
-    static close(e, type, isSwitch, bg, close, wrapper, footer, container) {
-        FancyTransition.closeLayer(type, isSwitch, bg, close, wrapper, footer, container);
+    static close(e, type, isSwitch, bg, close, wrapper, header, footer, container) {
+        FancyTransition.closeLayer(type, isSwitch, bg, close, wrapper, header, footer, container);
         e.preventDefault();
     }
 

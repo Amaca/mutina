@@ -3,6 +3,8 @@
 
 import Fancy from './fancy';
 import FancyViewAll from './fancy.view-all';
+import App from '../app';
+import Utils from './utils';
 
 const body = document.querySelector('body');
 const slideAnimationSpeed = 1000;
@@ -10,20 +12,27 @@ const slideAnimationSpeed = 1000;
 export default class FancyTransition {
 
     //OPEN LAYER ON IMAGE CLICK
-    static openLayer(type, layer, close, wrapper, footer, id) {
+    static openLayer(type, layer, close, wrapper, header, footer, id) {
         const closeHeight = close.clientHeight;
         const footerHeight = footer ? footer.clientHeight : null;
-        const wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
+        let wrapperHeight;
 
         let isDetailGallery = false,
-            isFullGallery = false;
+            isFullGallery = false,
+            isFullSamplesGallery = false;
 
         switch (type) {
             case 'detailGallery':
+                wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
                 isDetailGallery = true;
                 break;
             case 'fullGallery':
+                wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
                 isFullGallery = true;
+                break;
+            case 'fullSamplesGallery':
+                wrapperHeight = wrapper ? window.innerHeight - 81 : null;
+                isFullSamplesGallery = true;
                 break;
         }
 
@@ -62,6 +71,15 @@ export default class FancyTransition {
         if (isFullGallery) {
             TweenMax.set(wrapper, {
                 bottom: -wrapperHeight,
+            });
+        }
+
+        if (isFullSamplesGallery) {
+            TweenMax.set(wrapper, {
+                bottom: -wrapperHeight,
+            });
+            TweenMax.set(header, {
+                top: -header.offsetHeight,
             });
         }
 
@@ -104,7 +122,20 @@ export default class FancyTransition {
                 height: closeHeight,
                 ease: Expo.easeInOut
             });
-        } else {
+        } else if (isFullSamplesGallery) {
+            TweenMax.to(wrapper, 0.8, {
+                bottom: 0,
+                ease: Expo.easeIn
+            });
+            TweenMax.to(header, 1, {
+                top: 0,
+                ease: Expo.easeInOut
+            });
+            TweenMax.to(close, 1, {
+                height: closeHeight,
+                ease: Expo.easeInOut
+            }).delay(0.5);
+        }else {
             TweenMax.to(close, 1, {
                 height: closeHeight,
                 ease: Expo.easeInOut
@@ -113,30 +144,39 @@ export default class FancyTransition {
     }
 
     //CLOSE LAYER ON CLOSE CLICK
-    static closeLayer(type, isSwitch, layer, close, wrapper, footer, mainWrapper) {
+    static closeLayer(type, isSwitch, layer, close, wrapper, header, footer, mainWrapper) {
         const captionWrapper = document.querySelector('.detail-gallery__caption span');
         const footerHeight = footer ? footer.clientHeight : null;
-        const wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
         const detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper');
         const arrowLeft = document.querySelector('.swiper-button-prev');
         const arrowRight = document.querySelector('.swiper-button-next');
+        let wrapperHeight;
         let delayAll = 0;
         let delay = 0;
 
         let isDetailGallery = false,
             isFullGallery = false,
+            isFullSamplesGallery = false,
             isDetailAndFullGallery = body.classList.contains('full-gallery-open') && body.classList.contains('detail-gallery-open')
 
         switch (type) {
             case 'detailGallery':
+                wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
                 delay = 500;
                 body.classList.remove('detail-gallery-open');
                 isDetailGallery = true;
                 break;
             case 'fullGallery':
+                wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
                 delay = 500;
                 body.classList.remove('full-gallery-open');
                 isFullGallery = true;
+                break;
+            case 'fullSamplesGallery':
+                wrapperHeight = wrapper ? window.innerHeight - 81 : null;
+                delay = 500;
+                body.classList.remove('samples-gallery-open');
+                isFullSamplesGallery = true;
                 break;
             default:
                 delay = 0;
@@ -212,6 +252,21 @@ export default class FancyTransition {
                 }).delay(0.1);
             }
 
+            if (isFullSamplesGallery) {
+                TweenMax.to(close, 1, {
+                    height: 0,
+                    ease: Expo.easeInOut
+                });
+                TweenMax.to(header, 1, {
+                    top: -header.offsetHeight,
+                    ease: Expo.easeInOut
+                }).delay(0.2);
+                TweenMax.to(wrapper, 0.8, {
+                    bottom: -wrapperHeight,
+                    ease: Expo.easeIn
+                }).delay(0.2);
+            }
+
             setTimeout(x => {
                 if (!isSwitch) {
                     TweenMax.to(layer, 1, {
@@ -222,7 +277,7 @@ export default class FancyTransition {
                                 Fancy.destroySwiper();
                                 mainWrapper.remove();
                             }
-                            if (isFullGallery) {
+                            if (isFullGallery || isFullSamplesGallery) {
                                 mainWrapper.remove();
                             }
                         }
