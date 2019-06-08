@@ -326,6 +326,7 @@ export default class App {
         Anchors.destroyAll();
         Sliders.destroyAll();
         Fancy.destroyAll();
+        Samples.destroyAll();
         FancyViewAll.destroyAll();
         container.remove();
     }

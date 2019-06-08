@@ -3,8 +3,11 @@
 import FancyTransition from "./fancy.transition";
 import "gsap/ScrollToPlugin";
 import Utils from "./utils";
+import SamplesDetail from "./samples.detail";
 
 let clickClose;
+let scrollWrapper;
+let clickDetailGallery;
 
 const body = document.querySelector('body');
 const header = document.querySelector('header');
@@ -15,8 +18,14 @@ export default class Samples {
     constructor(node, index) {
         this.node = node;
         this.index = index;
-        this.jsonUrl = node.getAttribute('data-samples');
+        
+        this.init();
+        
+    }
 
+    init() {
+        this.jsonUrl = this.node.getAttribute('data-samples');
+        this.images = [];
         this.addListeners();
     }
 
@@ -57,6 +66,7 @@ export default class Samples {
 
         clickClose = (e) => {
             FancyTransition.closeLayer('fullSamplesGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, fullSamplesGallery);
+            fullSamplesClose.removeEventListener('click', clickClose);
             e.preventDefault();
         };
         fullSamplesClose.addEventListener('click', clickClose);
@@ -75,21 +85,17 @@ export default class Samples {
         
         body.classList.add('samples-gallery-open');
 
+        scrollWrapper = (e) => {
+            this.scrollWrapper(e);
+        };
+
+        fullSamplesWrapper.addEventListener('scroll', scrollWrapper);
+
         this.addCategories(fullSamplesCat);
         this.addImages(fullSamplesContainer);
 
         FancyTransition.openLayer('fullSamplesGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, this.id);
 
-        // history.pushState({
-        //     id: 'fullsamplesgallery'
-        // }, 'Full Samples Gallery | Mutina', 'http://localhost:9999/prodotto.html?p=homepage');
-        // window.addEventListener('popstate', function (event) {
-        //     console.log(event);
-        //     if (event.state && event.state.id === 'fullsamplesgallery') {
-        //         FancyTransition.closeLayer('fullGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, fullSamplesGallery);
-        //         event.preventDefault();
-        //     }
-        // }, false);
         //https://gomakethings.com/how-to-update-a-url-without-reloading-the-page-using-vanilla-javascript/
     }
 
@@ -106,6 +112,10 @@ export default class Samples {
         [...document.querySelectorAll('[data-sample-id]')].forEach( x => {
             x.addEventListener('click', this.scrollToColor);
         }); 
+    }
+
+    scrollWrapper(e) {
+        const wrapper = document.querySelector('.full-samples-gallery__wrapper');
     }
 
     scrollToColor(e) {
@@ -125,7 +135,6 @@ export default class Samples {
     }
 
     addImages(wrapper) {
-        console.log(this.data);
 
         let containerHtml = '';
 
@@ -135,7 +144,7 @@ export default class Samples {
                 fullSamplesHtml += `
                     <div class="full-samples-gallery__item">
                         <div class="img">
-                            <img src="${item.img}" alt="${item.title}">
+                            <img src="${item.img}" alt="${item.title}" data-sample-detail="${item.id}">
                         </div>
                         <div class="box">
                             <h6 class="h6">${item.title}</h6>
@@ -166,6 +175,48 @@ export default class Samples {
         });
 
         wrapper.innerHTML = containerHtml;
+        const images = this.mapData(); 
+
+        clickDetailGallery = (e) => {
+            this.openDetailGallery(e, images);
+        };
+
+        images.forEach(image => {
+            image.node.addEventListener('click', clickDetailGallery);
+        });
+    }
+
+    openDetailGallery(e, images) {
+        const wrapper = document.querySelector('.full-samples-gallery');
+        SamplesDetail.init(e, images, wrapper);
+        this.removeAllListeners();
+    }
+
+    mapData() {
+        const thumbs = [...document.querySelectorAll('.full-samples-gallery__item')];
+        const thumbsList = this.data.samples.map( category => {
+            let categoryItems = [];
+            category.items.forEach((item, index) => {
+                categoryItems.push({
+                    id: item.id,
+                    node: thumbs[item.id],
+                    img: item.img,
+                    imgHd: item.imgHd,
+                    size: item.size,
+                    title: item.title,
+                    color: category.color,
+                    parent: index === 0 ? true : false
+                });
+            });
+            return categoryItems;
+        });
+        
+        let flat = [];
+        for (let i = 0; i < thumbsList.length; i++) {
+            flat = flat.concat(thumbsList[i]);
+        }
+
+        return flat;
     }
 
     addListeners() {
@@ -177,8 +228,32 @@ export default class Samples {
         this.node.addEventListener('click', this.click);
     }
 
+    removeAllListeners() {
+        [...document.querySelectorAll('[data-sample-id]')].forEach( x => {
+            x.removeEventListener('click', this.scrollToColor);
+        });
+    }
+
+    addAllListeneres() {
+        [...document.querySelectorAll('[data-sample-id]')].forEach( x => {
+            x.addEventListener('click', this.scrollToColor);
+        });
+    }
+
     destroy() {
         this.node.removeEventListener('click', this.click);
+
+        if (document.querySelector('full-samples-gallery__wrapper')) {
+            document.querySelector('full-samples-gallery__wrapper').removeEventListener('scroll', scrollWrapper);
+        }
+    }
+
+    static destroyAll() {
+        if (Samples.items) {
+            Samples.items.forEach(sample => {
+                sample.destroy();
+            });
+        }
     }
 
     static init() {

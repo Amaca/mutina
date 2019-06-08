@@ -15154,6 +15154,8 @@ function () {
 
       _fancy.default.destroyAll();
 
+      _samples.default.destroyAll();
+
       _fancy2.default.destroyAll();
 
       container.remove();
@@ -15403,7 +15405,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":316,"./shared/fancy.view-all":318,"./shared/navigation":319,"./shared/rect":320,"./shared/samples":321,"./shared/sliders":322,"./shared/utils":323,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":316,"./shared/fancy.view-all":318,"./shared/navigation":319,"./shared/rect":320,"./shared/samples":322,"./shared/sliders":323,"./shared/utils":324,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15727,7 +15729,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":323}],316:[function(require,module,exports){
+},{"./utils":324}],316:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16365,7 +16367,7 @@ function () {
 
 exports.default = FancyTransition;
 
-},{"../app":312,"./fancy":316,"./fancy.view-all":318,"./utils":323}],318:[function(require,module,exports){
+},{"../app":312,"./fancy":316,"./fancy.view-all":318,"./utils":324}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16828,7 +16830,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":323}],320:[function(require,module,exports){
+},{"./utils":324}],320:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16961,6 +16963,121 @@ require("gsap/ScrollToPlugin");
 
 var _utils = _interopRequireDefault(require("./utils"));
 
+var _samples = _interopRequireDefault(require("./samples"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var clickClose;
+var scrollWrapper;
+var swiperInstance;
+var body = document.querySelector('body');
+var header = document.querySelector('header');
+var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
+
+var SamplesDetail =
+/*#__PURE__*/
+function () {
+  function SamplesDetail() {
+    _classCallCheck(this, SamplesDetail);
+  }
+
+  _createClass(SamplesDetail, null, [{
+    key: "initSampleDetailGallery",
+    value: function initSampleDetailGallery(id, data, wrapper) {
+      var detailSampleGalleryWrapper = document.createElement('div');
+      detailSampleGalleryWrapper.classList.add('detail-samples-gallery__wrapper');
+      wrapper.appendChild(detailSampleGalleryWrapper);
+      SamplesDetail.initSwiper(id, data, detailSampleGalleryWrapper);
+      body.classList.add('detail-sample-gallery-open');
+      TweenMax.set(detailSampleGalleryWrapper, {
+        bottom: -detailSampleGalleryWrapper.offsetHeight
+      });
+      TweenMax.to(detailSampleGalleryWrapper, 1, {
+        bottom: 0,
+        ease: Expo.easeInOut
+      });
+    }
+  }, {
+    key: "initSwiper",
+    value: function initSwiper(id, data, content) {
+      var slidesHtml = '';
+      data.forEach(function (item) {
+        var className = item.parent === true ? 'swiper-slide--parent' : '';
+        var attribute = item.parent === true ? 'data-sample-detail-id="' + item.color + '"' : '';
+        slidesHtml += "\n            <div class=\"swiper-slide\">\n                <div class=\"slider__picture\">\n                    <img data-src=\"".concat(item.imgHd, "\" class=\"swiper-lazy\">\n                    <div class=\"swiper-lazy-preloader\"></div>\n                </div>\n                <div class=\"slider__caption\">\n                    <div class=\"box\">\n                        <h6 class=\"h6\">").concat(item.title, "</h6>\n                        <div class=\"text\">").concat(item.size, "</div>\n                        <div class=\"cta\"><a href=\"#\" class=\"btn--inline\">Add to samples</a></div>\n                    </div>\n                </div>\n            </div>\n            ");
+      });
+      var swiperHtml = "\n        <div class=\"detail-sample-gallery__swiper\">\n            <div class=\"slider slider--samples\">\n                <div class=\"swiper-container\">\n                    <div class=\"swiper-wrapper\">\n                    ".concat(slidesHtml, "\n                    </div>\n                </div>\n            </div>\n        </div>\n        ");
+      content.innerHTML = swiperHtml;
+      var options = {
+        grabCursor: true,
+        watchOverflow: true,
+        centeredSlides: true,
+        loop: false,
+        slidesPerView: 'auto',
+        spaceBetween: 60,
+        preloadImages: false,
+        lazy: true,
+        watchSlidesVisibility: true,
+        freeMode: true,
+        freeModeMomentumRatio: 1,
+        freeModeMomentumVelocityRatio: 0.3,
+        speed: 400,
+        breakpoints: {
+          576: {
+            spaceBetween: 20
+          },
+          768: {
+            spaceBetween: 40
+          }
+        },
+        on: {
+          init: function init() {
+            var _this = this;
+
+            setTimeout(function (x) {
+              _this.slideTo(id, 0);
+            }, 300);
+          }
+        }
+      };
+      swiperInstance = new Swiper(document.querySelector('.detail-sample-gallery__swiper .swiper-container'), options);
+      swiperInstance.init();
+    }
+  }, {
+    key: "init",
+    value: function init(e, images, wrapper) {
+      var id = Number(e.target.getAttribute('data-sample-detail'));
+      SamplesDetail.initSampleDetailGallery(id, images, wrapper);
+    }
+  }]);
+
+  return SamplesDetail;
+}();
+
+exports.default = SamplesDetail;
+
+},{"./fancy.transition":317,"./samples":322,"./utils":324,"gsap/ScrollToPlugin":309}],322:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _fancy = _interopRequireDefault(require("./fancy.transition"));
+
+require("gsap/ScrollToPlugin");
+
+var _utils = _interopRequireDefault(require("./utils"));
+
+var _samples = _interopRequireDefault(require("./samples.detail"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -16977,7 +17094,10 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var clickClose;
+var _clickClose;
+
+var scrollWrapper;
+var clickDetailGallery;
 var body = document.querySelector('body');
 var header = document.querySelector('header');
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
@@ -16990,11 +17110,17 @@ function () {
 
     this.node = node;
     this.index = index;
-    this.jsonUrl = node.getAttribute('data-samples');
-    this.addListeners();
+    this.init();
   }
 
   _createClass(Samples, [{
+    key: "init",
+    value: function init() {
+      this.jsonUrl = this.node.getAttribute('data-samples');
+      this.images = [];
+      this.addListeners();
+    }
+  }, {
     key: "getData",
     value: function getData() {
       var _this = this;
@@ -17015,6 +17141,8 @@ function () {
   }, {
     key: "initFullSamplesGallery",
     value: function initFullSamplesGallery() {
+      var _this2 = this;
+
       var fullSamplesGallery = document.createElement('div');
       var fullSamplesHeader = document.createElement('div');
       var fullSamplesClose = document.createElement('div');
@@ -17035,13 +17163,14 @@ function () {
       fullSamplesContainer.classList.add('full-samples-gallery__container');
       fullSamplesClose.innerHTML = closeIcon;
 
-      clickClose = function clickClose(e) {
+      _clickClose = function clickClose(e) {
         _fancy.default.closeLayer('fullSamplesGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, fullSamplesGallery);
 
+        fullSamplesClose.removeEventListener('click', _clickClose);
         e.preventDefault();
       };
 
-      fullSamplesClose.addEventListener('click', clickClose);
+      fullSamplesClose.addEventListener('click', _clickClose);
       document.body.appendChild(fullSamplesGallery);
       fullSamplesGallery.appendChild(fullSamplesHeader);
       fullSamplesHeader.appendChild(fullSamplesClose);
@@ -17053,26 +17182,22 @@ function () {
       fullSamplesWrapper.appendChild(fullSamplesContainer);
       fullSamplesHeaderButton.innerHTML = 'Samples (0)';
       body.classList.add('samples-gallery-open');
+
+      scrollWrapper = function scrollWrapper(e) {
+        _this2.scrollWrapper(e);
+      };
+
+      fullSamplesWrapper.addEventListener('scroll', scrollWrapper);
       this.addCategories(fullSamplesCat);
       this.addImages(fullSamplesContainer);
 
-      _fancy.default.openLayer('fullSamplesGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, this.id); // history.pushState({
-      //     id: 'fullsamplesgallery'
-      // }, 'Full Samples Gallery | Mutina', 'http://localhost:9999/prodotto.html?p=homepage');
-      // window.addEventListener('popstate', function (event) {
-      //     console.log(event);
-      //     if (event.state && event.state.id === 'fullsamplesgallery') {
-      //         FancyTransition.closeLayer('fullGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, fullSamplesGallery);
-      //         event.preventDefault();
-      //     }
-      // }, false);
-      //https://gomakethings.com/how-to-update-a-url-without-reloading-the-page-using-vanilla-javascript/
+      _fancy.default.openLayer('fullSamplesGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, this.id); //https://gomakethings.com/how-to-update-a-url-without-reloading-the-page-using-vanilla-javascript/
 
     }
   }, {
     key: "addCategories",
     value: function addCategories(wrapper) {
-      var _this2 = this;
+      var _this3 = this;
 
       var categoriesHtml = '<ul>';
       this.data.samples.forEach(function (category) {
@@ -17082,8 +17207,13 @@ function () {
       wrapper.innerHTML = categoriesHtml;
 
       _toConsumableArray(document.querySelectorAll('[data-sample-id]')).forEach(function (x) {
-        x.addEventListener('click', _this2.scrollToColor);
+        x.addEventListener('click', _this3.scrollToColor);
       });
+    }
+  }, {
+    key: "scrollWrapper",
+    value: function scrollWrapper(e) {
+      var wrapper = document.querySelector('.full-samples-gallery__wrapper');
     }
   }, {
     key: "scrollToColor",
@@ -17108,24 +17238,72 @@ function () {
   }, {
     key: "addImages",
     value: function addImages(wrapper) {
-      console.log(this.data);
+      var _this4 = this;
+
       var containerHtml = '';
       this.data.samples.forEach(function (category) {
         var fullSamplesHtml = '';
         category.items.forEach(function (item) {
-          fullSamplesHtml += "\n                    <div class=\"full-samples-gallery__item\">\n                        <div class=\"img\">\n                            <img src=\"".concat(item.img, "\" alt=\"").concat(item.title, "\">\n                        </div>\n                        <div class=\"box\">\n                            <h6 class=\"h6\">").concat(item.title, "</h6>\n                            <div class=\"text\">").concat(item.size, "</div>\n                            <div class=\"cta\"><a href=\"#\" class=\"btn--inline\">Add to samples</a></div>\n                        </div>\n                    </div>\n                ");
+          fullSamplesHtml += "\n                    <div class=\"full-samples-gallery__item\">\n                        <div class=\"img\">\n                            <img src=\"".concat(item.img, "\" alt=\"").concat(item.title, "\" data-sample-detail=\"").concat(item.id, "\">\n                        </div>\n                        <div class=\"box\">\n                            <h6 class=\"h6\">").concat(item.title, "</h6>\n                            <div class=\"text\">").concat(item.size, "</div>\n                            <div class=\"cta\"><a href=\"#\" class=\"btn--inline\">Add to samples</a></div>\n                        </div>\n                    </div>\n                ");
         });
         containerHtml += "\n            <div class=\"full-samples-gallery__category\" data-sample-category=\"".concat(category.id, "\">\n                <div class=\"full-samples-gallery__cover\">\n                    <h2 class=\"h2\">").concat(category.color, "</h2>\n                    <div class=\"img\">\n                        <img src=\"").concat(category.img, "\">\n                    </div>\n                    <div class=\"box\">\n                        <h6 class=\"h6\">").concat(category.title, "</h6>\n                        <div class=\"text\">").concat(category.size, "</div>\n                    </div>\n                </div>\n                <div class=\"full-samples-gallery__listing\">\n                    ").concat(fullSamplesHtml, "                    \n                </div>\n            </div>\n        ");
       });
       wrapper.innerHTML = containerHtml;
+      var images = this.mapData();
+
+      clickDetailGallery = function clickDetailGallery(e) {
+        _this4.openDetailGallery(e, images);
+      };
+
+      images.forEach(function (image) {
+        image.node.addEventListener('click', clickDetailGallery);
+      });
+    }
+  }, {
+    key: "openDetailGallery",
+    value: function openDetailGallery(e, images) {
+      var wrapper = document.querySelector('.full-samples-gallery');
+
+      _samples.default.init(e, images, wrapper);
+
+      this.removeAllListeners();
+    }
+  }, {
+    key: "mapData",
+    value: function mapData() {
+      var thumbs = _toConsumableArray(document.querySelectorAll('.full-samples-gallery__item'));
+
+      var thumbsList = this.data.samples.map(function (category) {
+        var categoryItems = [];
+        category.items.forEach(function (item, index) {
+          categoryItems.push({
+            id: item.id,
+            node: thumbs[item.id],
+            img: item.img,
+            imgHd: item.imgHd,
+            size: item.size,
+            title: item.title,
+            color: category.color,
+            parent: index === 0 ? true : false
+          });
+        });
+        return categoryItems;
+      });
+      var flat = [];
+
+      for (var i = 0; i < thumbsList.length; i++) {
+        flat = flat.concat(thumbsList[i]);
+      }
+
+      return flat;
     }
   }, {
     key: "addListeners",
     value: function addListeners() {
-      var _this3 = this;
+      var _this5 = this;
 
       var click = function click(e) {
-        _this3.getData();
+        _this5.getData();
 
         e.preventDefault();
       };
@@ -17134,11 +17312,42 @@ function () {
       this.node.addEventListener('click', this.click);
     }
   }, {
+    key: "removeAllListeners",
+    value: function removeAllListeners() {
+      var _this6 = this;
+
+      _toConsumableArray(document.querySelectorAll('[data-sample-id]')).forEach(function (x) {
+        x.removeEventListener('click', _this6.scrollToColor);
+      });
+    }
+  }, {
+    key: "addAllListeneres",
+    value: function addAllListeneres() {
+      var _this7 = this;
+
+      _toConsumableArray(document.querySelectorAll('[data-sample-id]')).forEach(function (x) {
+        x.addEventListener('click', _this7.scrollToColor);
+      });
+    }
+  }, {
     key: "destroy",
     value: function destroy() {
       this.node.removeEventListener('click', this.click);
+
+      if (document.querySelector('full-samples-gallery__wrapper')) {
+        document.querySelector('full-samples-gallery__wrapper').removeEventListener('scroll', scrollWrapper);
+      }
     }
   }], [{
+    key: "destroyAll",
+    value: function destroyAll() {
+      if (Samples.items) {
+        Samples.items.forEach(function (sample) {
+          sample.destroy();
+        });
+      }
+    }
+  }, {
     key: "init",
     value: function init() {
       Samples.items = _toConsumableArray(document.querySelectorAll('[data-samples]')).map(function (element, id) {
@@ -17153,7 +17362,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":317,"./utils":323,"gsap/ScrollToPlugin":309}],322:[function(require,module,exports){
+},{"./fancy.transition":317,"./samples.detail":321,"./utils":324,"gsap/ScrollToPlugin":309}],323:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17208,6 +17417,8 @@ function () {
           freeMode: true,
           freeModeMomentumRatio: 1,
           freeModeMomentumVelocityRatio: 0.3,
+          preloadImages: false,
+          lazy: true,
           speed: 400,
           breakpoints: {
             576: {
@@ -17250,8 +17461,6 @@ function () {
           },
           on: {
             init: function init() {
-              console.log(parentWrap.parentNode);
-
               if (parentWrap.classList.contains('slider--lateral-switch')) {
                 this.slideTo(this.slides.length - 1, 0);
               }
@@ -17296,7 +17505,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],323:[function(require,module,exports){
+},{}],324:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

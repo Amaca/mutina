@@ -88,6 +88,27 @@
 }
 
 
+.slider--samples {
+
+    .swiper-wrapper {
+        transition-timing-function: cubic-bezier(0, 0.97, 0.43, 1);
+    }
+
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+    }
+
+    .swiper-slide {
+        width: 36vw; 
+    }
+
+    .slider__picture {
+        text-align: center;
+    }
+}
+
+
 //slider lateral
 .slider--lateral {
     margin-bottom: 0;

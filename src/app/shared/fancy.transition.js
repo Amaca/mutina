@@ -157,7 +157,7 @@ export default class FancyTransition {
         let isDetailGallery = false,
             isFullGallery = false,
             isFullSamplesGallery = false,
-            isDetailAndFullGallery = body.classList.contains('full-gallery-open') && body.classList.contains('detail-gallery-open')
+            isDetailAndFullGallery = body.classList.contains('full-gallery-open') && body.classList.contains('detail-gallery-open');
 
         switch (type) {
             case 'detailGallery':

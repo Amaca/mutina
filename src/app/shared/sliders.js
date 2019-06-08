@@ -29,6 +29,8 @@ export default class Sliders {
                 freeMode: true,
                 freeModeMomentumRatio: 1,
                 freeModeMomentumVelocityRatio: 0.3,
+                preloadImages: false,
+                lazy: true,
                 speed: 400,
                 breakpoints: {
                     576: {
@@ -73,7 +75,6 @@ export default class Sliders {
                 },
                 on: {
                     init: function () {
-                        console.log(parentWrap.parentNode)
                         if (parentWrap.classList.contains('slider--lateral-switch')) {
                             this.slideTo(this.slides.length - 1, 0);
                         }

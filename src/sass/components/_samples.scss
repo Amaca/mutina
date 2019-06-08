@@ -43,11 +43,20 @@ $slider-samples-arrow-close-zoom-fill: white;
     align-items: center;
     cursor: pointer;
 
+    @include sm-down {
+        top: 8px;
+    }
+
     svg {
         width: 25px;
         height: 25px;
         transition: fill .6s $smooth;
         fill: $slider-samples-arrow-close-fill;
+
+        @include sm-down {
+            width: 18px;
+            height: 18px;
+        }
     }
 }
 
@@ -63,6 +72,11 @@ $slider-samples-arrow-close-zoom-fill: white;
     display: flex;
     flex-direction: row;
     align-items: center;
+
+    @include sm-down {
+        top: -#{$header-height-mobile};
+        height: $header-height-mobile;
+    }
 
     &:after {
         content: '';
@@ -88,6 +102,11 @@ $slider-samples-arrow-close-zoom-fill: white;
     flex-direction: row;
     align-items: center;
 
+    @include xs-down {
+        flex: 0 0 calc(60vw - 80px);
+        max-width: calc(60vw - 80px);
+    }
+
     &:after {
         content: '';
         position: absolute;
@@ -103,6 +122,10 @@ $slider-samples-arrow-close-zoom-fill: white;
         padding: 0;
         margin: 0 20px;
         list-style: none;
+
+        @include xs-down {
+            display: none;
+        }
 
         li {
             display: inline-block;
@@ -131,6 +154,11 @@ $slider-samples-arrow-close-zoom-fill: white;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+
+    @include xs-down {
+        flex: 0 0 40vw;
+        max-width: 40vw;
+    }
    
     .detail-samples-gallery__header-button,
     .full-samples-gallery__header-button {
@@ -149,16 +177,34 @@ $slider-samples-arrow-close-zoom-fill: white;
 
 
 //DETAIL GALLERY
+// .detail-samples-gallery__wrapper {
+//     position: absolute;
+//     z-index: 2;
+//     width: 100vw;
+//     height: calc(100vh - 65px - 60px);
+//     bottom: calc(-100% - 60px);
+//     left: 0;
+//     background: $detail-samples-wrapper-bg;
+//     transition: all .6s $smooth;
+// }
+
 .detail-samples-gallery__wrapper {
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     width: 100vw;
-    height: calc(100vh - 65px - 60px);
-    bottom: calc(-100% - 60px);
+    height: calc(100vh - #{$header-height});
+    bottom: -100%;
     left: 0;
-    background: $detail-samples-wrapper-bg;
+    background: white;
     transition: all .6s $smooth;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    @include sm-down {
+        height: calc(100vh - #{$header-height-mobile});
+    }
 }
+
 
 //FULL SAMPLES GALLERY
 .full-samples-gallery__wrapper {
@@ -174,6 +220,10 @@ $slider-samples-arrow-close-zoom-fill: white;
     overflow-x: hidden;
     overflow-y: auto;
 
+    @include sm-down {
+        height: calc(100vh - #{$header-height-mobile});
+    }
+
     .full-samples-gallery__container {
         padding: $col-gutter;
     }
@@ -181,18 +231,23 @@ $slider-samples-arrow-close-zoom-fill: white;
     .full-samples-gallery__category {
         margin-bottom: 80px;
 
+        @include xs-down {
+            margin-bottom: 40px;
+        }
+
         &:last-child {
             margin-bottom: 0;
         }
 
         .h2 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             text-transform: uppercase;
+            margin-top: 20px;
             margin-bottom: 36px;
             display: none;
 
-            @include sm-down {
-                display: none;
+            @include xs-down {
+                display: block;
             }
         }
 
@@ -206,6 +261,10 @@ $slider-samples-arrow-close-zoom-fill: white;
             position: relative;
             z-index: 1;
             padding-right: 100px;
+
+            @include sm-down {
+                padding-right: 0;
+            }
 
             .h6 {
                 color: $dark;
@@ -226,6 +285,17 @@ $slider-samples-arrow-close-zoom-fill: white;
                 z-index: 1;
                 top: 0;
                 right: 0;
+
+                @include sm-down {
+                    position: static;
+
+                    &:hover{
+                        &:after {
+                            transition: none;
+                            width: 100%;
+                        }
+                    }
+                }
             }
         }
 
@@ -248,6 +318,11 @@ $slider-samples-arrow-close-zoom-fill: white;
                 max-width: 25%;
                 padding: 0 $col-gutter-half;
                 margin-bottom: 36px;
+
+                @include xs-down {
+                    flex: 0 0 50%;
+                    max-width: 50%;
+                }
 
                 .img {
                     cursor: crosshair;
