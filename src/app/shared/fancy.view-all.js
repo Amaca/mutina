@@ -7,6 +7,7 @@ import FancyTransition from "./fancy.transition";
 let clickClose;
 
 const body = document.querySelector('body');
+const html = document.getElementsByTagName('html')[0];
 const closeIcon = `<svg><use xlink:href="#svg-close"></use></svg>`;
 const slideAnimationSpeed = 1000;
 
@@ -80,6 +81,7 @@ export default class FancyViewAll {
         fullGalleryWrapper.appendChild(fullGalleryContainer);
 
         body.classList.add('full-gallery-open');
+        html.style.overflow = 'hidden';
         FancyViewAll.addImages(fullGalleryContainer);
 
 

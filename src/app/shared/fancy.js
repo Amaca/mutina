@@ -8,6 +8,7 @@ let clickSwitch;
 let swiperInstance;
 
 const body = document.querySelector('body');
+const html = document.getElementsByTagName('html')[0];
 const closeIcon = `<svg><use xlink:href="#svg-close"></use></svg>`;
 const prevIcon = `<svg><use xlink:href="#svg-prev"></use></svg>`;
 const nextIcon = `<svg><use xlink:href="#svg-next"></use></svg>`;
@@ -114,6 +115,7 @@ export default class Fancy {
         detailGallerySwitch.addEventListener('click', clickSwitch);
 
         body.classList.add('detail-gallery-open');
+        html.style.overflow = 'hidden';
         Fancy.initSwiper(detailGalleryWrapper, id);
 
         FancyTransition.openLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id);

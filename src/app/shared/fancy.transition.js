@@ -3,10 +3,10 @@
 
 import Fancy from './fancy';
 import FancyViewAll from './fancy.view-all';
-import App from '../app';
-import Utils from './utils';
+import SamplesDetail from './samples.detail';
 
 const body = document.querySelector('body');
+const html = document.getElementsByTagName('html')[0];
 const slideAnimationSpeed = 1000;
 
 export default class FancyTransition {
@@ -135,7 +135,7 @@ export default class FancyTransition {
                 height: closeHeight,
                 ease: Expo.easeInOut
             }).delay(0.5);
-        }else {
+        } else {
             TweenMax.to(close, 1, {
                 height: closeHeight,
                 ease: Expo.easeInOut
@@ -148,6 +148,7 @@ export default class FancyTransition {
         const captionWrapper = document.querySelector('.detail-gallery__caption span');
         const footerHeight = footer ? footer.clientHeight : null;
         const detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper');
+        const detailSamplesGalleryWrapper = document.querySelector('.detail-samples-gallery__wrapper');
         const arrowLeft = document.querySelector('.swiper-button-prev');
         const arrowRight = document.querySelector('.swiper-button-next');
         let wrapperHeight;
@@ -157,6 +158,7 @@ export default class FancyTransition {
         let isDetailGallery = false,
             isFullGallery = false,
             isFullSamplesGallery = false,
+            isSampleDetailAndFull = body.classList.contains('samples-gallery-open') && body.classList.contains('detail-sample-gallery-open'),
             isDetailAndFullGallery = body.classList.contains('full-gallery-open') && body.classList.contains('detail-gallery-open');
 
         switch (type) {
@@ -164,18 +166,21 @@ export default class FancyTransition {
                 wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
                 delay = 500;
                 body.classList.remove('detail-gallery-open');
+                html.style.overflow = 'initial';
                 isDetailGallery = true;
                 break;
             case 'fullGallery':
                 wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
                 delay = 500;
                 body.classList.remove('full-gallery-open');
+                html.style.overflow = 'initial';
                 isFullGallery = true;
                 break;
             case 'fullSamplesGallery':
                 wrapperHeight = wrapper ? window.innerHeight - 81 : null;
                 delay = 500;
                 body.classList.remove('samples-gallery-open');
+                html.style.overflow = 'initial';
                 isFullSamplesGallery = true;
                 break;
             default:
@@ -250,6 +255,7 @@ export default class FancyTransition {
                     bottom: -wrapperHeight,
                     ease: Expo.easeIn
                 }).delay(0.1);
+
             }
 
             if (isFullSamplesGallery) {
@@ -261,10 +267,20 @@ export default class FancyTransition {
                     top: -header.offsetHeight,
                     ease: Expo.easeInOut
                 }).delay(0.2);
-                TweenMax.to(wrapper, 0.8, {
-                    bottom: -wrapperHeight,
-                    ease: Expo.easeIn
-                }).delay(0.2);
+                if (isSampleDetailAndFull) {
+                    TweenMax.set(wrapper, {
+                        bottom: -wrapperHeight,
+                    })
+                    TweenMax.to(detailSamplesGalleryWrapper, 0.8, {
+                        bottom: -detailSamplesGalleryWrapper.offsetHeight,
+                        ease: Expo.easeIn
+                    }).delay(0.2);
+                } else {
+                    TweenMax.to(wrapper, 0.8, {
+                        bottom: -wrapperHeight,
+                        ease: Expo.easeIn
+                    }).delay(0.2);
+                }
             }
 
             setTimeout(x => {
@@ -277,7 +293,10 @@ export default class FancyTransition {
                                 Fancy.destroySwiper();
                                 mainWrapper.remove();
                             }
-                            if (isFullGallery || isFullSamplesGallery) {
+                            if (isFullGallery || isFullSamplesGallery || isSampleDetailAndFull) {
+                                if (isSampleDetailAndFull) {
+                                    SamplesDetail.destroyAll();
+                                }
                                 mainWrapper.remove();
                             }
                         }

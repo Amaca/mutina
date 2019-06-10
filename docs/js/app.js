@@ -15083,7 +15083,7 @@ function () {
               app.onPageInit();
               /*
               window.daraLayer.push({
-               })
+                })
               gtm.push({
                   title: document.title,
                   href: window.href
@@ -15759,6 +15759,7 @@ var clickClose;
 var clickSwitch;
 var swiperInstance;
 var body = document.querySelector('body');
+var html = document.getElementsByTagName('html')[0];
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
 var prevIcon = "<svg><use xlink:href=\"#svg-prev\"></use></svg>";
 var nextIcon = "<svg><use xlink:href=\"#svg-next\"></use></svg>";
@@ -15875,6 +15876,7 @@ function () {
 
       detailGallerySwitch.addEventListener('click', clickSwitch);
       body.classList.add('detail-gallery-open');
+      html.style.overflow = 'hidden';
       Fancy.initSwiper(detailGalleryWrapper, id);
 
       _fancy.default.openLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id);
@@ -16032,9 +16034,7 @@ var _fancy = _interopRequireDefault(require("./fancy"));
 
 var _fancy2 = _interopRequireDefault(require("./fancy.view-all"));
 
-var _app = _interopRequireDefault(require("../app"));
-
-var _utils = _interopRequireDefault(require("./utils"));
+var _samples = _interopRequireDefault(require("./samples.detail"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16045,6 +16045,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var body = document.querySelector('body');
+var html = document.getElementsByTagName('html')[0];
 var slideAnimationSpeed = 1000;
 
 var FancyTransition =
@@ -16195,6 +16196,7 @@ function () {
       var captionWrapper = document.querySelector('.detail-gallery__caption span');
       var footerHeight = footer ? footer.clientHeight : null;
       var detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper');
+      var detailSamplesGalleryWrapper = document.querySelector('.detail-samples-gallery__wrapper');
       var arrowLeft = document.querySelector('.swiper-button-prev');
       var arrowRight = document.querySelector('.swiper-button-next');
       var wrapperHeight;
@@ -16203,6 +16205,7 @@ function () {
       var isDetailGallery = false,
           isFullGallery = false,
           isFullSamplesGallery = false,
+          isSampleDetailAndFull = body.classList.contains('samples-gallery-open') && body.classList.contains('detail-sample-gallery-open'),
           isDetailAndFullGallery = body.classList.contains('full-gallery-open') && body.classList.contains('detail-gallery-open');
 
       switch (type) {
@@ -16210,6 +16213,7 @@ function () {
           wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
           delay = 500;
           body.classList.remove('detail-gallery-open');
+          html.style.overflow = 'initial';
           isDetailGallery = true;
           break;
 
@@ -16217,6 +16221,7 @@ function () {
           wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
           delay = 500;
           body.classList.remove('full-gallery-open');
+          html.style.overflow = 'initial';
           isFullGallery = true;
           break;
 
@@ -16224,6 +16229,7 @@ function () {
           wrapperHeight = wrapper ? window.innerHeight - 81 : null;
           delay = 500;
           body.classList.remove('samples-gallery-open');
+          html.style.overflow = 'initial';
           isFullSamplesGallery = true;
           break;
 
@@ -16314,10 +16320,21 @@ function () {
             top: -header.offsetHeight,
             ease: Expo.easeInOut
           }).delay(0.2);
-          TweenMax.to(wrapper, 0.8, {
-            bottom: -wrapperHeight,
-            ease: Expo.easeIn
-          }).delay(0.2);
+
+          if (isSampleDetailAndFull) {
+            TweenMax.set(wrapper, {
+              bottom: -wrapperHeight
+            });
+            TweenMax.to(detailSamplesGalleryWrapper, 0.8, {
+              bottom: -detailSamplesGalleryWrapper.offsetHeight,
+              ease: Expo.easeIn
+            }).delay(0.2);
+          } else {
+            TweenMax.to(wrapper, 0.8, {
+              bottom: -wrapperHeight,
+              ease: Expo.easeIn
+            }).delay(0.2);
+          }
         }
 
         setTimeout(function (x) {
@@ -16332,7 +16349,11 @@ function () {
                   mainWrapper.remove();
                 }
 
-                if (isFullGallery || isFullSamplesGallery) {
+                if (isFullGallery || isFullSamplesGallery || isSampleDetailAndFull) {
+                  if (isSampleDetailAndFull) {
+                    _samples.default.destroyAll();
+                  }
+
                   mainWrapper.remove();
                 }
               }
@@ -16367,7 +16388,7 @@ function () {
 
 exports.default = FancyTransition;
 
-},{"../app":312,"./fancy":316,"./fancy.view-all":318,"./utils":324}],318:[function(require,module,exports){
+},{"./fancy":316,"./fancy.view-all":318,"./samples.detail":321}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16397,6 +16418,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var clickClose;
 var body = document.querySelector('body');
+var html = document.getElementsByTagName('html')[0];
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
 var slideAnimationSpeed = 1000;
 
@@ -16485,6 +16507,7 @@ function () {
       fullGallery.appendChild(fullGalleryWrapper);
       fullGalleryWrapper.appendChild(fullGalleryContainer);
       body.classList.add('full-gallery-open');
+      html.style.overflow = 'hidden';
       FancyViewAll.addImages(fullGalleryContainer);
 
       _fancy2.default.openLayer('fullGallery', fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, null, id);
@@ -16957,15 +16980,21 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _fancy = _interopRequireDefault(require("./fancy.transition"));
-
 require("gsap/ScrollToPlugin");
-
-var _utils = _interopRequireDefault(require("./utils"));
 
 var _samples = _interopRequireDefault(require("./samples"));
 
+var _utils = _interopRequireDefault(require("./utils"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -16973,10 +17002,12 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var clickClose;
+var clickTab;
 var scrollWrapper;
+var clickBack;
 var swiperInstance;
 var body = document.querySelector('body');
+var html = document.getElementsByTagName('html')[0];
 var header = document.querySelector('header');
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
 
@@ -16995,25 +17026,107 @@ function () {
       wrapper.appendChild(detailSampleGalleryWrapper);
       SamplesDetail.initSwiper(id, data, detailSampleGalleryWrapper);
       body.classList.add('detail-sample-gallery-open');
-      TweenMax.set(detailSampleGalleryWrapper, {
-        bottom: -detailSampleGalleryWrapper.offsetHeight
+      html.style.overflow = 'hidden';
+    }
+  }, {
+    key: "openLayer",
+    value: function openLayer(wrapper) {
+      var back = document.querySelector('.full-samples-gallery__back svg');
+      var headerCat = document.querySelector('.full-samples-gallery__header-cat');
+      var viewportWidth = window.innerWidth > 768 ? window.innerWidth * 8 / 10 : window.innerWidth * 6 / 10;
+
+      clickBack = function clickBack(e) {
+        SamplesDetail.closeLayer(wrapper, back, headerCat, viewportWidth);
+        e.preventDefault();
+      };
+
+      back.addEventListener('click', clickBack);
+      TweenMax.set(wrapper, {
+        bottom: -wrapper.offsetHeight
       });
-      TweenMax.to(detailSampleGalleryWrapper, 1, {
+      TweenMax.set(back, {
+        transform: 'translateX(-32px)'
+      });
+      TweenMax.set(headerCat, {
+        marginLeft: '80px'
+      });
+      TweenMax.to(wrapper, 1, {
         bottom: 0,
+        ease: Expo.easeInOut
+      });
+      TweenMax.to(back, 1, {
+        transform: 'translateX(0)',
+        ease: Expo.easeInOut
+      });
+      TweenMax.to(headerCat, 1, {
+        marginLeft: '146px',
+        maxWidth: viewportWidth - 146 + 'px',
+        flex: '0 0 ' + (viewportWidth - 146) + 'px',
         ease: Expo.easeInOut
       });
     }
   }, {
+    key: "closeLayer",
+    value: function closeLayer(wrapper, back, headerCat, viewportWidth) {
+      TweenMax.set(wrapper, {
+        bottom: 0
+      });
+      TweenMax.set(back, {
+        transform: 'translateX(0)'
+      });
+      TweenMax.set(headerCat, {
+        marginLeft: '146px',
+        maxWidth: viewportWidth - 146 + 'px',
+        flex: '0 0 ' + (viewportWidth - 146) + 'px'
+      });
+      TweenMax.to(back, 1, {
+        transform: 'translateX(-32px)',
+        ease: Expo.easeInOut
+      });
+      TweenMax.to(headerCat, 1, {
+        marginLeft: '80px',
+        maxWidth: viewportWidth - 80 + 'px',
+        flex: '0 0 ' + (viewportWidth - 80) + 'px',
+        ease: Expo.easeInOut
+      });
+      TweenMax.to(wrapper, 1, {
+        bottom: -wrapper.offsetHeight,
+        ease: Expo.easeInOut,
+        onComplete: function onComplete() {
+          SamplesDetail.destroyAll();
+
+          _samples.default.addTabsListeners();
+        }
+      });
+    }
+  }, {
+    key: "destroyAll",
+    value: function destroyAll() {
+      var wrapper = document.querySelector('.detail-samples-gallery__wrapper');
+      var back = document.querySelector('.full-samples-gallery__back svg');
+
+      var tabs = _toConsumableArray(document.querySelectorAll('.full-samples-gallery__header-cat ul li a'));
+
+      body.classList.remove('detail-sample-gallery-open');
+      html.style.overflow = 'initial';
+      tabs.forEach(function (tab) {
+        tab.removeEventListener('click', clickTab);
+      });
+      back.removeEventListener('click', clickBack);
+      swiperInstance.destroy();
+      wrapper.remove();
+    }
+  }, {
     key: "initSwiper",
-    value: function initSwiper(id, data, content) {
+    value: function initSwiper(id, data, wrapper) {
       var slidesHtml = '';
-      data.forEach(function (item) {
+      data.forEach(function (item, index) {
         var className = item.parent === true ? 'swiper-slide--parent' : '';
-        var attribute = item.parent === true ? 'data-sample-detail-id="' + item.color + '"' : '';
-        slidesHtml += "\n            <div class=\"swiper-slide\">\n                <div class=\"slider__picture\">\n                    <img data-src=\"".concat(item.imgHd, "\" class=\"swiper-lazy\">\n                    <div class=\"swiper-lazy-preloader\"></div>\n                </div>\n                <div class=\"slider__caption\">\n                    <div class=\"box\">\n                        <h6 class=\"h6\">").concat(item.title, "</h6>\n                        <div class=\"text\">").concat(item.size, "</div>\n                        <div class=\"cta\"><a href=\"#\" class=\"btn--inline\">Add to samples</a></div>\n                    </div>\n                </div>\n            </div>\n            ");
+        var attribute = 'data-sample-detail-id="' + item.categoryId + '"';
+        slidesHtml += "\n            <div class=\"swiper-slide ".concat(className, "\" ").concat(attribute, " data-id=\"").concat(index, "\">\n                <div class=\"slider__picture\">\n                    <img data-src=\"").concat(item.imgHd, "\" class=\"swiper-lazy\">\n                    <div class=\"swiper-lazy-preloader\"></div>\n                </div>\n                <div class=\"slider__caption\">\n                    <div class=\"box\">\n                        <h6 class=\"h6\">").concat(item.title, "</h6>\n                        <div class=\"text\">").concat(item.size, "</div>\n                        <div class=\"cta\"><a href=\"#\" class=\"btn--inline\">Add to samples</a></div>\n                    </div>\n                </div>\n            </div>\n            ");
       });
       var swiperHtml = "\n        <div class=\"detail-sample-gallery__swiper\">\n            <div class=\"slider slider--samples\">\n                <div class=\"swiper-container\">\n                    <div class=\"swiper-wrapper\">\n                    ".concat(slidesHtml, "\n                    </div>\n                </div>\n            </div>\n        </div>\n        ");
-      content.innerHTML = swiperHtml;
+      wrapper.innerHTML = swiperHtml;
       var options = {
         grabCursor: true,
         watchOverflow: true,
@@ -17043,11 +17156,51 @@ function () {
             setTimeout(function (x) {
               _this.slideTo(id, 0);
             }, 300);
+            SamplesDetail.openLayer(wrapper);
+          },
+          slideChange: function slideChange() {
+            var tabs = _toConsumableArray(document.querySelectorAll('.full-samples-gallery__header-cat ul li a'));
+
+            var currentSlide = this.slides[this.activeIndex];
+            var currentCategory = tabs.find(function (tab) {
+              return currentSlide.getAttribute('data-sample-detail-id') === tab.getAttribute('data-sample-id');
+            });
+            tabs.forEach(function (tab) {
+              tab.classList.remove('active');
+            });
+
+            _utils.default.toggleClass(currentCategory, 'active');
           }
         }
       };
       swiperInstance = new Swiper(document.querySelector('.detail-sample-gallery__swiper .swiper-container'), options);
       swiperInstance.init();
+      SamplesDetail.initTabs(id);
+    }
+  }, {
+    key: "initTabs",
+    value: function initTabs(id) {
+      var tabs = _toConsumableArray(document.querySelectorAll('.full-samples-gallery__header-cat ul li a'));
+
+      var categoryParents = _toConsumableArray(document.querySelectorAll('[data-sample-detail-id]'));
+
+      clickTab = function clickTab(e) {
+        SamplesDetail.slideToCategory(e, id, categoryParents, tabs);
+        e.preventDefault();
+      };
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', clickTab);
+      });
+    }
+  }, {
+    key: "slideToCategory",
+    value: function slideToCategory(e, id, categoryParents, tabs) {
+      var target = e.target;
+      var selectedParent = categoryParents.find(function (parent) {
+        return parent.getAttribute('data-sample-detail-id') === target.getAttribute('data-sample-id');
+      });
+      swiperInstance.slideTo(Number(selectedParent.getAttribute('data-id')));
     }
   }, {
     key: "init",
@@ -17062,7 +17215,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./fancy.transition":317,"./samples":322,"./utils":324,"gsap/ScrollToPlugin":309}],322:[function(require,module,exports){
+},{"./samples":322,"./utils":324,"gsap/ScrollToPlugin":309}],322:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17070,11 +17223,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _fancy = _interopRequireDefault(require("./fancy.transition"));
-
 require("gsap/ScrollToPlugin");
 
-var _utils = _interopRequireDefault(require("./utils"));
+var _fancy = _interopRequireDefault(require("./fancy.transition"));
 
 var _samples = _interopRequireDefault(require("./samples.detail"));
 
@@ -17099,8 +17250,10 @@ var _clickClose;
 var scrollWrapper;
 var clickDetailGallery;
 var body = document.querySelector('body');
+var html = document.getElementsByTagName('html')[0];
 var header = document.querySelector('header');
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
+var backIcon = "<svg><use xlink:href=\"#svg-grid3x3\"></use></svg>";
 
 var Samples =
 /*#__PURE__*/
@@ -17146,6 +17299,7 @@ function () {
       var fullSamplesGallery = document.createElement('div');
       var fullSamplesHeader = document.createElement('div');
       var fullSamplesClose = document.createElement('div');
+      var fullSamplesBack = document.createElement('div');
       var fullSamplesCat = document.createElement('div');
       var fullSamplesHeaderCta = document.createElement('div');
       var fullSamplesHeaderButton = document.createElement('div');
@@ -17155,6 +17309,7 @@ function () {
       fullSamplesGallery.classList.add('full-samples-gallery');
       fullSamplesHeader.classList.add('full-samples-gallery__header');
       fullSamplesClose.classList.add('full-samples-gallery__close');
+      fullSamplesBack.classList.add('full-samples-gallery__back');
       fullSamplesCat.classList.add('full-samples-gallery__header-cat');
       fullSamplesHeaderCta.classList.add('full-samples-gallery__header-cta');
       fullSamplesHeaderButton.classList.add('full-samples-gallery__header-button');
@@ -17162,6 +17317,7 @@ function () {
       fullSamplesWrapper.classList.add('full-samples-gallery__wrapper');
       fullSamplesContainer.classList.add('full-samples-gallery__container');
       fullSamplesClose.innerHTML = closeIcon;
+      fullSamplesBack.innerHTML = backIcon;
 
       _clickClose = function clickClose(e) {
         _fancy.default.closeLayer('fullSamplesGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, fullSamplesGallery);
@@ -17174,6 +17330,7 @@ function () {
       document.body.appendChild(fullSamplesGallery);
       fullSamplesGallery.appendChild(fullSamplesHeader);
       fullSamplesHeader.appendChild(fullSamplesClose);
+      fullSamplesHeader.appendChild(fullSamplesBack);
       fullSamplesHeader.appendChild(fullSamplesCat);
       fullSamplesHeader.appendChild(fullSamplesHeaderCta);
       fullSamplesHeaderCta.appendChild(fullSamplesHeaderButton);
@@ -17182,6 +17339,7 @@ function () {
       fullSamplesWrapper.appendChild(fullSamplesContainer);
       fullSamplesHeaderButton.innerHTML = 'Samples (0)';
       body.classList.add('samples-gallery-open');
+      html.style.overflow = 'hidden';
 
       scrollWrapper = function scrollWrapper(e) {
         _this2.scrollWrapper(e);
@@ -17197,18 +17355,13 @@ function () {
   }, {
     key: "addCategories",
     value: function addCategories(wrapper) {
-      var _this3 = this;
-
       var categoriesHtml = '<ul>';
       this.data.samples.forEach(function (category) {
         categoriesHtml += "\n                <li><a href=\"#\" data-sample-id=\"".concat(category.id, "\">").concat(category.color, "</a></li>\n            ");
       });
       categoriesHtml += '</ul>';
       wrapper.innerHTML = categoriesHtml;
-
-      _toConsumableArray(document.querySelectorAll('[data-sample-id]')).forEach(function (x) {
-        x.addEventListener('click', _this3.scrollToColor);
-      });
+      Samples.addTabsListeners();
     }
   }, {
     key: "scrollWrapper",
@@ -17216,6 +17369,91 @@ function () {
       var wrapper = document.querySelector('.full-samples-gallery__wrapper');
     }
   }, {
+    key: "addImages",
+    value: function addImages(wrapper) {
+      var _this3 = this;
+
+      var containerHtml = '';
+      this.data.samples.forEach(function (category) {
+        var fullSamplesHtml = '';
+        category.items.forEach(function (item) {
+          fullSamplesHtml += "\n                    <div class=\"full-samples-gallery__item\">\n                        <div class=\"img\">\n                            <img src=\"".concat(item.img, "\" alt=\"").concat(item.title, "\" data-sample-detail=\"").concat(item.id, "\">\n                        </div>\n                        <div class=\"box\">\n                            <h6 class=\"h6\">").concat(item.title, "</h6>\n                            <div class=\"text\">").concat(item.size, "</div>\n                            <div class=\"cta\"><a href=\"#\" class=\"btn--inline\">Add to samples</a></div>\n                        </div>\n                    </div>\n                ");
+        });
+        containerHtml += "\n            <div class=\"full-samples-gallery__category\" data-sample-category=\"".concat(category.id, "\">\n                <div class=\"full-samples-gallery__cover\">\n                    <h2 class=\"h2\">").concat(category.color, "</h2>\n                    <div class=\"img\">\n                        <img src=\"").concat(category.img, "\">\n                    </div>\n                    <div class=\"box\">\n                        <h6 class=\"h6\">").concat(category.title, "</h6>\n                        <div class=\"text\">").concat(category.size, "</div>\n                    </div>\n                </div>\n                <div class=\"full-samples-gallery__listing\">\n                    ").concat(fullSamplesHtml, "                    \n                </div>\n            </div>\n        ");
+      });
+      wrapper.innerHTML = containerHtml;
+      var images = this.mapData();
+
+      clickDetailGallery = function clickDetailGallery(e) {
+        _this3.openDetailGallery(e, images);
+      };
+
+      images.forEach(function (image) {
+        image.node.addEventListener('click', clickDetailGallery);
+      });
+    }
+  }, {
+    key: "openDetailGallery",
+    value: function openDetailGallery(e, images) {
+      var wrapper = document.querySelector('.full-samples-gallery');
+
+      _samples.default.init(e, images, wrapper);
+
+      Samples.removeTabsListeners();
+    }
+  }, {
+    key: "mapData",
+    value: function mapData() {
+      var thumbs = _toConsumableArray(document.querySelectorAll('.full-samples-gallery__item'));
+
+      var thumbsList = this.data.samples.map(function (category) {
+        var categoryItems = [];
+        category.items.forEach(function (item, index) {
+          categoryItems.push({
+            id: item.id,
+            node: thumbs[item.id],
+            img: item.img,
+            imgHd: item.imgHd,
+            size: item.size,
+            title: item.title,
+            categoryId: category.id,
+            parent: index === 0 ? true : false
+          });
+        });
+        return categoryItems;
+      });
+      var flat = [];
+
+      for (var i = 0; i < thumbsList.length; i++) {
+        flat = flat.concat(thumbsList[i]);
+      }
+
+      return flat;
+    }
+  }, {
+    key: "addListeners",
+    value: function addListeners() {
+      var _this4 = this;
+
+      var click = function click(e) {
+        _this4.getData();
+
+        e.preventDefault();
+      };
+
+      this.click = click;
+      this.node.addEventListener('click', this.click);
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.node.removeEventListener('click', this.click);
+
+      if (document.querySelector('full-samples-gallery__wrapper')) {
+        document.querySelector('full-samples-gallery__wrapper').removeEventListener('scroll', scrollWrapper);
+      }
+    }
+  }], [{
     key: "scrollToColor",
     value: function scrollToColor(e) {
       var id = e.target.getAttribute('data-sample-id');
@@ -17236,109 +17474,24 @@ function () {
       e.preventDefault();
     }
   }, {
-    key: "addImages",
-    value: function addImages(wrapper) {
-      var _this4 = this;
-
-      var containerHtml = '';
-      this.data.samples.forEach(function (category) {
-        var fullSamplesHtml = '';
-        category.items.forEach(function (item) {
-          fullSamplesHtml += "\n                    <div class=\"full-samples-gallery__item\">\n                        <div class=\"img\">\n                            <img src=\"".concat(item.img, "\" alt=\"").concat(item.title, "\" data-sample-detail=\"").concat(item.id, "\">\n                        </div>\n                        <div class=\"box\">\n                            <h6 class=\"h6\">").concat(item.title, "</h6>\n                            <div class=\"text\">").concat(item.size, "</div>\n                            <div class=\"cta\"><a href=\"#\" class=\"btn--inline\">Add to samples</a></div>\n                        </div>\n                    </div>\n                ");
-        });
-        containerHtml += "\n            <div class=\"full-samples-gallery__category\" data-sample-category=\"".concat(category.id, "\">\n                <div class=\"full-samples-gallery__cover\">\n                    <h2 class=\"h2\">").concat(category.color, "</h2>\n                    <div class=\"img\">\n                        <img src=\"").concat(category.img, "\">\n                    </div>\n                    <div class=\"box\">\n                        <h6 class=\"h6\">").concat(category.title, "</h6>\n                        <div class=\"text\">").concat(category.size, "</div>\n                    </div>\n                </div>\n                <div class=\"full-samples-gallery__listing\">\n                    ").concat(fullSamplesHtml, "                    \n                </div>\n            </div>\n        ");
-      });
-      wrapper.innerHTML = containerHtml;
-      var images = this.mapData();
-
-      clickDetailGallery = function clickDetailGallery(e) {
-        _this4.openDetailGallery(e, images);
-      };
-
-      images.forEach(function (image) {
-        image.node.addEventListener('click', clickDetailGallery);
-      });
-    }
-  }, {
-    key: "openDetailGallery",
-    value: function openDetailGallery(e, images) {
-      var wrapper = document.querySelector('.full-samples-gallery');
-
-      _samples.default.init(e, images, wrapper);
-
-      this.removeAllListeners();
-    }
-  }, {
-    key: "mapData",
-    value: function mapData() {
-      var thumbs = _toConsumableArray(document.querySelectorAll('.full-samples-gallery__item'));
-
-      var thumbsList = this.data.samples.map(function (category) {
-        var categoryItems = [];
-        category.items.forEach(function (item, index) {
-          categoryItems.push({
-            id: item.id,
-            node: thumbs[item.id],
-            img: item.img,
-            imgHd: item.imgHd,
-            size: item.size,
-            title: item.title,
-            color: category.color,
-            parent: index === 0 ? true : false
-          });
-        });
-        return categoryItems;
-      });
-      var flat = [];
-
-      for (var i = 0; i < thumbsList.length; i++) {
-        flat = flat.concat(thumbsList[i]);
-      }
-
-      return flat;
-    }
-  }, {
-    key: "addListeners",
-    value: function addListeners() {
+    key: "removeTabsListeners",
+    value: function removeTabsListeners() {
       var _this5 = this;
 
-      var click = function click(e) {
-        _this5.getData();
-
-        e.preventDefault();
-      };
-
-      this.click = click;
-      this.node.addEventListener('click', this.click);
+      _toConsumableArray(document.querySelectorAll('[data-sample-id]')).forEach(function (x) {
+        x.removeEventListener('click', _this5.scrollToColor);
+      });
     }
   }, {
-    key: "removeAllListeners",
-    value: function removeAllListeners() {
+    key: "addTabsListeners",
+    value: function addTabsListeners() {
       var _this6 = this;
 
       _toConsumableArray(document.querySelectorAll('[data-sample-id]')).forEach(function (x) {
-        x.removeEventListener('click', _this6.scrollToColor);
+        x.addEventListener('click', _this6.scrollToColor);
       });
     }
   }, {
-    key: "addAllListeneres",
-    value: function addAllListeneres() {
-      var _this7 = this;
-
-      _toConsumableArray(document.querySelectorAll('[data-sample-id]')).forEach(function (x) {
-        x.addEventListener('click', _this7.scrollToColor);
-      });
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.node.removeEventListener('click', this.click);
-
-      if (document.querySelector('full-samples-gallery__wrapper')) {
-        document.querySelector('full-samples-gallery__wrapper').removeEventListener('scroll', scrollWrapper);
-      }
-    }
-  }], [{
     key: "destroyAll",
     value: function destroyAll() {
       if (Samples.items) {
@@ -17346,6 +17499,8 @@ function () {
           sample.destroy();
         });
       }
+
+      Samples.removeTabsListeners();
     }
   }, {
     key: "init",
@@ -17362,7 +17517,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":317,"./samples.detail":321,"./utils":324,"gsap/ScrollToPlugin":309}],323:[function(require,module,exports){
+},{"./fancy.transition":317,"./samples.detail":321,"gsap/ScrollToPlugin":309}],323:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

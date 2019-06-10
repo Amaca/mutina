@@ -1,8 +1,7 @@
 /* jshint esversion: 6 */
 
-import FancyTransition from "./fancy.transition";
 import "gsap/ScrollToPlugin";
-import Utils from "./utils";
+import FancyTransition from "./fancy.transition";
 import SamplesDetail from "./samples.detail";
 
 let clickClose;
@@ -10,17 +9,19 @@ let scrollWrapper;
 let clickDetailGallery;
 
 const body = document.querySelector('body');
+const html = document.getElementsByTagName('html')[0];
 const header = document.querySelector('header');
 const closeIcon = `<svg><use xlink:href="#svg-close"></use></svg>`;
+const backIcon = `<svg><use xlink:href="#svg-grid3x3"></use></svg>`;
 
 export default class Samples {
 
     constructor(node, index) {
         this.node = node;
         this.index = index;
-        
+
         this.init();
-        
+
     }
 
     init() {
@@ -45,6 +46,7 @@ export default class Samples {
         let fullSamplesGallery = document.createElement('div');
         let fullSamplesHeader = document.createElement('div');
         let fullSamplesClose = document.createElement('div');
+        let fullSamplesBack = document.createElement('div');
         let fullSamplesCat = document.createElement('div');
         let fullSamplesHeaderCta = document.createElement('div');
         let fullSamplesHeaderButton = document.createElement('div');
@@ -55,6 +57,7 @@ export default class Samples {
         fullSamplesGallery.classList.add('full-samples-gallery');
         fullSamplesHeader.classList.add('full-samples-gallery__header');
         fullSamplesClose.classList.add('full-samples-gallery__close');
+        fullSamplesBack.classList.add('full-samples-gallery__back');
         fullSamplesCat.classList.add('full-samples-gallery__header-cat');
         fullSamplesHeaderCta.classList.add('full-samples-gallery__header-cta');
         fullSamplesHeaderButton.classList.add('full-samples-gallery__header-button');
@@ -63,6 +66,7 @@ export default class Samples {
         fullSamplesContainer.classList.add('full-samples-gallery__container');
 
         fullSamplesClose.innerHTML = closeIcon;
+        fullSamplesBack.innerHTML = backIcon;
 
         clickClose = (e) => {
             FancyTransition.closeLayer('fullSamplesGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, fullSamplesGallery);
@@ -74,6 +78,7 @@ export default class Samples {
         document.body.appendChild(fullSamplesGallery);
         fullSamplesGallery.appendChild(fullSamplesHeader);
         fullSamplesHeader.appendChild(fullSamplesClose);
+        fullSamplesHeader.appendChild(fullSamplesBack);
         fullSamplesHeader.appendChild(fullSamplesCat);
         fullSamplesHeader.appendChild(fullSamplesHeaderCta);
         fullSamplesHeaderCta.appendChild(fullSamplesHeaderButton);
@@ -82,8 +87,9 @@ export default class Samples {
         fullSamplesWrapper.appendChild(fullSamplesContainer);
 
         fullSamplesHeaderButton.innerHTML = 'Samples (0)';
-        
+
         body.classList.add('samples-gallery-open');
+        html.style.overflow = 'hidden';
 
         scrollWrapper = (e) => {
             this.scrollWrapper(e);
@@ -104,34 +110,16 @@ export default class Samples {
         this.data.samples.forEach(category => {
             categoriesHtml += `
                 <li><a href="#" data-sample-id="${category.id}">${category.color}</a></li>
-            `; 
+            `;
         });
         categoriesHtml += '</ul>';
         wrapper.innerHTML = categoriesHtml;
 
-        [...document.querySelectorAll('[data-sample-id]')].forEach( x => {
-            x.addEventListener('click', this.scrollToColor);
-        }); 
+        Samples.addTabsListeners();
     }
 
     scrollWrapper(e) {
         const wrapper = document.querySelector('.full-samples-gallery__wrapper');
-    }
-
-    scrollToColor(e) {
-        const id = e.target.getAttribute('data-sample-id');
-        const wrapper = document.querySelector('.full-samples-gallery__wrapper');
-        const category = [...wrapper.querySelectorAll('[data-sample-category]')].find(x => {
-            return x.attributes[1].value === id;
-        });
-        TweenMax.to(wrapper, 0.8, {scrollTo:{
-            y: category.offsetTop,
-            offsetY: 36,
-            ease: Expo.easeInOut
-        }});
-
-        //Utils.toggleClass(e.target, 'active');
-        e.preventDefault();
     }
 
     addImages(wrapper) {
@@ -175,7 +163,7 @@ export default class Samples {
         });
 
         wrapper.innerHTML = containerHtml;
-        const images = this.mapData(); 
+        const images = this.mapData();
 
         clickDetailGallery = (e) => {
             this.openDetailGallery(e, images);
@@ -189,12 +177,12 @@ export default class Samples {
     openDetailGallery(e, images) {
         const wrapper = document.querySelector('.full-samples-gallery');
         SamplesDetail.init(e, images, wrapper);
-        this.removeAllListeners();
+        Samples.removeTabsListeners();
     }
 
     mapData() {
         const thumbs = [...document.querySelectorAll('.full-samples-gallery__item')];
-        const thumbsList = this.data.samples.map( category => {
+        const thumbsList = this.data.samples.map(category => {
             let categoryItems = [];
             category.items.forEach((item, index) => {
                 categoryItems.push({
@@ -204,13 +192,13 @@ export default class Samples {
                     imgHd: item.imgHd,
                     size: item.size,
                     title: item.title,
-                    color: category.color,
+                    categoryId: category.id,
                     parent: index === 0 ? true : false
                 });
             });
             return categoryItems;
         });
-        
+
         let flat = [];
         for (let i = 0; i < thumbsList.length; i++) {
             flat = flat.concat(thumbsList[i]);
@@ -228,18 +216,6 @@ export default class Samples {
         this.node.addEventListener('click', this.click);
     }
 
-    removeAllListeners() {
-        [...document.querySelectorAll('[data-sample-id]')].forEach( x => {
-            x.removeEventListener('click', this.scrollToColor);
-        });
-    }
-
-    addAllListeneres() {
-        [...document.querySelectorAll('[data-sample-id]')].forEach( x => {
-            x.addEventListener('click', this.scrollToColor);
-        });
-    }
-
     destroy() {
         this.node.removeEventListener('click', this.click);
 
@@ -248,12 +224,44 @@ export default class Samples {
         }
     }
 
+
+    static scrollToColor(e) {
+        const id = e.target.getAttribute('data-sample-id');
+        const wrapper = document.querySelector('.full-samples-gallery__wrapper');
+        const category = [...wrapper.querySelectorAll('[data-sample-category]')].find(x => {
+            return x.attributes[1].value === id;
+        });
+        TweenMax.to(wrapper, 0.8, {
+            scrollTo: {
+                y: category.offsetTop,
+                offsetY: 36,
+                ease: Expo.easeInOut
+            }
+        });
+
+        //Utils.toggleClass(e.target, 'active');
+        e.preventDefault();
+    }
+
+    static removeTabsListeners() {
+        [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
+            x.removeEventListener('click', this.scrollToColor);
+        });
+    }
+
+    static addTabsListeners() {
+        [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
+            x.addEventListener('click', this.scrollToColor);
+        });
+    }
+
     static destroyAll() {
         if (Samples.items) {
             Samples.items.forEach(sample => {
                 sample.destroy();
             });
         }
+        Samples.removeTabsListeners();
     }
 
     static init() {
