@@ -19,7 +19,7 @@ let menuStyle = 1;
 let scrollSpeed = 8;
 
 //settings
-const activateIntro = false;
+const activateIntro = true;
 const barbaDebug = true;
 const disableBarba = false;
 

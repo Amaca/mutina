@@ -126,7 +126,7 @@ a {
 
     &--primary {
         @include font($style:heavy);
-        @extend .btn--split;
+        // @extend .btn--split;
         font-size: 0.65rem;
         border: 2px solid $dark;
         padding: 25px 38px;

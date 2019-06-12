@@ -14833,7 +14833,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var menuStyle = 1;
 var scrollSpeed = 8; //settings
 
-var activateIntro = false;
+var activateIntro = true;
 var barbaDebug = true;
 var disableBarba = false;
 
@@ -17254,6 +17254,14 @@ var html = document.getElementsByTagName('html')[0];
 var header = document.querySelector('header');
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
 var backIcon = "<svg><use xlink:href=\"#svg-grid3x3\"></use></svg>";
+/*
+node.src = node.getAttribute('data-src');
+const image = new Image();
+image.onload = () => {
+    node.src = url;
+};
+image.src = url;
+*/
 
 var Samples =
 /*#__PURE__*/
