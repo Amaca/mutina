@@ -162,6 +162,7 @@ export default class Fancy {
             centeredSlides: true,
             slidesPerView: 1,
             spaceBetween: 60,
+            touch: true,
             speed: slideAnimationSpeed,
             allowTouchMove: false,
             zoom: {

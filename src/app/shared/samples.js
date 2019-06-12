@@ -14,15 +14,6 @@ const header = document.querySelector('header');
 const closeIcon = `<svg><use xlink:href="#svg-close"></use></svg>`;
 const backIcon = `<svg><use xlink:href="#svg-grid3x3"></use></svg>`;
 
-/*
-node.src = node.getAttribute('data-src');
-const image = new Image();
-image.onload = () => {
-    node.src = url;
-};
-image.src = url;
-*/
-
 export default class Samples {
 
     constructor(node, index) {

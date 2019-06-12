@@ -15913,6 +15913,7 @@ function () {
         centeredSlides: true,
         slidesPerView: 1,
         spaceBetween: 60,
+        touch: true,
         speed: slideAnimationSpeed,
         allowTouchMove: false,
         zoom: {
@@ -17006,8 +17007,8 @@ var clickTab;
 var scrollWrapper;
 var clickBack;
 var swiperInstance;
-var body = document.querySelector('body');
-var html = document.getElementsByTagName('html')[0];
+var body = document.querySelector('body'); //const html = document.getElementsByTagName('html')[0];
+
 var header = document.querySelector('header');
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
 
@@ -17025,8 +17026,7 @@ function () {
       detailSampleGalleryWrapper.classList.add('detail-samples-gallery__wrapper');
       wrapper.appendChild(detailSampleGalleryWrapper);
       SamplesDetail.initSwiper(id, data, detailSampleGalleryWrapper);
-      body.classList.add('detail-sample-gallery-open');
-      html.style.overflow = 'hidden';
+      body.classList.add('detail-sample-gallery-open'); //html.style.overflow = 'hidden';
     }
   }, {
     key: "openLayer",
@@ -17107,8 +17107,8 @@ function () {
 
       var tabs = _toConsumableArray(document.querySelectorAll('.full-samples-gallery__header-cat ul li a'));
 
-      body.classList.remove('detail-sample-gallery-open');
-      html.style.overflow = 'initial';
+      body.classList.remove('detail-sample-gallery-open'); //html.style.overflow = 'initial';
+
       tabs.forEach(function (tab) {
         tab.removeEventListener('click', clickTab);
       });
@@ -17254,14 +17254,6 @@ var html = document.getElementsByTagName('html')[0];
 var header = document.querySelector('header');
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
 var backIcon = "<svg><use xlink:href=\"#svg-grid3x3\"></use></svg>";
-/*
-node.src = node.getAttribute('data-src');
-const image = new Image();
-image.onload = () => {
-    node.src = url;
-};
-image.src = url;
-*/
 
 var Samples =
 /*#__PURE__*/

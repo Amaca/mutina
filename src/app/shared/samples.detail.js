@@ -10,7 +10,7 @@ let clickBack;
 let swiperInstance;
 
 const body = document.querySelector('body');
-const html = document.getElementsByTagName('html')[0];
+//const html = document.getElementsByTagName('html')[0];
 const header = document.querySelector('header');
 const closeIcon = `<svg><use xlink:href="#svg-close"></use></svg>`;
 
@@ -25,7 +25,7 @@ export default class SamplesDetail {
         SamplesDetail.initSwiper(id, data, detailSampleGalleryWrapper);
 
         body.classList.add('detail-sample-gallery-open');
-        html.style.overflow = 'hidden';
+        //html.style.overflow = 'hidden';
 
     }
 
@@ -105,7 +105,7 @@ export default class SamplesDetail {
         const tabs = [...document.querySelectorAll('.full-samples-gallery__header-cat ul li a')];
 
         body.classList.remove('detail-sample-gallery-open');
-        html.style.overflow = 'initial';
+        //html.style.overflow = 'initial';
 
         tabs.forEach(tab => {
             tab.removeEventListener('click', clickTab);
