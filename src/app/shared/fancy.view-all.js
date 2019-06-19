@@ -96,7 +96,7 @@ export default class FancyViewAll {
                 id: item.id,
                 caption: item.caption,
                 url: item.bigImageUrl,
-                html: `<div class="full-gallery__thumb" data-index="${item.id}"><img src="${item.bigImageUrl}" alt="${item.caption}"></div>`
+                html: `<div class="full-gallery__thumb" data-index="${item.id}"><img src="${item.smallImageUrl}" alt="${item.caption}"></div>`
             };
         });
 

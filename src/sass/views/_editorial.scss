@@ -483,3 +483,22 @@
         text-align: center;
     }
 }
+
+// 1col full img caption centered
+.editorial__1col-full-overlay-title {
+
+    .editorial__box-picture {
+        position: relative;
+        z-index: 1;
+    }
+
+    .box {
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        color: $white;
+    }
+}

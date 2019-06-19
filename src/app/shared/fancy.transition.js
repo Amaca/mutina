@@ -13,7 +13,7 @@ export default class FancyTransition {
 
     //OPEN LAYER ON IMAGE CLICK
     static openLayer(type, layer, close, wrapper, header, footer, id) {
-        const closeHeight = close.clientHeight;
+        const closeHeight = 40;
         const footerHeight = footer ? footer.clientHeight : null;
         let wrapperHeight;
 
@@ -208,18 +208,18 @@ export default class FancyTransition {
             }
             if (isDetailGallery) {
                 const captionSpeed = (slideAnimationSpeed / 1000) / 2;
-                TweenMax.set(footer, {
-                    bottom: 0,
-                });
-                TweenMax.set(captionWrapper, {
-                    bottom: 0,
-                });
-                TweenMax.set(arrowLeft, {
-                    left: 0,
-                });
-                TweenMax.set(arrowRight, {
-                    right: 0,
-                });
+                // TweenMax.set(footer, {
+                //     bottom: 0,
+                // });
+                // TweenMax.set(captionWrapper, {
+                //     bottom: 0,
+                // });
+                // TweenMax.set(arrowLeft, {
+                //     left: 0,
+                // });
+                // TweenMax.set(arrowRight, {
+                //     right: 0,
+                // });
                 TweenMax.to(captionWrapper, captionSpeed, {
                     bottom: -captionWrapper.offsetHeight,
                     ease: Expo.easeInOut,

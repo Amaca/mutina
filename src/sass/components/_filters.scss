@@ -85,3 +85,30 @@
         }
     }
 }
+
+.filters--centered {
+
+    .filters__wrapper {
+        justify-content: center;
+    }
+
+    ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        margin: 0 -25px;
+
+        li {
+            padding: 0 25px;
+            display: inline-block;
+
+            a {
+                color: #808080;
+
+                &.active {
+                    color: $dark;
+                }
+            }
+        }
+    }
+}

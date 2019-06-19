@@ -47,14 +47,31 @@
             fill: $dark;
         }
     }
+
+    .swiper-lazy-preloader {
+        width: 100px;
+        height: 80px;
+        margin-left: -50px;
+        margin-top: -40px;
+        animation: none;
+
+        &:after {
+            background-image: url(../assets/img/loading.gif);
+        }
+    }
 }
 
 //slider carousel
 .slider--carousel {
+    margin-top: 60px;
+    margin-bottom: 0;
+
+    @include sm-down {
+        margin-top: 40px;
+    }
 
     .swiper-wrapper {
         transition-timing-function: cubic-bezier(0, 0.97, 0.43, 1);
-        // elastica: cubic-bezier(0.02, 1.19, 0.43, 0.99) ;
     }
 
     .swiper-container {
@@ -63,27 +80,21 @@
     }
 
     .swiper-slide {
-        width: auto;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        width: 60vw;
 
-        img {
-            max-height: 80vh;
+        @include sm-down {
+            width: 65vw;
+        }
 
-            @include sm-down {
-                max-height: 350px;
-            }
-
-            @include xs-down {
-                max-height: 200px;
-            }
+        @include xs-down {
+            width: 80vw;
         }
     }
 
     .slider__picture {
         text-align: center;
+        width: 100%;
+        min-height: 38vw;
     }
 }
 
@@ -149,6 +160,25 @@
 
     .swiper-slide {
         width: 60%;
+        height: 100%;
+
+        img {
+            transition: opacity 1s $smooth;
+            opacity: 0;
+        }
+
+        .slider__caption {
+            transition: opacity 1s $smooth;
+            opacity: 0;
+        }
+    }
+
+    .swiper-slide-loaded {
+
+        img,
+        .slider__caption {
+            opacity: 1;
+        }
     }
 }
 
@@ -166,6 +196,30 @@
 
         img {
             max-width: 100%;
+            border: none;
+            outline: none;
+            opacity: 0;
+            transition: opacity 1s $smooth;
+        }
+
+        .slider__caption {
+            opacity: 0;
+            transition: opacity 1s $smooth;
+        }
+
+        .slider__picture {
+            @include aspect-clip(16, 9);
+        }
+    }
+
+
+    .swiper-slide-loaded {
+        img {
+            opacity: 1;
+        }
+
+        .slider__caption {
+            opacity: 1;
         }
     }
 

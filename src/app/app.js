@@ -9,17 +9,17 @@ import Appears from './shared/appears';
 import Dom from './shared/dom';
 import Fancy from "./shared/fancy";
 import FancyViewAll from "./shared/fancy.view-all";
+import LazyLoad from './shared/lazyload';
 import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
 import Samples from "./shared/samples";
 import Sliders from './shared/sliders';
 import Utils from './shared/utils';
 
+//settings
 let menuStyle = 1;
 let scrollSpeed = 8;
-
-//settings
-const activateIntro = true;
+const activateIntro = false;
 const barbaDebug = true;
 const disableBarba = false;
 
@@ -310,6 +310,7 @@ export default class App {
 
     onPageInit() {
         this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
+        LazyLoad.init();
         Sliders.init();
         Anchors.init(document.querySelector('.anchors__wrapper'), 200);
         Fancy.init();
@@ -513,6 +514,8 @@ export default class App {
                 }
             }
         });
+
+        LazyLoad.render(this.windowRect);
 
     }
 

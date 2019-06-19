@@ -14812,6 +14812,8 @@ var _fancy = _interopRequireDefault(require("./shared/fancy"));
 
 var _fancy2 = _interopRequireDefault(require("./shared/fancy.view-all"));
 
+var _lazyload = _interopRequireDefault(require("./shared/lazyload"));
+
 var _navigation = _interopRequireDefault(require("./shared/navigation"));
 
 var _rect = _interopRequireDefault(require("./shared/rect"));
@@ -14830,10 +14832,10 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+//settings
 var menuStyle = 1;
-var scrollSpeed = 8; //settings
-
-var activateIntro = true;
+var scrollSpeed = 8;
+var activateIntro = false;
 var barbaDebug = true;
 var disableBarba = false;
 
@@ -15128,6 +15130,8 @@ function () {
 
       this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
 
+      _lazyload.default.init();
+
       _sliders.default.init();
 
       _anchors.default.init(document.querySelector('.anchors__wrapper'), 200);
@@ -15367,6 +15371,8 @@ function () {
           }
         }
       });
+
+      _lazyload.default.render(this.windowRect);
     }
   }, {
     key: "loop",
@@ -15405,7 +15411,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":316,"./shared/fancy.view-all":318,"./shared/navigation":319,"./shared/rect":320,"./shared/samples":322,"./shared/sliders":323,"./shared/utils":324,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":316,"./shared/fancy.view-all":318,"./shared/lazyload":319,"./shared/navigation":320,"./shared/rect":321,"./shared/samples":323,"./shared/sliders":324,"./shared/utils":325,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15729,7 +15735,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":324}],316:[function(require,module,exports){
+},{"./utils":325}],316:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15758,6 +15764,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var clickClose;
 var clickSwitch;
 var swiperInstance;
+var firstLoad;
 var body = document.querySelector('body');
 var html = document.getElementsByTagName('html')[0];
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
@@ -15774,7 +15781,7 @@ function () {
 
     this.node = node;
     this.id = id;
-    this.smallImageUrl = node.getAttribute('src');
+    this.smallImageUrl = node.getAttribute('data-fancy-thumb');
     this.bigImageUrl = node.getAttribute('data-fancy-img');
     this.caption = node.getAttribute('data-fancy-caption');
     this.addListener();
@@ -15877,9 +15884,7 @@ function () {
       detailGallerySwitch.addEventListener('click', clickSwitch);
       body.classList.add('detail-gallery-open');
       html.style.overflow = 'hidden';
-      Fancy.initSwiper(detailGalleryWrapper, id);
-
-      _fancy.default.openLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id);
+      Fancy.initSwiper('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id);
     }
   }, {
     key: "close",
@@ -15891,7 +15896,7 @@ function () {
 
   }, {
     key: "initSwiper",
-    value: function initSwiper(wrapper, id) {
+    value: function initSwiper(type, layer, close, wrapper, header, footer, id) {
       var sliderItems = Fancy.items.map(function (item) {
         return {
           id: item.id,
@@ -15908,6 +15913,7 @@ function () {
       detailGallerySwiper.classList.add('detail-gallery__swiper');
       detailGallerySwiper.innerHTML = swiperMarkup;
       wrapper.appendChild(detailGallerySwiper);
+      firstLoad = false;
       var options = {
         watchOverflow: true,
         centeredSlides: true,
@@ -15915,9 +15921,8 @@ function () {
         spaceBetween: 60,
         touch: true,
         speed: slideAnimationSpeed,
-        allowTouchMove: false,
         zoom: {
-          maxRatio: 4,
+          maxRatio: 2,
           toggle: true
         },
         preloadImages: false,
@@ -15934,11 +15939,6 @@ function () {
             return "<span class=\"detail-gallery__pagination-item ".concat(className, "\">").concat(actualIndex, "/").concat(sliderItems.length, "</span>");
           }
         },
-        breakpoints: {
-          768: {
-            allowTouchMove: true
-          }
-        },
         on: {
           doubleTap: function doubleTap() {
             var detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper ');
@@ -15947,6 +15947,7 @@ function () {
             if (body.classList.contains('fancy-zoom')) {
               this.allowSlidePrev = false;
               this.allowSlideNext = false;
+              this.allowTouchMove = false;
               TweenMax.to(detailGalleryWrapper, 0.5, {
                 height: window.innerHeight - 60,
                 ease: Expo.easeInOut
@@ -15954,6 +15955,7 @@ function () {
             } else {
               this.allowSlidePrev = true;
               this.allowSlideNext = true;
+              this.allowTouchMove = true;
               TweenMax.to(detailGalleryWrapper, 0.5, {
                 height: window.innerHeight - 65 - 60,
                 ease: Expo.easeInOut
@@ -15963,6 +15965,7 @@ function () {
           init: function init() {
             var caption = sliderItems[this.activeIndex].caption;
             var captionWrapper = document.querySelector('.detail-gallery__caption span');
+            firstLoad = true;
             captionWrapper.innerHTML = caption;
             this.slideTo(id, 0);
           },
@@ -15984,6 +15987,15 @@ function () {
                 });
               }
             });
+          },
+          lazyImageReady: function lazyImageReady() {
+            if (firstLoad) {
+              _fancy.default.openLayer(type, layer, close, wrapper, null, footer, id);
+
+              console.log('lazy');
+            }
+
+            firstLoad = false;
           }
         }
       };
@@ -16060,7 +16072,7 @@ function () {
     key: "openLayer",
     //OPEN LAYER ON IMAGE CLICK
     value: function openLayer(type, layer, close, wrapper, header, footer, id) {
-      var closeHeight = close.clientHeight;
+      var closeHeight = 40;
       var footerHeight = footer ? footer.clientHeight : null;
       var wrapperHeight;
       var isDetailGallery = false,
@@ -16262,19 +16274,19 @@ function () {
         }
 
         if (isDetailGallery) {
-          var captionSpeed = slideAnimationSpeed / 1000 / 2;
-          TweenMax.set(footer, {
-            bottom: 0
-          });
-          TweenMax.set(captionWrapper, {
-            bottom: 0
-          });
-          TweenMax.set(arrowLeft, {
-            left: 0
-          });
-          TweenMax.set(arrowRight, {
-            right: 0
-          });
+          var captionSpeed = slideAnimationSpeed / 1000 / 2; // TweenMax.set(footer, {
+          //     bottom: 0,
+          // });
+          // TweenMax.set(captionWrapper, {
+          //     bottom: 0,
+          // });
+          // TweenMax.set(arrowLeft, {
+          //     left: 0,
+          // });
+          // TweenMax.set(arrowRight, {
+          //     right: 0,
+          // });
+
           TweenMax.to(captionWrapper, captionSpeed, {
             bottom: -captionWrapper.offsetHeight,
             ease: Expo.easeInOut
@@ -16389,7 +16401,7 @@ function () {
 
 exports.default = FancyTransition;
 
-},{"./fancy":316,"./fancy.view-all":318,"./samples.detail":321}],318:[function(require,module,exports){
+},{"./fancy":316,"./fancy.view-all":318,"./samples.detail":322}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16523,7 +16535,7 @@ function () {
           id: item.id,
           caption: item.caption,
           url: item.bigImageUrl,
-          html: "<div class=\"full-gallery__thumb\" data-index=\"".concat(item.id, "\"><img src=\"").concat(item.bigImageUrl, "\" alt=\"").concat(item.caption, "\"></div>")
+          html: "<div class=\"full-gallery__thumb\" data-index=\"".concat(item.id, "\"><img src=\"").concat(item.smallImageUrl, "\" alt=\"").concat(item.caption, "\"></div>")
         };
       });
       var thumbHtml = '';
@@ -16551,6 +16563,110 @@ function () {
 exports.default = FancyViewAll;
 
 },{"./fancy":316,"./fancy.transition":317}],319:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _rect = _interopRequireDefault(require("./rect"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var body = document.querySelector('body');
+var html = document.getElementsByTagName('html')[0];
+
+var LazyLoad =
+/*#__PURE__*/
+function () {
+  function LazyLoad(node, id) {
+    _classCallCheck(this, LazyLoad);
+
+    this.node = node;
+    this.id = id;
+    this.src = node.getAttribute('data-load');
+    this.height = node.getAttribute('data-height') ? node.getAttribute('data-height') : null;
+    this.parent = node.parentNode; // if (this.height) {
+    //     this.paddingTop = (this.parent.clientWidth * this.height) / this.parent.clientWidth;
+    //     this.node.style.paddingTop = this.paddingTop + 'px';
+    // }
+  }
+
+  _createClass(LazyLoad, [{
+    key: "load",
+    value: function load() {
+      var _this = this;
+
+      if (!this.loaded) {
+        this.loaded = true;
+        var node = this.node;
+
+        node.onload = function () {
+          setTimeout(function () {
+            _this.parent.classList.add('loaded');
+
+            node.onload = null;
+          }, 3000);
+
+          _this.parent.classList.add('loaded');
+
+          node.onload = null;
+        };
+
+        node.src = this.src;
+      }
+    } //INIT
+
+  }], [{
+    key: "init",
+    value: function init() {
+      LazyLoad.items = _toConsumableArray(document.querySelectorAll('[data-load]')).map(function (element, id) {
+        return new LazyLoad(element, id);
+      });
+      console.log('Lazy load: ', LazyLoad.items);
+    } //render
+
+  }, {
+    key: "render",
+    value: function render(windowRect) {
+      this.items.forEach(function (item, i) {
+        if (!item.loaded) {
+          var node = item.node;
+
+          var rect = _rect.default.fromNode(node);
+
+          var intersection = rect.intersection(windowRect);
+
+          if (intersection.y > 0.0) {
+            item.load();
+          }
+        }
+      });
+    }
+  }]);
+
+  return LazyLoad;
+}();
+
+exports.default = LazyLoad;
+LazyLoad.items = [];
+
+},{"./rect":321}],320:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16854,7 +16970,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":324}],320:[function(require,module,exports){
+},{"./utils":325}],321:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16973,7 +17089,7 @@ function () {
 
 exports.default = Rect;
 
-},{}],321:[function(require,module,exports){
+},{}],322:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17215,7 +17331,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":322,"./utils":324,"gsap/ScrollToPlugin":309}],322:[function(require,module,exports){
+},{"./samples":323,"./utils":325,"gsap/ScrollToPlugin":309}],323:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17517,7 +17633,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":317,"./samples.detail":321,"gsap/ScrollToPlugin":309}],323:[function(require,module,exports){
+},{"./fancy.transition":317,"./samples.detail":322,"gsap/ScrollToPlugin":309}],324:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17569,11 +17685,12 @@ function () {
           loop: true,
           slidesPerView: 'auto',
           spaceBetween: 60,
+          preloadImages: false,
+          lazy: true,
+          watchSlidesVisibility: true,
           freeMode: true,
           freeModeMomentumRatio: 1,
           freeModeMomentumVelocityRatio: 0.3,
-          preloadImages: false,
-          lazy: true,
           speed: 400,
           breakpoints: {
             576: {
@@ -17583,7 +17700,7 @@ function () {
               spaceBetween: 40
             }
           }
-        }; //Cover Slider
+        }; //Fullscreen slider
       } else if (parentWrap.classList.contains('slider--fullscreen') === true) {
         options = {
           grabCursor: true,
@@ -17593,10 +17710,17 @@ function () {
           slidesPerView: 1,
           spaceBetween: 60,
           speed: 800,
+          preloadImages: false,
+          lazy: true,
           autoHeight: 'auto',
           navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev'
+          },
+          on: {
+            lazyImageReady: function lazyImageReady(slideEl) {
+              slideEl.classList.add('swiper-slide-loaded');
+            }
           }
         }; //Lateral Slider
       } else if (parentWrap.classList.contains('slider--lateral') === true) {
@@ -17608,6 +17732,9 @@ function () {
           freeMode: true,
           freeModeMomentumRatio: 1,
           freeModeMomentumVelocityRatio: 0.3,
+          preloadImages: false,
+          lazy: true,
+          watchSlidesVisibility: true,
           speed: 400,
           breakpoints: {
             768: {
@@ -17619,6 +17746,9 @@ function () {
               if (parentWrap.classList.contains('slider--lateral-switch')) {
                 this.slideTo(this.slides.length - 1, 0);
               }
+            },
+            lazyImageReady: function lazyImageReady(slideEl, imageEl) {
+              slideEl.classList.add('swiper-slide-loaded');
             }
           }
         };
@@ -17660,7 +17790,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],324:[function(require,module,exports){
+},{}],325:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

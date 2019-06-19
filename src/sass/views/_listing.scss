@@ -7,6 +7,41 @@
         display: block;
     }
 
+    &--fullwidth {
+
+        &>a,
+        &>div {
+            display: block;
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding: 0 calc(#{$col-gutter} / 2);
+            margin-bottom: $col-gutter;
+
+            @include sm-down {
+                padding: 0;
+                max-width: none;
+                margin-bottom: 40px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+
+            .picture {
+
+                &:hover {
+
+                    .picture__primary {
+
+                        &:hover {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     &--grid-2 {
 
         &>a,

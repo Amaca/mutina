@@ -256,8 +256,8 @@
                 </section>
                 <section class="editorial">
                     <div class="editorial__1col-full-img">
-                        <div class="picture picture--cover" data-appear>
-                            <img src="assets/img/cover-01.jpg" alt="" data-parallax="3" data-fancy-img="assets/img/cover-01-hd.jpg" data-fancy-caption="Azulej by Patricia Urquiola">
+                        <div class="picture picture--cover">
+                            <img data-load="assets/img/cover-01.jpg" alt="" data-parallax="2" data-fancy-thumb="assets/img/cover-01-thumb.jpg" data-fancy-img="assets/img/cover-01-hd.jpg" data-fancy-caption="Azulej by Patricia Urquiola">
                         </div>
                     </div>
                 </section>
@@ -302,9 +302,9 @@
                 <section class="editorial" data-anchor="In use">
                     <div class="editorial__1col-full-img">
                         <div class="container--big">
-                            <div class="editorial__box-picture" data-appear>
+                            <div class="editorial__box-picture">
                                 <div class="picture">
-                                    <img src="assets/img/editorial-horizontal-full-02.jpg" alt="" data-parallax="5" data-fancy-img="assets/img/editorial-horizontal-full-02.jpg" data-fancy-caption="Azulej Bianco – cubo, trevo, estrela, flores, renda">
+                                    <img data-load="assets/img/editorial-horizontal-full-02.jpg" alt="" data-parallax="5" data-fancy-thumb="assets/img/editorial-horizontal-full-02-thumb.jpg" data-fancy-img="assets/img/editorial-horizontal-full-02-hd.jpg" data-fancy-caption="Azulej Bianco – cubo, trevo, estrela, flores, renda">
                                 </div>
                                 <div class="picture__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                             </div>
@@ -327,9 +327,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="editorial__box-picture" data-appear>
+                                <div class="editorial__box-picture">
                                     <div class="picture picture--full-height">
-                                        <img src="assets/img/editorial-vertical-02.jpg" alt="" data-parallax="5" data-fancy-img="assets/img/editorial-vertical-02.jpg" data-fancy-caption="Azulej Grigio – combination, cubo">
+                                        <!-- style="padding-top: @(100 / img.Width * img.Height)%"-->
+                                        <img data-load="assets/img/editorial-vertical-02.jpg" alt="" data-parallax="-5" data-fancy-thumb="assets/img/editorial-vertical-02-thumb.jpg" data-fancy-img="assets/img/editorial-vertical-02-hd.jpg" data-fancy-caption="Azulej Grigio – combination, cubo">
                                     </div>
                                     <div class="picture__caption">Azulej Grigio – combination, cubo</div>
                                 </div>
@@ -338,55 +339,68 @@
                     </div>
                 </section>
                 <section class="editorial">
+                    <div class="container--mid">
+                        <div class="box box--title">
+                            <h2 class="h2" data-splitting data-appear>Places</h2>
+                        </div>
+                    </div>
                     <div class="editorial__1col-full-img">
                         <div class="container--big">
-                            <div class="editorial__box-picture" data-appear>
+                            <div class="editorial__box-picture">
                                 <div class="picture">
-                                    <img src="assets/img/editorial-horizontal-full-01.jpg" alt="" data-parallax="5" data-fancy-img="assets/img/editorial-horizontal-full-01.jpg" data-fancy-caption="Azulej Nero – Azulej Nero / trevo, trama, estrela">
+                                    <img data-load="assets/img/editorial-horizontal-full-01.jpg" alt="" data-parallax="5" data-fancy-thumb="assets/img/editorial-horizontal-full-01-thumb.jpg" data-fancy-img="assets/img/editorial-horizontal-full-01-hd.jpg" data-fancy-caption="Azulej Nero – Azulej Nero / trevo, trama, estrela">
                                 </div>
                                 <div class="picture__caption">Azulej Nero – Azulej Nero / trevo, trama, estrela</div>
                             </div>
                         </div>
                     </div>
                 </section>
-                <section class="slider slider--carousel" data-appear>
-                    <div class="swiper-container">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="slider__picture">
-                                    <img src="assets/img/slider-carousel-01.jpg" alt="">
+                <section class="editorial">
+                    <div class="slider slider--carousel">
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <div class="slider__picture">
+                                        <img class="swiper-lazy" data-src="assets/img/slider-carousel-01.jpg" alt="">
+                                        <div class="swiper-lazy-preloader"></div>
+                                    </div>
+                                    <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                                 </div>
-                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="slider__picture">
-                                    <img src="assets/img/slider-carousel-02.jpg" alt="">
+                                <div class="swiper-slide">
+                                    <div class="slider__picture">
+                                        <img class="swiper-lazy" data-src="assets/img/slider-carousel-02.jpg" alt="">
+                                        <div class="swiper-lazy-preloader"></div>
+                                    </div>
+                                    <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                                 </div>
-                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="slider__picture">
-                                    <img src="assets/img/slider-carousel-01.jpg" alt="">
+                                <div class="swiper-slide">
+                                    <div class="slider__picture">
+                                        <img class="swiper-lazy" data-src="assets/img/slider-carousel-01.jpg" alt="">
+                                        <div class="swiper-lazy-preloader"></div>
+                                    </div>
+                                    <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                                 </div>
-                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="slider__picture">
-                                    <img src="assets/img/slider-carousel-02.jpg" alt="">
+                                <div class="swiper-slide">
+                                    <div class="slider__picture">
+                                        <img class="swiper-lazy" data-src="assets/img/slider-carousel-02.jpg" alt="">
+                                        <div class="swiper-lazy-preloader"></div>
+                                    </div>
+                                    <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                                 </div>
-                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="slider__picture">
-                                    <img src="assets/img/slider-carousel-01.jpg" alt="">
+                                <div class="swiper-slide">
+                                    <div class="slider__picture">
+                                        <img class="swiper-lazy" data-src="assets/img/slider-carousel-01.jpg" alt="">
+                                        <div class="swiper-lazy-preloader"></div>
+                                    </div>
+                                    <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                                 </div>
-                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="slider__picture">
-                                    <img src="assets/img/slider-carousel-02.jpg" alt="">
+                                <div class="swiper-slide">
+                                    <div class="slider__picture">
+                                        <img class="swiper-lazy" data-src="assets/img/slider-carousel-02.jpg" alt="">
+                                        <div class="swiper-lazy-preloader"></div>
+                                    </div>
+                                    <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                                 </div>
-                                <div class="slider__caption">Azulej Bianco – cubo, trevo, estrela, flores, renda</div>
                             </div>
                         </div>
                     </div>
@@ -422,8 +436,8 @@
                                     </div>
                                 </div>
                                 <div class="editorial__box-picture">
-                                    <div class="picture picture--full-height" data-appear>
-                                        <img src="assets/img/editorial-vertical-01.jpg" alt="" data-parallax="5" data-fancy-img="assets/img/editorial-vertical-01.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                                    <div class="picture picture--full-height">
+                                        <img data-load="assets/img/editorial-vertical-01.jpg" alt="" data-parallax="5">
                                     </div>
                                 </div>
                             </div>
@@ -460,10 +474,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="specs__secondary" data-appear>
+                            <div class="specs__secondary">
                                 <a href="#" class="specs__picture">
                                     <div class="picture picture--full-height">
-                                        <img src="assets/img/specs-thumb-01.jpg" alt="" data-parallax="5">
+                                        <img data-load="assets/img/specs-thumb-01.jpg" alt="" data-parallax="5">
                                     </div>
                                 </a>
                                 <a href="#" class="btn btn--primary" data-samples="assets/json/samples.json">View all colors & combinations</a>
@@ -508,17 +522,17 @@
                     </div>
                     <div class="container--big">
                         <div class="listing listing--grid-2">
-                            <a href="#" class="listing__item" data-appear>
+                            <a href="#" class="listing__item">
                                 <div class="picture">
-                                    <img src="assets/img/related-thumb-01.jpg" alt="" data-parallax="4">
+                                    <img data-load="assets/img/related-thumb-01.jpg" alt="" data-parallax="4">
                                 </div>
                                 <div class="box">
                                     <h3 class="h3">Puzzle by Barber & Osgerby</h3>
                                 </div>
                             </a>
-                            <a href="#" class="listing__item" data-appear>
+                            <a href="#" class="listing__item">
                                 <div class="picture">
-                                    <img src="assets/img/related-thumb-02.jpg" alt="" data-parallax="4">
+                                    <img data-load="assets/img/related-thumb-02.jpg" alt="" data-parallax="4">
                                 </div>
                                 <div class="box">
                                     <h3 class="h3">Bas-Relief by Patricia Urquiola</h3>
@@ -526,6 +540,32 @@
                             </a>
                         </div>
                     </div>
+                </section>
+                <section class="view-all-pictures">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/025.jpg" alt="" data-fancy-img="assets/img/gallery/hd/025.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/082.jpg" alt="" data-fancy-img="assets/img/gallery/hd/082.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/137_BIS.jpg" alt="" data-fancy-img="assets/img/gallery/hd/137_BIS.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/208_new-cromia_FG_01.jpg" alt="" data-fancy-img="assets/img/gallery/hd/208_new-cromia_FG_01.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/218.jpg" alt="" data-fancy-img="assets/img/gallery/hd/218.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/223.jpg" alt="" data-fancy-img="assets/img/gallery/hd/223.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E0954.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E0954.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E1156.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E1156.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E1218.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E1218.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E1256.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E1256.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E1389.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E1389.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E1678-1663.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E1678-1663.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E1912.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E1912.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E1955-1976.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E1955-1976.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E2003-2005.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E2003-2005.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E2043.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E2043.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E2074.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E2074.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E2086.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E2086.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E2153.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E2153.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E2207.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E2207.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E2225.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E2225.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E2308.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E2308.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E2324.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E2324.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
+                    <img data-fancy-thumb="assets/img/gallery/thumb/DK3E2353.jpg" alt="" data-fancy-img="assets/img/gallery/hd/DK3E2353.jpg" data-fancy-caption="we would like to evaluate the memory of the hydraulic cement">
                 </section>
             </main>
             <footer class="footer">

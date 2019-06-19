@@ -4,63 +4,63 @@
             "color": "Nero",
             "title": "Combination nero",
             "size": "180cm 60cm",
-            "img": "assets/img/samples-cover-01.jpg",
-            "imgHd": "assets/img/samples-cover-01.jpg",
+            "img": "assets/img/samples/thumb/combination_nero.jpg",
+            "imgHd": "assets/img/samples/hd/combination_nero.jpg",
             "items": [{
                     "id": "0",
-                    "title": "Estrela nero",
+                    "title": "Nero cubo",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Nero_cubo.jpg",
+                    "imgHd": "assets/img/samples/hd/Nero_cubo.jpg"
                 },
                 {
                     "id": "1",
-                    "title": "Estrela nero",
+                    "title": "Nero diagonal",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Nero_diagonal.jpg",
+                    "imgHd": "assets/img/samples/hd/Nero_diagonal.jpg"
                 },
                 {
                     "id": "2",
-                    "title": "Estrela nero",
+                    "title": "Nero estrela",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Nero_estrela.jpg",
+                    "imgHd": "assets/img/samples/hd/Nero_estrela.jpg"
                 },
                 {
                     "id": "3",
-                    "title": "Estrela nero",
+                    "title": "Nero flores",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Nero_flores.jpg",
+                    "imgHd": "assets/img/samples/hd/Nero_flores.jpg"
                 },
                 {
                     "id": "4",
-                    "title": "Estrela nero",
+                    "title": "Nero gira",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Nero_gira.jpg",
+                    "imgHd": "assets/img/samples/hd/Nero_gira.jpg"
                 },
                 {
                     "id": "5",
-                    "title": "Estrela nero",
+                    "title": "Nero prada",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Nero_prata.jpg",
+                    "imgHd": "assets/img/samples/hd/Nero_prata.jpg"
                 },
                 {
                     "id": "6",
-                    "title": "Estrela nero",
+                    "title": "Nero renda",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Nero_renda.jpg",
+                    "imgHd": "assets/img/samples/hd/Nero_renda.jpg"
                 },
                 {
                     "id": "7",
-                    "title": "Estrela nero",
+                    "title": "Nero trama",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Nero_trama.jpg",
+                    "imgHd": "assets/img/samples/hd/Nero_trama.jpg"
                 }
             ]
         },
@@ -69,49 +69,70 @@
             "color": "Grigio",
             "title": "Combination grigio",
             "size": "180cm 60cm",
-            "img": "assets/img/samples-cover-01.jpg",
-            "imgHd": "assets/img/samples-cover-01.jpg",
+            "img": "assets/img/samples/thumb/combination_grigio.jpg",
+            "imgHd": "assets/img/samples/hd/combination_grigio.jpg",
             "items": [{
                     "id": "8",
-                    "title": "Estrela grigio",
+                    "title": "Grigio cubo",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Grigio_cubo.jpg",
+                    "imgHd": "assets/img/samples/hd/Grigio_cubo.jpg"
                 },
                 {
                     "id": "9",
-                    "title": "Estrela grigio",
+                    "title": "Grigio diagonal",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/grigio_diagonal.jpg",
+                    "imgHd": "assets/img/samples/hd/grigio_diagonal.jpg"
                 },
                 {
                     "id": "10",
-                    "title": "Estrela grigio",
+                    "title": "Grigio estrela",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Grigio_estrela.jpg",
+                    "imgHd": "assets/img/samples/hd/Grigio_estrela.jpg"
                 },
                 {
                     "id": "11",
-                    "title": "Estrela grigio",
+                    "title": "Grigio flores",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Grigio_flores.jpg",
+                    "imgHd": "assets/img/samples/hd/Grigio_flores.jpg"
                 },
                 {
                     "id": "12",
-                    "title": "Estrela nero",
+                    "title": "Grigio gira",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Grigio_gira.jpg",
+                    "imgHd": "assets/img/samples/hd/Grigio_gira.jpg"
                 },
                 {
                     "id": "13",
-                    "title": "Estrela nero",
+                    "title": "Grigio prata",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Grigio_prata.jpg",
+                    "imgHd": "assets/img/samples/hd/Grigio_prata.jpg"
+                },
+                {
+                    "id": "14",
+                    "title": "Grigio renda",
+                    "size": "20cm 20cm",
+                    "img": "assets/img/samples/thumb/Grigio_renda.jpg",
+                    "imgHd": "assets/img/samples/hd/Grigio_renda.jpg"
+                },
+                {
+                    "id": "15",
+                    "title": "Grigio trama",
+                    "size": "20cm 20cm",
+                    "img": "assets/img/samples/thumb/Grigio_trama.jpg",
+                    "imgHd": "assets/img/samples/hd/Grigio_trama.jpg"
+                },
+                {
+                    "id": "16",
+                    "title": "Grigio trevo",
+                    "size": "20cm 20cm",
+                    "img": "assets/img/samples/thumb/Grigio_trevo.jpg",
+                    "imgHd": "assets/img/samples/hd/Grigio_trevo.jpg"
                 }
             ]
         },
@@ -120,35 +141,70 @@
             "color": "Bianco",
             "title": "Combination bianco",
             "size": "180cm 60cm",
-            "img": "assets/img/samples-cover-01.jpg",
-            "imgHd": "assets/img/samples-cover-01.jpg",
+            "img": "assets/img/samples/thumb/combination_bianco.jpg",
+            "imgHd": "assets/img/samples/hd/combination_bianco.jpg",
             "items": [{
-                    "id": "14",
-                    "title": "Estrela bianco",
-                    "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
-                },
-                {
-                    "id": "15",
-                    "title": "Estrela nero",
-                    "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
-                },
-                {
-                    "id": "16",
-                    "title": "Estrela bianco",
-                    "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
-                },
-                {
                     "id": "17",
-                    "title": "Estrela bianco",
+                    "title": "Bianco cubo",
                     "size": "20cm 20cm",
-                    "img": "assets/img/samples-item-01.jpg",
-                    "imgHd": "assets/img/samples-item-hd-01.jpg"
+                    "img": "assets/img/samples/thumb/Bianco_cubo.jpg",
+                    "imgHd": "assets/img/samples/hd/Bianco_cubo.jpg"
+                },
+                {
+                    "id": "18",
+                    "title": "Bianco diagonal",
+                    "size": "20cm 20cm",
+                    "img": "assets/img/samples/thumb/Bianco_diagonal.jpg",
+                    "imgHd": "assets/img/samples/hd/Bianco_diagonal.jpg"
+                },
+                {
+                    "id": "19",
+                    "title": "Bianco estrela",
+                    "size": "20cm 20cm",
+                    "img": "assets/img/samples/thumb/Bianco_estrela.jpg",
+                    "imgHd": "assets/img/samples/hd/Bianco_estrela.jpg"
+                },
+                {
+                    "id": "20",
+                    "title": "Bianco flores",
+                    "size": "20cm 20cm",
+                    "img": "assets/img/samples/thumb/Bianco_flores.jpg",
+                    "imgHd": "assets/img/samples/hd/Bianco_flores.jpg"
+                },
+                {
+                    "id": "21",
+                    "title": "Bianco gira",
+                    "size": "20cm 20cm",
+                    "img": "assets/img/samples/thumb/Bianco_gira.jpg",
+                    "imgHd": "assets/img/samples/hd/Bianco_gira.jpg"
+                },
+                {
+                    "id": "22",
+                    "title": "Bianco trama",
+                    "size": "20cm 20cm",
+                    "img": "assets/img/samples/thumb/Bianco_trama.jpg",
+                    "imgHd": "assets/img/samples/hd/Bianco_trama.jpg"
+                },
+                {
+                    "id": "23",
+                    "title": "Bianco trevo",
+                    "size": "20cm 20cm",
+                    "img": "assets/img/samples/thumb/Bianco_trevo.jpg",
+                    "imgHd": "assets/img/samples/hd/Bianco_trevo.jpg"
+                },
+                {
+                    "id": "24",
+                    "title": "Bianco renda",
+                    "size": "20cm 20cm",
+                    "img": "assets/img/samples/thumb/Biano_renda.jpg",
+                    "imgHd": "assets/img/samples/hd/Biano_renda.jpg"
+                },
+                {
+                    "id": "25",
+                    "title": "Bianco prata",
+                    "size": "20cm 20cm",
+                    "img": "assets/img/samples/thumb/Bianco_prata.jpg",
+                    "imgHd": "assets/img/samples/hd/Bianco_prata.jpg"
                 }
             ]
         }

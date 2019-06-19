@@ -26,11 +26,12 @@ export default class Sliders {
                 loop: true,
                 slidesPerView: 'auto',
                 spaceBetween: 60,
+                preloadImages: false,
+                lazy: true,
+                watchSlidesVisibility: true,
                 freeMode: true,
                 freeModeMomentumRatio: 1,
                 freeModeMomentumVelocityRatio: 0.3,
-                preloadImages: false,
-                lazy: true,
                 speed: 400,
                 breakpoints: {
                     576: {
@@ -41,7 +42,7 @@ export default class Sliders {
                     }
                 }
             };
-            //Cover Slider
+            //Fullscreen slider
         } else if (parentWrap.classList.contains('slider--fullscreen') === true) {
             options = {
                 grabCursor: true,
@@ -51,11 +52,18 @@ export default class Sliders {
                 slidesPerView: 1,
                 spaceBetween: 60,
                 speed: 800,
+                preloadImages: false,
+                lazy: true,
                 autoHeight: 'auto',
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
                 },
+                on: {
+                    lazyImageReady: function (slideEl) {
+                        slideEl.classList.add('swiper-slide-loaded');
+                    }
+                }
             };
             //Lateral Slider
         } else if (parentWrap.classList.contains('slider--lateral') === true) {
@@ -67,6 +75,9 @@ export default class Sliders {
                 freeMode: true,
                 freeModeMomentumRatio: 1,
                 freeModeMomentumVelocityRatio: 0.3,
+                preloadImages: false,
+                lazy: true,
+                watchSlidesVisibility: true,
                 speed: 400,
                 breakpoints: {
                     768: {
@@ -79,7 +90,10 @@ export default class Sliders {
                             this.slideTo(this.slides.length - 1, 0);
                         }
                     },
-                }
+                    lazyImageReady: function (slideEl, imageEl) {
+                        slideEl.classList.add('swiper-slide-loaded');
+                    }
+                },
             };
         }
 

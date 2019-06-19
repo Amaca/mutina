@@ -6,6 +6,7 @@ import FancyTransition from "./fancy.transition";
 let clickClose;
 let clickSwitch;
 let swiperInstance;
+let firstLoad;
 
 const body = document.querySelector('body');
 const html = document.getElementsByTagName('html')[0];
@@ -20,7 +21,7 @@ export default class Fancy {
     constructor(node, id) {
         this.node = node;
         this.id = id;
-        this.smallImageUrl = node.getAttribute('src');
+        this.smallImageUrl = node.getAttribute('data-fancy-thumb');
         this.bigImageUrl = node.getAttribute('data-fancy-img');
         this.caption = node.getAttribute('data-fancy-caption');
 
@@ -90,7 +91,7 @@ export default class Fancy {
 
         clickClose = (e) => {
             Fancy.close(e, 'detailGallery', false, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, detailGallery);
-        }
+        };
 
         detailGalleryClose.addEventListener('click', clickClose);
 
@@ -116,9 +117,8 @@ export default class Fancy {
 
         body.classList.add('detail-gallery-open');
         html.style.overflow = 'hidden';
-        Fancy.initSwiper(detailGalleryWrapper, id);
+        Fancy.initSwiper('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id);
 
-        FancyTransition.openLayer('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id);
     }
 
     static close(e, type, isSwitch, bg, close, wrapper, header, footer, container) {
@@ -127,7 +127,7 @@ export default class Fancy {
     }
 
     // INIT SWIPER WITH OPTIONS AND EVENTS
-    static initSwiper(wrapper, id) {
+    static initSwiper(type, layer, close, wrapper, header, footer, id) {
         let sliderItems = Fancy.items.map((item) => {
             return {
                 id: item.id,
@@ -156,6 +156,7 @@ export default class Fancy {
         detailGallerySwiper.classList.add('detail-gallery__swiper');
         detailGallerySwiper.innerHTML = swiperMarkup;
         wrapper.appendChild(detailGallerySwiper);
+        firstLoad = false;
 
         let options = {
             watchOverflow: true,
@@ -164,9 +165,8 @@ export default class Fancy {
             spaceBetween: 60,
             touch: true,
             speed: slideAnimationSpeed,
-            allowTouchMove: false,
             zoom: {
-                maxRatio: 4,
+                maxRatio: 2,
                 toggle: true
             },
             preloadImages: false,
@@ -183,19 +183,14 @@ export default class Fancy {
                     return `<span class="detail-gallery__pagination-item ${className}">${actualIndex}/${sliderItems.length}</span>`;
                 },
             },
-            breakpoints: {
-                768: {
-                    allowTouchMove: true,
-                }
-            },
             on: {
                 doubleTap: function () {
                     const detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper ');
                     Fancy.toggleClass(body, 'fancy-zoom');
-
                     if (body.classList.contains('fancy-zoom')) {
                         this.allowSlidePrev = false;
                         this.allowSlideNext = false;
+                        this.allowTouchMove = false;
                         TweenMax.to(detailGalleryWrapper, 0.5, {
                             height: window.innerHeight - 60,
                             ease: Expo.easeInOut
@@ -203,6 +198,7 @@ export default class Fancy {
                     } else {
                         this.allowSlidePrev = true;
                         this.allowSlideNext = true;
+                        this.allowTouchMove = true;
                         TweenMax.to(detailGalleryWrapper, 0.5, {
                             height: window.innerHeight - 65 - 60,
                             ease: Expo.easeInOut
@@ -212,7 +208,7 @@ export default class Fancy {
                 init: function () {
                     const caption = sliderItems[this.activeIndex].caption;
                     const captionWrapper = document.querySelector('.detail-gallery__caption span');
-
+                    firstLoad = true;
                     captionWrapper.innerHTML = caption;
                     this.slideTo(id, 0);
                 },
@@ -234,6 +230,13 @@ export default class Fancy {
                             });
                         }
                     });
+                },
+                lazyImageReady: function () {
+                    if (firstLoad) {
+                        FancyTransition.openLayer(type, layer, close, wrapper, null, footer, id);
+                        console.log('lazy');
+                    }
+                    firstLoad = false;
                 }
             },
         };
