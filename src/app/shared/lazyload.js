@@ -24,10 +24,10 @@ export default class LazyLoad {
             this.loaded = true;
             const node = this.node;
             node.onload = () => {
-                setTimeout(() => {
-                    this.parent.classList.add('loaded');
-                    node.onload = null;
-                }, 3000);
+                // setTimeout(() => {
+                //     this.parent.classList.add('loaded');
+                //     node.onload = null;
+                // }, 2000);
                 this.parent.classList.add('loaded');
                 node.onload = null;
             };

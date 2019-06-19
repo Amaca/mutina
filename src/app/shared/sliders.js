@@ -33,6 +33,11 @@ export default class Sliders {
                 freeModeMomentumRatio: 1,
                 freeModeMomentumVelocityRatio: 0.3,
                 speed: 400,
+                on: {
+                    lazyImageReady: function (slideEl) {
+                        slideEl.classList.add('swiper-slide-loaded');
+                    }
+                },
                 breakpoints: {
                     576: {
                         spaceBetween: 20,

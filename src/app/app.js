@@ -465,8 +465,7 @@ export default class App {
 
         //parallax
         this.parallaxes.forEach((node, i) => {
-            const fullHeight = node.parentNode.classList.contains('picture--full-height');
-            const parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 2;
+            const parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 3;
             const direction = i % 2 === 0 ? 1 : -1;
             let currentY = node.currentY || 0;
             let rect = Rect.fromNode(node);
@@ -485,14 +484,10 @@ export default class App {
             if (intersection.y > 0) {
                 const y = intersection.center.y; // Math.min(1, Math.max(-1, intersection.center.y));
                 const s = (100 + parallax * 2) / 100;
-                currentY = ((fullHeight ? 0 : -50) + (y * parallax * direction)).toFixed(3);
+                currentY = ((-50) + (y * parallax * direction)).toFixed(3);
                 if (node.currentY !== currentY) {
                     node.currentY = currentY;
-                    if (fullHeight) {
-                        node.setAttribute('style', `height: ${s * 100}%; top: 0; left: 0; transform: translateX(0) translateY(${currentY}%);`);
-                    } else {
-                        node.setAttribute('style', `height: ${s * 100}%; top: 50%; left: 50%; transform: translateX(-50%) translateY(${currentY}%);`);
-                    }
+                    node.setAttribute('style', `height: ${s * 100}%; top: 50%; left: 50%; transform: translateX(-50%) translateY(${currentY}%);`);
                 }
             }
         });

@@ -89,12 +89,33 @@
         @include xs-down {
             width: 80vw;
         }
+
+        img {
+            max-width: 100%;
+            border: none;
+            outline: none;
+            opacity: 0;
+            transition: opacity 1s $smooth;
+        }
+
+        .slider__caption {
+            opacity: 0;
+            transition: opacity 1s $smooth;
+        }
+    }
+
+    .swiper-slide-loaded {
+
+        img,
+        .slider__caption {
+            opacity: 1;
+        }
     }
 
     .slider__picture {
         text-align: center;
         width: 100%;
-        min-height: 38vw;
+        @include aspect-clip(16, 10);
     }
 }
 

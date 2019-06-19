@@ -15315,8 +15315,7 @@ function () {
 
 
       this.parallaxes.forEach(function (node, i) {
-        var fullHeight = node.parentNode.classList.contains('picture--full-height');
-        var parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 2;
+        var parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 3;
         var direction = i % 2 === 0 ? 1 : -1;
         var currentY = node.currentY || 0;
 
@@ -15339,16 +15338,11 @@ function () {
           var y = intersection.center.y; // Math.min(1, Math.max(-1, intersection.center.y));
 
           var s = (100 + parallax * 2) / 100;
-          currentY = ((fullHeight ? 0 : -50) + y * parallax * direction).toFixed(3);
+          currentY = (-50 + y * parallax * direction).toFixed(3);
 
           if (node.currentY !== currentY) {
             node.currentY = currentY;
-
-            if (fullHeight) {
-              node.setAttribute('style', "height: ".concat(s * 100, "%; top: 0; left: 0; transform: translateX(0) translateY(").concat(currentY, "%);"));
-            } else {
-              node.setAttribute('style', "height: ".concat(s * 100, "%; top: 50%; left: 50%; transform: translateX(-50%) translateY(").concat(currentY, "%);"));
-            }
+            node.setAttribute('style', "height: ".concat(s * 100, "%; top: 50%; left: 50%; transform: translateX(-50%) translateY(").concat(currentY, "%);"));
           }
         }
       }); // appears
@@ -16617,12 +16611,10 @@ function () {
         var node = this.node;
 
         node.onload = function () {
-          setTimeout(function () {
-            _this.parent.classList.add('loaded');
-
-            node.onload = null;
-          }, 3000);
-
+          // setTimeout(() => {
+          //     this.parent.classList.add('loaded');
+          //     node.onload = null;
+          // }, 2000);
           _this.parent.classList.add('loaded');
 
           node.onload = null;
@@ -17692,6 +17684,11 @@ function () {
           freeModeMomentumRatio: 1,
           freeModeMomentumVelocityRatio: 0.3,
           speed: 400,
+          on: {
+            lazyImageReady: function lazyImageReady(slideEl) {
+              slideEl.classList.add('swiper-slide-loaded');
+            }
+          },
           breakpoints: {
             576: {
               spaceBetween: 20
