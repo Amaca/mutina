@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
+	 viewBox="0 0 16 14.4" style="enable-background:new 0 0 16 14.4;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#231F20;}
 </style>
-<path class="st0" d="M16,15.1L15.1,16L8,8.9L0.9,16L0,15.1L7.1,8L0,0.9L0.9,0L8,7.1L15.1,0L16,0.9L8.9,8L16,15.1z"/>
+<path class="st0" d="M0,8V6.4h16V8H0z M0,0h16v1.6H0V0z M16,14.4H0v-1.6h16V14.4z"/>
 </svg>

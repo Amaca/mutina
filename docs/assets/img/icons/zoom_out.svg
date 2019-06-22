@@ -5,5 +5,6 @@
 <style type="text/css">
 	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#231F20;}
 </style>
-<path class="st0" d="M16,15.1L15.1,16L8,8.9L0.9,16L0,15.1L7.1,8L0,0.9L0.9,0L8,7.1L15.1,0L16,0.9L8.9,8L16,15.1z"/>
+<path class="st0" d="M8,16c-4.4,0-8-3.6-8-8s3.6-8,8-8s8,3.6,8,8S12.4,16,8,16z M8,0.8C4,0.8,0.8,4,0.8,8S4,15.2,8,15.2
+	S15.2,12,15.2,8S12,0.8,8,0.8z M6,7.6h4v0.8H6V7.6z"/>
 </svg>
