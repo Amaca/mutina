@@ -141,6 +141,7 @@
 .archive {
     margin-top: $col-gutter;
     margin-bottom: $col-gutter;
+    transition: padding-top .8s $smooth;
 
     .container--big {
         max-width: calc(100% - #{$col-gutter});

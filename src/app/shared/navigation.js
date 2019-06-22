@@ -26,7 +26,7 @@ export default class Navigation {
         parents.forEach(parent => {
             parent.addEventListener('click', (e) => {
                 e.preventDefault();
-                const activeNav = e.path[3]; //seleziono ul li attiva appena cliccata
+                const activeNav = Utils.getClosest(event.target, 'ul li'); //seleziono ul li attiva appena cliccata
                 const subnavItemHeight = activeNav.querySelector('.subnav__item').clientHeight;
                 const height = subnavItemHeight + (subnavItemHeight / 2) + 'px';
                 const thisParent = parent.parentNode;

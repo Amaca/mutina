@@ -15,6 +15,7 @@ import Rect from './shared/rect';
 import Samples from "./shared/samples";
 import Sliders from './shared/sliders';
 import Utils from './shared/utils';
+import Filters from './shared/filters';
 
 //settings
 let menuStyle = 1;
@@ -317,9 +318,12 @@ export default class App {
         FancyViewAll.init();
         Samples.init();
         Utils.toggleGrid();
+        Filters.init();
         setTimeout(x => {
             this.appears = Appears.init();
-            Splitting();
+            if (window.innerWidth > 768) {
+                Splitting();
+            }
         }, 600);
     }
 

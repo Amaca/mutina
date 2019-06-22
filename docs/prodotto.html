@@ -435,7 +435,7 @@
                                     </div>
                                 </div>
                                 <div class="editorial__box-picture">
-                                    <div class="picture picture--full-height">
+                                    <div class="picture" style="padding-top: 127.30%">
                                         <img data-load="assets/img/editorial-vertical-01.jpg" alt="" data-parallax="5">
                                     </div>
                                 </div>
@@ -475,7 +475,7 @@
                             </div>
                             <div class="specs__secondary">
                                 <a href="#" class="specs__picture">
-                                    <div class="picture picture--full-height">
+                                    <div class="picture" style="padding-top: 100%">
                                         <img data-load="assets/img/specs-thumb-01.jpg" alt="" data-parallax="5">
                                     </div>
                                 </a>
@@ -679,6 +679,15 @@
             <symbol id="svg-close" viewbox="0 0 16 16">
                 <path d="M16,14.5L14.5,16L8,9.5L1.5,16L0,14.5L6.5,8L0,1.5L1.5,0L8,6.5L14.5,0L16,1.5L9.5,8L16,14.5z" />
             </symbol>
+            <symbol id="svg-close-menu" viewbox="0 0 16 16">
+                <path d="M16,14.5L14.5,16L8,9.5L1.5,16L0,14.5L6.5,8L0,1.5L1.5,0L8,6.5L14.5,0L16,1.5L9.5,8L16,14.5z"/>
+            </symbol>
+            <symbol id="svg-less" viewbox="0 0 16 2">
+                <path class="st0" d="M0,0h16v2H0V0z"/>
+            </symbol>
+            <symbol id="svg-delete" viebox="0 0 16 16">
+                <path  d="M16,13.3L13.3,16L8,10.7L2.7,16L0,13.3L5.3,8L0,2.7L2.7,0L8,5.3L13.3,0L16,2.7L10.7,8L16,13.3z"/>
+            </symbol>
             <symbol id="svg-open" viewbox="0 0 16 16">
                 <path d="M0,8V6.4h16V8H0z M0,0h16v1.6H0V0z M16,14.4H0v-1.6h16V14.4z" />
             </symbol>
@@ -688,20 +697,26 @@
             <symbol id="svg-prev" viewBox="0 0 8.9 16">
                 <path d="M8.9,15.1L8,16L0,8l8-8l0.9,0.9L1.8,8L8.9,15.1z" />
             </symbol>
+            <symbol id="svg-arrow-prev" viewBox="0 0 8.01 16">
+                <polygon points="5.32,16 7.89,14.32 3.65,7.99 8.01,1.79 5.52,0 0,8.01 "/>
+            </symbol>
+            <symbol id="svg-arrow-next"  viewBox="0 0 8.01 16">
+                <polygon points="2.69,0 0.12,1.68 4.36,8.01 0,14.21 2.49,16 8.01,7.99 "/>
+            </symbol>
             <symbol id="svg-arrow-left" viewBox="0 0 8.4 16">
-                <path class="st0" d="M3.3,8.1l5.1,6.3l-2,1.6L0,8.1L6.4,0l2,1.6L3.3,8.1z" />
+                <path d="M3.3,8.1l5.1,6.3l-2,1.6L0,8.1L6.4,0l2,1.6L3.3,8.1z" />
             </symbol>
             <symbol id="svg-arrow-right" viewBox="0 0 8.4 16">
-                <path class="st0" d="M5.1,7.9L0,1.6L2,0l6.4,7.9L2,16l-2-1.6L5.1,7.9z" />
+                <path d="M5.1,7.9L0,1.6L2,0l6.4,7.9L2,16l-2-1.6L5.1,7.9z" />
             </symbol>
             <symbol id="svg-arrow-top" viewBox="0 0  16 8.1">
-                <path class="st0" d="M1.9,0L0,2.9l8,5.3l8-5.3L14.1,0L8,4.1L1.9,0z" />
+                <path d="M1.9,0L0,2.9l8,5.3l8-5.3L14.1,0L8,4.1L1.9,0z" />
             </symbol>
             <symbol id="svg-arrow-bottom" viewBox="0 0 16 8.2">
-                <path class="st0" d="M14.1,8.2L16,5.3L8,0L0,5.3l1.9,2.9L8,4.1L14.1,8.2z" />
+                <path d="M14.1,8.2L16,5.3L8,0L0,5.3l1.9,2.9L8,4.1L14.1,8.2z" />
             </symbol>
             <symbol id="svg-search" viewBox="0 0 16 16">
-                <path class="st0" d="M9.3,13.5c-3.7,0-6.7-3-6.7-6.8C2.5,3,5.5,0,9.2,0S16,3,16,6.8C16,10.5,13,13.5,9.3,13.5z M9.2,1.7
+                <path d="M9.3,13.5c-3.7,0-6.7-3-6.7-6.8C2.5,3,5.5,0,9.2,0S16,3,16,6.8C16,10.5,13,13.5,9.3,13.5z M9.2,1.7
                     c-2.8,0-5,2.3-5,5c0,2.8,2.2,5,5,5s5-2.3,5-5S12,1.7,9.2,1.7z M4.2,13.3L1.6,16L0,14.4l2.7-2.7C3.1,12.4,3.6,12.9,4.2,13.3z" />
             </symbol>
             <symbol id="svg-grid3x3" viewBox="0 0 16 16">
@@ -744,6 +759,30 @@
                         C0.6,6.7,0.6,4.3,0.6,4.3c0.6,0.3,1.6,0.3,1.6,0.3c-2.5-1.8-0.9-4.3-0.9-4.3s1.6,2.2,3.4,2.8C6.5,3.7,7.8,3.7,8,3.7h0.4
                         c-0.1-0.3-0.1-0.6,0-0.9C8.5,1.3,9.6,0.2,11.1,0c1.9-0.2,3.4,1.2,3.4,3.1C14.6,3.1,14.5,5,14,6.5z M16,1.6c-0.3,0.4-0.8,0.8-1.1,1
                         V1.9C14.9,1.9,15.4,1.9,16,1.6z" />
+            </symbol>
+            <symbol id="svg-more" viewBox="0 0 16 16">
+                <path d="M16,9H9v7H7V9H0V7h7V0h2v7h7V9z"/>
+            </symbol>
+            <symbol id="svg-play" viewBox="0 0 16 16">
+                <path d="M8,16c-4.4,0-8-3.6-8-8c0-4.4,3.6-8,8-8c4.4,0,8,3.6,8,8C16,12.4,12.4,16,8,16z"/>
+                <path d="M6.9,5.3L9.6,8l-2.7,2.7V5.3"/>
+            </symbol>
+            <symbol id="svg-toggle" viewBox="0 0 16 16" >
+                <g>
+                    <rect y="-0.05" width="16" height="1.7"/>
+                    <rect y="14.35" width="16" height="1.7"/>
+                    <rect y="7.33" width="16" height="1.7"/>
+                </g>
+                <line x1="1.35" y1="1.31" x2="14.7" y2="14.65"/>
+                <line x1="14.5" y1="1.35" x2="1.33" y2="14.52"/>
+            </symbol>
+            <symbol id="svg-zoom-in" viewBox="0 0 16 16">
+                <path d="M8,16c-4.4,0-8-3.6-8-8s3.6-8,8-8s8,3.6,8,8S12.4,16,8,16z M8,0.8C4,0.8,0.8,4,0.8,8S4,15.2,8,15.2
+                S15.2,12,15.2,8S12,0.8,8,0.8z M8.4,10H7.6V8.4H6V7.6h1.6V6h0.8v1.6H10v0.8H8.4V10z"/>
+            </symbol>
+            <symbol id="svg-zoom-out" viewBox="0 0 16 16">
+                <path d="M8,16c-4.4,0-8-3.6-8-8s3.6-8,8-8s8,3.6,8,8S12.4,16,8,16z M8,0.8C4,0.8,0.8,4,0.8,8S4,15.2,8,15.2
+                S15.2,12,15.2,8S12,0.8,8,0.8z M6,7.6h4v0.8H6V7.6z"/>
             </symbol>
         </defs>
     </svg>

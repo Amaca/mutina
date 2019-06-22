@@ -23,5 +23,9 @@
 
 	main {
 		padding-top: $header-height;
+
+		@include sm-down {
+			padding-top: $header-height-mobile;
+		}
 	}
 }

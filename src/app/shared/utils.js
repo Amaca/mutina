@@ -104,7 +104,7 @@ export default class Utils {
             Utils.toggleClass(listing, 'listing--grid-2');
             grid3x3.addEventListener('click', setGrid3x3);
             grid2x2.removeEventListener('click', setGrid2x2);
-        }
+        };
 
         if (grid2x2 && grid3x3 && listing) {
             grid2x2.classList.add('active');
@@ -113,4 +113,10 @@ export default class Utils {
         }
     }
 
+    static getClosest(elem, selector) {
+        for ( ; elem && elem !== document; elem = elem.parentNode ) {
+            if ( elem.matches( selector ) ) return elem;
+        }
+        return null;
+    }
 }

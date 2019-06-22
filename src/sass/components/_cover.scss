@@ -42,6 +42,10 @@
         align-items: center;
         margin-bottom: 0;
 
+        @include sm-down {
+            height: 28vh;
+        }
+
         .box {
             color: white;
         }

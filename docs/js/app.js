@@ -14824,6 +14824,8 @@ var _sliders = _interopRequireDefault(require("./shared/sliders"));
 
 var _utils = _interopRequireDefault(require("./shared/utils"));
 
+var _filters = _interopRequireDefault(require("./shared/filters"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -15085,7 +15087,7 @@ function () {
               app.onPageInit();
               /*
               window.daraLayer.push({
-                })
+               })
               gtm.push({
                   title: document.title,
                   href: window.href
@@ -15144,9 +15146,14 @@ function () {
 
       _utils.default.toggleGrid();
 
+      _filters.default.init();
+
       setTimeout(function (x) {
         _this.appears = _appears.default.init();
-        Splitting();
+
+        if (window.innerWidth > 768) {
+          Splitting();
+        }
       }, 600);
     }
   }, {
@@ -15405,7 +15412,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":316,"./shared/fancy.view-all":318,"./shared/lazyload":319,"./shared/navigation":320,"./shared/rect":321,"./shared/samples":323,"./shared/sliders":324,"./shared/utils":325,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":316,"./shared/fancy.view-all":318,"./shared/filters":319,"./shared/lazyload":320,"./shared/navigation":321,"./shared/rect":322,"./shared/samples":324,"./shared/sliders":325,"./shared/utils":326,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15729,7 +15736,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":325}],316:[function(require,module,exports){
+},{"./utils":326}],316:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16395,7 +16402,7 @@ function () {
 
 exports.default = FancyTransition;
 
-},{"./fancy":316,"./fancy.view-all":318,"./samples.detail":322}],318:[function(require,module,exports){
+},{"./fancy":316,"./fancy.view-all":318,"./samples.detail":323}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16564,6 +16571,132 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _utils = _interopRequireDefault(require("./utils"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var body = document.querySelector('body');
+var parents = document.querySelectorAll('.filters__panel-parent');
+var subFiltersOpen = false;
+
+var Filters =
+/*#__PURE__*/
+function () {
+  function Filters() {
+    _classCallCheck(this, Filters);
+  }
+
+  _createClass(Filters, null, [{
+    key: "init",
+    value: function init() {
+      if (window.innerWidth > 768) {
+        Filters.desktopFilters();
+      } else {
+        Filters.desktopFilters();
+      }
+    }
+  }, {
+    key: "desktopFilters",
+    value: function desktopFilters() {
+      var closeFiltersSlow = getComputedStyle(document.documentElement).getPropertyValue('--close-filters-speed');
+      var closeFiltersFast = 400;
+      parents.forEach(function (parent) {
+        parent.addEventListener('click', function (e) {
+          e.preventDefault();
+
+          var activeFilters = _utils.default.getClosest(event.target, 'ul li'); //seleziono ul li attiva appena cliccata
+
+
+          var subFiltersItemHeight = activeFilters.querySelector('.subfilters__item').clientHeight;
+          var height = activeFilters.querySelector('.subfilters__wrapper').clientHeight + 'px';
+          var thisParent = parent.parentNode;
+          var archive = document.querySelector('.archive');
+
+          if (!subFiltersOpen) {
+            //se i sottomenu sono chiusi
+            document.documentElement.style.setProperty('--close-filters-speed', closeFiltersSlow);
+            body.classList.add('filters-open');
+            thisParent.classList.add('active');
+            archive.style.paddingTop = height;
+            activeFilters.querySelector('.subfilters').style.height = height;
+            activeFilters.querySelector('.subfilters__wrapper').style.top = subFiltersItemHeight / 4 + 'px';
+            subFiltersOpen = true;
+          } else {
+            if (thisParent.classList.contains('active')) {
+              //se un sottomenu è da aprire, verifico prima se ho gia aperto un sottomenu
+              document.documentElement.style.setProperty('--close-filters-speed', closeFiltersSlow);
+              body.classList.remove('filters-open');
+              archive.style.paddingTop = 0;
+              document.querySelectorAll('.subfilters').forEach(function (x) {
+                return x.style.height = '0';
+              });
+              document.querySelectorAll('.filters__panel ul li.active').forEach(function (x) {
+                return x.classList.remove('active');
+              });
+              subFiltersOpen = false;
+            } else {
+              //un sottomenu è stato già aperto
+              document.documentElement.style.setProperty('--close-filters-speed', closeFiltersFast + 'ms');
+              document.querySelectorAll('.subfilters').forEach(function (x) {
+                return x.style.height = '0';
+              });
+              document.querySelectorAll('.filters__panel ul li.active').forEach(function (x) {
+                return x.classList.remove('active');
+              });
+              setTimeout(function (x) {
+                //timeout per definite l'animazione di chiusura del sottomenu gia aperto per mostrare il successivo
+                body.classList.add('filters-open');
+                thisParent.classList.add('active');
+                archive.style.paddingTop = height;
+                activeFilters.querySelector('.subfilters').style.height = height;
+                activeFilters.querySelector('.subfilters__wrapper').style.top = subFiltersItemHeight / 4 + 'px';
+              }, closeFiltersFast);
+              subFiltersOpen = true;
+            }
+          }
+        });
+      });
+    }
+  }, {
+    key: "closeFilters",
+    value: function closeFilters(delay) {
+      //chiudo il sottomenu
+      if (body.classList.contains('filters-open')) {
+        if (delay) {
+          document.documentElement.style.setProperty('--close-filters-speed', delay + 'ms');
+        }
+
+        body.classList.remove('filters-open');
+        document.querySelectorAll('.filters__panel ul li').forEach(function (x) {
+          return x.classList.remove('active');
+        });
+        document.querySelectorAll('.subfilters').forEach(function (x) {
+          return x.style.height = '0';
+        });
+        subFiltersOpen = false;
+      }
+    }
+  }]);
+
+  return Filters;
+}();
+
+exports.default = Filters;
+
+},{"./utils":326}],320:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 var _rect = _interopRequireDefault(require("./rect"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -16658,7 +16791,7 @@ function () {
 exports.default = LazyLoad;
 LazyLoad.items = [];
 
-},{"./rect":321}],320:[function(require,module,exports){
+},{"./rect":322}],321:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16707,7 +16840,9 @@ function () {
       parents.forEach(function (parent) {
         parent.addEventListener('click', function (e) {
           e.preventDefault();
-          var activeNav = e.path[3]; //seleziono ul li attiva appena cliccata
+
+          var activeNav = _utils.default.getClosest(event.target, 'ul li'); //seleziono ul li attiva appena cliccata
+
 
           var subnavItemHeight = activeNav.querySelector('.subnav__item').clientHeight;
           var height = subnavItemHeight + subnavItemHeight / 2 + 'px';
@@ -16962,7 +17097,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":325}],321:[function(require,module,exports){
+},{"./utils":326}],322:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17081,7 +17216,7 @@ function () {
 
 exports.default = Rect;
 
-},{}],322:[function(require,module,exports){
+},{}],323:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17323,7 +17458,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":323,"./utils":325,"gsap/ScrollToPlugin":309}],323:[function(require,module,exports){
+},{"./samples":324,"./utils":326,"gsap/ScrollToPlugin":309}],324:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17625,7 +17760,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":317,"./samples.detail":322,"gsap/ScrollToPlugin":309}],324:[function(require,module,exports){
+},{"./fancy.transition":317,"./samples.detail":323,"gsap/ScrollToPlugin":309}],325:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17787,7 +17922,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],325:[function(require,module,exports){
+},{}],326:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17947,6 +18082,15 @@ function () {
         Utils.toggleClass(listing, 'listing--grid-2');
         grid3x3.addEventListener('click', setGrid3x3);
       }
+    }
+  }, {
+    key: "getClosest",
+    value: function getClosest(elem, selector) {
+      for (; elem && elem !== document; elem = elem.parentNode) {
+        if (elem.matches(selector)) return elem;
+      }
+
+      return null;
     }
   }]);
 
