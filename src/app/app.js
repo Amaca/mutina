@@ -218,6 +218,7 @@ export default class App {
                             Navigation.closeSearch();
                             TweenMax.set(transitionLayer, {
                                 backgroundColor: '#CFCFCF',
+                                width: window.innerWidth,
                                 bottom: 0,
                                 opacity: 1,
                                 top: 'auto',
@@ -303,9 +304,14 @@ export default class App {
                         ////////////////////////////////////////////////////
                     },
                     {
-                        name: 'fast-animation',
-                        from: 'filters',
-                        to: 'filters',
+                        name: 'fast-transition',
+                        from: {
+                            custom: ({
+                                trigger
+                            }) => {
+                                return trigger.classList && trigger.classList.contains('fast-transition');
+                            },
+                        },
                         leave(data) {
                             const done = this.async();
                             console.log('fadeOut');
@@ -326,6 +332,71 @@ export default class App {
                             console.log('fadeIn');
                             done();
                         },
+                    },
+                    {
+                        name: 'fancy-transition',
+                        from: {
+                            custom: ({
+                                trigger
+                            }) => {
+                                return trigger.classList && trigger.classList.contains('fancy-transition');
+                            },
+                        },
+                        leave(data) {
+                            const done = this.async();
+                            Navigation.closeNav();
+                            Navigation.closeSearch();
+                            TweenMax.set(line, {
+                                width: 0,
+                            });
+                            TweenMax.set(transitionLayer, {
+                                backgroundColor: '#CFCFCF',
+                                width: window.innerWidth,
+                                bottom: 0,
+                                opacity: 1,
+                                top: 'auto',
+                                height: 0,
+                            });
+                            TweenMax.to(data.current.container, 1, {
+                                transform: 'translateY(-60px)',
+                                ease: Expo.easeInOut
+                            }).delay(0.3);
+                            TweenMax.to(transitionLayer, 1, {
+                                height: window.innerHeight,
+                                ease: Expo.easeInOut,
+                                onComplete: (e) => {
+                                    done();
+                                }
+                            }).delay(0.3);
+                        },
+                        afterLeave(data) {
+                            const done = this.async();
+                            app.destroyAll(data.current.container);
+                            done();
+                        },
+                        beforeEnter(data) {
+                            const done = this.async();
+                            app.onPageInit();
+                            done();
+                        },
+                        enter(data) {
+                            const done = this.async();
+                            window.scrollTo(0, 0);
+                            TweenMax.to(transitionLayer, 1, {
+                                width: 422,
+                                top: 0,
+                                bottom: 'auto',
+                                backgroundColor: '#121212',
+                                ease: Expo.easeInOut,
+                            });
+                            TweenMax.to(transitionLayer, 1, {
+                                opacity: 0,
+                                ease: Expo.easeInOut,
+                                onComplete: (e) => {
+                                    done();
+                                }
+                            }).delay(0.3);
+                        },
                     }
                 ],
             });
@@ -333,6 +404,20 @@ export default class App {
             const transition = document.querySelector('.transition');
             transition.remove();
             this.onPageInit();
+        }
+    }
+
+    setFancySidebar() {
+        if (document.querySelector('.fancy-detail')) {
+            const sidebar = document.querySelector('.fancy-detail__sidebar');
+            const sidebarClone = sidebar.cloneNode(true);
+            this.body.classList.add('fancy-page');
+            this.body.appendChild(sidebarClone);
+            sidebar.remove();
+        } else if (document.querySelector('.fancy-detail__sidebar')) {
+            const sidebar = document.querySelector('.fancy-detail__sidebar');
+            this.body.classList.remove('fancy-page');
+            sidebar.remove();
         }
     }
 
@@ -346,6 +431,8 @@ export default class App {
         Samples.init();
         Utils.toggleGrid();
         Filters.init();
+        this.setFancySidebar();
+
         setTimeout(x => {
             this.appears = Appears.init();
             if (window.innerWidth > 768) {
@@ -420,7 +507,7 @@ export default class App {
         }
 
         //header animation
-        if (scrollTop > 300 && !this.body.classList.contains('nav-mobile-open')) {
+        if (this.header && scrollTop > 300 && !this.body.classList.contains('nav-mobile-open')) {
             this.header.style.top = -this.header.clientHeight + 'px';
             this.header.style.transition = 'top .15s linear';
 
@@ -428,11 +515,6 @@ export default class App {
                 anchorPanel.style.top = -anchorPanel.clientHeight + 'px';
                 anchorPanel.style.transition = 'top .15s linear';
             }
-
-            // if (this.filtersPanel) {
-            //     this.filtersPanel.style.top = -this.filtersPanel.clientHeight + 'px';
-            //     this.filtersPanel.style.transition = 'top .15s linear';
-            // }
 
             if (this.body.classList.contains('scroll-down')) {
                 this.header.style.top = 0;

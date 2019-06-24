@@ -1,0 +1,156 @@
+@import "../mixins";
+
+.fancy-detail {
+    position: relative;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: $white;
+    display: flex;
+    flex-direction: row;
+
+    .fancy-detail__content {
+        position: relative;
+        z-index: 1;
+        left: 25vw;
+        width: 75vw;
+        background: $white;
+        padding: $col-gutter-half (#{$col-gutter-half / 2}) 0 (#{$col-gutter-half / 2});
+
+        .listing--grid-2 {
+
+            &>a,
+            &>div {
+                padding: 0 calc(#{$col-gutter-half} / 2);
+                margin-bottom: $col-gutter-half;
+
+                @include sm-down {
+                    // padding: 0;
+                    // max-width: none;
+                    // margin-bottom: 40px;
+
+                    // &:last-child {
+                    //     margin-bottom: 0;
+                    // }
+                }
+            }
+        }
+    }
+}
+
+.fancy-detail__sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 25vw;
+    height: 100vh;
+    background: $dark;
+}
+
+.fancy-detail__sidebar-header {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .fancy-detail__close {
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+
+        svg {
+            width: 25px;
+            height: 25px;
+            transition: fill .6s $smooth;
+            fill: $white;
+        }
+    }
+}
+
+.fancy-detail__sidebar-content {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+
+    .box {
+        color: $white;
+        text-align: center;
+
+        .h3 {
+            font-size: 1.9rem;
+            margin-bottom: 60px;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+.fancy-detail__panel {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background: $dark;
+
+    &:after,
+    &:before {
+        content: '';
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: $white;
+    }
+
+    &:before {
+        top: auto;
+        bottom: 0;
+    }
+
+    .fancy-detail__panel-header {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        height: $header-height;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .box {
+            @include font($style:heavy);
+            font-size: 0.7rem;
+            color: $white;
+            text-transform: uppercase;
+            padding: 0 $col-gutter;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            line-height: 1;
+
+            svg {
+                fill: $white;
+            }
+        }
+
+
+    }
+}

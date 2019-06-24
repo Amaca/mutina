@@ -221,3 +221,18 @@ body.fixed {
         position: fixed;
     }
 }
+
+body.fancy-page {
+    .header {
+        top: -$header-height !important;
+        transition: none;
+    }
+
+    // .page {
+    //     min-height: auto;
+    // }
+
+    main {
+        padding-top: 0;
+    }
+}

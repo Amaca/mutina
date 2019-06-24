@@ -23,59 +23,61 @@ export default class Navigation {
         const closeNavSlow = getComputedStyle(document.documentElement).getPropertyValue('--close-nav-speed');
         const closeNavFast = 400;
 
-        parents.forEach(parent => {
-            parent.addEventListener('click', (e) => {
-                e.preventDefault();
-                const activeNav = Utils.getClosest(event.target, 'ul li'); //seleziono ul li attiva appena cliccata
-                const subnavItemHeight = activeNav.querySelector('.subnav__item').clientHeight;
-                const height = subnavItemHeight + (subnavItemHeight / 2) + 'px';
-                const thisParent = parent.parentNode;
-                if (!subnavOpen) { //se i sottomenu sono chiusi
-                    if (searchOpen) { //se la ricerca è aperta
-                        document.documentElement.style.setProperty('--close-nav-speed', closeNavFast + 'ms');
-                        Navigation.toggleSearch();
-                        setTimeout(x => { //timeout per definite l'animazione di chiusura della ricerca per mostrare il sottomenu
+        if (parents) {
+            parents.forEach(parent => {
+                parent.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const activeNav = Utils.getClosest(event.target, 'ul li'); //seleziono ul li attiva appena cliccata
+                    const subnavItemHeight = activeNav.querySelector('.subnav__item').clientHeight;
+                    const height = subnavItemHeight + (subnavItemHeight / 2) + 'px';
+                    const thisParent = parent.parentNode;
+                    if (!subnavOpen) { //se i sottomenu sono chiusi
+                        if (searchOpen) { //se la ricerca è aperta
+                            document.documentElement.style.setProperty('--close-nav-speed', closeNavFast + 'ms');
+                            Navigation.toggleSearch();
+                            setTimeout(x => { //timeout per definite l'animazione di chiusura della ricerca per mostrare il sottomenu
+                                body.classList.add('subnav-open');
+                                thisParent.classList.add('active');
+                                activeNav.querySelector('.subnav').style.height = height;
+                                activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
+                                Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
+                                subnavOpen = true;
+                            }, closeNavFast);
+                        } else {
+                            document.documentElement.style.setProperty('--close-nav-speed', closeNavSlow);
                             body.classList.add('subnav-open');
                             thisParent.classList.add('active');
                             activeNav.querySelector('.subnav').style.height = height;
                             activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
                             Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
                             subnavOpen = true;
-                        }, closeNavFast);
+                        }
                     } else {
-                        document.documentElement.style.setProperty('--close-nav-speed', closeNavSlow);
-                        body.classList.add('subnav-open');
-                        thisParent.classList.add('active');
-                        activeNav.querySelector('.subnav').style.height = height;
-                        activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
-                        Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
-                        subnavOpen = true;
-                    }
-                } else {
-                    if (thisParent.classList.contains('active')) { //se un sottomenu è da aprire, verifico prima se ho gia aperto un sottomenu
-                        document.documentElement.style.setProperty('--close-nav-speed', closeNavSlow);
-                        body.classList.remove('subnav-open');
-                        document.querySelectorAll('.subnav').forEach(x => x.style.height = '0');
-                        document.querySelectorAll('.nav ul li.active').forEach(x => x.classList.remove('active'));
-                        subnavOpen = false;
-                    } else { //un sottomenu è stato già aperto
-                        document.documentElement.style.setProperty('--close-nav-speed', closeNavFast + 'ms');
-                        document.querySelectorAll('.subnav').forEach(x => x.style.height = '0');
-                        document.querySelectorAll('.nav ul li.active').forEach(x => x.classList.remove('active'));
-                        setTimeout(x => { //timeout per definite l'animazione di chiusura del sottomenu gia aperto per mostrare il successivo
-                            body.classList.add('subnav-open');
-                            thisParent.classList.add('active');
-                            activeNav.querySelector('.subnav').style.height = height;
-                            activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
-                            Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
+                        if (thisParent.classList.contains('active')) { //se un sottomenu è da aprire, verifico prima se ho gia aperto un sottomenu
+                            document.documentElement.style.setProperty('--close-nav-speed', closeNavSlow);
+                            body.classList.remove('subnav-open');
+                            document.querySelectorAll('.subnav').forEach(x => x.style.height = '0');
+                            document.querySelectorAll('.nav ul li.active').forEach(x => x.classList.remove('active'));
+                            subnavOpen = false;
+                        } else { //un sottomenu è stato già aperto
+                            document.documentElement.style.setProperty('--close-nav-speed', closeNavFast + 'ms');
+                            document.querySelectorAll('.subnav').forEach(x => x.style.height = '0');
+                            document.querySelectorAll('.nav ul li.active').forEach(x => x.classList.remove('active'));
+                            setTimeout(x => { //timeout per definite l'animazione di chiusura del sottomenu gia aperto per mostrare il successivo
+                                body.classList.add('subnav-open');
+                                thisParent.classList.add('active');
+                                activeNav.querySelector('.subnav').style.height = height;
+                                activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
+                                Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
 
-                        }, closeNavFast);
-                        subnavOpen = true;
+                            }, closeNavFast);
+                            subnavOpen = true;
+                        }
                     }
-                }
 
+                });
             });
-        });
+        }
     }
 
     static closeNav(delay) { //chiudo il sottomenu
@@ -127,24 +129,28 @@ export default class Navigation {
 
     static toggleSearch() {
         const inputText = document.querySelector('.header__search input');
-        Utils.toggleClass(body, 'search-bar-open');
-        searchOpen = body.classList.contains('search-bar-open') ? true : false;
-        if (searchOpen) {
-            inputText.focus();
-        } else {
-            setTimeout(e => {
-                inputText.value = '';
-            }, 400);
+        if (inputText) {
+            Utils.toggleClass(body, 'search-bar-open');
+            searchOpen = body.classList.contains('search-bar-open') ? true : false;
+            if (searchOpen) {
+                inputText.focus();
+            } else {
+                setTimeout(e => {
+                    inputText.value = '';
+                }, 400);
+            }
         }
     }
 
     static closeSearch() {
         const inputText = document.querySelector('.header__search input');
-        body.classList.remove('search-bar-open');
-        searchOpen = false;
-        setTimeout(e => {
-            inputText.value = '';
-        }, 400);
+        if (inputText) {
+            body.classList.remove('search-bar-open');
+            searchOpen = false;
+            setTimeout(e => {
+                inputText.value = '';
+            }, 400);
+        }
     }
 
     static mobileNav() {
@@ -152,108 +158,46 @@ export default class Navigation {
         const backs = document.querySelectorAll('.subnav__mobile-back');
         let actualSubNav;
 
-        toggle.addEventListener('click', (e) => {
-            if (body.classList.contains('nav-mobile-open')) {
-                let subNavActive = false;
-                parents.forEach(x => {
-                    if (x.parentNode.classList.contains('active')) {
-                        x.parentNode.classList.remove('active');
-                        subNavActive = true;
-                    }
-                });
-                if (!subNavActive) {
-                    body.classList.remove('nav-mobile-open');
-                } else {
-                    setTimeout(() => {
+        if (toggle) {
+            toggle.addEventListener('click', (e) => {
+                if (body.classList.contains('nav-mobile-open')) {
+                    let subNavActive = false;
+                    parents.forEach(x => {
+                        if (x.parentNode.classList.contains('active')) {
+                            x.parentNode.classList.remove('active');
+                            subNavActive = true;
+                        }
+                    });
+                    if (!subNavActive) {
                         body.classList.remove('nav-mobile-open');
-                    }, 420);
+                    } else {
+                        setTimeout(() => {
+                            body.classList.remove('nav-mobile-open');
+                        }, 420);
+                    }
+                } else {
+                    body.classList.add('nav-mobile-open');
                 }
-            } else {
-                body.classList.add('nav-mobile-open');
-            }
-        });
-
-        parents.forEach(parent => {
-            parent.addEventListener('click', (e) => {
-                actualSubNav = parent.parentNode;
-                actualSubNav.classList.add('active');
-                actualSubNav.style.zIndex = 2;
-                e.preventDefault();
             });
-        });
 
-        backs.forEach(back => {
-            back.addEventListener('click', (e) => {
-                actualSubNav.classList.remove('active');
-                setTimeout(() => {
-                    actualSubNav.style.zIndex = 1;
-                }, 500);
-                e.preventDefault();
+            parents.forEach(parent => {
+                parent.addEventListener('click', (e) => {
+                    actualSubNav = parent.parentNode;
+                    actualSubNav.classList.add('active');
+                    actualSubNav.style.zIndex = 2;
+                    e.preventDefault();
+                });
             });
-        });
+
+            backs.forEach(back => {
+                back.addEventListener('click', (e) => {
+                    actualSubNav.classList.remove('active');
+                    setTimeout(() => {
+                        actualSubNav.style.zIndex = 1;
+                    }, 500);
+                    e.preventDefault();
+                });
+            });
+        }
     }
-
-
-    // static splitButtons() {
-    //     const buttons = document.querySelectorAll('.btn--split');
-    //     buttons.forEach(button => {
-    //         const words = Array.from(button.children).filter(function (item) {
-    //             return item.matches('.word');
-    //         });
-    //         words.forEach(word => {
-    //             let text = document.createElement('span');
-    //             text.classList.add('full-text');
-    //             text.innerHTML = word.getAttribute('data-word');
-    //             word.appendChild(text);
-    //         });
-    //     });
-    // }
 }
-
-
-// class Toggle {
-
-//     constructor(node) {
-//         this.node = node;
-//         this.onClick = (event) => {
-//             this.onClick_(event);
-//         };
-//         node.addEventListener('click', this.onClick);
-//         console.log(this);
-//         /*
-//         {
-//             constructor: function
-//             onClick: function
-//             close: function
-//         } 
-//         */
-//     }
-
-//     onClick_(event) {
-//         console.log('onClick');
-//         Toggle.items.forEach(x => x === this ? x.open() : x.close());
-//     }
-
-//     close() {
-
-//     }
-
-//     destroy() {
-//         this.node.removeEventListener('click', this.onClick);
-//     }
-
-//     static init() {
-//         if (Toggle.items) {
-//             Toggle.items.forEach(x => x.destroy());
-//         }
-//         Toggle.items = [...document.querySelectorAll('[toggle]')].map(x => new Toggle(x));
-//     }
-
-// }
-
-// console.log(Toggle);
-
-// {
-//     init: function
-//     items: [Toggle, Toggle, Toggle, Toggle]
-// } 
