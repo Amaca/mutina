@@ -14903,6 +14903,7 @@ function () {
           timeout: 5000,
           debug: barbaDebug,
           transitions: [{
+            name: 'default',
             appear: function appear(data) {
               var done = this.async();
               var transitionLayer = document.querySelector('.transition');
@@ -15116,6 +15117,30 @@ function () {
                   done();
                 }
               }).delay(0.3);
+            }
+          }, {
+            name: 'fast-animation',
+            from: 'filters',
+            to: 'filters',
+            leave: function leave(data) {
+              var done = this.async();
+              console.log('fadeOut');
+              done();
+            },
+            afterLeave: function afterLeave(data) {
+              var done = this.async();
+              app.destroyAll(data.current.container);
+              done();
+            },
+            beforeEnter: function beforeEnter(data) {
+              var done = this.async();
+              app.onPageInit();
+              done();
+            },
+            enter: function enter(data) {
+              var done = this.async();
+              console.log('fadeIn');
+              done();
             }
           }]
         });

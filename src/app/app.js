@@ -75,232 +75,259 @@ export default class App {
                 timeout: 5000,
                 debug: barbaDebug,
                 transitions: [{
-                    appear(data) {
-                        const done = this.async();
-                        const transitionLayer = document.querySelector('.transition');
-                        const logoWrapper = document.querySelector('.transition .logo__wrapper');
-                        if (activateIntro) {
-                            let tl = new TimelineMax();
-                            const speed = 0.5;
-                            const transform = -10;
-                            tl.timeScale(0.9);
+                        name: 'default',
+                        appear(data) {
+                            const done = this.async();
+                            const transitionLayer = document.querySelector('.transition');
+                            const logoWrapper = document.querySelector('.transition .logo__wrapper');
+                            if (activateIntro) {
+                                let tl = new TimelineMax();
+                                const speed = 0.5;
+                                const transform = -10;
+                                tl.timeScale(0.9);
 
-                            const logo = [{
-                                    name: 'charM',
-                                    selector: document.querySelector('.logo__char-m'),
-                                    move: transform,
-                                    width: null,
-                                },
-                                {
-                                    name: 'charU',
-                                    selector: document.querySelector('.logo__char-u'),
-                                    move: transform,
-                                    width: null,
-                                },
-                                {
-                                    name: 'squarePrimary',
-                                    selector: document.querySelector('.logo__square-primary'),
-                                    width: document.querySelector('.logo__square-primary').width.baseVal.value,
-                                },
-                                {
-                                    name: 'charT',
-                                    selector: document.querySelector('.logo__char-t'),
-                                    move: transform,
-                                    width: null,
-                                },
-                                {
-                                    name: 'charI',
-                                    selector: document.querySelector('.logo__char-i'),
-                                    move: transform,
-                                    width: null,
-                                },
-                                {
-                                    name: 'squareSecondary',
-                                    selector: document.querySelector('.logo__square-secondary'),
-                                    move: transform,
-                                    width: document.querySelector('.logo__square-secondary').width.baseVal.value,
-                                },
-                                {
-                                    name: 'charN',
-                                    selector: document.querySelector('.logo__char-n'),
-                                    move: transform,
-                                    width: null,
-                                },
-                                {
-                                    name: 'groupA',
-                                    selector: document.querySelector('.logo__group-a'),
-                                    move: transform,
-                                    width: null,
-                                }
-                            ];
+                                const logo = [{
+                                        name: 'charM',
+                                        selector: document.querySelector('.logo__char-m'),
+                                        move: transform,
+                                        width: null,
+                                    },
+                                    {
+                                        name: 'charU',
+                                        selector: document.querySelector('.logo__char-u'),
+                                        move: transform,
+                                        width: null,
+                                    },
+                                    {
+                                        name: 'squarePrimary',
+                                        selector: document.querySelector('.logo__square-primary'),
+                                        width: document.querySelector('.logo__square-primary').width.baseVal.value,
+                                    },
+                                    {
+                                        name: 'charT',
+                                        selector: document.querySelector('.logo__char-t'),
+                                        move: transform,
+                                        width: null,
+                                    },
+                                    {
+                                        name: 'charI',
+                                        selector: document.querySelector('.logo__char-i'),
+                                        move: transform,
+                                        width: null,
+                                    },
+                                    {
+                                        name: 'squareSecondary',
+                                        selector: document.querySelector('.logo__square-secondary'),
+                                        move: transform,
+                                        width: document.querySelector('.logo__square-secondary').width.baseVal.value,
+                                    },
+                                    {
+                                        name: 'charN',
+                                        selector: document.querySelector('.logo__char-n'),
+                                        move: transform,
+                                        width: null,
+                                    },
+                                    {
+                                        name: 'groupA',
+                                        selector: document.querySelector('.logo__group-a'),
+                                        move: transform,
+                                        width: null,
+                                    }
+                                ];
 
-                            tl.set(transitionLayer, {
-                                height: window.innerHeight + 2,
-                            });
+                                tl.set(transitionLayer, {
+                                    height: window.innerHeight + 2,
+                                });
 
-                            logo.forEach(item => {
-                                if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
-                                    tl.set(item.selector, {
-                                        width: 0,
-                                        transform: 'translateX(' + item.move + 'px)',
-                                        opacity: 1
-                                    });
-                                } else {
-                                    tl.set(item.selector, {
-                                        transform: 'translateX(' + item.move + 'px)',
-                                        opacity: 0
-                                    });
-                                }
-                            });
+                                logo.forEach(item => {
+                                    if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
+                                        tl.set(item.selector, {
+                                            width: 0,
+                                            transform: 'translateX(' + item.move + 'px)',
+                                            opacity: 1
+                                        });
+                                    } else {
+                                        tl.set(item.selector, {
+                                            transform: 'translateX(' + item.move + 'px)',
+                                            opacity: 0
+                                        });
+                                    }
+                                });
 
-                            logo.forEach((item, index) => {
-                                let delay = '-=0.4';
-                                if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
-                                    tl.to(item.selector, speed, {
-                                        width: item.width,
-                                        transform: 'translateX(0px)',
-                                        opacity: 1,
-                                        ease: Expo.easeInOut
-                                    }, delay);
-                                } else {
-                                    tl.to(item.selector, speed, {
-                                        transform: 'translateX(0px)',
-                                        opacity: 1,
-                                        ease: Expo.easeInOut,
-                                        onComplete: () => {
-                                            if (index === logo.length - 1) {
-                                                console.log('pageinit');
-                                                app.onPageInit();
+                                logo.forEach((item, index) => {
+                                    let delay = '-=0.4';
+                                    if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
+                                        tl.to(item.selector, speed, {
+                                            width: item.width,
+                                            transform: 'translateX(0px)',
+                                            opacity: 1,
+                                            ease: Expo.easeInOut
+                                        }, delay);
+                                    } else {
+                                        tl.to(item.selector, speed, {
+                                            transform: 'translateX(0px)',
+                                            opacity: 1,
+                                            ease: Expo.easeInOut,
+                                            onComplete: () => {
+                                                if (index === logo.length - 1) {
+                                                    console.log('pageinit');
+                                                    app.onPageInit();
+                                                }
                                             }
-                                        }
-                                    }, delay);
-                                }
-                            });
+                                        }, delay);
+                                    }
+                                });
 
-                            tl.to(logoWrapper, 0.8, {
+                                tl.to(logoWrapper, 0.8, {
+                                    height: 0,
+                                    ease: Expo.easeInOut,
+                                }, '+=0.5');
+
+                                tl.to(transitionLayer, 1, {
+                                    height: 2,
+                                    top: app.header.clientHeight - 2,
+                                    bottom: 'auto',
+                                    ease: Expo.easeInOut,
+                                    onComplete: function () {
+                                        transitionLayer.style.height = 0;
+                                        transitionLayer.classList.add('transition--no-top-line');
+                                        done();
+                                    }
+                                }, '-=0.6');
+                            } else {
+                                app.onPageInit();
+                                TweenMax.set(transitionLayer, {
+                                    height: 0,
+                                    top: 0,
+                                    bottom: 'auto',
+                                });
+                                transitionLayer.classList.add('transition--no-top-line');
+                                done();
+                            }
+                        },
+                        /////////////////////////////////////////////
+                        leave(data) {
+                            const done = this.async();
+                            const title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'Mutina';
+
+                            textFront.innerHTML = '';
+                            textBack.innerHTML = '';
+                            textFront.innerHTML = title;
+                            textBack.innerHTML = title;
+                            Navigation.closeNav();
+                            Navigation.closeSearch();
+                            TweenMax.set(transitionLayer, {
+                                backgroundColor: '#CFCFCF',
+                                bottom: 0,
+                                opacity: 1,
+                                top: 'auto',
                                 height: 0,
+                            });
+                            TweenMax.set(textFront, {
+                                transform: 'translateY(100%)',
+                                opacity: 1
+                            });
+                            TweenMax.set(textBack, {
+                                transform: 'translateY(0)',
+                            });
+                            TweenMax.set(boxBack, {
+                                width: 0,
+                            });
+                            TweenMax.set(line, {
+                                width: 0,
+                            });
+                            TweenMax.to(data.current.container, 1, {
+                                transform: 'translateY(-60px)',
+                                ease: Expo.easeInOut
+                            }).delay(0.3);
+                            TweenMax.to(transitionLayer, 1, {
+                                height: window.innerHeight,
+                                ease: Expo.easeInOut
+                            }).delay(0.3);
+                            TweenMax.to(textFront, 1, {
+                                transform: 'translateY(0)',
                                 ease: Expo.easeInOut,
-                            }, '+=0.5');
-
-                            tl.to(transitionLayer, 1, {
-                                height: 2,
-                                top: app.header.clientHeight - 2,
-                                bottom: 'auto',
+                            }).delay(0.4);
+                            TweenMax.to(line, 1, {
+                                width: '100%',
                                 ease: Expo.easeInOut,
-                                onComplete: function () {
-                                    transitionLayer.style.height = 0;
-                                    transitionLayer.classList.add('transition--no-top-line');
+                            }).delay(1.2);
+                            TweenMax.to(boxBack, 1, {
+                                width: '100%',
+                                ease: Expo.easeInOut,
+                                onComplete: (e) => {
                                     done();
                                 }
-                            }, '-=0.6');
-                        } else {
+                            }).delay(1.2);
+                        },
+                        afterLeave(data) {
+                            const done = this.async();
+                            app.destroyAll(data.current.container);
+                            done();
+                        },
+                        beforeEnter(data) {
+                            const done = this.async();
                             app.onPageInit();
-                            TweenMax.set(transitionLayer, {
+                            /*
+                            window.daraLayer.push({
+
+                            })
+                            gtm.push({
+                                title: document.title,
+                                href: window.href
+                            })
+                            */
+                            done();
+                        },
+                        enter(data) {
+                            const done = this.async();
+                            window.scrollTo(0, 0);
+                            TweenMax.to(textBack, 1, {
+                                transform: 'translateY(-100%)',
+                                ease: Expo.easeInOut,
+                            }).delay(0.1);
+                            TweenMax.to(textFront, 1, {
+                                transform: 'translateY(-100%)',
+                                ease: Expo.easeInOut,
+                            }).delay(0.1);
+                            TweenMax.to(transitionLayer, 1, {
                                 height: 0,
                                 top: 0,
                                 bottom: 'auto',
-                            });
-                            transitionLayer.classList.add('transition--no-top-line');
+                                ease: Expo.easeInOut,
+                                onComplete: (e) => {
+                                    done();
+                                }
+                            }).delay(0.3);
+                        },
+                        ////////////////////////////////////////////////////
+                    },
+                    {
+                        name: 'fast-animation',
+                        from: 'filters',
+                        to: 'filters',
+                        leave(data) {
+                            const done = this.async();
+                            console.log('fadeOut');
                             done();
-                        }
-                    },
-                    /////////////////////////////////////////////
-                    leave(data) {
-                        const done = this.async();
-                        const title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'Mutina';
-
-                        textFront.innerHTML = '';
-                        textBack.innerHTML = '';
-                        textFront.innerHTML = title;
-                        textBack.innerHTML = title;
-                        Navigation.closeNav();
-                        Navigation.closeSearch();
-                        TweenMax.set(transitionLayer, {
-                            backgroundColor: '#CFCFCF',
-                            bottom: 0,
-                            opacity: 1,
-                            top: 'auto',
-                            height: 0,
-                        });
-                        TweenMax.set(textFront, {
-                            transform: 'translateY(100%)',
-                            opacity: 1
-                        });
-                        TweenMax.set(textBack, {
-                            transform: 'translateY(0)',
-                        });
-                        TweenMax.set(boxBack, {
-                            width: 0,
-                        });
-                        TweenMax.set(line, {
-                            width: 0,
-                        });
-                        TweenMax.to(data.current.container, 1, {
-                            transform: 'translateY(-60px)',
-                            ease: Expo.easeInOut
-                        }).delay(0.3);
-                        TweenMax.to(transitionLayer, 1, {
-                            height: window.innerHeight,
-                            ease: Expo.easeInOut
-                        }).delay(0.3);
-                        TweenMax.to(textFront, 1, {
-                            transform: 'translateY(0)',
-                            ease: Expo.easeInOut,
-                        }).delay(0.4);
-                        TweenMax.to(line, 1, {
-                            width: '100%',
-                            ease: Expo.easeInOut,
-                        }).delay(1.2);
-                        TweenMax.to(boxBack, 1, {
-                            width: '100%',
-                            ease: Expo.easeInOut,
-                            onComplete: (e) => {
-                                done();
-                            }
-                        }).delay(1.2);
-                    },
-                    afterLeave(data) {
-                        const done = this.async();
-                        app.destroyAll(data.current.container);
-                        done();
-                    },
-                    beforeEnter(data) {
-                        const done = this.async();
-                        app.onPageInit();
-                        /*
-                        window.daraLayer.push({
-
-                        })
-                        gtm.push({
-                            title: document.title,
-                            href: window.href
-                        })
-                        */
-                        done();
-                    },
-                    enter(data) {
-                        const done = this.async();
-                        window.scrollTo(0, 0);
-                        TweenMax.to(textBack, 1, {
-                            transform: 'translateY(-100%)',
-                            ease: Expo.easeInOut,
-                        }).delay(0.1);
-                        TweenMax.to(textFront, 1, {
-                            transform: 'translateY(-100%)',
-                            ease: Expo.easeInOut,
-                        }).delay(0.1);
-                        TweenMax.to(transitionLayer, 1, {
-                            height: 0,
-                            top: 0,
-                            bottom: 'auto',
-                            ease: Expo.easeInOut,
-                            onComplete: (e) => {
-                                done();
-                            }
-                        }).delay(0.3);
-                    },
-                    ////////////////////////////////////////////////////
-                }, ],
+                        },
+                        afterLeave(data) {
+                            const done = this.async();
+                            app.destroyAll(data.current.container);
+                            done();
+                        },
+                        beforeEnter(data) {
+                            const done = this.async();
+                            app.onPageInit();
+                            done();
+                        },
+                        enter(data) {
+                            const done = this.async();
+                            console.log('fadeIn');
+                            done();
+                        },
+                    }
+                ],
             });
         } else {
             const transition = document.querySelector('.transition');
