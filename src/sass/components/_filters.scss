@@ -41,7 +41,7 @@
         height: 100%;
     }
 
-    & > .container--big {
+    &>.container--big {
         @include xs-down {
             max-width: 100vw;
         }
@@ -153,22 +153,26 @@
     }
 
     .btn--split {
-        padding: 0 27px;
+        padding: 0 29px 0 27px;
+        height: 100%;
+        display: flex;
+        align-items: center;
 
         @include md-down {
-            padding: 0 15px;
+            padding: 0 17px 0 15px;
         }
 
         &:before {
             content: '';
             width: 100%;
             height: 2px;
-            background:white;
+            background: white;
             position: absolute;
-            bottom: -34px;
+            bottom: 0;
             left: 0;
             opacity: 0;
             transition: opacity .6s $smooth;
+
         }
 
         &:after {
@@ -179,20 +183,69 @@
             &:after {
                 display: none;
             }
+
             .char {
                 color: $dark;
             }
         }
     }
 
-    & > ul {
+    .filters__arrow {
+        display: inline-block;
+        position: relative;
+        z-index: 1;
+        width: 10px;
+        height: 10px;
+        left: 10px;
+        top: 0px;
+        overflow: hidden;
+
+        @include md-down {
+            left: 5px;
+        }
+
+        @include sm-down {
+            width: 8px;
+            height: 8px;
+        }
+
+        .ico {
+            position: absolute;
+            z-index: 1;
+            width: 10px;
+            height: 10px;
+            transition: all .6s $smooth;
+
+            @include sm-down {
+                width: 8px;
+                height: 8px;
+            }
+        }
+
+        .ico--arrow-top {
+            top: 0;
+            left: 0;
+        }
+
+        .ico--arrow-bottom {
+            top: -10px;
+            left: 0;
+            fill: #a6a6a6;
+
+            @include sm-down {
+                top: -8ps;
+            }
+        }
+    }
+
+    &>ul {
         list-style: none;
         padding: 0;
         margin: 0;
         height: 100%;
         display: flex;
 
-        & > li {
+        &>li {
             height: 100%;
             display: flex;
             align-items: center;
@@ -216,6 +269,22 @@
 
             &:after {
                 right: 0;
+            }
+
+            &.active {
+                .filters__arrow {
+                    .ico--arrow-top {
+                        top: 10px;
+
+                        @include sm-down {
+                            top: 8ps;
+                        }
+                    }
+
+                    .ico--arrow-bottom {
+                        top: 0;
+                    }
+                }
             }
         }
     }
@@ -265,7 +334,7 @@ $subfilters-bg-transition: all var(--close-filters-speed) cubic-bezier(0, 0.97, 
         background: $dark;
         bottom: 0;
     }
-    
+
     .container--big {
         height: 100%;
     }
@@ -290,7 +359,7 @@ $subfilters-bg-transition: all var(--close-filters-speed) cubic-bezier(0, 0.97, 
         @include xs-down {
             margin: 0 -5px;
         }
-        
+
         a {
             position: relative;
             top: $subfilters-item-top;
@@ -411,37 +480,48 @@ $subfilters-bg-transition: all var(--close-filters-speed) cubic-bezier(0, 0.97, 
                 background: white;
                 border: 2px solid #e4e4e4;
             }
+
             &.subfilters__color--grey {
                 background: #c1c0be;
             }
+
             &.subfilters__color--brown {
                 background: #4d423f;
             }
+
             &.subfilters__color--green {
                 background: #9AA48C;
             }
+
             &.subfilters__color--red {
                 background: #6E2926;
             }
+
             &.subfilters__color--blue {
                 background: #0C485E;
             }
+
             &.subfilters__color--black {
-                
+
                 background: #000000;
             }
+
             &.subfilters__color--beige {
                 background: #C5BEAA;
             }
+
             &.subfilters__color--terra {
                 background: #96715F;
             }
+
             &.subfilters__color--yellow {
                 background: #F1D89F;
             }
+
             &.subfilters__color--purple {
                 background: #4F3A4B;
             }
+
             &.subfilters__color--light-blue {
                 background: #ABCEE2;
             }
@@ -455,7 +535,7 @@ $subfilters-bg-transition: all var(--close-filters-speed) cubic-bezier(0, 0.97, 
     padding: 0 $col-gutter-half;
     margin: 0 -20px $col-gutter -20px;
 
-    & > div {
+    &>div {
         @include font($style:heavy);
         color: $dark;
         font-size: 0.75rem;

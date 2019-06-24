@@ -2148,17 +2148,24 @@ body.samples-gallery-open {
     color: var(--color-dark);
     text-transform: uppercase; }
   .filters__panel .btn--split {
-    padding: 0 27px; }
+    padding: 0 29px 0 27px;
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center; }
     @media (max-width: 992px) {
       .filters__panel .btn--split {
-        padding: 0 15px; } }
+        padding: 0 17px 0 15px; } }
     .filters__panel .btn--split:before {
       content: '';
       width: 100%;
       height: 2px;
       background: white;
       position: absolute;
-      bottom: -34px;
+      bottom: 0;
       left: 0;
       opacity: 0;
       -webkit-transition: opacity 0.6s cubic-bezier(0, 0.97, 0.43, 1);
@@ -2169,6 +2176,43 @@ body.samples-gallery-open {
       display: none; }
     .filters__panel .btn--split:hover .char {
       color: var(--color-dark); }
+  .filters__panel .filters__arrow {
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    width: 10px;
+    height: 10px;
+    left: 10px;
+    top: 0px;
+    overflow: hidden; }
+    @media (max-width: 992px) {
+      .filters__panel .filters__arrow {
+        left: 5px; } }
+    @media (max-width: 768px) {
+      .filters__panel .filters__arrow {
+        width: 8px;
+        height: 8px; } }
+    .filters__panel .filters__arrow .ico {
+      position: absolute;
+      z-index: 1;
+      width: 10px;
+      height: 10px;
+      -webkit-transition: all 0.6s cubic-bezier(0, 0.97, 0.43, 1);
+      transition: all 0.6s cubic-bezier(0, 0.97, 0.43, 1); }
+      @media (max-width: 768px) {
+        .filters__panel .filters__arrow .ico {
+          width: 8px;
+          height: 8px; } }
+    .filters__panel .filters__arrow .ico--arrow-top {
+      top: 0;
+      left: 0; }
+    .filters__panel .filters__arrow .ico--arrow-bottom {
+      top: -10px;
+      left: 0;
+      fill: #a6a6a6; }
+      @media (max-width: 768px) {
+        .filters__panel .filters__arrow .ico--arrow-bottom {
+          top: -8ps; } }
   .filters__panel > ul {
     list-style: none;
     padding: 0;
@@ -2200,6 +2244,13 @@ body.samples-gallery-open {
         left: 0; }
       .filters__panel > ul > li:after {
         right: 0; }
+      .filters__panel > ul > li.active .filters__arrow .ico--arrow-top {
+        top: 10px; }
+        @media (max-width: 768px) {
+          .filters__panel > ul > li.active .filters__arrow .ico--arrow-top {
+            top: 8ps; } }
+      .filters__panel > ul > li.active .filters__arrow .ico--arrow-bottom {
+        top: 0; }
 
 .subfilters {
   width: 100%;
