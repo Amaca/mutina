@@ -14810,7 +14810,9 @@ var _dom = _interopRequireDefault(require("./shared/dom"));
 
 var _fancy = _interopRequireDefault(require("./shared/fancy"));
 
-var _fancy2 = _interopRequireDefault(require("./shared/fancy.view-all"));
+var _fancy2 = _interopRequireDefault(require("./shared/fancy.detail"));
+
+var _fancy3 = _interopRequireDefault(require("./shared/fancy.view-all"));
 
 var _filters = _interopRequireDefault(require("./shared/filters"));
 
@@ -15148,11 +15150,11 @@ function () {
               done();
             }
           }, {
-            name: 'fancy-transition',
+            name: 'fancy-in-transition',
             from: {
               custom: function custom(_ref2) {
                 var trigger = _ref2.trigger;
-                return trigger.classList && trigger.classList.contains('fancy-transition');
+                return trigger.classList && trigger.classList.contains('fancy-in-transition');
               }
             },
             leave: function leave(data) {
@@ -15167,7 +15169,6 @@ function () {
               });
               TweenMax.set(transitionLayer, {
                 backgroundColor: '#CFCFCF',
-                width: window.innerWidth,
                 bottom: 0,
                 opacity: 1,
                 top: 'auto',
@@ -15210,8 +15211,78 @@ function () {
                 opacity: 0,
                 ease: Expo.easeInOut
               });
-              TweenMax.to(sidebar, 2, {
+              TweenMax.to(sidebar, 1.5, {
                 left: 0,
+                ease: Expo.easeInOut,
+                onComplete: function onComplete(e) {
+                  done();
+                }
+              });
+            }
+          }, {
+            name: 'fancy-out-transition',
+            from: {
+              custom: function custom(_ref3) {
+                var trigger = _ref3.trigger;
+                return trigger.classList && trigger.classList.contains('fancy-out-transition');
+              }
+            },
+            leave: function leave(data) {
+              var done = this.async();
+              var sidebar = document.querySelector('.fancy-detail__sidebar');
+              var panel = document.querySelector('.fancy-detail__panel');
+
+              if (window.innerWidth > 768) {
+                TweenMax.to(sidebar, 1, {
+                  left: -sidebar.clientWidth - 10,
+                  ease: Expo.easeInOut
+                });
+              } else {
+                TweenMax.to(sidebar, 1, {
+                  opacity: 0,
+                  transform: 'translateY(60px)',
+                  ease: Expo.easeInOut
+                });
+                TweenMax.to(panel, 1, {
+                  bottom: -panel.clientHeight,
+                  ease: Expo.easeInOut
+                });
+              }
+
+              TweenMax.to(data.current.container, 1, {
+                opacity: 0,
+                transform: 'translateY(100px)',
+                ease: Expo.easeInOut,
+                onComplete: function onComplete(e) {
+                  done();
+                }
+              });
+            },
+            afterLeave: function afterLeave(data) {
+              var done = this.async();
+              TweenMax.set(transitionLayer, {
+                top: 'auto',
+                bottom: 0,
+                height: window.innerHeight,
+                backgroundColor: '#ffffff',
+                opacity: 1
+              });
+              app.destroyAll(data.current.container);
+              done();
+            },
+            beforeEnter: function beforeEnter(data) {
+              var done = this.async();
+              app.onPageInit();
+              done();
+            },
+            enter: function enter(data) {
+              var done = this.async();
+              var header = document.querySelector('header');
+              window.scrollTo(0, 0);
+              header.style.top = 0;
+              TweenMax.to(transitionLayer, 1, {
+                height: 0,
+                backgroundColor: '#CFCFCF',
                 ease: Expo.easeInOut,
                 onComplete: function onComplete(e) {
                   done();
@@ -15227,39 +15298,9 @@ function () {
       }
     }
   }, {
-    key: "setFancySidebar",
-    value: function setFancySidebar() {
-      var _this = this;
-
-      var sidebar = document.querySelector('.fancy-detail__sidebar');
-
-      var clickToggle = function clickToggle(e) {
-        _utils.default.toggleClass(_this.body, 'fancy-detail-panel-open');
-
-        e.preventDefault();
-      };
-
-      if (document.querySelector('.fancy-detail')) {
-        var sidebarClone = sidebar.cloneNode(true);
-        this.body.classList.add('fancy-page');
-        this.body.appendChild(sidebarClone);
-        sidebar.remove();
-        var sidebarButton = document.querySelector('.fancy-detail__panel-header');
-        sidebarButton.addEventListener('click', clickToggle);
-      } else if (document.querySelector('.fancy-detail__sidebar')) {
-        var _sidebarButton = document.querySelector('.fancy-detail__panel-header');
-
-        _sidebarButton.removeEventListener('click', clickToggle);
-
-        this.body.classList.remove('fancy-page');
-        this.body.classList.remove('fancy-detail-panel-open');
-        sidebar.remove();
-      }
-    }
-  }, {
     key: "onPageInit",
     value: function onPageInit() {
-      var _this2 = this;
+      var _this = this;
 
       this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
 
@@ -15271,6 +15312,8 @@ function () {
 
       _fancy.default.init();
 
+      _fancy3.default.init();
+
       _fancy2.default.init();
 
       _samples.default.init();
@@ -15279,9 +15322,8 @@ function () {
 
       _filters.default.init();
 
-      this.setFancySidebar();
       setTimeout(function (x) {
-        _this2.appears = _appears.default.init();
+        _this.appears = _appears.default.init();
 
         if (window.innerWidth > 768) {
           Splitting();
@@ -15299,6 +15341,8 @@ function () {
 
       _samples.default.destroyAll();
 
+      _fancy3.default.destroyAll();
+
       _fancy2.default.destroyAll();
 
       _filters.default.destroyAll();
@@ -15308,16 +15352,16 @@ function () {
   }, {
     key: "addListeners",
     value: function addListeners() {
-      var _this3 = this;
+      var _this2 = this;
 
       window.addEventListener('resize', function () {
-        _this3.onResize();
+        _this2.onResize();
       });
       window.addEventListener('scroll', _utils.default.throttle(function () {
-        _this3.onScroll();
+        _this2.onScroll();
       }, 1000 / 25));
       window.addEventListener('wheel', function (e) {
-        _this3.onWheel(e);
+        _this2.onWheel(e);
       });
     }
   }, {
@@ -15408,7 +15452,7 @@ function () {
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this3 = this;
 
       // smoothscroll desktop
       // if (!Dom.overscroll && !Dom.touch) {
@@ -15464,7 +15508,7 @@ function () {
           width: rect.width,
           height: rect.height
         });
-        var intersection = rect.intersection(_this4.windowRect);
+        var intersection = rect.intersection(_this3.windowRect);
         /*
         if (fullHeight) {
         	console.log(intersection);
@@ -15487,7 +15531,7 @@ function () {
       this.appears.forEach(function (node, i) {
         var rect = _rect.default.fromNode(node);
 
-        var intersection = rect.intersection(_this4.windowRect);
+        var intersection = rect.intersection(_this3.windowRect);
 
         if (intersection.y > 0.0) {
           if (!node.to) {
@@ -15508,13 +15552,13 @@ function () {
   }, {
     key: "loop",
     value: function loop() {
-      var _this5 = this;
+      var _this4 = this;
 
       this.render();
 
       if (this.playing) {
         window.requestAnimationFrame(function () {
-          _this5.loop();
+          _this4.loop();
         });
       }
     }
@@ -15542,7 +15586,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":316,"./shared/fancy.view-all":318,"./shared/filters":319,"./shared/lazyload":320,"./shared/navigation":321,"./shared/rect":322,"./shared/samples":324,"./shared/sliders":325,"./shared/utils":326,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":317,"./shared/fancy.detail":316,"./shared/fancy.view-all":319,"./shared/filters":320,"./shared/lazyload":321,"./shared/navigation":322,"./shared/rect":323,"./shared/samples":325,"./shared/sliders":326,"./shared/utils":327,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15866,7 +15910,111 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":326}],316:[function(require,module,exports){
+},{"./utils":327}],316:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _utils = _interopRequireDefault(require("./utils"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var body = document.querySelector('body');
+
+var FancyDetail =
+/*#__PURE__*/
+function () {
+  function FancyDetail() {
+    _classCallCheck(this, FancyDetail);
+  }
+
+  _createClass(FancyDetail, null, [{
+    key: "init",
+    value: function init() {
+      if (window.innerWidth > 768) {
+        this.initDesktopSidebar();
+      } else {
+        this.initMobileSidebar();
+      }
+    }
+  }, {
+    key: "initDesktopSidebar",
+    value: function initDesktopSidebar() {
+      var sidebar = document.querySelector('.fancy-detail__sidebar');
+
+      if (document.querySelector('.fancy-detail')) {
+        var sidebarClone = sidebar.cloneNode(true);
+        body.classList.add('fancy-page');
+        body.appendChild(sidebarClone);
+        sidebar.remove();
+        var sidebarButton = document.querySelector('.fancy-detail__panel-header');
+        sidebarButton.addEventListener('click', this.clickToggle);
+      }
+    }
+  }, {
+    key: "initMobileSidebar",
+    value: function initMobileSidebar() {
+      var panel = document.querySelector('.fancy-detail__panel');
+
+      if (document.querySelector('.fancy-detail')) {
+        var panelClone = panel.cloneNode(true);
+        body.classList.add('fancy-page');
+        body.appendChild(panelClone);
+        panel.remove();
+        var sidebarButton = document.querySelector('.fancy-detail__panel-header');
+        sidebarButton.addEventListener('click', this.clickToggle);
+      }
+    }
+  }, {
+    key: "clickToggle",
+    value: function clickToggle(e) {
+      _utils.default.toggleClass(body, 'fancy-detail-panel-open');
+
+      e.preventDefault();
+    }
+  }, {
+    key: "destroyAll",
+    value: function destroyAll() {
+      if (window.innerWidth > 768) {
+        if (document.querySelector('.fancy-detail__sidebar')) {
+          var sidebar = document.querySelector('.fancy-detail__sidebar');
+          var sidebarButton = document.querySelector('.fancy-detail__panel-header');
+          sidebarButton.removeEventListener('click', this.clickToggle);
+          body.classList.remove('fancy-page');
+          body.classList.remove('fancy-detail-panel-open');
+          sidebar.remove();
+        }
+      } else {
+        if (document.querySelector('.fancy-detail__sidebar')) {
+          var panel = document.querySelector('.fancy-detail__panel');
+
+          var _sidebarButton = document.querySelector('.fancy-detail__panel-header');
+
+          _sidebarButton.removeEventListener('click', this.clickToggle);
+
+          body.classList.remove('fancy-page');
+          body.classList.remove('fancy-detail-panel-open');
+          panel.remove();
+        }
+      }
+    }
+  }]);
+
+  return FancyDetail;
+}();
+
+exports.default = FancyDetail;
+
+},{"./utils":327}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16166,7 +16314,7 @@ function () {
 
 exports.default = Fancy;
 
-},{"./fancy.transition":317}],317:[function(require,module,exports){
+},{"./fancy.transition":318}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16532,7 +16680,7 @@ function () {
 
 exports.default = FancyTransition;
 
-},{"./fancy":316,"./fancy.view-all":318,"./samples.detail":323}],318:[function(require,module,exports){
+},{"./fancy":317,"./fancy.view-all":319,"./samples.detail":324}],319:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16693,7 +16841,7 @@ function () {
 
 exports.default = FancyViewAll;
 
-},{"./fancy":316,"./fancy.transition":317}],319:[function(require,module,exports){
+},{"./fancy":317,"./fancy.transition":318}],320:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16849,7 +16997,7 @@ function () {
 
 exports.default = Filters;
 
-},{"./utils":326}],320:[function(require,module,exports){
+},{"./utils":327}],321:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16951,7 +17099,7 @@ function () {
 exports.default = LazyLoad;
 LazyLoad.items = [];
 
-},{"./rect":322}],321:[function(require,module,exports){
+},{"./rect":323}],322:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17217,7 +17365,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":326}],322:[function(require,module,exports){
+},{"./utils":327}],323:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17336,7 +17484,7 @@ function () {
 
 exports.default = Rect;
 
-},{}],323:[function(require,module,exports){
+},{}],324:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17578,7 +17726,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":324,"./utils":326,"gsap/ScrollToPlugin":309}],324:[function(require,module,exports){
+},{"./samples":325,"./utils":327,"gsap/ScrollToPlugin":309}],325:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17880,7 +18028,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":317,"./samples.detail":323,"gsap/ScrollToPlugin":309}],325:[function(require,module,exports){
+},{"./fancy.transition":318,"./samples.detail":324,"gsap/ScrollToPlugin":309}],326:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18042,7 +18190,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],326:[function(require,module,exports){
+},{}],327:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

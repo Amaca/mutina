@@ -8,6 +8,7 @@ import Anchors from './shared/anchors';
 import Appears from './shared/appears';
 import Dom from './shared/dom';
 import Fancy from "./shared/fancy";
+import FancyDetail from "./shared/fancy.detail";
 import FancyViewAll from "./shared/fancy.view-all";
 import Filters from './shared/filters';
 import LazyLoad from './shared/lazyload';
@@ -334,12 +335,12 @@ export default class App {
                         },
                     },
                     {
-                        name: 'fancy-transition',
+                        name: 'fancy-in-transition',
                         from: {
                             custom: ({
                                 trigger
                             }) => {
-                                return trigger.classList && trigger.classList.contains('fancy-transition');
+                                return trigger.classList && trigger.classList.contains('fancy-in-transition');
                             },
                         },
                         leave(data) {
@@ -351,7 +352,6 @@ export default class App {
                             });
                             TweenMax.set(transitionLayer, {
                                 backgroundColor: '#CFCFCF',
-                                width: window.innerWidth,
                                 bottom: 0,
                                 opacity: 1,
                                 top: 'auto',
@@ -394,8 +394,79 @@ export default class App {
                                 opacity: 0,
                                 ease: Expo.easeInOut,
                             });
-                            TweenMax.to(sidebar, 2, {
+                            TweenMax.to(sidebar, 1.5, {
                                 left: 0,
+                                ease: Expo.easeInOut,
+                                onComplete: (e) => {
+                                    done();
+                                }
+                            });
+                        },
+                    },
+                    {
+                        name: 'fancy-out-transition',
+                        from: {
+                            custom: ({
+                                trigger
+                            }) => {
+                                return trigger.classList && trigger.classList.contains('fancy-out-transition');
+                            },
+                        },
+                        leave(data) {
+                            const done = this.async();
+                            const sidebar = document.querySelector('.fancy-detail__sidebar');
+                            const panel = document.querySelector('.fancy-detail__panel');
+                            if (window.innerWidth > 768) {
+                                TweenMax.to(sidebar, 1, {
+                                    left: -sidebar.clientWidth - 10,
+                                    ease: Expo.easeInOut,
+                                });
+                            } else {
+                                TweenMax.to(sidebar, 1, {
+                                    opacity: 0,
+                                    transform: 'translateY(60px)',
+                                    ease: Expo.easeInOut,
+                                });
+                                TweenMax.to(panel, 1, {
+                                    bottom: -panel.clientHeight,
+                                    ease: Expo.easeInOut,
+                                });
+                            }
+
+                            TweenMax.to(data.current.container, 1, {
+                                opacity: 0,
+                                transform: 'translateY(100px)',
+                                ease: Expo.easeInOut,
+                                onComplete: (e) => {
+                                    done();
+                                }
+                            });
+                        },
+                        afterLeave(data) {
+                            const done = this.async();
+                            TweenMax.set(transitionLayer, {
+                                top: 'auto',
+                                bottom: 0,
+                                height: window.innerHeight,
+                                backgroundColor: '#ffffff',
+                                opacity: 1,
+                            });
+                            app.destroyAll(data.current.container);
+                            done();
+                        },
+                        beforeEnter(data) {
+                            const done = this.async();
+                            app.onPageInit();
+                            done();
+                        },
+                        enter(data) {
+                            const done = this.async();
+                            const header = document.querySelector('header');
+                            window.scrollTo(0, 0);
+                            header.style.top = 0;
+                            TweenMax.to(transitionLayer, 1, {
+                                height: 0,
+                                backgroundColor: '#CFCFCF',
                                 ease: Expo.easeInOut,
                                 onComplete: (e) => {
                                     done();
@@ -412,30 +483,6 @@ export default class App {
         }
     }
 
-    setFancySidebar() {
-        const sidebar = document.querySelector('.fancy-detail__sidebar');
-        const clickToggle = (e) => {
-            Utils.toggleClass(this.body, 'fancy-detail-panel-open');
-            e.preventDefault();
-        };
-
-        if (document.querySelector('.fancy-detail')) {
-            const sidebarClone = sidebar.cloneNode(true);
-            this.body.classList.add('fancy-page');
-            this.body.appendChild(sidebarClone);
-            sidebar.remove();
-            const sidebarButton = document.querySelector('.fancy-detail__panel-header');
-            sidebarButton.addEventListener('click', clickToggle);
-
-        } else if (document.querySelector('.fancy-detail__sidebar')) {
-            const sidebarButton = document.querySelector('.fancy-detail__panel-header');
-            sidebarButton.removeEventListener('click', clickToggle);
-            this.body.classList.remove('fancy-page');
-            this.body.classList.remove('fancy-detail-panel-open');
-            sidebar.remove();
-        }
-    }
-
     onPageInit() {
         this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
         LazyLoad.init();
@@ -443,10 +490,10 @@ export default class App {
         Anchors.init(document.querySelector('.anchors__wrapper'), 200);
         Fancy.init();
         FancyViewAll.init();
+        FancyDetail.init();
         Samples.init();
         Utils.toggleGrid();
         Filters.init();
-        this.setFancySidebar();
 
         setTimeout(x => {
             this.appears = Appears.init();
@@ -462,6 +509,7 @@ export default class App {
         Fancy.destroyAll();
         Samples.destroyAll();
         FancyViewAll.destroyAll();
+        FancyDetail.destroyAll();
         Filters.destroyAll();
         container.remove();
     }
