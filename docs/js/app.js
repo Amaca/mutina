@@ -15100,7 +15100,9 @@ function () {
             },
             enter: function enter(data) {
               var done = this.async();
+              var header = document.querySelector('header');
               window.scrollTo(0, 0);
+              header.style.top = 0;
               TweenMax.to(textBack, 1, {
                 transform: 'translateY(-100%)',
                 ease: Expo.easeInOut
@@ -15129,7 +15131,6 @@ function () {
             },
             leave: function leave(data) {
               var done = this.async();
-              console.log('fadeOut');
               done();
             },
             afterLeave: function afterLeave(data) {
@@ -15144,7 +15145,6 @@ function () {
             },
             enter: function enter(data) {
               var done = this.async();
-              console.log('fadeIn');
               done();
             }
           }, {
@@ -15176,14 +15176,18 @@ function () {
               TweenMax.to(data.current.container, 1, {
                 transform: 'translateY(-60px)',
                 ease: Expo.easeInOut
-              }).delay(0.3);
+              });
               TweenMax.to(transitionLayer, 1, {
                 height: window.innerHeight,
-                ease: Expo.easeInOut,
+                ease: Expo.easeInOut
+              });
+              TweenMax.to(transitionLayer, 0.8, {
+                backgroundColor: '#ffffff',
+                ease: Power1.easeOut,
                 onComplete: function onComplete(e) {
                   done();
                 }
-              }).delay(0.3);
+              }).delay(0.4);
             },
             afterLeave: function afterLeave(data) {
               var done = this.async();
@@ -15197,21 +15201,22 @@ function () {
             },
             enter: function enter(data) {
               var done = this.async();
+              var sidebar = document.querySelector('.fancy-detail__sidebar');
               window.scrollTo(0, 0);
-              TweenMax.to(transitionLayer, 1, {
-                width: 422,
-                top: 0,
-                bottom: 'auto',
-                backgroundColor: '#121212',
-                ease: Expo.easeInOut
+              TweenMax.set(sidebar, {
+                left: -sidebar.clientWidth
               });
               TweenMax.to(transitionLayer, 1, {
                 opacity: 0,
+                ease: Expo.easeInOut
+              });
+              TweenMax.to(sidebar, 2, {
+                left: 0,
                 ease: Expo.easeInOut,
                 onComplete: function onComplete(e) {
                   done();
                 }
-              }).delay(0.3);
+              });
             }
           }]
         });
@@ -15224,24 +15229,37 @@ function () {
   }, {
     key: "setFancySidebar",
     value: function setFancySidebar() {
+      var _this = this;
+
+      var sidebar = document.querySelector('.fancy-detail__sidebar');
+
+      var clickToggle = function clickToggle(e) {
+        _utils.default.toggleClass(_this.body, 'fancy-detail-panel-open');
+
+        e.preventDefault();
+      };
+
       if (document.querySelector('.fancy-detail')) {
-        var sidebar = document.querySelector('.fancy-detail__sidebar');
         var sidebarClone = sidebar.cloneNode(true);
         this.body.classList.add('fancy-page');
         this.body.appendChild(sidebarClone);
         sidebar.remove();
+        var sidebarButton = document.querySelector('.fancy-detail__panel-header');
+        sidebarButton.addEventListener('click', clickToggle);
       } else if (document.querySelector('.fancy-detail__sidebar')) {
-        var _sidebar = document.querySelector('.fancy-detail__sidebar');
+        var _sidebarButton = document.querySelector('.fancy-detail__panel-header');
+
+        _sidebarButton.removeEventListener('click', clickToggle);
 
         this.body.classList.remove('fancy-page');
-
-        _sidebar.remove();
+        this.body.classList.remove('fancy-detail-panel-open');
+        sidebar.remove();
       }
     }
   }, {
     key: "onPageInit",
     value: function onPageInit() {
-      var _this = this;
+      var _this2 = this;
 
       this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
 
@@ -15263,7 +15281,7 @@ function () {
 
       this.setFancySidebar();
       setTimeout(function (x) {
-        _this.appears = _appears.default.init();
+        _this2.appears = _appears.default.init();
 
         if (window.innerWidth > 768) {
           Splitting();
@@ -15290,16 +15308,16 @@ function () {
   }, {
     key: "addListeners",
     value: function addListeners() {
-      var _this2 = this;
+      var _this3 = this;
 
       window.addEventListener('resize', function () {
-        _this2.onResize();
+        _this3.onResize();
       });
       window.addEventListener('scroll', _utils.default.throttle(function () {
-        _this2.onScroll();
+        _this3.onScroll();
       }, 1000 / 25));
       window.addEventListener('wheel', function (e) {
-        _this2.onWheel(e);
+        _this3.onWheel(e);
       });
     }
   }, {
@@ -15390,7 +15408,7 @@ function () {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       // smoothscroll desktop
       // if (!Dom.overscroll && !Dom.touch) {
@@ -15446,7 +15464,7 @@ function () {
           width: rect.width,
           height: rect.height
         });
-        var intersection = rect.intersection(_this3.windowRect);
+        var intersection = rect.intersection(_this4.windowRect);
         /*
         if (fullHeight) {
         	console.log(intersection);
@@ -15469,7 +15487,7 @@ function () {
       this.appears.forEach(function (node, i) {
         var rect = _rect.default.fromNode(node);
 
-        var intersection = rect.intersection(_this3.windowRect);
+        var intersection = rect.intersection(_this4.windowRect);
 
         if (intersection.y > 0.0) {
           if (!node.to) {
@@ -15490,13 +15508,13 @@ function () {
   }, {
     key: "loop",
     value: function loop() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.render();
 
       if (this.playing) {
         window.requestAnimationFrame(function () {
-          _this4.loop();
+          _this5.loop();
         });
       }
     }

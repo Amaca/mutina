@@ -282,7 +282,9 @@ export default class App {
                         },
                         enter(data) {
                             const done = this.async();
+                            const header = document.querySelector('header');
                             window.scrollTo(0, 0);
+                            header.style.top = 0;
                             TweenMax.to(textBack, 1, {
                                 transform: 'translateY(-100%)',
                                 ease: Expo.easeInOut,
@@ -314,7 +316,6 @@ export default class App {
                         },
                         leave(data) {
                             const done = this.async();
-                            console.log('fadeOut');
                             done();
                         },
                         afterLeave(data) {
@@ -329,7 +330,6 @@ export default class App {
                         },
                         enter(data) {
                             const done = this.async();
-                            console.log('fadeIn');
                             done();
                         },
                     },
@@ -360,14 +360,18 @@ export default class App {
                             TweenMax.to(data.current.container, 1, {
                                 transform: 'translateY(-60px)',
                                 ease: Expo.easeInOut
-                            }).delay(0.3);
+                            });
                             TweenMax.to(transitionLayer, 1, {
                                 height: window.innerHeight,
                                 ease: Expo.easeInOut,
+                            });
+                            TweenMax.to(transitionLayer, 0.8, {
+                                backgroundColor: '#ffffff',
+                                ease: Power1.easeOut,
                                 onComplete: (e) => {
                                     done();
                                 }
-                            }).delay(0.3);
+                            }).delay(0.4);
                         },
                         afterLeave(data) {
                             const done = this.async();
@@ -381,21 +385,22 @@ export default class App {
                         },
                         enter(data) {
                             const done = this.async();
+                            const sidebar = document.querySelector('.fancy-detail__sidebar')
                             window.scrollTo(0, 0);
-                            TweenMax.to(transitionLayer, 1, {
-                                width: 422,
-                                top: 0,
-                                bottom: 'auto',
-                                backgroundColor: '#121212',
-                                ease: Expo.easeInOut,
+                            TweenMax.set(sidebar, {
+                                left: -sidebar.clientWidth
                             });
                             TweenMax.to(transitionLayer, 1, {
                                 opacity: 0,
                                 ease: Expo.easeInOut,
+                            });
+                            TweenMax.to(sidebar, 2, {
+                                left: 0,
+                                ease: Expo.easeInOut,
                                 onComplete: (e) => {
                                     done();
                                 }
-                            }).delay(0.3);
+                            });
                         },
                     }
                 ],
@@ -408,15 +413,25 @@ export default class App {
     }
 
     setFancySidebar() {
+        const sidebar = document.querySelector('.fancy-detail__sidebar');
+        const clickToggle = (e) => {
+            Utils.toggleClass(this.body, 'fancy-detail-panel-open');
+            e.preventDefault();
+        };
+
         if (document.querySelector('.fancy-detail')) {
-            const sidebar = document.querySelector('.fancy-detail__sidebar');
             const sidebarClone = sidebar.cloneNode(true);
             this.body.classList.add('fancy-page');
             this.body.appendChild(sidebarClone);
             sidebar.remove();
+            const sidebarButton = document.querySelector('.fancy-detail__panel-header');
+            sidebarButton.addEventListener('click', clickToggle);
+
         } else if (document.querySelector('.fancy-detail__sidebar')) {
-            const sidebar = document.querySelector('.fancy-detail__sidebar');
+            const sidebarButton = document.querySelector('.fancy-detail__panel-header');
+            sidebarButton.removeEventListener('click', clickToggle);
             this.body.classList.remove('fancy-page');
+            this.body.classList.remove('fancy-detail-panel-open');
             sidebar.remove();
         }
     }
