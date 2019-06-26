@@ -15026,7 +15026,7 @@ function () {
             /////////////////////////////////////////////
             leave: function leave(data) {
               var done = this.async();
-              var title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'Mutina';
+              var title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'back';
               textFront.innerHTML = '';
               textBack.innerHTML = '';
               textFront.innerHTML = title;

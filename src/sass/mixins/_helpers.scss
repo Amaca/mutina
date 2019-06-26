@@ -17,8 +17,17 @@
         font-weight: 400;
     }
 
-    @if $style==booklight {
+    @if $style==bookitalic {
         font-weight: 400;
+        font-style: italic;
+    }
+
+    @if $style==medium {
+        font-weight: 500;
+    }
+
+    @if $style==mediumitalic {
+        font-weight: 500;
         font-style: italic;
     }
 
@@ -26,7 +35,7 @@
         font-weight: 700;
     }
 
-    @if $style==heavylight {
+    @if $style==heavyitalic {
         font-weight: 700;
         font-style: italic;
     }

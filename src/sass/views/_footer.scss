@@ -15,7 +15,7 @@
     }
 
     .h5 {
-        @include font($style:heavy);
+        @include font($style:medium);
         margin-bottom: 30px;
 
         @include sm-down {
@@ -116,8 +116,8 @@
         }
 
         button {
+            @include font($style:medium);
             text-transform: uppercase;
-            @include font($style:heavy);
             padding: 8px 10px;
 
             @include sm-down {

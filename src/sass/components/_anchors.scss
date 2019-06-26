@@ -51,13 +51,13 @@
             }
 
             a {
+                @include font($style:medium);
                 color: $grey;
                 position: relative;
 
                 @include xxs-down {
                     font-size: .8rem;
                 }
-
 
                 &:before {
                     content: '';
@@ -116,6 +116,7 @@
             height: 100%;
             position: relative;
             z-index: 1;
+            @include font($style:medium);
 
             &:after {
                 content: '';

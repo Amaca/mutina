@@ -209,7 +209,7 @@ export default class App {
                         /////////////////////////////////////////////
                         leave(data) {
                             const done = this.async();
-                            const title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'Mutina';
+                            const title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'back';
 
                             textFront.innerHTML = '';
                             textBack.innerHTML = '';
