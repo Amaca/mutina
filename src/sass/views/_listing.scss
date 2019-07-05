@@ -20,7 +20,7 @@
             @include sm-down {
                 padding: 0;
                 max-width: none;
-                margin-bottom: 40px;
+                margin-bottom: $col-gutter;
 
                 &:last-child {
                     margin-bottom: 0;

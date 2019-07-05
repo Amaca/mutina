@@ -7,6 +7,10 @@ html {
     line-height: 32px;
     color: $dark;
 
+    @include lg-down {
+        font-size: $font-size-lg;
+    }
+
     @include md-down {
         font-size: $font-size-md;
     }

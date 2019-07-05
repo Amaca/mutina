@@ -560,5 +560,47 @@
         transform: translateX(-50%);
         text-align: center;
         color: $white;
+
+        .h2 {
+
+            @include xs-down {
+                font-size: 1.3rem;
+            }
+        }
+
+        .text {
+            font-size: 1.15rem;
+
+            @include xs-down {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    .picture {
+        @include aspect-clip(16, 8);
+
+        @include sm-down {
+            @include aspect-clip(16, 10);
+        }
+
+        @include xs-down {
+            @include aspect-clip(3, 4);
+        }
+    }
+
+    .box .h2+.text,
+    .box .h2+.box__appear {
+        margin-top: 10px;
+    }
+
+    .picture+.box {
+        margin-top: 0;
+        width: 100%;
+        padding: 0 30px 60px 30px;
+
+        @include sm-down {
+            padding: 0 15px 20px 15px;
+        }
     }
 }

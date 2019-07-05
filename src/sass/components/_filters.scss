@@ -80,7 +80,7 @@
 
     .filters__secondary {
 
-        @include xs-down {
+        @include sm-down {
             display: none;
         }
 
@@ -115,6 +115,11 @@
 
     .filters__wrapper {
         justify-content: center;
+
+        @include sm-down {
+            overflow-x: auto;
+            padding: 0 $col-gutter;
+        }
     }
 
     ul {
@@ -123,9 +128,27 @@
         list-style: none;
         margin: 0 -25px;
 
+        @include md-down {
+            margin: 0 -15px;
+        }
+
+        @include sm-down {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
         li {
             padding: 0 25px;
             display: inline-block;
+
+            @include md-down {
+                padding: 0 15px;
+            }
+
+            @include sm-down {
+                display: block;
+            }
 
             a {
                 @include font($style:medium);
@@ -135,6 +158,16 @@
                     color: $dark;
                 }
             }
+        }
+    }
+}
+
+.filters--centered-search {
+    @extend .filters--centered;
+
+    .filters__wrapper {
+        @include sm-down {
+            align-items: flex-start;
         }
     }
 }
