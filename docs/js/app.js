@@ -14841,7 +14841,7 @@ var menuStyle = 1;
 var scrollSpeed = 8;
 var activateIntro = false;
 var barbaDebug = true;
-var disableBarba = false;
+var disableBarba = true;
 
 var App =
 /*#__PURE__*/
@@ -15306,15 +15306,15 @@ function () {
 
       _lazyload.default.init();
 
-      _sliders.default.init();
-
-      _anchors.default.init(document.querySelector('.anchors__wrapper'), 200);
-
       _fancy.default.init();
 
       _fancy3.default.init();
 
       _fancy2.default.init();
+
+      _sliders.default.init();
+
+      _anchors.default.init(document.querySelector('.anchors__wrapper'), 200);
 
       _samples.default.init();
 

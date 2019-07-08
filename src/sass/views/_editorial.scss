@@ -99,6 +99,19 @@
                 }
             }
         }
+
+        .quote {
+            font-size: 1.4rem;
+            line-height: 1.5;
+        }
+
+        .text+.quote {
+            margin-top: 100px;
+
+            @include md-down {
+                margin-top: 40px;
+            }
+        }
     }
 
     .editorial__box-picture {
@@ -361,6 +374,14 @@
 
         .picture {
             @include aspect-clip(16, 9);
+
+            @include sm-down {
+                @include aspect-clip(16, 10);
+            }
+
+            @include xs-down {
+                @include aspect-clip(3, 4);
+            }
         }
     }
 
@@ -374,6 +395,11 @@
             flex: 0 0 60%;
             max-width: 60%;
             margin: 20px 0 0;
+        }
+
+        @include xs-down {
+            flex: 0 0 100%;
+            max-width: 100%;
         }
 
         .box {
@@ -474,6 +500,10 @@
     .editorial__box-picture {
         .picture {
             @include aspect-clip(16, 6);
+
+            @include sm-down {
+                @include aspect-clip(1, 1);
+            }
         }
 
         &:after {
@@ -503,12 +533,29 @@
     .editorial__box-picture {
         flex: 0 0 100%;
         max-width: 100%;
+
+        .picture {
+            @include aspect-clip(16, 8);
+
+            @include sm-down {
+                @include aspect-clip(16, 10);
+            }
+
+            @include xs-down {
+                @include aspect-clip(3, 4);
+            }
+        }
     }
 
     .editorial__caption {
         flex: 0 0 60%;
         max-width: 60%;
         margin: 20px 0 0;
+
+        @include xs-down {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
 
         .box {
             line-height: 1.2;
@@ -541,6 +588,18 @@
     .editorial__caption {
         margin-top: 24px;
         text-align: center;
+    }
+
+    .picture {
+        @include aspect-clip(16, 8);
+
+        @include sm-down {
+            @include aspect-clip(16, 10);
+        }
+
+        @include xs-down {
+            @include aspect-clip(3, 4);
+        }
     }
 }
 

@@ -23,7 +23,7 @@ let menuStyle = 1;
 let scrollSpeed = 8;
 const activateIntro = false;
 const barbaDebug = true;
-const disableBarba = false;
+const disableBarba = true;
 
 export default class App {
 
@@ -486,11 +486,11 @@ export default class App {
     onPageInit() {
         this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
         LazyLoad.init();
-        Sliders.init();
-        Anchors.init(document.querySelector('.anchors__wrapper'), 200);
         Fancy.init();
         FancyViewAll.init();
         FancyDetail.init();
+        Sliders.init();
+        Anchors.init(document.querySelector('.anchors__wrapper'), 200);
         Samples.init();
         Utils.toggleGrid();
         Filters.init();

@@ -8,6 +8,10 @@
         @include sm-down {
             font-size: 3.8rem;
         }
+
+        @include xs-down {
+            font-size: 2.8rem;
+        }
     }
 
     .eyelet {

@@ -1,6 +1,6 @@
 .box {
     .text {
-        
+
         p {
             margin-bottom: 3rem;
 
@@ -44,7 +44,7 @@
     }
 
     .quote {
-        font-size: 1.4rem;
+        font-size: 2.5rem;
         line-height: 1.5;
 
         @include xs-down {
@@ -62,10 +62,10 @@
     }
 
     .text+.quote {
-        margin-top: 100px;
+        margin-top: 50px;
 
         @include md-down {
-            margin-top: 40px;
+            margin-top: 20px;
         }
     }
 
