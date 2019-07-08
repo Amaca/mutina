@@ -138,7 +138,7 @@ a {
     }
 
     &--inline {
-        @include font($style:heavy);
+        @include font($style:medium);
 
         color: $dark;
         position: relative;

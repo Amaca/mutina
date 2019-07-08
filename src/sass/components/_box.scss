@@ -43,6 +43,7 @@
         line-height: 1.6;
     }
 
+    blockquote,
     .quote {
         font-size: 2.5rem;
         line-height: 1.5;
@@ -51,6 +52,8 @@
             text-align: center;
         }
     }
+
+    blockquote {}
 
     .h2+.text,
     .h2+.box__appear {

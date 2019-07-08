@@ -680,10 +680,10 @@ export default class App {
                     }, 150 * node.appearingIndex);
                 }
             } else {
-                if (node.classList.contains('appeared')) {
-                    node.to = null;
-                    node.classList.remove('appeared');
-                }
+                // if (node.classList.contains('appeared')) {
+                //     node.to = null;
+                //     node.classList.remove('appeared');
+                // }
             }
         });
 

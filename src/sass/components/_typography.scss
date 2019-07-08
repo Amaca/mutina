@@ -38,6 +38,14 @@ h6,
 
 .h1 {
     font-size: 3.2rem;
+
+    @include md-down {
+        font-size: 2.9rem;
+    }
+
+    @include sm-down {
+        font-size: 2.6rem;
+    }
 }
 
 .h2 {
