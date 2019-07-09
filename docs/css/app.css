@@ -3427,6 +3427,7 @@ fieldset {
     transition: opacity 1s cubic-bezier(0, 0.97, 0.43, 1); }
   .slider--fullscreen .swiper-slide .slider__caption {
     opacity: 0;
+    margin-top: 24px;
     -webkit-transition: opacity 1s cubic-bezier(0, 0.97, 0.43, 1);
     transition: opacity 1s cubic-bezier(0, 0.97, 0.43, 1); }
   .slider--fullscreen .swiper-slide .slider__picture {
@@ -5006,7 +5007,7 @@ body.fancy-page main {
     max-width: 45%;
     font-family: 'futura-pt', sans-serif;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 0.8rem; }
     @media (max-width: 576px) {
       .listing--grid .listing__box-date {
@@ -5068,6 +5069,9 @@ body.fancy-page main {
         .bookmarks ul.socials li .ico {
           width: 26px;
           height: 26px; }
+        .bookmarks ul.socials li:last-child .ico {
+          position: relative;
+          top: 3px; }
 
 .downloads {
   padding: 0 0 120px 0; }

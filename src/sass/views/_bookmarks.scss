@@ -34,6 +34,13 @@
                     width: 26px;
                     height: 26px;
                 }
+
+                &:last-child {
+                    .ico {
+                        position: relative;
+                        top: 3px;
+                    }
+                }
             }
         }
     }

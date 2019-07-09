@@ -95,7 +95,7 @@
     .listing__box-date {
         flex: 0 0 45%;
         max-width: 45%;
-        @include font($style:medium);
+        @include font($style:book);
         font-size: 0.8rem;
 
         @include xs-down {
