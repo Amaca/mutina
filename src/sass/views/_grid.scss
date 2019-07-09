@@ -1,0 +1,122 @@
+.listing--grid {
+    position: relative;
+    margin: 0 -#{$col-gutter};
+
+    .listing__item {
+        position: absolute;
+        z-index: 1;
+        width: 50vw;
+        padding: 0 $col-gutter;
+        margin-bottom: $col-width;
+        display: flex !important;
+
+        @include xs-down {
+            width: 100%;
+            display: block !important;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        &.listing__item--small-right {
+            justify-content: flex-start;
+
+            .listing__wrapper {
+                width: calc(#{$col-width-3} + #{$col-gutter});
+
+                @include md-down {
+                    width: calc(#{$col-width-4} + #{$col-gutter});
+                }
+
+                @include xs-down {
+                    width: 100%;
+                }
+            }
+        }
+
+        &.listing__item--small-left {
+            justify-content: flex-end;
+
+            .listing__wrapper {
+                width: calc(#{$col-width-3} + #{$col-gutter});
+
+                @include md-down {
+                    width: calc(#{$col-width-4} + #{$col-gutter});
+                }
+
+                @include xs-down {
+                    width: 100%;
+                }
+            }
+        }
+
+        &.listing__item--big-unline {
+            justify-content: flex-end;
+            padding-right: 0;
+
+            .listing__wrapper {
+                width: $col-width-5;
+            }
+        }
+
+        &.listing__item--padding-top {
+            padding-top: $col-width;
+
+            @include xs-down {
+                padding-top: 0;
+            }
+        }
+    }
+
+    .listing__wrapper {
+        position: relative;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .listing__wrapper>img {
+        display: block;
+    }
+
+
+    .listing__box {
+        display: flex;
+        flex-direction: row;
+        margin-top: 30px;
+        line-height: 1.6;
+
+        @include xs-down {
+            flex-direction: column;
+            margin-top: 10px;
+        }
+    }
+
+    .listing__box-date {
+        flex: 0 0 45%;
+        max-width: 45%;
+        @include font($style:medium);
+        font-size: 0.8rem;
+
+        @include xs-down {
+            margin-bottom: 10px;
+        }
+    }
+
+    .listing__box-title {
+        flex: 0 0 55%;
+        max-width: 55%;
+
+        @include xs-down {
+            flex: 0 0 55%;
+            max-width: 55%;
+        }
+
+        .btn--inline {
+            margin-top: 20px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+    }
+
+}

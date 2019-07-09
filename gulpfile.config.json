@@ -21,7 +21,8 @@
                     "node_modules/gsap/src/uncompressed/TweenLite.js",
                     "node_modules/gsap/src/uncompressed/TweenMax.js",
                     "node_modules/splitting/dist/splitting.js",
-                    "node_modules/swiper/dist/js/swiper.js"
+                    "node_modules/swiper/dist/js/swiper.js",
+                    "node_modules/muuri/dist/muuri.js"
                 ],
                 "output": "docs/js/vendors.js",
                 "minify": false

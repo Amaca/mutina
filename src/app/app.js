@@ -11,6 +11,7 @@ import Fancy from "./shared/fancy";
 import FancyDetail from "./shared/fancy.detail";
 import FancyViewAll from "./shared/fancy.view-all";
 import Filters from './shared/filters';
+import Grid from './shared/grid';
 import LazyLoad from './shared/lazyload';
 import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
@@ -23,7 +24,7 @@ let menuStyle = 1;
 let scrollSpeed = 8;
 const activateIntro = false;
 const barbaDebug = true;
-const disableBarba = true;
+const disableBarba = false;
 
 export default class App {
 
@@ -494,6 +495,7 @@ export default class App {
         Samples.init();
         Utils.toggleGrid();
         Filters.init();
+        Grid.init();
 
         setTimeout(x => {
             this.appears = Appears.init();
@@ -511,6 +513,7 @@ export default class App {
         FancyViewAll.destroyAll();
         FancyDetail.destroyAll();
         Filters.destroyAll();
+        Grid.destroyAll();
         container.remove();
     }
 

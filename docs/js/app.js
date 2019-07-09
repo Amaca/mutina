@@ -14816,6 +14816,8 @@ var _fancy3 = _interopRequireDefault(require("./shared/fancy.view-all"));
 
 var _filters = _interopRequireDefault(require("./shared/filters"));
 
+var _grid = _interopRequireDefault(require("./shared/grid"));
+
 var _lazyload = _interopRequireDefault(require("./shared/lazyload"));
 
 var _navigation = _interopRequireDefault(require("./shared/navigation"));
@@ -14841,7 +14843,7 @@ var menuStyle = 1;
 var scrollSpeed = 8;
 var activateIntro = false;
 var barbaDebug = true;
-var disableBarba = true;
+var disableBarba = false;
 
 var App =
 /*#__PURE__*/
@@ -15322,6 +15324,8 @@ function () {
 
       _filters.default.init();
 
+      _grid.default.init();
+
       setTimeout(function (x) {
         _this.appears = _appears.default.init();
 
@@ -15346,6 +15350,8 @@ function () {
       _fancy2.default.destroyAll();
 
       _filters.default.destroyAll();
+
+      _grid.default.destroyAll();
 
       container.remove();
     }
@@ -15585,7 +15591,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":317,"./shared/fancy.detail":316,"./shared/fancy.view-all":319,"./shared/filters":320,"./shared/lazyload":321,"./shared/navigation":322,"./shared/rect":323,"./shared/samples":325,"./shared/sliders":326,"./shared/utils":327,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":317,"./shared/fancy.detail":316,"./shared/fancy.view-all":319,"./shared/filters":320,"./shared/grid":321,"./shared/lazyload":322,"./shared/navigation":323,"./shared/rect":324,"./shared/samples":326,"./shared/sliders":327,"./shared/utils":328,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15909,7 +15915,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":327}],316:[function(require,module,exports){
+},{"./utils":328}],316:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16013,7 +16019,7 @@ function () {
 
 exports.default = FancyDetail;
 
-},{"./utils":327}],317:[function(require,module,exports){
+},{"./utils":328}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16679,7 +16685,7 @@ function () {
 
 exports.default = FancyTransition;
 
-},{"./fancy":317,"./fancy.view-all":319,"./samples.detail":324}],319:[function(require,module,exports){
+},{"./fancy":317,"./fancy.view-all":319,"./samples.detail":325}],319:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16996,7 +17002,72 @@ function () {
 
 exports.default = Filters;
 
-},{"./utils":327}],321:[function(require,module,exports){
+},{"./utils":328}],321:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* jshint esversion: 6 */
+var Grid =
+/*#__PURE__*/
+function () {
+  function Grid(node, index) {
+    _classCallCheck(this, Grid);
+
+    this.node = node;
+    this.index = index;
+    this.instance = new Muuri(node, {
+      layout: {
+        fillGaps: true
+      }
+    });
+  }
+
+  _createClass(Grid, [{
+    key: "destroy",
+    value: function destroy() {
+      this.instance.destroy(true);
+    }
+  }], [{
+    key: "destroyAll",
+    value: function destroyAll() {
+      Grid.items.forEach(function (grid) {
+        grid.destroy();
+      });
+    }
+  }, {
+    key: "init",
+    value: function init() {
+      Grid.items = _toConsumableArray(document.querySelectorAll('.listing--grid')).map(function (node, index) {
+        return new Grid(node, index);
+      });
+      console.log('grid: ', Grid.items);
+    }
+  }]);
+
+  return Grid;
+}();
+
+exports.default = Grid;
+
+},{}],322:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17098,7 +17169,7 @@ function () {
 exports.default = LazyLoad;
 LazyLoad.items = [];
 
-},{"./rect":323}],322:[function(require,module,exports){
+},{"./rect":324}],323:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17364,7 +17435,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":327}],323:[function(require,module,exports){
+},{"./utils":328}],324:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17483,7 +17554,7 @@ function () {
 
 exports.default = Rect;
 
-},{}],324:[function(require,module,exports){
+},{}],325:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17725,7 +17796,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":325,"./utils":327,"gsap/ScrollToPlugin":309}],325:[function(require,module,exports){
+},{"./samples":326,"./utils":328,"gsap/ScrollToPlugin":309}],326:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18027,7 +18098,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":318,"./samples.detail":324,"gsap/ScrollToPlugin":309}],326:[function(require,module,exports){
+},{"./fancy.transition":318,"./samples.detail":325,"gsap/ScrollToPlugin":309}],327:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18218,7 +18289,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],327:[function(require,module,exports){
+},{}],328:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

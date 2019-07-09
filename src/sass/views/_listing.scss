@@ -151,3 +151,9 @@
         }
     }
 }
+
+.archive--grid {
+    margin-top: $col-gutter;
+    margin-bottom: $col-gutter;
+    transition: none;
+}
