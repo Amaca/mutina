@@ -4045,6 +4045,9 @@ body.fancy-page main {
 */
 .editorial {
   padding-bottom: 190px; }
+  @media (max-width: 1560px) {
+    .editorial {
+      padding-bottom: 130px; } }
   @media (max-width: 992px) {
     .editorial {
       padding-bottom: 120px; } }
@@ -4093,7 +4096,7 @@ body.fancy-page main {
       margin-bottom: 20px; } }
 
 .editorial__2col-text p {
-  font-size: 1.15rem;
+  font-size: 1.28rem;
   line-height: 1.6; }
   @media (max-width: 1200px) {
     .editorial__2col-text p {
@@ -4384,6 +4387,43 @@ body.fancy-page main {
     font-weight: 700;
     font-size: 0.9rem;
     margin-bottom: 22px; }
+  .editorial__1col-mid-text .h4, .editorial__1col-mid-text--centered .h4, .editorial__1col-mid-text--lines .h4 {
+    color: var(--color-grey);
+    margin-top: 100px;
+    margin-bottom: 40px;
+    font-size: 1.7rem;
+    line-height: 1.6; }
+    .editorial__1col-mid-text .h4:first-child, .editorial__1col-mid-text--centered .h4:first-child, .editorial__1col-mid-text--lines .h4:first-child {
+      margin-top: 0; }
+    @media (max-width: 1200px) {
+      .editorial__1col-mid-text .h4, .editorial__1col-mid-text--centered .h4, .editorial__1col-mid-text--lines .h4 {
+        font-size: 1.5rem;
+        margin-top: 50px;
+        margin-bottom: 30px; } }
+    @media (max-width: 992px) {
+      .editorial__1col-mid-text .h4, .editorial__1col-mid-text--centered .h4, .editorial__1col-mid-text--lines .h4 {
+        margin-top: 30px;
+        font-size: 1.4rem; } }
+    @media (max-width: 768px) {
+      .editorial__1col-mid-text .h4, .editorial__1col-mid-text--centered .h4, .editorial__1col-mid-text--lines .h4 {
+        font-size: 1.2rem;
+        margin-top: 20px;
+        margin-bottom: 10px; } }
+  .editorial__1col-mid-text p, .editorial__1col-mid-text--centered p, .editorial__1col-mid-text--lines p {
+    font-size: 1.28rem;
+    line-height: 1.6; }
+    @media (max-width: 1200px) {
+      .editorial__1col-mid-text p, .editorial__1col-mid-text--centered p, .editorial__1col-mid-text--lines p {
+        font-size: 18px; } }
+    @media (max-width: 992px) {
+      .editorial__1col-mid-text p, .editorial__1col-mid-text--centered p, .editorial__1col-mid-text--lines p {
+        font-size: 16px; } }
+    @media (max-width: 768px) {
+      .editorial__1col-mid-text p, .editorial__1col-mid-text--centered p, .editorial__1col-mid-text--lines p {
+        font-size: 14px; } }
+  .editorial__1col-mid-text blockquote, .editorial__1col-mid-text--centered blockquote, .editorial__1col-mid-text--lines blockquote {
+    line-height: 1.6;
+    margin-bottom: 70px; }
 
 .editorial__1col-mid-text--centered {
   text-align: center; }

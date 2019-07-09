@@ -3,6 +3,10 @@
 .editorial {
     padding-bottom: 190px;
 
+    @include xl-down {
+        padding-bottom: 130px;
+    }
+
     @include md-down {
         padding-bottom: 120px;
     }
@@ -64,7 +68,7 @@
     }
 
     p {
-        font-size: 1.15rem;
+        font-size: 1.28rem;
         line-height: 1.6;
 
         @include lg-down {
@@ -83,9 +87,7 @@
     blockquote {
         line-height: 1.6;
         margin-bottom: 70px;
-
     }
-
 }
 
 // 2col-img 
@@ -367,6 +369,57 @@
         @include font($style:heavy);
         font-size: 0.9rem;
         margin-bottom: 22px;
+    }
+
+    .h4 {
+        color: $grey;
+        margin-top: 100px;
+        margin-bottom: 40px;
+        font-size: 1.7rem;
+        line-height: 1.6;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        @include lg-down {
+            font-size: 1.5rem;
+            margin-top: 50px;
+            margin-bottom: 30px;
+        }
+
+        @include md-down {
+            margin-top: 30px;
+            font-size: 1.4rem;
+        }
+
+        @include sm-down {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+    }
+
+    p {
+        font-size: 1.28rem;
+        line-height: 1.6;
+
+        @include lg-down {
+            font-size: $font-size-lg;
+        }
+
+        @include md-down {
+            font-size: $font-size-md;
+        }
+
+        @include sm-down {
+            font-size: $font-size-sm;
+        }
+    }
+
+    blockquote {
+        line-height: 1.6;
+        margin-bottom: 70px;
     }
 }
 
