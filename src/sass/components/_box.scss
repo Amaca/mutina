@@ -36,6 +36,10 @@
                 }
             }
         }
+
+        strong, b {
+            font-weight: 400;
+        }
     }
 
     .text--big {
@@ -53,7 +57,26 @@
         }
     }
 
-    blockquote {}
+    blockquote {
+        line-height: 1.6;
+        
+        @include sm-down {
+            text-align: left;
+            font-size: 2rem;
+        }
+
+        @include xs-down {
+            font-size: 1.5rem;
+        }
+    }
+
+    blockquote+p {
+        margin-top: 70px;
+
+        @include md-down {
+            margin-top: 40px;
+        }
+    }
 
     .h2+.text,
     .h2+.box__appear {

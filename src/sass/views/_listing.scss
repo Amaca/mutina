@@ -157,3 +157,35 @@
     margin-bottom: $col-gutter;
     transition: none;
 }
+
+.archive--squared {
+    
+    @include sm-down {
+        margin-bottom: $col-width-2;
+    }
+
+    .listing__item {
+        text-align: center;
+
+        .h2 {
+            font-size: 2.2rem;
+
+            @include md-down {
+                font-size: 1.8rem;
+            }
+
+            @include xs-down {
+                font-size: 1.6rem;
+            }
+        }
+
+        .picture {
+            padding-top: 100%;
+            background: $white;
+        }
+    }
+}
+
+.cover + .archive--squared {
+    margin-top: 0;
+}

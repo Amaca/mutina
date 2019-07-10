@@ -1,0 +1,64 @@
+.schedule {
+    padding: 200px 0 140px 0;
+    border-top: 2px solid var(--color-dark);
+
+    @include md-down {
+        padding: 120px 0 90px 0;
+    }
+
+    @include sm-down {
+        padding: 80px 0 50px 0;
+    }
+
+    .box--title {
+        text-align: left;
+        margin-bottom: 120px;
+
+        @include md-down {
+            margin-bottom: 80px;
+        }
+
+        @include sm-down {
+            margin-bottom: 60px;
+        }
+    }
+
+    .schedule__wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 0 -30px;
+
+        @include xxs-down {
+            margin: 0;
+        }
+    }
+
+    .schedule__item {
+        padding: 0 30px;
+        flex: 0 0 33.333%;
+        max-width: 33.333%;
+        margin-bottom: 60px;
+
+        @include sm-down {
+            flex: 0 0 50%;
+            max-width: 50%;
+            margin-bottom: 30px;
+        }
+
+        @include xxs-down {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding: 0;
+        }
+    }
+
+    .h4 {
+        @include font($style:book);
+    }
+
+    .eyelet {
+        text-transform: uppercase;
+        @include font($style:medium);
+    }
+}

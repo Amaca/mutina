@@ -15,6 +15,10 @@
         padding-bottom: 80px;
     }
 
+    @include xs-down {
+        padding-bottom: 50px;
+    }
+
     &>div {
         margin-bottom: 100px;
 
@@ -82,11 +86,6 @@
         @include sm-down {
             font-size: $font-size-sm;
         }
-    }
-
-    blockquote {
-        line-height: 1.6;
-        margin-bottom: 70px;
     }
 }
 
@@ -290,6 +289,23 @@
     }
 }
 
+// 1col-slider-carousel
+.editorial__1col-slider-carousel {
+
+    .box--title {
+        text-align: center;
+
+        @include sm-down {
+            text-align: center;
+        }
+
+        .h2 {
+            @include xs-down {
+                font-size: 1.8rem;
+            }
+        }
+    }
+}
 
 // 2col-text-slider
 .editorial__2col-text-slider {
@@ -430,11 +446,6 @@
         @include sm-down {
             font-size: $font-size-sm;
         }
-    }
-
-    blockquote {
-        line-height: 1.6;
-        margin-bottom: 70px;
     }
 }
 
@@ -799,5 +810,15 @@
         @include sm-down {
             padding: 0 15px 20px 15px;
         }
+    }
+}
+
+
+//1col-full-video
+.editorial__1col-full-video {
+    
+    .video {
+        position: relative;
+        padding-top: 56.25%;
     }
 }
