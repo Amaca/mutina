@@ -14830,6 +14830,8 @@ var _sliders = _interopRequireDefault(require("./shared/sliders"));
 
 var _utils = _interopRequireDefault(require("./shared/utils"));
 
+var _toggle = _interopRequireDefault(require("./shared/toggle.search"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -14842,8 +14844,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var menuStyle = 1;
 var scrollSpeed = 8;
 var activateIntro = false;
-var barbaDebug = true;
+var debug = true;
 var disableBarba = false;
+var barbaDebug = debug;
 
 var App =
 /*#__PURE__*/
@@ -15093,7 +15096,7 @@ function () {
               app.onPageInit();
               /*
               window.daraLayer.push({
-                })
+               })
               gtm.push({
                   title: document.title,
                   href: window.href
@@ -15324,7 +15327,9 @@ function () {
 
       _filters.default.init();
 
-      _grid.default.init();
+      _toggle.default.init(debug);
+
+      _grid.default.init(debug);
 
       setTimeout(function (x) {
         _this.appears = _appears.default.init();
@@ -15350,6 +15355,8 @@ function () {
       _fancy2.default.destroyAll();
 
       _filters.default.destroyAll();
+
+      _toggle.default.destroyAll();
 
       _grid.default.destroyAll();
 
@@ -15591,7 +15598,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":317,"./shared/fancy.detail":316,"./shared/fancy.view-all":319,"./shared/filters":320,"./shared/grid":321,"./shared/lazyload":322,"./shared/navigation":323,"./shared/rect":324,"./shared/samples":326,"./shared/sliders":327,"./shared/utils":328,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":317,"./shared/fancy.detail":316,"./shared/fancy.view-all":319,"./shared/filters":320,"./shared/grid":321,"./shared/lazyload":322,"./shared/navigation":323,"./shared/rect":324,"./shared/samples":326,"./shared/sliders":327,"./shared/toggle.search":328,"./shared/utils":329,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15915,7 +15922,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":328}],316:[function(require,module,exports){
+},{"./utils":329}],316:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16019,7 +16026,7 @@ function () {
 
 exports.default = FancyDetail;
 
-},{"./utils":328}],317:[function(require,module,exports){
+},{"./utils":329}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17002,7 +17009,7 @@ function () {
 
 exports.default = Filters;
 
-},{"./utils":328}],321:[function(require,module,exports){
+},{"./utils":329}],321:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17054,11 +17061,14 @@ function () {
     }
   }, {
     key: "init",
-    value: function init() {
+    value: function init(debug) {
       Grid.items = _toConsumableArray(document.querySelectorAll('.listing--grid')).map(function (node, index) {
         return new Grid(node, index);
       });
-      console.log('grid: ', Grid.items);
+
+      if (debug) {
+        console.log('Grid: ', Grid.items);
+      }
     }
   }]);
 
@@ -17435,7 +17445,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":328}],324:[function(require,module,exports){
+},{"./utils":329}],324:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17796,7 +17806,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":326,"./utils":328,"gsap/ScrollToPlugin":309}],326:[function(require,module,exports){
+},{"./samples":326,"./utils":329,"gsap/ScrollToPlugin":309}],326:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18290,6 +18300,114 @@ function () {
 exports.default = Sliders;
 
 },{}],328:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _utils = _interopRequireDefault(require("./utils"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var body = document.querySelector('body');
+var clickToggle;
+
+var ToggleSearch =
+/*#__PURE__*/
+function () {
+  function ToggleSearch(node, id) {
+    _classCallCheck(this, ToggleSearch);
+
+    this.node = node;
+    this.id = id;
+    this.wrapper = this.node.querySelector('.toggle-search__wrapper');
+    this.input = this.node.querySelector('.toggle-search__input input');
+    this.open = this.node.querySelector('.toggle-search__open');
+    this.close = this.node.querySelector('.toggle-search__close');
+    this.addListener();
+  }
+
+  _createClass(ToggleSearch, [{
+    key: "addListener",
+    value: function addListener() {
+      var _this = this;
+
+      var clickToggle = function clickToggle(e) {
+        _this.toggle();
+
+        e.preventDefault();
+      };
+
+      this.clickToggle = clickToggle;
+      this.open.addEventListener('click', this.clickToggle);
+      this.close.addEventListener('click', this.clickToggle);
+    }
+  }, {
+    key: "toggle",
+    value: function toggle() {
+      var _this2 = this;
+
+      _utils.default.toggleClass(this.wrapper, 'active');
+
+      var searchOpen = this.wrapper.classList.contains('active') ? true : false;
+
+      if (searchOpen) {
+        this.input.focus();
+      } else {
+        setTimeout(function (e) {
+          _this2.input.value = '';
+        }, 600);
+      }
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.wrapper.classList.remove('active');
+      this.open.removeEventListener('click', this.clickToggle);
+      this.close.removeEventListener('click', this.clickToggle);
+    }
+  }], [{
+    key: "destroyAll",
+    value: function destroyAll() {
+      ToggleSearch.items.forEach(function (node) {
+        node.destroy();
+      });
+    }
+  }, {
+    key: "init",
+    value: function init(debug) {
+      ToggleSearch.items = _toConsumableArray(document.querySelectorAll('[data-toggle-search]')).map(function (node, id) {
+        return new ToggleSearch(node, id);
+      });
+
+      if (debug) {
+        console.log('ToggleSearch: ', ToggleSearch.items);
+      }
+    }
+  }]);
+
+  return ToggleSearch;
+}();
+
+exports.default = ToggleSearch;
+
+},{"./utils":329}],329:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

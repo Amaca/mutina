@@ -166,11 +166,12 @@
     @extend .filters--centered;
 
     .filters__wrapper {
-        @include sm-down {
-            align-items: flex-start;
+        @include xs-down {
+            justify-content: flex-start;
         }
     }
 }
+
 
 //FILTERS PANEL
 .filters__panel {

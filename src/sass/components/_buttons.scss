@@ -169,4 +169,22 @@ a {
             }
         }
     }
+
+    &--inline-alt {
+        @extend .btn--inline;
+
+        &:after {
+            width: 0;
+            left: auto;
+            right: 0;
+        }
+
+        &:hover {
+            &:after {
+                width: 100%;
+                left: 0;
+                right: auto;
+            }
+        }
+    }
 }

@@ -1,0 +1,94 @@
+.toggle-search {
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center !important;
+
+    @include xs-down {
+        position: static;
+        padding-right: 46px !important;
+    }
+
+    li.toggle-search__wrapper {
+        
+        @include xs-down {
+            position: absolute;
+            z-index: 3;
+            top: 2px;
+            right: 0;
+            height: calc(#{$header-height-mobile} - 6px);
+            background: $white;
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-search__input {
+            position: absolute;
+            z-index: 2;
+            top: 2px;
+            right: 0;
+            background: $white;
+            width: 0;
+            height: calc(#{$header-height} - 4px);
+            transition: width .6s $smooth;
+            overflow: hidden;
+
+            @include sm-down {
+                top: 0;
+                height: calc(#{$header-height-mobile} - 6px);
+            }
+
+            input {
+                width: 100%;
+                height: 100%;
+                font-size: 1.3rem;
+                background: transparent;
+                border: 0;
+                padding: 10px 80px 10px 30px;
+            }
+        }
+    
+        .toggle-search__open {
+            cursor: pointer;
+
+            @include xs-down {
+                margin-top: -3px;
+            }
+
+            svg {
+                width: 16px;
+                height: 16px;
+                fill: $grey;
+            }
+        }
+
+        .toggle-search__close {
+            position: absolute;
+            z-index: 3;
+            width: 0;
+            overflow: hidden;
+            transition: width .4s $smooth;
+            cursor: pointer;
+
+            svg {
+                width: 16px;
+                height: 16px;
+                fill: $grey;
+            }
+        }
+
+        &.active {
+            .toggle-search__input { 
+                width: 100%;
+
+                @include sm-down {
+                    width: 100vw;
+                }
+            }
+
+            .toggle-search__close {
+                width: 16px;
+            }
+        }
+    }
+}

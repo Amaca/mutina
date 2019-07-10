@@ -18,13 +18,16 @@ import Rect from './shared/rect';
 import Samples from "./shared/samples";
 import Sliders from './shared/sliders';
 import Utils from './shared/utils';
+import ToggleSearch from "./shared/toggle.search";
 
 //settings
 let menuStyle = 1;
 let scrollSpeed = 8;
 const activateIntro = false;
-const barbaDebug = true;
+const debug = true;
 const disableBarba = false;
+const barbaDebug = debug;
+
 
 export default class App {
 
@@ -495,7 +498,8 @@ export default class App {
         Samples.init();
         Utils.toggleGrid();
         Filters.init();
-        Grid.init();
+        ToggleSearch.init(debug);
+        Grid.init(debug);
 
         setTimeout(x => {
             this.appears = Appears.init();
@@ -513,6 +517,7 @@ export default class App {
         FancyViewAll.destroyAll();
         FancyDetail.destroyAll();
         Filters.destroyAll();
+        ToggleSearch.destroyAll();
         Grid.destroyAll();
         container.remove();
     }

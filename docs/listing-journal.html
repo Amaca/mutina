@@ -200,7 +200,7 @@
                 <section class="filters filters--centered-search">
                     <div class="container--big">
                         <div class="filters__wrapper">
-                            <ul>
+                            <ul class="toggle-search" data-toggle-search>
                                 <li><a href="#" class="active">All</a></li>
                                 <li><a href="listing-journal-talks.html" class="fast-transition">Talks</a></li>
                                 <li><a href="#">Art</a></li>
@@ -208,16 +208,30 @@
                                 <li><a href="#">Places</a></li>
                                 <li><a href="#">Events</a></li>
                                 <li><a href="#">Diary</a></li>
+                                <li class="toggle-search__wrapper">
+                                    <button class="toggle-search__close">
+                                        <svg>
+                                            <use xlink:href="#svg-close"></use>
+                                        </svg>
+                                    </button>
+                                    <div class="toggle-search__input">
+                                        <input type="text" placeholder="Search in journal">
+                                    </div>
+                                    <button class="toggle-search__open">
+                                        <svg>
+                                            <use xlink:href="#svg-search"></use>
+                                        </svg>
+                                    </button>
+                                </li>
                             </ul>
-                            <input type="text" placeholder="cerca">
                         </div>
                     </div>
                 </section>
-                <section class=" archive--grid">
+                <section class="archive--grid">
                     <div class="container--big">
                         <div class="listing--grid">
                             <div class="listing__item listing__item--small-right">
-                                <div class="listing__wrapper">
+                                <a href="article-journal.html" data-transition="Journal" class="listing__wrapper">
                                     <div class="listing__picture picture" data-appear>
                                         <img data-load="assets/img/listing-grid-small-01.jpg" data-parallax="5" />
                                     </div>
@@ -227,13 +241,13 @@
                                         </div>
                                         <div class="listing__box-title">
                                             <h4 class="h4">Lane & Primavera in Lyon with Edward Barber & Jay Osgerby</h4>
-                                            <a href="#" class="btn btn--inline">Read more</a>
+                                            <div class="btn btn--inline-alt">Read more</div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                             <div class="listing__item">
-                                <div class="listing__wrapper">
+                                <a href="article-journal-b.html" data-transition="Journal" class="listing__wrapper">
                                     <div class="listing__picture picture" style="padding-top: 127.30%" data-appear>
                                         <img data-load="assets/img/listing-grid-vertical-01.jpg" data-parallax="5" />
                                     </div>
@@ -243,13 +257,13 @@
                                         </div>
                                         <div class="listing__box-title">
                                             <h4 class="h4">Libreria Rizzoli: project by Paolo Lucchetta+RetailDesign</h4>
-                                            <a href="#" class="btn btn--inline">Read more</a>
+                                            <div class="btn btn--inline-alt">Read more</div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                             <div class="listing__item listing__item--small-left">
-                                <div class="listing__wrapper">
+                                <a href="article-journal-c.html" data-transition="Journal" class="listing__wrapper">
                                     <div class="listing__picture picture" data-appear>
                                         <img data-load="assets/img/listing-grid-small-02.jpg" data-parallax="5" />
                                     </div>
@@ -259,13 +273,13 @@
                                         </div>
                                         <div class="listing__box-title">
                                             <h4 class="h4">A talk with Neri&Hu</h4>
-                                            <a href="#" class="btn btn--inline">Read more</a>
+                                            <div class="btn btn--inline-alt">Read more</div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                             <div class="listing__item listing__item--small-right listing__item--padding-top">
-                                <div class="listing__wrapper">
+                                <a href="article-journal.html" data-transition="Journal" class="listing__wrapper">
                                     <div class="listing__picture picture" data-appear>
                                         <img data-load="assets/img/listing-grid-small-03.jpg" data-parallax="5" />
                                     </div>
@@ -275,13 +289,13 @@
                                         </div>
                                         <div class="listing__box-title">
                                             <h4 class="h4">A talk with AGi Architects</h4>
-                                            <a href="#" class="btn btn--inline">Read more</a>
+                                            <div class="btn btn--inline-alt">Read more</div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                             <div class="listing__item">
-                                <div class="listing__wrapper">
+                                <a href="article-journal-b.html" data-transition="Journal" class="listing__wrapper">
                                     <div class="listing__picture picture" data-appear>
                                         <img data-load="assets/img/slider-carousel-03.jpg" data-parallax="5" />
                                     </div>
@@ -291,13 +305,13 @@
                                         </div>
                                         <div class="listing__box-title">
                                             <h4 class="h4">Stockholm Furniture Fair 2019</h4>
-                                            <a href="#" class="btn btn--inline">Read more</a>
+                                            <div class="btn btn--inline-alt">Read more</div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                             <div class="listing__item ">
-                                <div class="listing__wrapper">
+                                <a href="article-journal-c.html" data-transition="Journal" class="listing__wrapper">
                                     <div class="listing__picture picture" data-appear>
                                         <img data-load="assets/img/slider-carousel-01.jpg" data-parallax="5" />
                                     </div>
@@ -307,13 +321,13 @@
                                         </div>
                                         <div class="listing__box-title">
                                             <h4 class="h4">Stockholm Furniture Fair 2019</h4>
-                                            <a href="#" class="btn btn--inline">Read more</a>
+                                            <div class="btn btn--inline-alt">Read more</div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                             <div class="listing__item listing__item--small-left listing__item--padding-top">
-                                <div class="listing__wrapper">
+                                <a href="article-journal.html" data-transition="Journal" class="listing__wrapper">
                                     <div class="listing__picture picture" data-appear>
                                         <img data-load="assets/img/editorial-horizontal-full-02.jpg" data-parallax="5" />
                                     </div>
@@ -323,13 +337,13 @@
                                         </div>
                                         <div class="listing__box-title">
                                             <h4 class="h4">Stockholm Furniture Fair 2019</h4>
-                                            <a href="#" class="btn btn--inline">Read more</a>
+                                            <div class="btn btn--inline-alt">Read more</div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                             <div class="listing__item">
-                                <div class="listing__wrapper">
+                                <a href="article-journal-b.html" data-transition="Journal" class="listing__wrapper">
                                     <div class="listing__picture picture" style="padding-top: 127.30%" data-appear>
                                         <img data-load="assets/img/editorial-vertical-02.jpg" data-parallax="5" />
                                     </div>
@@ -339,13 +353,13 @@
                                         </div>
                                         <div class="listing__box-title">
                                             <h4 class="h4">Grow Hotel project by 3XN Architects and Note Design Studio</h4>
-                                            <a href="#" class="btn btn--inline">Read more</a>
+                                            <div class="btn btn--inline-alt">Read more</div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                             <div class="listing__item listing__item--small-right listing__item--padding-top">
-                                <div class="listing__wrapper">
+                                <a href="article-journal-c.html" data-transition="Journal" class="listing__wrapper">
                                     <div class="listing__picture picture" data-appear>
                                         <img data-load="assets/img/editorial-horizontal-full-01-thumb.jpg" data-parallax="5" />
                                     </div>
@@ -355,10 +369,10 @@
                                         </div>
                                         <div class="listing__box-title">
                                             <h4 class="h4">A talk with Neri&Hu</h4>
-                                            <a href="#" class="btn btn--inline">Read more</a>
+                                            <div class="btn btn--inline-alt">Read more</div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                     </div>
