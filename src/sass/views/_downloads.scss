@@ -1,8 +1,20 @@
 .downloads {
-    padding: 0 0 120px 0;
+    padding-bottom: 190px;
+
+    @include xl-down {
+        padding-bottom: 130px;
+    }
+
+    @include md-down {
+        padding-bottom: 120px;
+    }
 
     @include sm-down {
-        padding: 0 0 80px 0;
+        padding-bottom: 80px;
+    }
+
+    @include xs-down {
+        padding-bottom: 50px;
     }
 }
 
@@ -20,6 +32,10 @@
 .downloads__item {
     padding: 20px;
     border-bottom: 2px solid $dark;
+}
+
+.downloads__title {
+    font-size: 1.2rem;
 }
 
 .downloads__button {

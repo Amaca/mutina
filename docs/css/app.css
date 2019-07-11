@@ -1738,14 +1738,14 @@ body.fancy-detail-panel-open .fancy-detail__panel-content .listing {
   font-size: 0.7rem;
   font-family: 'futura-pt', sans-serif;
   font-style: normal;
-  font-weight: 500; }
+  font-weight: 700; }
   @media (max-width: 768px) {
     .cover .eyelet {
       font-size: 0.8rem;
       margin-bottom: 10px; } }
   .cover .eyelet svg {
     position: relative;
-    top: -1px;
+    top: -2px;
     width: 5px;
     height: 10px;
     margin-right: 15px; }
@@ -5034,6 +5034,18 @@ body.fancy-page main {
   padding-top: 80px;
   border-top: 2px solid var(--color-dark); }
 
+.schedule + .related--slider {
+  padding-top: 140px;
+  padding-bottom: 140px; }
+  @media (max-width: 992px) {
+    .schedule + .related--slider {
+      padding-top: 100px;
+      padding-bottom: 100px; } }
+  @media (max-width: 768px) {
+    .schedule + .related--slider {
+      padding-top: 80px;
+      padding-bottom: 80px; } }
+
 .schedule {
   padding: 200px 0 140px 0;
   border-top: 2px solid var(--color-dark); }
@@ -5093,9 +5105,10 @@ body.fancy-page main {
     font-weight: 400; }
   .schedule .eyelet {
     text-transform: uppercase;
+    font-size: 0.7rem;
     font-family: 'futura-pt', sans-serif;
     font-style: normal;
-    font-weight: 500; }
+    font-weight: 700; }
 
 .listing--grid {
   position: relative;
@@ -5248,10 +5261,19 @@ body.fancy-page main {
           top: 3px; }
 
 .downloads {
-  padding: 0 0 120px 0; }
+  padding-bottom: 190px; }
+  @media (max-width: 1560px) {
+    .downloads {
+      padding-bottom: 130px; } }
+  @media (max-width: 992px) {
+    .downloads {
+      padding-bottom: 120px; } }
   @media (max-width: 768px) {
     .downloads {
-      padding: 0 0 80px 0; } }
+      padding-bottom: 80px; } }
+  @media (max-width: 576px) {
+    .downloads {
+      padding-bottom: 50px; } }
 
 .downloads__list > a,
 .downloads__list > div {
@@ -5272,6 +5294,9 @@ body.fancy-page main {
 .downloads__item {
   padding: 20px;
   border-bottom: 2px solid var(--color-dark); }
+
+.downloads__title {
+  font-size: 1.2rem; }
 
 .downloads__button {
   font-family: 'futura-pt', sans-serif;

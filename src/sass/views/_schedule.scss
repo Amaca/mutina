@@ -59,6 +59,7 @@
 
     .eyelet {
         text-transform: uppercase;
-        @include font($style:medium);
+        font-size: 0.7rem;
+        @include font($style:heavy);
     }
 }
