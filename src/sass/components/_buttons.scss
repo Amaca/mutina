@@ -132,6 +132,7 @@ a {
         border: 2px solid $dark;
         padding: 25px 38px;
         text-transform: uppercase;
+        cursor: pointer;
 
         @include sm-down {
             font-size: 0.8rem;
@@ -194,6 +195,10 @@ a {
         height: 100%;
         font-size: 0.9rem;
         text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
         @include font($style:medium);
     }
 }

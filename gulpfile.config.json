@@ -21,13 +21,15 @@
                     "node_modules/gsap/src/uncompressed/TweenMax.js",
                     "node_modules/splitting/dist/splitting.js",
                     "node_modules/swiper/dist/js/swiper.js",
+                    "node_modules/choices.js/public/assets/scripts/choices.js",
                     "node_modules/muuri/dist/muuri.js"
                 ],
                 "output": "docs/js/vendors.js",
                 "minify": false
             }, {
                 "input": [
-                    "node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css",
+                    "node_modules/choices.js/public/assets/styles/base.css",
+                    "node_modules/choices.js/public/assets/styles/choices.css",
                     "node_modules/swiper/dist/css/swiper.css"
                 ],
                 "output": "docs/css/vendors.css",

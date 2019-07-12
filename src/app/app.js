@@ -502,6 +502,8 @@ export default class App {
         ToggleSearch.init(debug);
         Grid.init(debug);
         SidePanel.init(debug);
+        const choices = new Choices('[data-trigger]');
+        // https://github.com/jshjohnson/Choices
 
         setTimeout(x => {
             this.appears = Appears.init();

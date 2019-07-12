@@ -15335,6 +15335,8 @@ function () {
 
       _side.default.init(debug);
 
+      var choices = new Choices('[data-trigger]'); // https://github.com/jshjohnson/Choices
+
       setTimeout(function (x) {
         _this.appears = _appears.default.init();
 
@@ -17941,7 +17943,7 @@ function () {
       fullSamplesGallery.appendChild(fullSamplesWrapper);
       fullSamplesWrapper.appendChild(fullSamplesContainer);
       fullSamplesHeaderButton.innerHTML = 'Samples (0)';
-      sidePanelButton = new _side.default(fullSamplesHeaderButton, null);
+      sidePanelButton = new _side.default(fullSamplesHeaderButton, null, 'samples');
       body.classList.add('samples-gallery-open');
       html.style.overflow = 'hidden';
 
@@ -18154,27 +18156,44 @@ var header = document.querySelector('header');
 var clickToggle;
 var clickOutside;
 var clickNext;
+var clickClose;
 
 var SidePanel =
 /*#__PURE__*/
 function () {
-  function SidePanel(node, id) {
+  function SidePanel(node, id, type) {
     _classCallCheck(this, SidePanel);
 
     this.node = node;
     this.id = id;
     this.panel = document.querySelector('.side-panel');
     this.close = this.panel.querySelector('.side-panel__close');
-    this.primaryPanel = this.panel.querySelector('.side-panel__list');
-    this.secondaryPanel = this.panel.querySelector('.side-panel__form');
     this.next = this.panel.querySelector('.cta--next');
     this.send = this.panel.querySelector('.cta--send');
-    this.addListener();
+    this.primaryPanel = this.panel.querySelector('.side-panel__primary');
+    this.secondaryPanel = this.panel.querySelector('.side-panel__secondary');
+    this.type = type;
+    this.isSamples = false;
+    this.isDealers = false;
+
+    switch (type) {
+      case 'samples':
+        this.parentClass = 'side-panel--samples';
+        this.isSamples = true;
+        break;
+
+      case 'dealers':
+        this.parentClass = 'side-panel--dealers';
+        this.isDealers = true;
+        break;
+    }
+
+    this.init();
   }
 
   _createClass(SidePanel, [{
-    key: "addListener",
-    value: function addListener() {
+    key: "init",
+    value: function init() {
       var _this = this;
 
       clickToggle = function clickToggle(e) {
@@ -18183,19 +18202,31 @@ function () {
 
       this.clickToggle = clickToggle;
       this.node.addEventListener('click', this.clickToggle);
-      this.close.addEventListener('click', this.clickToggle); //clicca fuori dal pannello
+    }
+  }, {
+    key: "addListener",
+    value: function addListener() {
+      var _this2 = this;
 
+      //clicca fuori dal pannello
       clickOutside = function clickOutside(e) {
-        if (!_this.panel.contains(e.target) && body.classList.contains('side-panel-open')) {
-          _this.closePanel();
+        if (!_this2.panel.contains(e.target) && body.classList.contains('side-panel-open')) {
+          _this2.closePanel();
         }
       };
 
       this.clickOutside = clickOutside;
-      document.addEventListener('click', this.clickOutside); //click next
+      document.addEventListener('click', this.clickOutside); //click close
+
+      clickClose = function clickClose(e) {
+        _this2.toggle();
+      };
+
+      this.clickClose = clickClose;
+      this.close.addEventListener('click', this.clickClose); //click next
 
       clickNext = function clickNext(e) {
-        _this.nextPanel();
+        _this2.nextPanel();
       };
 
       this.clickNext = clickNext;
@@ -18213,12 +18244,14 @@ function () {
   }, {
     key: "openPanel",
     value: function openPanel() {
+      this.addListener();
       html.style.overflow = 'hidden';
 
       _navigation.default.closeNav();
 
       _navigation.default.closeSearch();
 
+      this.panel.classList.add(this.parentClass);
       setTimeout(function (x) {
         body.classList.add('side-panel-open');
       }, 400);
@@ -18230,8 +18263,11 @@ function () {
   }, {
     key: "closePanel",
     value: function closePanel() {
-      var _this2 = this;
+      var _this3 = this;
 
+      document.removeEventListener('click', this.clickOutside);
+      this.close.removeEventListener('click', this.clickClose);
+      this.next.removeEventListener('click', this.clickNext);
       html.style.overflow = 'initial';
       setTimeout(function (x) {
         body.classList.remove('side-panel-open');
@@ -18240,23 +18276,28 @@ function () {
         right: -this.panel.clientWidth - 2 + 'px',
         ease: Expo.easeInOut,
         onComplete: function onComplete() {
-          TweenMax.set(_this2.primaryPanel, {
+          TweenMax.set(_this3.primaryPanel, {
             transform: "translateX(0)"
           });
-          TweenMax.set(_this2.secondaryPanel, {
+          TweenMax.set(_this3.secondaryPanel, {
             transform: 'translateX(0)'
           });
-          TweenMax.set(_this2.next, {
-            transform: "translateY(0)",
-            ease: Expo.easeInOut
-          });
-          TweenMax.set(_this2.send, {
-            transform: "translateY(0)"
-          });
 
-          _this2.primaryPanel.scrollTo(0, 0);
+          if (_this3.isSamples) {
+            TweenMax.set(_this3.next, {
+              transform: "translateY(0)",
+              ease: Expo.easeInOut
+            });
+            TweenMax.set(_this3.send, {
+              transform: "translateY(0)"
+            });
+          }
 
-          _this2.secondaryPanel.scrollTo(0, 0);
+          _this3.panel.classList.remove(_this3.parentClass);
+
+          _this3.primaryPanel.scrollTo(0, 0);
+
+          _this3.secondaryPanel.scrollTo(0, 0);
         }
       });
     }
@@ -18271,20 +18312,24 @@ function () {
         transform: 'translateX(-100%)',
         ease: Expo.easeInOut
       });
-      TweenMax.to(this.next, 0.8, {
-        transform: "translateY(-100%)",
-        ease: Expo.easeInOut
-      });
-      TweenMax.to(this.send, 0.8, {
-        transform: "translateY(-100%)",
-        ease: Expo.easeInOut
-      });
+
+      if (this.isSamples) {
+        TweenMax.to(this.next, 0.8, {
+          transform: "translateY(-100%)",
+          ease: Expo.easeInOut
+        });
+        TweenMax.to(this.send, 0.8, {
+          transform: "translateY(-100%)",
+          ease: Expo.easeInOut
+        });
+      }
     }
   }, {
     key: "destroy",
     value: function destroy() {
+      this.panel.classList.remove(this.parentClass);
       this.node.removeEventListener('click', this.clickToggle);
-      this.close.removeEventListener('click', this.clickToggle);
+      this.close.removeEventListener('click', this.clickClose);
       this.next.removeEventListener('click', this.clickNext);
       document.removeEventListener('click', this.clickOutside);
     }
@@ -18299,7 +18344,7 @@ function () {
     key: "init",
     value: function init(debug) {
       SidePanel.items = _toConsumableArray(document.querySelectorAll('[data-side-panel]')).map(function (node, id) {
-        return new SidePanel(node, id);
+        return new SidePanel(node, id, node.getAttribute('data-side-panel'));
       });
 
       if (debug) {

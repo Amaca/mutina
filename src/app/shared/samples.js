@@ -21,9 +21,7 @@ export default class Samples {
     constructor(node, index) {
         this.node = node;
         this.index = index;
-
         this.init();
-
     }
 
     init() {
@@ -90,7 +88,7 @@ export default class Samples {
 
         fullSamplesHeaderButton.innerHTML = 'Samples (0)';
 
-        sidePanelButton = new SidePanel(fullSamplesHeaderButton, null);
+        sidePanelButton = new SidePanel(fullSamplesHeaderButton, null, 'samples');
 
         body.classList.add('samples-gallery-open');
         html.style.overflow = 'hidden';

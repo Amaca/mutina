@@ -32,7 +32,7 @@
             <div class="header__logo">
                 <a href="#"><img src="assets/img/logo.svg"></a>
             </div>
-            <a class="nav__counter" data-side-panel>
+            <a class="nav__counter" data-side-panel="samples">
                 <span>10</span>
             </a>
             <div class="header__wrapper">
@@ -158,7 +158,9 @@
                 <nav class="nav nav--secondary">
                     <ul>
                         <li><a href="about.html" class="btn--split" data-splitting data-transition="About">About</a></li>
-                        <li><a href="#" class="btn--split" data-splitting>Dealers</a></li>
+                        <li>
+                            <div class="btn--split" data-side-panel="dealers" data-splitting>Dealers</div>
+                        </li>
                         <li class="nav__mobile-hidden">
                             <button class="nav__search">
                                 <svg>
@@ -167,7 +169,7 @@
                             </button>
                         </li>
                         <li class="nav__mobile-hidden">
-                            <div data-side-panel class="btn--split">Samples (0)</div>
+                            <div data-side-panel="samples" class="btn--split">Samples (0)</div>
                         </li>
                         <li class="nav__mobile-only"><a href="#" class="btn--split">Press</a></li>
                         <li class="nav__mobile-only"><a href="#" class="btn--split">Contacts</a></li>
@@ -628,173 +630,233 @@
     </div>
 
     <div class="side-panel">
-        <div class="side-panel__header">
-            <svg class="side-panel__close">
-                <use xlink:href="#svg-close"></use>
-            </svg>
-        </div>
-        <div class="side-panel__content">
-            <div class="side-panel__list">
-                <div class="side-panel__item">
-                    <div class="img">
-                        <img src="assets/img/samples/thumb/Nero_cubo.jpg" alt="Nero cubo">
+        <form class="form" role="form">
+            <div class="side-panel__header">
+                <svg class="side-panel__close">
+                    <use xlink:href="#svg-close"></use>
+                </svg>
+            </div>
+            <div class="side-panel__content">
+                <div class="side-panel__primary">
+                    <div class="side-panel__list">
+                        <div class="side-panel__item">
+                            <div class="img">
+                                <img src="assets/img/samples/thumb/Nero_cubo.jpg" alt="Nero cubo">
+                            </div>
+                            <div class="box">
+                                <h6 class="h6">Nero cubo</h6>
+                                <div class="text">20cm 20cm</div>
+                            </div>
+                            <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
+                        </div>
+                        <div class="side-panel__item">
+                            <div class="img">
+                                <img src="assets/img/samples/thumb/Nero_diagonal.jpg" alt="Nero diagonal">
+                            </div>
+                            <div class="box">
+                                <h6 class="h6">Nero diagonal</h6>
+                                <div class="text">20cm 20cm</div>
+                            </div>
+                            <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
+                        </div>
+                        <div class="side-panel__item">
+                            <div class="img">
+                                <img src="assets/img/samples/thumb/Nero_cubo.jpg" alt="Nero cubo">
+                            </div>
+                            <div class="box">
+                                <h6 class="h6">Nero cubo</h6>
+                                <div class="text">20cm 20cm</div>
+                            </div>
+                            <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
+                        </div>
+                        <div class="side-panel__item">
+                            <div class="img">
+                                <img src="assets/img/samples/thumb/Nero_diagonal.jpg" alt="Nero diagonal">
+                            </div>
+                            <div class="box">
+                                <h6 class="h6">Nero diagonal</h6>
+                                <div class="text">20cm 20cm</div>
+                            </div>
+                            <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
+                        </div>
+                        <div class="side-panel__item">
+                            <div class="img">
+                                <img src="assets/img/samples/thumb/Nero_cubo.jpg" alt="Nero cubo">
+                            </div>
+                            <div class="box">
+                                <h6 class="h6">Nero cubo</h6>
+                                <div class="text">20cm 20cm</div>
+                            </div>
+                            <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
+                        </div>
+                        <div class="side-panel__item">
+                            <div class="img">
+                                <img src="assets/img/samples/thumb/Nero_diagonal.jpg" alt="Nero diagonal">
+                            </div>
+                            <div class="box">
+                                <h6 class="h6">Nero diagonal</h6>
+                                <div class="text">20cm 20cm</div>
+                            </div>
+                            <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
+                        </div>
                     </div>
-                    <div class="box">
-                        <h6 class="h6">Nero cubo</h6>
-                        <div class="text">20cm 20cm</div>
+                    <div class="side-panel__choices">
+                        <div class="side-panel__title">
+                            To better serve your needs, please fill the form below
+                        </div>
+                        <div class="side-panel__questions">
+                            <div class="side-panel__item">
+                                <span>I'm an</span>
+                                <select name="" id="" data-trigger>
+                                    <option value="architect">Scegli</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Designer</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Designer</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                </select>
+                            </div>
+                            <div class="side-panel__item">
+                                <span>Who operates in</span>
+                                <select name="" id="" data-trigger>
+                                    <option value="architect">Scegli</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Designer</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                </select>
+                            </div>
+                            <div class="side-panel__item">
+                                <span>Interested in</span>
+                                <select name="" id="">
+                                    <option value="architect">Scegli</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Designer</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="architect">Architect</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="side-panel__next">
+                            <div class="btn btn--primary">Get in touch</div>
+                        </div>
                     </div>
-                    <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
                 </div>
-                <div class="side-panel__item">
-                    <div class="img">
-                        <img src="assets/img/samples/thumb/Nero_diagonal.jpg" alt="Nero diagonal">
+                <div class="side-panel__secondary">
+                    <div class="side-panel__form">
+                        <p class="obbl_fields"><em>*</em> Campi obbligatori</p>
+                        <div class="form-row">
+                            <div class="form-col-half">
+                                <div class="form-group">
+                                    <label for="Nome">Nome *</label>
+                                    <input type="text" class="form-control required " placeholder="Nome *" name="Nome" value="">
+                                </div>
+                            </div>
+                            <div class="form-col-half">
+                                <div class="form-group">
+                                    <label for="Cognome">Cognome *</label>
+                                    <input type="text" class="form-control required " placeholder="Cognome *" name="Cognome" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col-half">
+                                <div class="form-group">
+                                    <label for="Indirizzo">Indirizzo *</label>
+                                    <input type="text" class="form-control required " placeholder="Indirizzo *" name="Indirizzo" value="">
+                                </div>
+                            </div>
+                            <div class="form-col-half">
+                                <div class="form-group">
+                                    <label for="Civico">Civico *</label>
+                                    <input type="text" class="form-control required " placeholder="Civico *" name="Civico" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col-half">
+                                <div class="form-group">
+                                    <label for="Citta">Citta *</label>
+                                    <input type="text" class="form-control required " placeholder="Citta *" name="Citta" value="">
+                                </div>
+                            </div>
+                            <div class="form-col-half">
+                                <div class="form-group">
+                                    <label for="Cap">Cap *</label>
+                                    <input type="text" class="form-control required " placeholder="Cap *" name="Cap" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col-half">
+                                <div class="form-group">
+                                    <label for="Email">Email *</label>
+                                    <input type="text" class="form-control required email" placeholder="Email *" name="Email">
+                                </div>
+                            </div>
+                            <div class="form-col-half">
+                                <div class="form-group">
+                                    <label for="Telefono">Telefono *</label>
+                                    <input type="text" class="form-control required " placeholder="Telefono *" name="Telefono" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Messaggio</label>
+                                <textarea placeholder="Messaggio" class="form-control" name="Messaggio" type="text" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="control-checkbox">
+                                    <input type="checkbox" name="Privacy" id="checkbox1" class="required">
+                                    <label for="checkbox1">Ho preso visione dell'informativa sulla <a href="#" class="btn btn--inline" target="_blank">privacy</a></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="control-checkbox">
+                                    <input type="checkbox" name="PrivacyCommerciale" id="checkbox2">
+                                    <label for="checkbox2">Presto il consenso al trattamento dei miei dati personali per la ricezione di informazioni commerciali da parte del Titolare e dei punti vendita Dorelan appartenenti al Gruppo B&amp;T S.p.A. Leggi la <a href="#" target="_blank">privacy policy</a></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="control-checkbox">
+                                    <input type="checkbox" name="PrivacyCommercialeTerzeParti" id="checkbox3">
+                                    <label for="checkbox3">Presto il consenso al trattamento dei miei dati personali per la ricezione di informazioni commerciali da parte dei punti vendita Dorelan appartenenti a terze parti. Leggi la <a href="#" class="btn btn--inline" target="_blank">privacy policy</a></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-results"></div>
+                        </div>
                     </div>
-                    <div class="box">
-                        <h6 class="h6">Nero diagonal</h6>
-                        <div class="text">20cm 20cm</div>
+                    <div class="side-panel__results">
+                        results
                     </div>
-                    <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
-                </div>
-                <div class="side-panel__item">
-                    <div class="img">
-                        <img src="assets/img/samples/thumb/Nero_cubo.jpg" alt="Nero cubo">
-                    </div>
-                    <div class="box">
-                        <h6 class="h6">Nero cubo</h6>
-                        <div class="text">20cm 20cm</div>
-                    </div>
-                    <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
-                </div>
-                <div class="side-panel__item">
-                    <div class="img">
-                        <img src="assets/img/samples/thumb/Nero_diagonal.jpg" alt="Nero diagonal">
-                    </div>
-                    <div class="box">
-                        <h6 class="h6">Nero diagonal</h6>
-                        <div class="text">20cm 20cm</div>
-                    </div>
-                    <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
-                </div>
-                <div class="side-panel__item">
-                    <div class="img">
-                        <img src="assets/img/samples/thumb/Nero_cubo.jpg" alt="Nero cubo">
-                    </div>
-                    <div class="box">
-                        <h6 class="h6">Nero cubo</h6>
-                        <div class="text">20cm 20cm</div>
-                    </div>
-                    <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
-                </div>
-                <div class="side-panel__item">
-                    <div class="img">
-                        <img src="assets/img/samples/thumb/Nero_diagonal.jpg" alt="Nero diagonal">
-                    </div>
-                    <div class="box">
-                        <h6 class="h6">Nero diagonal</h6>
-                        <div class="text">20cm 20cm</div>
-                    </div>
-                    <div class="cta"><a href="#" class="btn--inline-alt">Remove</a></div>
                 </div>
             </div>
-            <div class="side-panel__form">
-                <form class="form" role="form">
-                    <p class="obbl_fields"><em>*</em> Campi obbligatori</p>
-                    <div class="form-row">
-                        <div class="form-col-half">
-                            <div class="form-group">
-                                <label for="Nome">Nome *</label>
-                                <input type="text" class="form-control required " placeholder="Nome *" name="Nome" value="">
-                            </div>
-                        </div>
-                        <div class="form-col-half">
-                            <div class="form-group">
-                                <label for="Cognome">Cognome *</label>
-                                <input type="text" class="form-control required " placeholder="Cognome *" name="Cognome" value="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-col-half">
-                            <div class="form-group">
-                                <label for="Indirizzo">Indirizzo *</label>
-                                <input type="text" class="form-control required " placeholder="Indirizzo *" name="Indirizzo" value="">
-                            </div>
-                        </div>
-                        <div class="form-col-half">
-                            <div class="form-group">
-                                <label for="Civico">Civico *</label>
-                                <input type="text" class="form-control required " placeholder="Civico *" name="Civico" value="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-col-half">
-                            <div class="form-group">
-                                <label for="Citta">Citta *</label>
-                                <input type="text" class="form-control required " placeholder="Citta *" name="Citta" value="">
-                            </div>
-                        </div>
-                        <div class="form-col-half">
-                            <div class="form-group">
-                                <label for="Cap">Cap *</label>
-                                <input type="text" class="form-control required " placeholder="Cap *" name="Cap" value="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-col-half">
-                            <div class="form-group">
-                                <label for="Email">Email *</label>
-                                <input type="text" class="form-control required email" placeholder="Email *" name="Email">
-                            </div>
-                        </div>
-                        <div class="form-col-half">
-                            <div class="form-group">
-                                <label for="Telefono">Telefono *</label>
-                                <input type="text" class="form-control required " placeholder="Telefono *" name="Telefono" value="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Messaggio</label>
-                            <textarea placeholder="Messaggio" class="form-control" name="Messaggio" type="text" rows="5"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <div class="control-checkbox">
-                                <input type="checkbox" name="Privacy" id="checkbox1" class="required">
-                                <label for="checkbox1">Ho preso visione dell'informativa sulla <a href="#" class="btn btn--inline" target="_blank">privacy</a></label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="control-checkbox">
-                                <input type="checkbox" name="PrivacyCommerciale" id="checkbox2">
-                                <label for="checkbox2">Presto il consenso al trattamento dei miei dati personali per la ricezione di informazioni commerciali da parte del Titolare e dei punti vendita Dorelan appartenenti al Gruppo B&amp;T S.p.A. Leggi la <a href="#" target="_blank">privacy policy</a></label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="control-checkbox">
-                                <input type="checkbox" name="PrivacyCommercialeTerzeParti" id="checkbox3">
-                                <label for="checkbox3">Presto il consenso al trattamento dei miei dati personali per la ricezione di informazioni commerciali da parte dei punti vendita Dorelan appartenenti a terze parti. Leggi la <a href="#" class="btn btn--inline" target="_blank">privacy policy</a></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-results"></div>
-                    </div>
-                </form>
+            <div class="side-panel__footer">
+                <div class="cta cta--next">
+                    <div class="btn btn--full">Richiedi campioni (2)</div>
+                </div>
+                <div class="cta cta--send">
+                    <button class="btn btn--full">Invia richiesta campioni (2)</button>
+                </div>
             </div>
-        </div>
-        <div class="side-panel__footer">
-            <div class="cta cta--next">
-                <button class="btn btn--full">Richiedi campioni (2)</button>
-            </div>
-            <div class="cta cta--send">
-                <button class="btn btn--full">Invia richiesta campioni (2)</button>
-            </div>
-        </div>
+        </form>
     </div>
 
     <div class="dark-layer"></div>
