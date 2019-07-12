@@ -219,9 +219,9 @@ body {
     &:after {
         content: '';
         width: 100vw;
-        height: 130vh;
+        height: 100vh;
         background: black;
-        position: absolute;
+        position: fixed;
         z-index: 1;
         top: 0;
         left: 0;
@@ -236,6 +236,7 @@ body.subnav-open {
 
     &:after {
         opacity: .3;
+        pointer-events: all;
     }
 
     .nav {
@@ -376,7 +377,7 @@ body.subnav-open {
         position: fixed;
         z-index: 10;
         top: calc(#{$header-height-mobile} - 2px);
-        left: 100%;
+        left: calc(100% + 4px);
         background: $white;
         height: 75vh;
         width: 100%;
@@ -529,4 +530,15 @@ body.subnav-open {
             }
         }
     }
+}
+
+
+.pd {
+    background: red;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 100px;
+    height: 100px;
+    z-index: 9999999;
 }

@@ -80,6 +80,7 @@ a {
         line-height: 1;
         position: relative;
         padding: 0 0 3px;
+        cursor: pointer;
 
         &:before,
         &:after {
@@ -186,5 +187,13 @@ a {
                 right: auto;
             }
         }
+    }
+
+    &--full {
+        width: 100%;
+        height: 100%;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        @include font($style:medium);
     }
 }

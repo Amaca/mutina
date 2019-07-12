@@ -14826,11 +14826,13 @@ var _rect = _interopRequireDefault(require("./shared/rect"));
 
 var _samples = _interopRequireDefault(require("./shared/samples"));
 
+var _side = _interopRequireDefault(require("./shared/side.panel"));
+
 var _sliders = _interopRequireDefault(require("./shared/sliders"));
 
-var _utils = _interopRequireDefault(require("./shared/utils"));
-
 var _toggle = _interopRequireDefault(require("./shared/toggle.search"));
+
+var _utils = _interopRequireDefault(require("./shared/utils"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15327,9 +15329,10 @@ function () {
 
       _filters.default.init();
 
-      _toggle.default.init(debug);
+      _toggle.default.init(debug); // Grid.init(debug);
 
-      _grid.default.init(debug);
+
+      _side.default.init(debug);
 
       setTimeout(function (x) {
         _this.appears = _appears.default.init();
@@ -15598,7 +15601,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":317,"./shared/fancy.detail":316,"./shared/fancy.view-all":319,"./shared/filters":320,"./shared/grid":321,"./shared/lazyload":322,"./shared/navigation":323,"./shared/rect":324,"./shared/samples":326,"./shared/sliders":327,"./shared/toggle.search":328,"./shared/utils":329,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":317,"./shared/fancy.detail":316,"./shared/fancy.view-all":319,"./shared/filters":320,"./shared/grid":321,"./shared/lazyload":322,"./shared/navigation":323,"./shared/rect":324,"./shared/samples":326,"./shared/side.panel":327,"./shared/sliders":328,"./shared/toggle.search":329,"./shared/utils":330,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15922,7 +15925,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":329}],316:[function(require,module,exports){
+},{"./utils":330}],316:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16026,7 +16029,7 @@ function () {
 
 exports.default = FancyDetail;
 
-},{"./utils":329}],317:[function(require,module,exports){
+},{"./utils":330}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17009,7 +17012,7 @@ function () {
 
 exports.default = Filters;
 
-},{"./utils":329}],321:[function(require,module,exports){
+},{"./utils":330}],321:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17445,7 +17448,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":329}],324:[function(require,module,exports){
+},{"./utils":330}],324:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17806,7 +17809,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":326,"./utils":329,"gsap/ScrollToPlugin":309}],326:[function(require,module,exports){
+},{"./samples":326,"./utils":330,"gsap/ScrollToPlugin":309}],326:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18116,6 +18119,197 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _navigation = _interopRequireDefault(require("./navigation"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* jshint esversion: 6 */
+var body = document.querySelector('body');
+var html = document.getElementsByTagName('html')[0];
+var header = document.querySelector('header');
+var clickToggle;
+var clickOutside;
+var clickNext;
+
+var SidePanel =
+/*#__PURE__*/
+function () {
+  function SidePanel(node, id) {
+    _classCallCheck(this, SidePanel);
+
+    this.node = node;
+    this.id = id;
+    this.panel = document.querySelector('.side-panel');
+    this.close = this.panel.querySelector('.side-panel__close');
+    this.primaryPanel = this.panel.querySelector('.side-panel__list');
+    this.secondaryPanel = this.panel.querySelector('.side-panel__form');
+    this.next = this.panel.querySelector('.cta--next');
+    this.send = this.panel.querySelector('.cta--send');
+    this.addListener();
+  }
+
+  _createClass(SidePanel, [{
+    key: "addListener",
+    value: function addListener() {
+      var _this = this;
+
+      clickToggle = function clickToggle(e) {
+        _this.toggle();
+      };
+
+      this.clickToggle = clickToggle;
+      this.node.addEventListener('click', this.clickToggle);
+      this.close.addEventListener('click', this.clickToggle); //clicca fuori dal pannello
+
+      clickOutside = function clickOutside(e) {
+        if (!_this.panel.contains(e.target) && body.classList.contains('side-panel-open')) {
+          _this.closePanel();
+        }
+      };
+
+      this.clickOutside = clickOutside;
+      document.addEventListener('click', this.clickOutside); //click next
+
+      clickNext = function clickNext(e) {
+        _this.nextPanel();
+      };
+
+      this.clickNext = clickNext;
+      this.next.addEventListener('click', this.clickNext);
+    }
+  }, {
+    key: "toggle",
+    value: function toggle() {
+      if (!body.classList.contains('side-panel-open')) {
+        this.openPanel();
+      } else {
+        this.closePanel();
+      }
+    }
+  }, {
+    key: "openPanel",
+    value: function openPanel() {
+      html.style.overflow = 'hidden';
+
+      _navigation.default.closeNav();
+
+      _navigation.default.closeSearch();
+
+      setTimeout(function (x) {
+        body.classList.add('side-panel-open');
+      }, 400);
+      TweenMax.to(this.panel, 0.8, {
+        right: 0,
+        ease: Expo.easeInOut
+      });
+    }
+  }, {
+    key: "closePanel",
+    value: function closePanel() {
+      var _this2 = this;
+
+      html.style.overflow = 'initial';
+      setTimeout(function (x) {
+        body.classList.remove('side-panel-open');
+      }, 400);
+      TweenMax.to(this.panel, 0.8, {
+        right: -this.panel.clientWidth - 2 + 'px',
+        ease: Expo.easeInOut,
+        onComplete: function onComplete() {
+          TweenMax.set(_this2.primaryPanel, {
+            transform: "translateX(0)"
+          });
+          TweenMax.set(_this2.secondaryPanel, {
+            transform: 'translateX(0)'
+          });
+          TweenMax.set(_this2.next, {
+            transform: "translateY(0)",
+            ease: Expo.easeInOut
+          });
+          TweenMax.set(_this2.send, {
+            transform: "translateY(0)"
+          });
+
+          _this2.primaryPanel.scrollTo(0, 0);
+
+          _this2.secondaryPanel.scrollTo(0, 0);
+        }
+      });
+    }
+  }, {
+    key: "nextPanel",
+    value: function nextPanel() {
+      TweenMax.to(this.primaryPanel, 0.8, {
+        transform: "translateX(-100%)",
+        ease: Expo.easeInOut
+      });
+      TweenMax.to(this.secondaryPanel, 0.8, {
+        transform: 'translateX(-100%)',
+        ease: Expo.easeInOut
+      });
+      TweenMax.to(this.next, 0.8, {
+        transform: "translateY(-100%)",
+        ease: Expo.easeInOut
+      });
+      TweenMax.to(this.send, 0.8, {
+        transform: "translateY(-100%)",
+        ease: Expo.easeInOut
+      });
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.node.removeEventListener('click', this.clickToggle);
+      this.close.removeEventListener('click', this.clickToggle);
+      document.removeEventListener('click', this.clickOutside);
+    }
+  }], [{
+    key: "destroyAll",
+    value: function destroyAll() {
+      SidePanel.items.forEach(function (node) {
+        node.destroy();
+      });
+    }
+  }, {
+    key: "init",
+    value: function init(debug) {
+      SidePanel.items = _toConsumableArray(document.querySelectorAll('[data-side-panel]')).map(function (node, id) {
+        return new SidePanel(node, id);
+      });
+
+      if (debug) {
+        console.log('SidePanel: ', SidePanel.items);
+      }
+    }
+  }]);
+
+  return SidePanel;
+}();
+
+exports.default = SidePanel;
+
+},{"./navigation":323}],328:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -18299,7 +18493,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],328:[function(require,module,exports){
+},{}],329:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18407,7 +18601,7 @@ function () {
 
 exports.default = ToggleSearch;
 
-},{"./utils":329}],329:[function(require,module,exports){
+},{"./utils":330}],330:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

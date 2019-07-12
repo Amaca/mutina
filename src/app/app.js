@@ -16,9 +16,10 @@ import LazyLoad from './shared/lazyload';
 import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
 import Samples from "./shared/samples";
+import SidePanel from "./shared/side.panel";
 import Sliders from './shared/sliders';
-import Utils from './shared/utils';
 import ToggleSearch from "./shared/toggle.search";
+import Utils from './shared/utils';
 
 //settings
 let menuStyle = 1;
@@ -499,7 +500,8 @@ export default class App {
         Utils.toggleGrid();
         Filters.init();
         ToggleSearch.init(debug);
-        Grid.init(debug);
+        // Grid.init(debug);
+        SidePanel.init(debug);
 
         setTimeout(x => {
             this.appears = Appears.init();
