@@ -500,7 +500,7 @@ export default class App {
         Utils.toggleGrid();
         Filters.init();
         ToggleSearch.init(debug);
-        // Grid.init(debug);
+        Grid.init(debug);
         SidePanel.init(debug);
 
         setTimeout(x => {
@@ -521,6 +521,7 @@ export default class App {
         Filters.destroyAll();
         ToggleSearch.destroyAll();
         Grid.destroyAll();
+        SidePanel.destroyAll();
         container.remove();
     }
 

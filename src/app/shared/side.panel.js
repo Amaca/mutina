@@ -120,6 +120,7 @@ export default class SidePanel {
     destroy() {
         this.node.removeEventListener('click', this.clickToggle);
         this.close.removeEventListener('click', this.clickToggle);
+        this.next.removeEventListener('click', this.clickNext);
         document.removeEventListener('click', this.clickOutside);
     }
 

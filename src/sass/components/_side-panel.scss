@@ -2,7 +2,7 @@
 
 .side-panel {
     position: fixed;
-    z-index: 3;
+    z-index: 10001;
     top: 0;
     right: -700px;
     width: 700px;
@@ -188,9 +188,9 @@
 body.side-panel-open {
     overflow: hidden;
 
-    &:after {
+    .dark-layer {
         pointer-events: all;
         opacity: .3;
-        z-index: 2;
+
     }
 }

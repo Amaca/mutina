@@ -118,7 +118,6 @@
         left: 50%;
         transform: translate(-50%, -50%);
         background: $dark;
-
     }
 
     @include sm-down {
@@ -530,15 +529,4 @@ body.subnav-open {
             }
         }
     }
-}
-
-
-.pd {
-    background: red;
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 100px;
-    height: 100px;
-    z-index: 9999999;
 }

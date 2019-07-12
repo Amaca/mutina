@@ -138,20 +138,15 @@
 
 }
 
-// .transition--fancy {
-//     position: fixed;
-//     z-index: 3;
-//     bottom: 0;
-//     transform-origin: bottom;
-//     left: 0;
-//     width: 100vw;
-//     height: 100vh;
-//     //background: white;
-//     //background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 20%, rgba(255,255,255,1) 80%, rgba(255,255,255,0) 100%);
-//     //background: #f0f0f0;
-//     //background: #e1e1e1;
-//     //background: #f7f7f7;
-//     background: red;
-//     overflow: hidden;
-//     pointer-events: none;
-// }
+.dark-layer {
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .6s $smooth;
+}

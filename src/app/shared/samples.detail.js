@@ -112,7 +112,9 @@ export default class SamplesDetail {
         });
         back.removeEventListener('click', clickBack);
         swiperInstance.destroy();
-        wrapper.remove();
+        if (wrapper) {
+            wrapper.remove();
+        }
     }
 
     static initSwiper(id, data, wrapper) {

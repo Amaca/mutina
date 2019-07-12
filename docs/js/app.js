@@ -15329,8 +15329,9 @@ function () {
 
       _filters.default.init();
 
-      _toggle.default.init(debug); // Grid.init(debug);
+      _toggle.default.init(debug);
 
+      _grid.default.init(debug);
 
       _side.default.init(debug);
 
@@ -15362,6 +15363,8 @@ function () {
       _toggle.default.destroyAll();
 
       _grid.default.destroyAll();
+
+      _side.default.destroyAll();
 
       container.remove();
     }
@@ -17708,7 +17711,10 @@ function () {
       });
       back.removeEventListener('click', clickBack);
       swiperInstance.destroy();
-      wrapper.remove();
+
+      if (wrapper) {
+        wrapper.remove();
+      }
     }
   }, {
     key: "initSwiper",
@@ -17823,6 +17829,8 @@ var _fancy = _interopRequireDefault(require("./fancy.transition"));
 
 var _samples = _interopRequireDefault(require("./samples.detail"));
 
+var _side = _interopRequireDefault(require("./side.panel"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -17848,6 +17856,7 @@ var html = document.getElementsByTagName('html')[0];
 var header = document.querySelector('header');
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
 var backIcon = "<svg><use xlink:href=\"#svg-grid3x3\"></use></svg>";
+var sidePanelButton;
 
 var Samples =
 /*#__PURE__*/
@@ -17932,6 +17941,7 @@ function () {
       fullSamplesGallery.appendChild(fullSamplesWrapper);
       fullSamplesWrapper.appendChild(fullSamplesContainer);
       fullSamplesHeaderButton.innerHTML = 'Samples (0)';
+      sidePanelButton = new _side.default(fullSamplesHeaderButton, null);
       body.classList.add('samples-gallery-open');
       html.style.overflow = 'hidden';
 
@@ -18111,7 +18121,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":318,"./samples.detail":325,"gsap/ScrollToPlugin":309}],327:[function(require,module,exports){
+},{"./fancy.transition":318,"./samples.detail":325,"./side.panel":327,"gsap/ScrollToPlugin":309}],327:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18275,6 +18285,7 @@ function () {
     value: function destroy() {
       this.node.removeEventListener('click', this.clickToggle);
       this.close.removeEventListener('click', this.clickToggle);
+      this.next.removeEventListener('click', this.clickNext);
       document.removeEventListener('click', this.clickOutside);
     }
   }], [{

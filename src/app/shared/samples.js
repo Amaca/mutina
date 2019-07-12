@@ -3,6 +3,7 @@
 import "gsap/ScrollToPlugin";
 import FancyTransition from "./fancy.transition";
 import SamplesDetail from "./samples.detail";
+import SidePanel from "./side.panel";
 
 let clickClose;
 let scrollWrapper;
@@ -13,6 +14,7 @@ const html = document.getElementsByTagName('html')[0];
 const header = document.querySelector('header');
 const closeIcon = `<svg><use xlink:href="#svg-close"></use></svg>`;
 const backIcon = `<svg><use xlink:href="#svg-grid3x3"></use></svg>`;
+let sidePanelButton;
 
 export default class Samples {
 
@@ -87,6 +89,8 @@ export default class Samples {
         fullSamplesWrapper.appendChild(fullSamplesContainer);
 
         fullSamplesHeaderButton.innerHTML = 'Samples (0)';
+
+        sidePanelButton = new SidePanel(fullSamplesHeaderButton, null);
 
         body.classList.add('samples-gallery-open');
         html.style.overflow = 'hidden';
