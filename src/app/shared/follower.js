@@ -23,7 +23,10 @@ export default class Follower {
 		this.r = size / 2;
 		this.s = 0;
 		this.o = 0;
-		this.mouse = { x: 0, y: 0 };
+		this.mouse = {
+			x: 0,
+			y: 0
+		};
 		this.rects = [];
 		this.magnet = null;
 		this.setMagnetThrottled = Utils.throttle(() => {

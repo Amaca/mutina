@@ -14836,6 +14836,8 @@ var _custom = _interopRequireDefault(require("./shared/custom.select"));
 
 var _utils = _interopRequireDefault(require("./shared/utils"));
 
+var _follower = _interopRequireDefault(require("./shared/follower"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -14851,6 +14853,7 @@ var activateIntro = false;
 var debug = true;
 var disableBarba = false;
 var barbaDebug = debug;
+var enabledFollower = false;
 
 var App =
 /*#__PURE__*/
@@ -14862,10 +14865,17 @@ function () {
   _createClass(App, [{
     key: "init",
     value: function init() {
+      console.log('%c Coded by Websolute ', 'background: #01c0f6; color: #fff; border-radius: 20px; padding: 10px;');
       var body = document.querySelector('body');
       var page = document.querySelector('.page');
       var header = document.querySelector('.header');
       var smooth = 'cubic-bezier(0, 0.97, 0.43, 1)';
+      var links = [].slice.call(document.querySelectorAll('img'));
+      var follower = new _follower.default(document.querySelector('.follower'));
+
+      if (enabledFollower) {
+        body.classList.add('follower-enabled');
+      }
 
       _dom.default.detect(body);
 
@@ -14877,6 +14887,9 @@ function () {
       this.page = page;
       this.header = header;
       this.smooth = smooth;
+      this.mouse = mouse;
+      this.follower = follower;
+      this.links = links;
       this.appears = [];
       this.parallaxes = [];
       this.onResize();
@@ -15388,10 +15401,23 @@ function () {
       window.addEventListener('wheel', function (e) {
         _this2.onWheel(e);
       });
+      window.addEventListener('mousemove', function (e) {
+        _this2.onMouseMove(e);
+      });
     }
   }, {
     key: "onMouseMove",
-    value: function onMouseMove(e) {}
+    value: function onMouseMove(e) {
+      this.mouse.x = e.clientX / window.innerWidth - 0.5;
+      this.mouse.y = e.clientY / window.innerHeight - 0.5;
+      this.follower.follow(this.links.map(function (x) {
+        return _rect.default.fromNode(x);
+      }));
+      this.follower.move({
+        x: e.clientX,
+        y: e.clientY
+      }); //console.log('moving', e.clientX, e.clientY);
+    }
   }, {
     key: "onResize",
     value: function onResize() {
@@ -15572,6 +15598,13 @@ function () {
       });
 
       _lazyload.default.render(this.windowRect);
+
+      if (!_dom.default.mobile) {
+        // follower
+        if (this.enabledFollower) {
+          this.follower.render();
+        }
+      }
     }
   }, {
     key: "loop",
@@ -15610,7 +15643,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/custom.select":315,"./shared/dom":316,"./shared/fancy":318,"./shared/fancy.detail":317,"./shared/fancy.view-all":320,"./shared/filters":321,"./shared/grid":322,"./shared/lazyload":323,"./shared/navigation":324,"./shared/rect":325,"./shared/samples":327,"./shared/side.panel":328,"./shared/sliders":329,"./shared/toggle.search":330,"./shared/utils":331,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/custom.select":315,"./shared/dom":316,"./shared/fancy":318,"./shared/fancy.detail":317,"./shared/fancy.view-all":320,"./shared/filters":321,"./shared/follower":322,"./shared/grid":323,"./shared/lazyload":324,"./shared/navigation":325,"./shared/rect":326,"./shared/samples":328,"./shared/side.panel":329,"./shared/sliders":330,"./shared/toggle.search":331,"./shared/utils":332,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16005,7 +16038,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":331}],317:[function(require,module,exports){
+},{"./utils":332}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16109,7 +16142,7 @@ function () {
 
 exports.default = FancyDetail;
 
-},{"./utils":331}],318:[function(require,module,exports){
+},{"./utils":332}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16775,7 +16808,7 @@ function () {
 
 exports.default = FancyTransition;
 
-},{"./fancy":318,"./fancy.view-all":320,"./samples.detail":326}],320:[function(require,module,exports){
+},{"./fancy":318,"./fancy.view-all":320,"./samples.detail":327}],320:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17092,7 +17125,162 @@ function () {
 
 exports.default = Filters;
 
-},{"./utils":331}],322:[function(require,module,exports){
+},{"./utils":332}],322:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _utils = _interopRequireDefault(require("./utils"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var friction = 8;
+var friction2 = 2;
+var size = 20;
+
+var Follower =
+/*#__PURE__*/
+function () {
+  function Follower(node) {
+    var _this = this;
+
+    _classCallCheck(this, Follower);
+
+    this.enabled = false;
+    this.node = node;
+    this.div1 = node.querySelectorAll('div')[0];
+    this.div2 = node.querySelectorAll('div')[1];
+    this.x = 0;
+    this.y = 0;
+    this.x2 = 0;
+    this.y2 = 0;
+    this.w = size;
+    this.h = size;
+    this.r = size / 2;
+    this.s = 0;
+    this.o = 0;
+    this.mouse = {
+      x: 0,
+      y: 0
+    };
+    this.rects = [];
+    this.magnet = null;
+    this.setMagnetThrottled = _utils.default.throttle(function () {
+      return _this.setMagnet();
+    }, 100);
+  }
+
+  _createClass(Follower, [{
+    key: "follow",
+    value: function follow(rects) {
+      this.rects = rects;
+    }
+  }, {
+    key: "move",
+    value: function move(mouse) {
+      this.mouse = mouse;
+    }
+  }, {
+    key: "setMagnet",
+    value: function setMagnet() {
+      var _this2 = this;
+
+      var magnet = this.rects.reduce(function (p, rect) {
+        if (rect.contains(_this2.mouse.x, _this2.mouse.y)) {
+          return {
+            match: true,
+
+            /*
+            x: rect.left,
+            y: rect.bottom - 3,
+            width: rect.width,
+            height: 3,
+            */
+            x: _this2.mouse.x,
+            y: _this2.mouse.y,
+            width: size,
+            height: size,
+            radius: 0,
+            scale: 1,
+            opacity: 0.05
+          };
+        } else {
+          return p;
+        }
+      }, {
+        match: false,
+        x: this.mouse.x,
+        y: this.mouse.y,
+        width: size,
+        height: size,
+        radius: 75,
+        scale: 0.25,
+        opacity: 0.15
+      });
+      this.magnet = magnet;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (window.innerWidth >= 1024 && this.mouse.x && this.mouse.y) {
+        this.setMagnetThrottled();
+        var magnet = this.magnet; //
+
+        this.x += (magnet.x - this.x) / friction;
+        this.y += (magnet.y - this.y) / friction;
+        this.w += (magnet.width - this.w) / friction;
+        this.h += (magnet.height - this.h) / friction;
+        this.r += (magnet.radius - this.r) / friction;
+        this.s += (magnet.scale - this.s) / friction;
+        this.o += (magnet.opacity - this.o) / friction; //
+
+        this.x2 += (this.mouse.x - this.x2) / friction2;
+        this.y2 += (this.mouse.y - this.y2) / friction2;
+        this.div1.setAttribute('style', "opacity: ".concat(this.o, "; left:").concat(this.x - this.s * 50, "px; top:").concat(this.y - this.s * 50, "px; width:").concat(this.s * 100, "px; height:").concat(this.s * 100, "px;"));
+        this.div2.setAttribute('style', "opacity: 1; left:".concat(this.x2 - 2, "px; top:").concat(this.y2 - 2, "px;")); // this.div1.setAttribute('style', `opacity: ${this.o}; transform: translateX(${this.x + this.w / 2 - 50}px) translateY(${this.y + this.h / 2 - 50}px) scale3d(${this.s},${this.s},1.0);`);
+        // this.div2.setAttribute('style', `opacity: 1; transform: translateX(${this.x2}px) translateY(${this.y2}px);`);
+
+        /*
+        TweenMax.set(this.div1, {
+        	opacity: this.o,
+        	// transform: `translateX(${this.x + this.w / 2 - 50}px) translateY(${this.y + this.h / 2 - 50}px) scale3d(${this.w / 100},${this.h / 100},1.0)`,
+        	transform: `translateX(${this.x + this.w / 2 - 50}px) translateY(${this.y + this.h / 2 - 50}px) scale3d(${this.s},${this.s},1.0)`,
+        });
+        TweenMax.set(this.div2, {
+        	opacity: 1,
+        	transform: `translateX(${this.x2}px) translateY(${this.y2}px)`,
+        });
+        */
+      } else {
+        this.div1.setAttribute('style', "opacity: 0;");
+        this.div2.setAttribute('style', "opacity: 0;");
+        /*
+        TweenMax.set(this.div1, {
+        	opacity: 0,
+        });
+        TweenMax.set(this.div2, {
+        	opacity: 0,
+        });
+        */
+      }
+    }
+  }]);
+
+  return Follower;
+}();
+
+exports.default = Follower;
+
+},{"./utils":332}],323:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17160,7 +17348,7 @@ function () {
 
 exports.default = Grid;
 
-},{}],323:[function(require,module,exports){
+},{}],324:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17262,7 +17450,7 @@ function () {
 exports.default = LazyLoad;
 LazyLoad.items = [];
 
-},{"./rect":325}],324:[function(require,module,exports){
+},{"./rect":326}],325:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17528,7 +17716,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":331}],325:[function(require,module,exports){
+},{"./utils":332}],326:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17647,7 +17835,7 @@ function () {
 
 exports.default = Rect;
 
-},{}],326:[function(require,module,exports){
+},{}],327:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17892,7 +18080,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":327,"./utils":331,"gsap/ScrollToPlugin":309}],327:[function(require,module,exports){
+},{"./samples":328,"./utils":332,"gsap/ScrollToPlugin":309}],328:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18198,7 +18386,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":319,"./samples.detail":326,"./side.panel":328,"gsap/ScrollToPlugin":309}],328:[function(require,module,exports){
+},{"./fancy.transition":319,"./samples.detail":327,"./side.panel":329,"gsap/ScrollToPlugin":309}],329:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18438,7 +18626,7 @@ function () {
 
 exports.default = SidePanel;
 
-},{"./navigation":324}],329:[function(require,module,exports){
+},{"./navigation":325}],330:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18629,7 +18817,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],330:[function(require,module,exports){
+},{}],331:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18737,7 +18925,7 @@ function () {
 
 exports.default = ToggleSearch;
 
-},{"./utils":331}],331:[function(require,module,exports){
+},{"./utils":332}],332:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

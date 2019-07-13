@@ -21,6 +21,7 @@ import Sliders from './shared/sliders';
 import ToggleSearch from './shared/toggle.search';
 import CustomSelect from './shared/custom.select';
 import Utils from './shared/utils';
+import Follower from './shared/follower';
 
 //settings
 let menuStyle = 1;
@@ -29,18 +30,25 @@ const activateIntro = false;
 const debug = true;
 const disableBarba = false;
 const barbaDebug = debug;
-
+const enabledFollower = false;
 
 export default class App {
 
     constructor() {}
 
     init() {
+        console.log('%c Coded by Websolute ', 'background: #01c0f6; color: #fff; border-radius: 20px; padding: 10px;');
         const body = document.querySelector('body');
         const page = document.querySelector('.page');
         const header = document.querySelector('.header');
         const smooth = 'cubic-bezier(0, 0.97, 0.43, 1)';
+        const links = [].slice.call(document.querySelectorAll('img'));
+        const follower = new Follower(document.querySelector('.follower'));
 
+
+        if (enabledFollower) {
+            body.classList.add('follower-enabled');
+        }
         Dom.detect(body);
         const mouse = {
             x: 0,
@@ -50,11 +58,15 @@ export default class App {
         this.page = page;
         this.header = header;
         this.smooth = smooth;
+        this.mouse = mouse;
+        this.follower = follower;
+        this.links = links;
         this.appears = [];
         this.parallaxes = [];
         this.onResize();
         this.addListeners();
         this.transitions();
+
 
         Element.prototype.scrollIntoView_ = Element.prototype.scrollIntoView;
         Element.prototype.scrollIntoView = function () {
@@ -540,10 +552,22 @@ export default class App {
         window.addEventListener('wheel', (e) => {
             this.onWheel(e);
         });
+
+        window.addEventListener('mousemove', (e) => {
+            this.onMouseMove(e);
+        });
     }
 
     onMouseMove(e) {
+        this.mouse.x = e.clientX / window.innerWidth - 0.5;
+        this.mouse.y = e.clientY / window.innerHeight - 0.5;
 
+        this.follower.follow(this.links.map(x => Rect.fromNode(x)));
+        this.follower.move({
+            x: e.clientX,
+            y: e.clientY
+        });
+        //console.log('moving', e.clientX, e.clientY);
     }
 
     onResize() {
@@ -702,6 +726,14 @@ export default class App {
         });
 
         LazyLoad.render(this.windowRect);
+
+        if (!Dom.mobile) {
+
+            // follower
+            if (this.enabledFollower) {
+                this.follower.render();
+            }
+        }
 
     }
 
