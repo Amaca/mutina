@@ -7,18 +7,19 @@ import "css-vars-ponyfill";
 import Anchors from './shared/anchors';
 import Appears from './shared/appears';
 import Dom from './shared/dom';
-import Fancy from "./shared/fancy";
-import FancyDetail from "./shared/fancy.detail";
+import Fancy from './shared/fancy';
+import FancyDetail from './shared/fancy.detail';
 import FancyViewAll from "./shared/fancy.view-all";
 import Filters from './shared/filters';
 import Grid from './shared/grid';
 import LazyLoad from './shared/lazyload';
 import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
-import Samples from "./shared/samples";
-import SidePanel from "./shared/side.panel";
+import Samples from './shared/samples';
+import SidePanel from './shared/side.panel';
 import Sliders from './shared/sliders';
-import ToggleSearch from "./shared/toggle.search";
+import ToggleSearch from './shared/toggle.search';
+import CustomSelect from './shared/custom.select';
 import Utils from './shared/utils';
 
 //settings
@@ -502,8 +503,7 @@ export default class App {
         ToggleSearch.init(debug);
         Grid.init(debug);
         SidePanel.init(debug);
-        const choices = new Choices('[data-trigger]');
-        // https://github.com/jshjohnson/Choices
+        CustomSelect.init(debug);
 
         setTimeout(x => {
             this.appears = Appears.init();
@@ -524,6 +524,7 @@ export default class App {
         ToggleSearch.destroyAll();
         Grid.destroyAll();
         SidePanel.destroyAll();
+        CustomSelect.destroyAll();
         container.remove();
     }
 

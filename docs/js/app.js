@@ -14832,6 +14832,8 @@ var _sliders = _interopRequireDefault(require("./shared/sliders"));
 
 var _toggle = _interopRequireDefault(require("./shared/toggle.search"));
 
+var _custom = _interopRequireDefault(require("./shared/custom.select"));
+
 var _utils = _interopRequireDefault(require("./shared/utils"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -15098,7 +15100,7 @@ function () {
               app.onPageInit();
               /*
               window.daraLayer.push({
-                })
+               })
               gtm.push({
                   title: document.title,
                   href: window.href
@@ -15335,7 +15337,7 @@ function () {
 
       _side.default.init(debug);
 
-      var choices = new Choices('[data-trigger]'); // https://github.com/jshjohnson/Choices
+      _custom.default.init(debug);
 
       setTimeout(function (x) {
         _this.appears = _appears.default.init();
@@ -15367,6 +15369,8 @@ function () {
       _grid.default.destroyAll();
 
       _side.default.destroyAll();
+
+      _custom.default.destroyAll();
 
       container.remove();
     }
@@ -15606,7 +15610,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/dom":315,"./shared/fancy":317,"./shared/fancy.detail":316,"./shared/fancy.view-all":319,"./shared/filters":320,"./shared/grid":321,"./shared/lazyload":322,"./shared/navigation":323,"./shared/rect":324,"./shared/samples":326,"./shared/side.panel":327,"./shared/sliders":328,"./shared/toggle.search":329,"./shared/utils":330,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/custom.select":315,"./shared/dom":316,"./shared/fancy":318,"./shared/fancy.detail":317,"./shared/fancy.view-all":320,"./shared/filters":321,"./shared/grid":322,"./shared/lazyload":323,"./shared/navigation":324,"./shared/rect":325,"./shared/samples":327,"./shared/side.panel":328,"./shared/sliders":329,"./shared/toggle.search":330,"./shared/utils":331,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15808,6 +15812,77 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* jshint esversion: 6 */
+var body = document.querySelector('body');
+var html = document.getElementsByTagName('html')[0];
+
+var CustomSelect =
+/*#__PURE__*/
+function () {
+  function CustomSelect(node, id) {
+    _classCallCheck(this, CustomSelect);
+
+    this.node = node;
+    this.id = id;
+    this.instance = new Choices(node, {
+      searchEnabled: false,
+      itemSelectText: '',
+      shouldSort: false
+    });
+  }
+
+  _createClass(CustomSelect, [{
+    key: "destroy",
+    value: function destroy() {
+      this.instance.destroy();
+    }
+  }], [{
+    key: "destroyAll",
+    value: function destroyAll() {
+      CustomSelect.items.forEach(function (node) {
+        node.destroy();
+      });
+    }
+  }, {
+    key: "init",
+    value: function init(debug) {
+      CustomSelect.items = _toConsumableArray(document.querySelectorAll('[data-select]')).map(function (node, id) {
+        return new CustomSelect(node, id);
+      });
+
+      if (debug) {
+        console.log('CustomSelect: ', CustomSelect.items);
+      }
+    }
+  }]);
+
+  return CustomSelect;
+}();
+
+exports.default = CustomSelect;
+
+},{}],316:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 var _utils = _interopRequireDefault(require("./utils"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -15930,7 +16005,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":330}],316:[function(require,module,exports){
+},{"./utils":331}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16034,7 +16109,7 @@ function () {
 
 exports.default = FancyDetail;
 
-},{"./utils":330}],317:[function(require,module,exports){
+},{"./utils":331}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16334,7 +16409,7 @@ function () {
 
 exports.default = Fancy;
 
-},{"./fancy.transition":318}],318:[function(require,module,exports){
+},{"./fancy.transition":319}],319:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16700,7 +16775,7 @@ function () {
 
 exports.default = FancyTransition;
 
-},{"./fancy":317,"./fancy.view-all":319,"./samples.detail":325}],319:[function(require,module,exports){
+},{"./fancy":318,"./fancy.view-all":320,"./samples.detail":326}],320:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16861,7 +16936,7 @@ function () {
 
 exports.default = FancyViewAll;
 
-},{"./fancy":317,"./fancy.transition":318}],320:[function(require,module,exports){
+},{"./fancy":318,"./fancy.transition":319}],321:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17017,7 +17092,7 @@ function () {
 
 exports.default = Filters;
 
-},{"./utils":330}],321:[function(require,module,exports){
+},{"./utils":331}],322:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17085,7 +17160,7 @@ function () {
 
 exports.default = Grid;
 
-},{}],322:[function(require,module,exports){
+},{}],323:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17187,7 +17262,7 @@ function () {
 exports.default = LazyLoad;
 LazyLoad.items = [];
 
-},{"./rect":324}],323:[function(require,module,exports){
+},{"./rect":325}],324:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17453,7 +17528,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":330}],324:[function(require,module,exports){
+},{"./utils":331}],325:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17572,7 +17647,7 @@ function () {
 
 exports.default = Rect;
 
-},{}],325:[function(require,module,exports){
+},{}],326:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17817,7 +17892,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":326,"./utils":330,"gsap/ScrollToPlugin":309}],326:[function(require,module,exports){
+},{"./samples":327,"./utils":331,"gsap/ScrollToPlugin":309}],327:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18123,7 +18198,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":318,"./samples.detail":325,"./side.panel":327,"gsap/ScrollToPlugin":309}],327:[function(require,module,exports){
+},{"./fancy.transition":319,"./samples.detail":326,"./side.panel":328,"gsap/ScrollToPlugin":309}],328:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18168,7 +18243,6 @@ function () {
     this.id = id;
     this.panel = document.querySelector('.side-panel');
     this.close = this.panel.querySelector('.side-panel__close');
-    this.next = this.panel.querySelector('.cta--next');
     this.send = this.panel.querySelector('.cta--send');
     this.primaryPanel = this.panel.querySelector('.side-panel__primary');
     this.secondaryPanel = this.panel.querySelector('.side-panel__secondary');
@@ -18179,11 +18253,13 @@ function () {
     switch (type) {
       case 'samples':
         this.parentClass = 'side-panel--samples';
+        this.next = this.panel.querySelector('.cta--next');
         this.isSamples = true;
         break;
 
       case 'dealers':
         this.parentClass = 'side-panel--dealers';
+        this.next = this.panel.querySelector('.cta--results');
         this.isDealers = true;
         break;
     }
@@ -18201,7 +18277,11 @@ function () {
       };
 
       this.clickToggle = clickToggle;
-      this.node.addEventListener('click', this.clickToggle);
+      this.node.addEventListener('click', this.clickToggle); //###
+      // this.parentClass = 'side-panel--dealers';
+      // this.isDealers = true;
+      // this.toggle();
+      //###
     }
   }, {
     key: "addListener",
@@ -18358,7 +18438,7 @@ function () {
 
 exports.default = SidePanel;
 
-},{"./navigation":323}],328:[function(require,module,exports){
+},{"./navigation":324}],329:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18549,7 +18629,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],329:[function(require,module,exports){
+},{}],330:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18657,7 +18737,7 @@ function () {
 
 exports.default = ToggleSearch;
 
-},{"./utils":330}],330:[function(require,module,exports){
+},{"./utils":331}],331:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

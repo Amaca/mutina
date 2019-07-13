@@ -205,6 +205,15 @@
 //side panel dealers
 .side-panel--dealers {
 
+    .side-panel__primary,
+    .side-panel__secondary {
+        padding: $col-gutter-half;
+
+        @include xs-down {
+            padding: $col-gutter;
+        }
+    }
+
     .side-panel__primary {
         display: flex;
         align-items: center;
@@ -224,66 +233,120 @@
         display: flex;
         flex-direction: column;
         text-align: center;
+    }
 
-        .side-panel__title {
-            font-size: 0.8rem;
-            margin-bottom: 130px;
-            text-transform: uppercase;
-            padding: 0 180px;
-            @include font($style:medium);
+    .side-panel__title {
+        font-size: 0.8rem;
+        margin-bottom: 130px;
+        text-transform: uppercase;
+        padding: 0 180px;
+        @include font($style:medium);
+
+        @include md-down {
+            margin-bottom: 70px;
         }
 
-        .side-panel__questions {
-            margin-bottom: 130px;
+        @include sm-down {
+            padding: 0 40px;
+        }
 
-            .side-panel__item {
-                span {
-                    font-size: 1.8rem;
+        @include xs-down {
+            padding: 0;
+            margin-bottom: 30px;
+        }
+    }
+
+    .side-panel__questions {
+        margin-bottom: 130px;
+
+        @include md-down {
+            margin-bottom: 70px;
+        }
+
+        @include xs-down {
+            margin-bottom: 30px;
+        }
+
+        .side-panel__item {
+            display: flex;
+            flex-direction: row;
+            margin: 0 -10px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+
+            @include xs-down {
+                margin: 0;
+                flex-direction: column;
+                margin-bottom: 20px;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            span {
+                flex: 0 0 auto;
+                padding: 0 10px;
+                font-size: 1.8rem;
+
+                @include xs-down {
+                    padding: 0;
+                    margin-bottom: 0;
+                    font-size: 1.5rem;
                 }
             }
 
-            select {
-                -webkit-appearance: button;
-                -moz-appearance: button;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -webkit-padding-end: 20px;
-                -moz-padding-end: 20px;
-                -webkit-padding-start: 2px;
-                -moz-padding-start: 2px;
-                background-color: #F07575;
-                width: 300px;
-                /* fallback color if gradients are not supported */
-                background-image: url(../images/select-arrow.png), -webkit-linear-gradient(top, #E5E5E5, #F4F4F4);
-                /* For Chrome and Safari */
-                background-image: url(../images/select-arrow.png), -moz-linear-gradient(top, #E5E5E5, #F4F4F4);
-                /* For old Fx (3.6 to 15) */
-                background-image: url(../images/select-arrow.png), -ms-linear-gradient(top, #E5E5E5, #F4F4F4);
-                /* For pre-releases of IE 10*/
-                background-image: url(../images/select-arrow.png), -o-linear-gradient(top, #E5E5E5, #F4F4F4);
-                /* For old Opera (11.1 to 12.0) */
-                background-image: url(../images/select-arrow.png), linear-gradient(to bottom, #E5E5E5, #F4F4F4);
-                /* Standard syntax; must be last */
-                background-position: center right;
-                background-repeat: no-repeat;
-                border: 1px solid #AAA;
-                border-radius: 2px;
-                box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-                color: #555;
-                font-size: inherit;
-                margin: 0;
-                overflow: hidden;
-                padding-top: 2px;
-                padding-bottom: 2px;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+            .choices {
+                flex: 0 0 40%;
+                max-width: 40%;
+                padding: 0 10px;
+
+                @include xs-down {
+                    max-width: none;
+                    width: 80%;
+                    padding: 0;
+                    margin-bottom: 20px;
+                }
+            }
+        }
+    }
+
+    .side-panel__results {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .side-panel__title {
+            margin-bottom: 40px;
+
+            @include sm-down {
+                margin-bottom: 20px;
             }
         }
 
-        .side-panel__next {}
-    }
+        .box {
+            text-align: center;
+            background: $white;
+            padding: 40px;
+            margin-bottom: $col-gutter;
 
-    .side-panel__results {}
+            .eyelet {
+                text-transform: uppercase;
+                font-weight: 700;
+                font-size: 0.65rem;
+                margin-bottom: 12px;
+            }
+
+            .text p {
+                margin-bottom: 12px;
+            }
+
+            .text span {
+                margin-right: 20px;
+            }
+        }
+    }
 
     .side-panel__list {
         display: none;
@@ -306,5 +369,8 @@ body.side-panel-open {
         pointer-events: all;
         opacity: .3;
 
+        @include xs-down {
+            display: none;
+        }
     }
 }

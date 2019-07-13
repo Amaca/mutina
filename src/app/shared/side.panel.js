@@ -18,7 +18,6 @@ export default class SidePanel {
         this.id = id;
         this.panel = document.querySelector('.side-panel');
         this.close = this.panel.querySelector('.side-panel__close');
-        this.next = this.panel.querySelector('.cta--next');
         this.send = this.panel.querySelector('.cta--send');
         this.primaryPanel = this.panel.querySelector('.side-panel__primary');
         this.secondaryPanel = this.panel.querySelector('.side-panel__secondary');
@@ -29,10 +28,12 @@ export default class SidePanel {
         switch (type) {
             case 'samples':
                 this.parentClass = 'side-panel--samples';
+                this.next = this.panel.querySelector('.cta--next');
                 this.isSamples = true;
                 break;
             case 'dealers':
                 this.parentClass = 'side-panel--dealers';
+                this.next = this.panel.querySelector('.cta--results');
                 this.isDealers = true;
                 break;
         }
@@ -46,6 +47,11 @@ export default class SidePanel {
         };
         this.clickToggle = clickToggle;
         this.node.addEventListener('click', this.clickToggle);
+        //###
+        // this.parentClass = 'side-panel--dealers';
+        // this.isDealers = true;
+        // this.toggle();
+        //###
     }
 
     addListener() {
@@ -54,7 +60,7 @@ export default class SidePanel {
             if (!this.panel.contains(e.target) && body.classList.contains('side-panel-open')) {
                 this.closePanel();
             }
-        }
+        };
         this.clickOutside = clickOutside;
         document.addEventListener('click', this.clickOutside);
 

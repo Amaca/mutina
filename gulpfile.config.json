@@ -28,7 +28,6 @@
                 "minify": false
             }, {
                 "input": [
-                    "node_modules/choices.js/public/assets/styles/base.css",
                     "node_modules/choices.js/public/assets/styles/choices.css",
                     "node_modules/swiper/dist/css/swiper.css"
                 ],
