@@ -14870,12 +14870,9 @@ function () {
       var page = document.querySelector('.page');
       var header = document.querySelector('.header');
       var smooth = 'cubic-bezier(0, 0.97, 0.43, 1)';
-      var links = [].slice.call(document.querySelectorAll('img'));
       var follower = new _follower.default(document.querySelector('.follower'));
-
-      if (enabledFollower) {
-        body.classList.add('follower-enabled');
-      }
+      var hrefs = [].slice.call(document.querySelectorAll('[href="#"]'));
+      var links = [].slice.call(document.querySelectorAll('.btn'));
 
       _dom.default.detect(body);
 
@@ -14883,15 +14880,21 @@ function () {
         x: 0,
         y: 0
       };
+
+      if (follower.enabled) {
+        body.classList.add('follower-enabled');
+      }
+
       this.body = body;
       this.page = page;
       this.header = header;
       this.smooth = smooth;
-      this.mouse = mouse;
-      this.follower = follower;
-      this.links = links;
       this.appears = [];
       this.parallaxes = [];
+      this.follower = follower;
+      this.hrefs = hrefs;
+      this.links = links;
+      this.mouse = mouse;
       this.onResize();
       this.addListeners();
       this.transitions();
@@ -15410,13 +15413,16 @@ function () {
     value: function onMouseMove(e) {
       this.mouse.x = e.clientX / window.innerWidth - 0.5;
       this.mouse.y = e.clientY / window.innerHeight - 0.5;
-      this.follower.follow(this.links.map(function (x) {
-        return _rect.default.fromNode(x);
-      }));
-      this.follower.move({
-        x: e.clientX,
-        y: e.clientY
-      }); //console.log('moving', e.clientX, e.clientY);
+
+      if (this.follower.enabled) {
+        this.follower.follow(this.links.map(function (x) {
+          return _rect.default.fromNode(x);
+        }));
+        this.follower.move({
+          x: e.clientX,
+          y: e.clientY
+        });
+      }
     }
   }, {
     key: "onResize",
@@ -15599,11 +15605,8 @@ function () {
 
       _lazyload.default.render(this.windowRect);
 
-      if (!_dom.default.mobile) {
-        // follower
-        if (this.enabledFollower) {
-          this.follower.render();
-        }
+      if (this.follower.enabled) {
+        this.follower.render();
       }
     }
   }, {
@@ -17245,7 +17248,7 @@ function () {
 
         this.x2 += (this.mouse.x - this.x2) / friction2;
         this.y2 += (this.mouse.y - this.y2) / friction2;
-        this.div1.setAttribute('style', "opacity: ".concat(this.o, "; left:").concat(this.x - this.s * 50, "px; top:").concat(this.y - this.s * 50, "px; width:").concat(this.s * 100, "px; height:").concat(this.s * 100, "px;"));
+        this.div1.setAttribute('style', "opacity: 1; left:".concat(this.x - this.s * 100, "px; top:").concat(this.y - this.s * 100, "px;"));
         this.div2.setAttribute('style', "opacity: 1; left:".concat(this.x2 - 2, "px; top:").concat(this.y2 - 2, "px;")); // this.div1.setAttribute('style', `opacity: ${this.o}; transform: translateX(${this.x + this.w / 2 - 50}px) translateY(${this.y + this.h / 2 - 50}px) scale3d(${this.s},${this.s},1.0);`);
         // this.div2.setAttribute('style', `opacity: 1; transform: translateX(${this.x2}px) translateY(${this.y2}px);`);
 

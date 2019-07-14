@@ -42,27 +42,29 @@ export default class App {
         const page = document.querySelector('.page');
         const header = document.querySelector('.header');
         const smooth = 'cubic-bezier(0, 0.97, 0.43, 1)';
-        const links = [].slice.call(document.querySelectorAll('img'));
+
         const follower = new Follower(document.querySelector('.follower'));
+        const hrefs = [].slice.call(document.querySelectorAll('[href="#"]'));
+        const links = [].slice.call(document.querySelectorAll('.btn'));
 
-
-        if (enabledFollower) {
-            body.classList.add('follower-enabled');
-        }
         Dom.detect(body);
         const mouse = {
             x: 0,
             y: 0
         };
+        if (follower.enabled) {
+            body.classList.add('follower-enabled');
+        }
         this.body = body;
         this.page = page;
         this.header = header;
         this.smooth = smooth;
-        this.mouse = mouse;
-        this.follower = follower;
-        this.links = links;
         this.appears = [];
         this.parallaxes = [];
+        this.follower = follower;
+        this.hrefs = hrefs;
+        this.links = links;
+        this.mouse = mouse;
         this.onResize();
         this.addListeners();
         this.transitions();
@@ -561,13 +563,13 @@ export default class App {
     onMouseMove(e) {
         this.mouse.x = e.clientX / window.innerWidth - 0.5;
         this.mouse.y = e.clientY / window.innerHeight - 0.5;
-
-        this.follower.follow(this.links.map(x => Rect.fromNode(x)));
-        this.follower.move({
-            x: e.clientX,
-            y: e.clientY
-        });
-        //console.log('moving', e.clientX, e.clientY);
+        if (this.follower.enabled) {
+            this.follower.follow(this.links.map(x => Rect.fromNode(x)));
+            this.follower.move({
+                x: e.clientX,
+                y: e.clientY
+            });
+        }
     }
 
     onResize() {
@@ -727,14 +729,9 @@ export default class App {
 
         LazyLoad.render(this.windowRect);
 
-        if (!Dom.mobile) {
-
-            // follower
-            if (this.enabledFollower) {
-                this.follower.render();
-            }
+        if (this.follower.enabled) {
+            this.follower.render();
         }
-
     }
 
     loop() {

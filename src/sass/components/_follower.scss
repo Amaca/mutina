@@ -1,0 +1,57 @@
+$follower-width: 48px;
+
+.follower {
+	display: none;
+	position: fixed;
+	z-index: 9999999;
+	pointer-events: none;
+	top: 0;
+	left: 0;
+
+	.follower-enabled & {
+		display: block;
+	}
+
+	div:first-child {
+		position: absolute;
+		display: none;
+		// top: 0;
+		// left: 0;
+		// width: $follower-width;
+		// height: $follower-width;
+		// border-radius: $follower-width / 2;
+		// background: $grey;
+		// border-radius: 100%;
+		width: $follower-width;
+		height: $follower-width;
+		top: 0;
+		left: 0;
+		width: $follower-width;
+		height: $follower-width;
+		background-size: $follower-width $follower-width;
+		background-image: url('../assets/img/icons/zoom_in.svg');
+		background-repeat: no-repeat;
+	}
+
+	div:last-child {
+		position: absolute;
+		opacity: 1;
+		display: none;
+	}
+
+	@include sm-down {
+		.follower-enabled & {
+			display: none;
+		}
+	}
+}
+
+@include sm-up {
+
+	.follower-enabled {
+
+		[data-fancy-img]:hover {
+			cursor: none !important;
+		}
+	}
+}
