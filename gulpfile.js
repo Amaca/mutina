@@ -425,7 +425,7 @@ function serveTask() {
     return src(options.src)
         .pipe(webserver(options));
 }
- 
+
 // UTILS
 function getCompilers(ext) {
     const options = configuration.targets[target];

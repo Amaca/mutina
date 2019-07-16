@@ -1,0 +1,17 @@
+.elements {
+    padding: 0 0 80px 0;
+    margin-bottom: 120px;
+    border-bottom: 2px solid $dark;
+
+    @include md-down {
+        margin-bottom: 100px;
+    }
+
+    @include sm-down {
+        margin-bottom: 80px;
+    }
+
+    .box--title {
+        text-align: center !important;
+    }
+}

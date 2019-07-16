@@ -1,31 +1,31 @@
 .page {
-	display: block;
-	position: fixed;
-	width: 100vw;
-	min-height: 100vh;
-	margin: 0;
-	padding: 0;
-	background: $white;
-	// overflow-x: hidden;
-	user-select: none;
-	left: 0;
+    display: block;
+    position: fixed;
+    width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: $white;
+    // overflow-x: hidden;
+    user-select: none;
+    left: 0;
 
-	.fastscroll & {
-		position: relative;
-	}
+    .fastscroll & {
+        position: relative;
+    }
 
-	/*
+    /*
 	.overscroll &,
 	.touch & {
 		position: relative;
 	}
 	*/
 
-	main {
-		padding-top: $header-height;
+    main {
+        padding-top: $header-height;
 
-		@include sm-down {
-			padding-top: $header-height-mobile;
-		}
-	}
+        @include sm-down {
+            padding-top: $header-height-mobile;
+        }
+    }
 }

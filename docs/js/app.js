@@ -14806,6 +14806,8 @@ var _anchors = _interopRequireDefault(require("./shared/anchors"));
 
 var _appears = _interopRequireDefault(require("./shared/appears"));
 
+var _custom = _interopRequireDefault(require("./shared/custom.select"));
+
 var _dom = _interopRequireDefault(require("./shared/dom"));
 
 var _fancy = _interopRequireDefault(require("./shared/fancy"));
@@ -14815,6 +14817,8 @@ var _fancy2 = _interopRequireDefault(require("./shared/fancy.detail"));
 var _fancy3 = _interopRequireDefault(require("./shared/fancy.view-all"));
 
 var _filters = _interopRequireDefault(require("./shared/filters"));
+
+var _follower = _interopRequireDefault(require("./shared/follower"));
 
 var _grid = _interopRequireDefault(require("./shared/grid"));
 
@@ -14830,13 +14834,11 @@ var _side = _interopRequireDefault(require("./shared/side.panel"));
 
 var _sliders = _interopRequireDefault(require("./shared/sliders"));
 
+var _tabs = _interopRequireDefault(require("./shared/tabs"));
+
 var _toggle = _interopRequireDefault(require("./shared/toggle.search"));
 
-var _custom = _interopRequireDefault(require("./shared/custom.select"));
-
 var _utils = _interopRequireDefault(require("./shared/utils"));
-
-var _follower = _interopRequireDefault(require("./shared/follower"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15116,7 +15118,7 @@ function () {
               app.onPageInit();
               /*
               window.daraLayer.push({
-               })
+                })
               gtm.push({
                   title: document.title,
                   href: window.href
@@ -15354,6 +15356,8 @@ function () {
       _side.default.init(debug);
 
       _custom.default.init(debug);
+
+      _tabs.default.init(debug);
 
       setTimeout(function (x) {
         _this.appears = _appears.default.init();
@@ -15646,7 +15650,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/custom.select":315,"./shared/dom":316,"./shared/fancy":318,"./shared/fancy.detail":317,"./shared/fancy.view-all":320,"./shared/filters":321,"./shared/follower":322,"./shared/grid":323,"./shared/lazyload":324,"./shared/navigation":325,"./shared/rect":326,"./shared/samples":328,"./shared/side.panel":329,"./shared/sliders":330,"./shared/toggle.search":331,"./shared/utils":332,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/custom.select":315,"./shared/dom":316,"./shared/fancy":318,"./shared/fancy.detail":317,"./shared/fancy.view-all":320,"./shared/filters":321,"./shared/follower":322,"./shared/grid":323,"./shared/lazyload":324,"./shared/navigation":325,"./shared/rect":326,"./shared/samples":328,"./shared/side.panel":329,"./shared/sliders":330,"./shared/tabs":331,"./shared/toggle.search":332,"./shared/utils":333,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16041,7 +16045,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":332}],317:[function(require,module,exports){
+},{"./utils":333}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16145,7 +16149,7 @@ function () {
 
 exports.default = FancyDetail;
 
-},{"./utils":332}],318:[function(require,module,exports){
+},{"./utils":333}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17128,7 +17132,7 @@ function () {
 
 exports.default = Filters;
 
-},{"./utils":332}],322:[function(require,module,exports){
+},{"./utils":333}],322:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17283,7 +17287,7 @@ function () {
 
 exports.default = Follower;
 
-},{"./utils":332}],323:[function(require,module,exports){
+},{"./utils":333}],323:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17719,7 +17723,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":332}],326:[function(require,module,exports){
+},{"./utils":333}],326:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18083,7 +18087,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":328,"./utils":332,"gsap/ScrollToPlugin":309}],328:[function(require,module,exports){
+},{"./samples":328,"./utils":333,"gsap/ScrollToPlugin":309}],328:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18828,6 +18832,120 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* jshint esversion: 6 */
+var Tabs =
+/*#__PURE__*/
+function () {
+  function Tabs(node, index) {
+    _classCallCheck(this, Tabs);
+
+    this.node = node;
+    this.index = index;
+    this.controls = _toConsumableArray(this.node.querySelectorAll('[data-tabs-control]'));
+    this.contents = _toConsumableArray(this.node.querySelectorAll('[data-tabs-wrapper]'));
+    this.wrapper = this.node.querySelector('.tabs__content');
+    this.clickTab = this.clickTab.bind(this);
+    this.reset();
+    this.addListeners();
+  }
+
+  _createClass(Tabs, [{
+    key: "reset",
+    value: function reset() {
+      this.wrapper.style.height = this.contents[0].clientHeight + 'px';
+      this.controls[0].classList.add('active');
+      this.contents[0].classList.add('active');
+    }
+  }, {
+    key: "addListeners",
+    value: function addListeners() {
+      var _this = this;
+
+      this.controls.forEach(function (control) {
+        control.addEventListener('click', _this.clickTab);
+      });
+    }
+  }, {
+    key: "clickTab",
+    value: function clickTab(e) {
+      if (!e.target.classList.contains('active')) {
+        var tabId = e.target.getAttribute('data-tabs-control');
+        var result = this.contents.filter(function (x) {
+          return x.getAttribute('data-tabs-wrapper') === tabId;
+        });
+        this.wrapper.style.height = result[0].clientHeight + 'px';
+        this.controls.forEach(function (x) {
+          return x.classList.remove('active');
+        });
+        this.contents.forEach(function (x) {
+          return x.classList.remove('active');
+        });
+        setTimeout(function (x) {
+          e.target.classList.add('active');
+          result[0].classList.add('active');
+        }, 300);
+      }
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      var _this2 = this;
+
+      this.controls.forEach(function (control) {
+        control.removeEventListener('click', _this2.clickTab);
+        control.classList.remove('active');
+      });
+      this.contents.forEach(function (x) {
+        return x.classList.remove('active');
+      });
+    }
+  }], [{
+    key: "destroyAll",
+    value: function destroyAll() {
+      Tabs.items.forEach(function (elem) {
+        elem.destroy();
+      });
+    }
+  }, {
+    key: "init",
+    value: function init(debug) {
+      Tabs.items = _toConsumableArray(document.querySelectorAll('[data-tabs]')).map(function (node, index) {
+        return new Tabs(node, index);
+      });
+
+      if (debug) {
+        console.log('Tabs: ', Tabs.items);
+      }
+    }
+  }]);
+
+  return Tabs;
+}();
+
+exports.default = Tabs;
+
+},{}],332:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 var _utils = _interopRequireDefault(require("./utils"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -18928,7 +19046,7 @@ function () {
 
 exports.default = ToggleSearch;
 
-},{"./utils":332}],332:[function(require,module,exports){
+},{"./utils":333}],333:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -6,11 +6,13 @@ import barba from '@barba/core';
 import "css-vars-ponyfill";
 import Anchors from './shared/anchors';
 import Appears from './shared/appears';
+import CustomSelect from './shared/custom.select';
 import Dom from './shared/dom';
 import Fancy from './shared/fancy';
 import FancyDetail from './shared/fancy.detail';
 import FancyViewAll from "./shared/fancy.view-all";
 import Filters from './shared/filters';
+import Follower from './shared/follower';
 import Grid from './shared/grid';
 import LazyLoad from './shared/lazyload';
 import Navigation from "./shared/navigation";
@@ -18,10 +20,9 @@ import Rect from './shared/rect';
 import Samples from './shared/samples';
 import SidePanel from './shared/side.panel';
 import Sliders from './shared/sliders';
+import Tabs from './shared/tabs';
 import ToggleSearch from './shared/toggle.search';
-import CustomSelect from './shared/custom.select';
 import Utils from './shared/utils';
-import Follower from './shared/follower';
 
 //settings
 let menuStyle = 1;
@@ -518,6 +519,7 @@ export default class App {
         Grid.init(debug);
         SidePanel.init(debug);
         CustomSelect.init(debug);
+        Tabs.init(debug);
 
         setTimeout(x => {
             this.appears = Appears.init();
