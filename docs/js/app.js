@@ -15118,7 +15118,7 @@ function () {
               app.onPageInit();
               /*
               window.daraLayer.push({
-                })
+               })
               gtm.push({
                   title: document.title,
                   href: window.href

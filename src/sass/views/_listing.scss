@@ -152,6 +152,16 @@
                         line-height: 1.5;
                     }
                 }
+
+                .cta {
+                    margin-top: 0;
+
+                    .btn--inline {
+                        @include font($style:book);
+                        font-size: 0.7rem;
+                        cursor: pointer;
+                    }
+                }
             }
         }
 

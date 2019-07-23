@@ -55,12 +55,14 @@
         padding-bottom: $col-gutter-half;
     }
 
-    .editorial__1col-full-img {
+    .editorial__1col-full-img,
+    .editorial__1col-full-img-caption--left {
 
         .picture {
             @include aspect-clip(3, 2);
         }
     }
+
 
     .editorial__2col-img {
 
@@ -70,6 +72,96 @@
 
         .editorial__wrapper {
             margin: 0 -#{$col-gutter-half / 2};
+        }
+
+        .editorial__box-content {
+            padding: 0;
+        }
+
+        .editorial__caption {
+            padding: 0 #{$col-gutter-half / 2};
+            margin-top: $col-gutter-half;
+        }
+    }
+
+    .archive {
+
+        .listing--grid-2,
+        .listing--grid-4 {
+            margin: 0 -#{$col-gutter-half / 2};
+
+            @include xs-down {
+                margin: 0;
+            }
+        }
+
+        .listing__item {
+            padding: 0 #{$col-gutter-half / 2};
+
+            .picture+.box {
+                margin-top: 20px;
+            }
+
+            .box {
+                .h3 {
+                    font-size: 1.2rem;
+                }
+
+                .text {
+                    margin-top: 10px;
+
+                    p {
+                        margin-bottom: 0;
+                        font-size: 0.8rem;
+                        line-height: 1.5;
+                    }
+                }
+            }
+        }
+
+        .container--big {
+            padding: 0;
+            margin: 0;
+            max-width: 100%;
+        }
+    }
+
+    &.fancy-detail--variant {
+
+        .box--title {
+            margin-bottom: 50px;
+
+            .eyelet {
+                text-transform: uppercase;
+                @include font($style:medium);
+                font-size: 0.7rem;
+            }
+        }
+
+        .editorial {
+            padding-bottom: 80px;
+
+            @include sm-down {
+                padding-bottom: 50px;
+            }
+
+            &>div {
+                margin-bottom: 0;
+            }
+        }
+
+        .archive {
+            margin-bottom: 80px;
+
+            @include sm-down {
+                margin-bottom: 50px;
+            }
+        }
+
+        .fancy-detail__footer {
+            .editorial {
+                padding-bottom: 0;
+            }
         }
     }
 }
