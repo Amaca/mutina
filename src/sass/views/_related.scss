@@ -12,6 +12,10 @@
             max-width: calc(100% - #{$col-width});
         }
     }
+
+    .picture {
+        @include aspect-clip(880, 550, 0.15);
+    }
 }
 
 .related--slider {

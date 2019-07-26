@@ -14854,8 +14854,10 @@ var scrollSpeed = 8;
 var activateIntro = false;
 var debug = true;
 var disableBarba = false;
+var breakTransition = false;
 var barbaDebug = debug;
 var enabledFollower = false;
+var firstLoad = false;
 
 var App =
 /*#__PURE__*/
@@ -14913,6 +14915,8 @@ function () {
           window.scrollTo(0, Math.max(0, scrollTop + rect.top - 120));
         }
       };
+
+      firstLoad = true;
 
       _navigation.default.init();
 
@@ -15115,10 +15119,15 @@ function () {
             },
             beforeEnter: function beforeEnter(data) {
               var done = this.async();
+
+              if (breakTransition) {
+                throw new Error('stop!');
+              }
+
               app.onPageInit();
               /*
               window.daraLayer.push({
-               })
+                })
               gtm.push({
                   title: document.title,
                   href: window.href
@@ -15330,6 +15339,15 @@ function () {
       var _this = this;
 
       this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
+      this.pictures = [].slice.call(document.querySelectorAll('.picture img'));
+      this.pictures.forEach(function (picture) {
+        if (!picture.classList.contains('picture__secondary')) {
+          var wrapper = document.createElement('div');
+          wrapper.classList.add('picture__container');
+          picture.parentNode.insertBefore(wrapper, picture);
+          wrapper.appendChild(picture);
+        }
+      });
 
       _lazyload.default.init();
 
@@ -15359,13 +15377,15 @@ function () {
 
       _tabs.default.init(debug);
 
+      var delay = firstLoad ? 0 : 600;
+      firstLoad = false;
       setTimeout(function (x) {
         _this.appears = _appears.default.init();
 
         if (window.innerWidth > 768) {
           Splitting();
         }
-      }, 600);
+      }, delay);
     }
   }, {
     key: "destroyAll",
@@ -15557,8 +15577,10 @@ function () {
 
 
       this.parallaxes.forEach(function (node, i) {
-        var parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 3;
-        var direction = i % 2 === 0 ? 1 : -1;
+        // const parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 3;
+        var parallax = node.parallax || 15; // const direction = i % 2 === 0 ? 1 : -1;
+
+        var direction = 1;
         var currentY = node.currentY || 0;
 
         var rect = _rect.default.fromNode(node);
@@ -15569,6 +15591,11 @@ function () {
           width: rect.width,
           height: rect.height
         });
+
+        if (direction === -1) {
+          node.parentNode.classList.add('reverse');
+        }
+
         var intersection = rect.intersection(_this3.windowRect);
         /*
         if (fullHeight) {
@@ -15577,14 +15604,19 @@ function () {
         */
 
         if (intersection.y > 0) {
-          var y = intersection.center.y; // Math.min(1, Math.max(-1, intersection.center.y));
+          // const y = intersection.center.y; // Math.min(1, Math.max(-1, intersection.center.y));
+          // const s = (100 + parallax * 2) / 100;
+          // currentY = ((-50) + (y * parallax * direction)).toFixed(3);
+          var y = (rect.top - window.innerHeight) / (window.innerHeight + rect.height);
+          y = Math.min(0, Math.max(-1, y)); // const y = 1 - (1 + Math.min(1, Math.max(-1, intersection.center.y))) / 2;
+          // currentY = (y * parallax * direction).toFixed(3);
 
-          var s = (100 + parallax * 2) / 100;
-          currentY = (-50 + y * parallax * direction).toFixed(3);
+          currentY = (y * direction * parallax).toFixed(3);
 
           if (node.currentY !== currentY) {
-            node.currentY = currentY;
-            node.setAttribute('style', "height: ".concat(s * 100, "%; top: 50%; left: 50%; transform: translateX(-50%) translateY(").concat(currentY, "%);"));
+            node.currentY = currentY; // node.setAttribute('style', `height: ${s * 100}%; top: 50%; left: 50%; transform: translateX(-50%) translateY(${currentY}%);`);
+
+            node.setAttribute('style', "transform: translateY(".concat(currentY, "%);"));
           }
         }
       }); // appears
@@ -17394,7 +17426,7 @@ function () {
     this.id = id;
     this.src = node.getAttribute('data-load');
     this.height = node.getAttribute('data-height') ? node.getAttribute('data-height') : null;
-    this.parent = node.parentNode; // if (this.height) {
+    this.parent = node.parentNode.parentNode; // if (this.height) {
     //     this.paddingTop = (this.parent.clientWidth * this.height) / this.parent.clientWidth;
     //     this.node.style.paddingTop = this.paddingTop + 'px';
     // }
@@ -17410,13 +17442,12 @@ function () {
         var node = this.node;
 
         node.onload = function () {
-          // setTimeout(() => {
-          //     this.parent.classList.add('loaded');
-          //     node.onload = null;
-          // }, 2000);
-          _this.parent.classList.add('loaded');
+          var time = _this.parent.classList.contains('picture--static') ? 0 : 1200;
+          setTimeout(function () {
+            _this.parent.classList.add('loaded');
 
-          node.onload = null;
+            node.onload = null;
+          }, time);
         };
 
         node.src = this.src;

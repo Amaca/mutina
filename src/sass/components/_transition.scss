@@ -108,10 +108,11 @@
                 font-size: 5rem;
                 color: #fff;
                 line-height: 1;
-                padding: 5px 0;
+                padding: 8px 0;
                 position: relative;
                 bottom: 0;
                 display: inline-block;
+                white-space: nowrap;
             }
         }
 
@@ -127,11 +128,12 @@
                 font-size: 5rem;
                 color: $dark;
                 line-height: 1;
-                padding: 5px 0;
+                padding: 8px 0;
                 position: relative;
                 z-index: 3;
                 bottom: 0;
                 display: inline-block;
+                white-space: nowrap;
             }
         }
     }

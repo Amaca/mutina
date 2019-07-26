@@ -513,14 +513,14 @@
         }
 
         .picture {
-            @include aspect-clip(16, 9);
+            @include aspect-clip(1920, 1200, 0.15);
 
-            @include sm-down {
-                @include aspect-clip(16, 10);
-            }
+            // @include sm-down {
+            //     @include aspect-clip(1920, 1200, 0.15);
+            // }
 
             @include xs-down {
-                @include aspect-clip(3, 4);
+                @include aspect-clip(3, 4, 0.15);
             }
         }
     }
@@ -640,6 +640,11 @@
     .editorial__box-picture {
         .picture {
             @include aspect-clip(16, 6);
+            transform: scale(1, 1);
+
+            .picture__container {
+                transform: scale(1, 1);
+            }
 
             @include sm-down {
                 @include aspect-clip(1, 1);
@@ -675,14 +680,14 @@
         max-width: 100%;
 
         .picture {
-            @include aspect-clip(16, 8);
+            @include aspect-clip(1920, 1200, 0.15);
 
-            @include sm-down {
-                @include aspect-clip(16, 10);
-            }
+            // @include sm-down {
+            //     @include aspect-clip(16, 10, 0.15);
+            // }
 
             @include xs-down {
-                @include aspect-clip(3, 4);
+                @include aspect-clip(3, 4, 0.15);
             }
         }
     }
@@ -786,14 +791,14 @@
     }
 
     .picture {
-        @include aspect-clip(16, 8);
+        @include aspect-clip(16, 8, 0.15);
 
         @include sm-down {
-            @include aspect-clip(16, 10);
+            @include aspect-clip(16, 10, 0.15);
         }
 
         @include xs-down {
-            @include aspect-clip(3, 4);
+            @include aspect-clip(3, 4, 0.15);
         }
     }
 
@@ -816,7 +821,7 @@
 
 //1col-full-video
 .editorial__1col-full-video {
-    
+
     .video {
         position: relative;
         padding-top: 56.25%;

@@ -30,8 +30,10 @@ let scrollSpeed = 8;
 const activateIntro = false;
 const debug = true;
 const disableBarba = false;
+const breakTransition = false;
 const barbaDebug = debug;
 const enabledFollower = false;
+let firstLoad = false;
 
 export default class App {
 
@@ -81,6 +83,7 @@ export default class App {
                 window.scrollTo(0, Math.max(0, scrollTop + rect.top - 120));
             }
         };
+        firstLoad = true;
         Navigation.init();
         body.classList.add('ready');
     }
@@ -290,6 +293,9 @@ export default class App {
                         },
                         beforeEnter(data) {
                             const done = this.async();
+                            if (breakTransition) {
+                                throw new Error('stop!');
+                            }
                             app.onPageInit();
                             /*
                             window.daraLayer.push({
@@ -506,6 +512,17 @@ export default class App {
 
     onPageInit() {
         this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
+        this.pictures = [].slice.call(document.querySelectorAll('.picture img'));
+
+        this.pictures.forEach(picture => {
+            if (!picture.classList.contains('picture__secondary')) {
+                let wrapper = document.createElement('div');
+                wrapper.classList.add('picture__container');
+                picture.parentNode.insertBefore(wrapper, picture);
+                wrapper.appendChild(picture);
+            }
+        });
+
         LazyLoad.init();
         Fancy.init();
         FancyViewAll.init();
@@ -521,12 +538,15 @@ export default class App {
         CustomSelect.init(debug);
         Tabs.init(debug);
 
+        let delay = firstLoad ? 0 : 600;
+        firstLoad = false;
+
         setTimeout(x => {
             this.appears = Appears.init();
             if (window.innerWidth > 768) {
                 Splitting();
             }
-        }, 600);
+        }, delay);
     }
 
     destroyAll(container) {
@@ -684,8 +704,10 @@ export default class App {
 
         //parallax
         this.parallaxes.forEach((node, i) => {
-            const parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 3;
-            const direction = i % 2 === 0 ? 1 : -1;
+            // const parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 3;
+            const parallax = node.parallax || 15;
+            // const direction = i % 2 === 0 ? 1 : -1;
+            const direction = 1;
             let currentY = node.currentY || 0;
             let rect = Rect.fromNode(node);
             rect = new Rect({
@@ -694,6 +716,9 @@ export default class App {
                 width: rect.width,
                 height: rect.height,
             });
+            if (direction === -1) {
+                node.parentNode.classList.add('reverse');
+            }
             const intersection = rect.intersection(this.windowRect);
             /*
             if (fullHeight) {
@@ -701,12 +726,18 @@ export default class App {
             }
             */
             if (intersection.y > 0) {
-                const y = intersection.center.y; // Math.min(1, Math.max(-1, intersection.center.y));
-                const s = (100 + parallax * 2) / 100;
-                currentY = ((-50) + (y * parallax * direction)).toFixed(3);
+                // const y = intersection.center.y; // Math.min(1, Math.max(-1, intersection.center.y));
+                // const s = (100 + parallax * 2) / 100;
+                // currentY = ((-50) + (y * parallax * direction)).toFixed(3);
+                let y = (rect.top - window.innerHeight) / (window.innerHeight + rect.height);
+                y = Math.min(0, Math.max(-1, y));
+                // const y = 1 - (1 + Math.min(1, Math.max(-1, intersection.center.y))) / 2;
+                // currentY = (y * parallax * direction).toFixed(3);
+                currentY = (y * direction * parallax).toFixed(3);
                 if (node.currentY !== currentY) {
                     node.currentY = currentY;
-                    node.setAttribute('style', `height: ${s * 100}%; top: 50%; left: 50%; transform: translateX(-50%) translateY(${currentY}%);`);
+                    // node.setAttribute('style', `height: ${s * 100}%; top: 50%; left: 50%; transform: translateX(-50%) translateY(${currentY}%);`);
+                    node.setAttribute('style', `transform: translateY(${currentY}%);`);
                 }
             }
         });

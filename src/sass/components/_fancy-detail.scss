@@ -59,7 +59,7 @@
     .editorial__1col-full-img-caption--left {
 
         .picture {
-            @include aspect-clip(3, 2);
+            @include aspect-clip(3, 2, 0.15);
         }
     }
 
@@ -418,6 +418,10 @@
 
         .box {
             color: $white;
+        }
+
+        .picture {
+            @include aspect-clip(880, 550, 0);
         }
 
         .listing .picture+.box {

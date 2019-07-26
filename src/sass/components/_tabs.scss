@@ -59,6 +59,10 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        .picture {
+            @include aspect-clip(880, 550, 0);
+        }
     }
 
     .archive {

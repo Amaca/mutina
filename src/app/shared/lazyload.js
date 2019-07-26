@@ -12,7 +12,7 @@ export default class LazyLoad {
         this.id = id;
         this.src = node.getAttribute('data-load');
         this.height = node.getAttribute('data-height') ? node.getAttribute('data-height') : null;
-        this.parent = node.parentNode;
+        this.parent = (node.parentNode).parentNode;
         // if (this.height) {
         //     this.paddingTop = (this.parent.clientWidth * this.height) / this.parent.clientWidth;
         //     this.node.style.paddingTop = this.paddingTop + 'px';
@@ -24,12 +24,11 @@ export default class LazyLoad {
             this.loaded = true;
             const node = this.node;
             node.onload = () => {
-                // setTimeout(() => {
-                //     this.parent.classList.add('loaded');
-                //     node.onload = null;
-                // }, 2000);
-                this.parent.classList.add('loaded');
-                node.onload = null;
+                let time = this.parent.classList.contains('picture--static') ? 0 : 1200;
+                setTimeout(() => {
+                    this.parent.classList.add('loaded');
+                    node.onload = null;
+                }, time);
             };
             node.src = this.src;
         }
