@@ -85,6 +85,7 @@ export default class App {
         };
         firstLoad = true;
         Navigation.init();
+        CustomSelect.init(debug);
         body.classList.add('ready');
     }
 
@@ -94,7 +95,7 @@ export default class App {
         const textBack = document.querySelector('.transition__text .box--back .text');
         const boxBack = document.querySelector('.transition__text .box--back');
         const line = document.querySelector('.transition__line');
-
+        const page = this.page;
         if (!disableBarba) {
             barba.init({
                 timeout: 5000,
@@ -311,7 +312,7 @@ export default class App {
                         enter(data) {
                             const done = this.async();
                             const header = document.querySelector('header');
-                            window.scrollTo(0, 0);
+                            app.scrollTo(0, false);
                             header.style.top = 0;
                             TweenMax.to(textBack, 1, {
                                 transform: 'translateY(-100%)',
@@ -413,7 +414,7 @@ export default class App {
                         enter(data) {
                             const done = this.async();
                             const sidebar = document.querySelector('.fancy-detail__sidebar')
-                            window.scrollTo(0, 0);
+                            app.scrollTo(0, true);
                             TweenMax.set(sidebar, {
                                 left: -sidebar.clientWidth
                             });
@@ -488,9 +489,7 @@ export default class App {
                         },
                         enter(data) {
                             const done = this.async();
-                            const header = document.querySelector('header');
-                            window.scrollTo(0, 0);
-                            header.style.top = 0;
+                            app.scrollTo(0, true);
                             TweenMax.to(transitionLayer, 1, {
                                 height: 0,
                                 backgroundColor: '#CFCFCF',
@@ -508,6 +507,15 @@ export default class App {
             transition.remove();
             this.onPageInit();
         }
+    }
+
+    scrollTo(top, setHeader) {
+        window.scrollTo(0, top);
+        if (setHeader) {
+            const header = document.querySelector('header');
+            header.style.top = top;
+        }
+        this.page.previousTop = top + 1;
     }
 
     onPageInit() {
@@ -535,7 +543,7 @@ export default class App {
         ToggleSearch.init(debug);
         Grid.init(debug);
         SidePanel.init(debug);
-        CustomSelect.init(debug);
+        // CustomSelect.init(debug);
         Tabs.init(debug);
 
         let delay = firstLoad ? 0 : 600;
@@ -560,7 +568,7 @@ export default class App {
         ToggleSearch.destroyAll();
         Grid.destroyAll();
         SidePanel.destroyAll();
-        CustomSelect.destroyAll();
+        // CustomSelect.destroyAll();
         container.remove();
     }
 
@@ -734,7 +742,7 @@ export default class App {
                 y = Math.min(0, Math.max(-1, y));
                 // const y = 1 - (1 + Math.min(1, Math.max(-1, intersection.center.y))) / 2;
                 // currentY = (y * parallax * direction).toFixed(3);
-                currentY = 1 + (1 + y) * 0.12;
+                currentY = 1 + (1 + y) * 0.08;
                 //currentY = (y * direction * parallax).toFixed(3);
                 if (node.currentY !== currentY) {
                     node.currentY = currentY;

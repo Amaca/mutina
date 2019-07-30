@@ -14920,6 +14920,8 @@ function () {
 
       _navigation.default.init();
 
+      _custom.default.init(debug);
+
       body.classList.add('ready');
     }
   }, {
@@ -14930,6 +14932,7 @@ function () {
       var textBack = document.querySelector('.transition__text .box--back .text');
       var boxBack = document.querySelector('.transition__text .box--back');
       var line = document.querySelector('.transition__line');
+      var page = this.page;
 
       if (!disableBarba) {
         _core.default.init({
@@ -15139,7 +15142,7 @@ function () {
             enter: function enter(data) {
               var done = this.async();
               var header = document.querySelector('header');
-              window.scrollTo(0, 0);
+              app.scrollTo(0, false);
               header.style.top = 0;
               TweenMax.to(textBack, 1, {
                 transform: 'translateY(-100%)',
@@ -15239,7 +15242,7 @@ function () {
             enter: function enter(data) {
               var done = this.async();
               var sidebar = document.querySelector('.fancy-detail__sidebar');
-              window.scrollTo(0, 0);
+              app.scrollTo(0, true);
               TweenMax.set(sidebar, {
                 left: -sidebar.clientWidth
               });
@@ -15313,9 +15316,7 @@ function () {
             },
             enter: function enter(data) {
               var done = this.async();
-              var header = document.querySelector('header');
-              window.scrollTo(0, 0);
-              header.style.top = 0;
+              app.scrollTo(0, true);
               TweenMax.to(transitionLayer, 1, {
                 height: 0,
                 backgroundColor: '#CFCFCF',
@@ -15332,6 +15333,18 @@ function () {
         transition.remove();
         this.onPageInit();
       }
+    }
+  }, {
+    key: "scrollTo",
+    value: function scrollTo(top, setHeader) {
+      window.scrollTo(0, top);
+
+      if (setHeader) {
+        var header = document.querySelector('header');
+        header.style.top = top;
+      }
+
+      this.page.previousTop = top + 1;
     }
   }, {
     key: "onPageInit",
@@ -15371,9 +15384,8 @@ function () {
 
       _grid.default.init(debug);
 
-      _side.default.init(debug);
+      _side.default.init(debug); // CustomSelect.init(debug);
 
-      _custom.default.init(debug);
 
       _tabs.default.init(debug);
 
@@ -15408,9 +15420,8 @@ function () {
 
       _grid.default.destroyAll();
 
-      _side.default.destroyAll();
+      _side.default.destroyAll(); // CustomSelect.destroyAll();
 
-      _custom.default.destroyAll();
 
       container.remove();
     }
@@ -15612,7 +15623,7 @@ function () {
           y = Math.min(0, Math.max(-1, y)); // const y = 1 - (1 + Math.min(1, Math.max(-1, intersection.center.y))) / 2;
           // currentY = (y * parallax * direction).toFixed(3);
 
-          currentY = 1 + (1 + y) * 0.12; //currentY = (y * direction * parallax).toFixed(3);
+          currentY = 1 + (1 + y) * 0.08; //currentY = (y * direction * parallax).toFixed(3);
 
           if (node.currentY !== currentY) {
             node.currentY = currentY; // node.setAttribute('style', `height: ${s * 100}%; top: 50%; left: 50%; transform: translateX(-50%) translateY(${currentY}%);`);
