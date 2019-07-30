@@ -9,31 +9,37 @@
     }
 }
 
-.editorial__box-picture[data-appear],
-.editorial__1col-full-img[data-appear],
-.listing .listing__item[data-appear],
-.cover__picture[data-appear] {
-    opacity: 1;
-    transform: none;
 
-    .picture {
-        &:after {
-            transform: translateX(-100%);
-            transition: all 1000ms $smooth 200ms;
-        }
-    }
+//@slidebg on enter
+// .editorial__box-picture[data-appear],
+// .editorial__1col-full-img[data-appear],
+// .listing .listing__item[data-appear],
+// .cover__picture[data-appear] {
+//     opacity: 1;
+//     transform: none;
 
-    &.appeared {
-        transform: none;
-        transition: none;
+//     // .picture {
+//     //     &:after {
+//     //         transform: translateX(-100%);
+//     //         transition: all 1000ms $smooth 200ms;
+//     //     }
+//     // }
+//     //@slidebg on enter
 
-        .picture {
-            &:after {
-                transform: translateX(0px);
-            }
-        }
-    }
-}
+//     &.appeared {
+//         transform: none;
+//         transition: none;
+
+//         //@slidebg on enter
+//         // .picture {
+//         //     &:after {
+//         //         transform: translateX(0px);
+//         //     }
+//         // }
+//         //@slidebg on enter
+//     }
+// }
+//@slidebg on enter
 
 .splitting[data-appear] {
 

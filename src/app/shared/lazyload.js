@@ -5,6 +5,9 @@ import Rect from './rect';
 const body = document.querySelector('body');
 const html = document.getElementsByTagName('html')[0];
 
+// const delay = 1200; //@slidebg on enter
+const delay = 800;
+
 export default class LazyLoad {
 
     constructor(node, id) {
@@ -24,11 +27,14 @@ export default class LazyLoad {
             this.loaded = true;
             const node = this.node;
             node.onload = () => {
-                let time = this.parent.classList.contains('picture--static') ? 0 : 1200;
-                setTimeout(() => {
-                    this.parent.classList.add('loaded');
-                    node.onload = null;
-                }, time);
+                // let time = this.parent.classList.contains('') ? 0 : delay;
+                // setTimeout(() => {
+                //     this.parent.classList.add('loaded');
+                //     node.onload = null;
+                // }, 2000);
+
+                this.parent.classList.add('loaded');
+                node.onload = null;
             };
             node.src = this.src;
         }

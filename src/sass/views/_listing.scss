@@ -73,7 +73,8 @@
         }
 
         .picture {
-            @include aspect-clip(880, 550, 0.15);
+            // @include aspect-clip(880, 550, 0.15);
+            @include aspect-clip(880, 550, 0);
         }
     }
 

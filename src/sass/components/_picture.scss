@@ -9,9 +9,14 @@ img:not([src]) {
     position: relative;
     overflow: hidden;
     width: 100%;
-    transform: scale(0.97, 0.97);
+    //@slidebg on enter
+    // transform: scale(0.97, 0.97);
+    //@slidebg on enter
+
+    //transform: translateY(30px);
     transition: all 1000ms $smooth;
-    @include aspect-clip(10, 6, 0.15);
+    @include aspect-clip(10, 6, 0);
+    // @include aspect-clip(10, 6, 0.15);
 
     &:after {
         content: '';
@@ -31,30 +36,40 @@ img:not([src]) {
         left: 0;
         width: 100%;
         height: 100%;
-        transform: scale(1.03, 1.03);
-        transition: all 1000ms ease-in-out;
+        //transform: scale(1.05, 1.05);
+        //@slidebg on enter
+        //transition: all 1000ms ease-in-out;
+        //@slidebg on enter
+        transition: all 1000ms $smooth;
     }
 
     &.loaded {
-        transform: scale(1, 1);
+        //@slidebg on enter
+        // transform: scale(1, 1);
+        //@slidebg on enter
+        //transform: translateY(0px);
 
         img {
             transform: scale(1, 1);
             opacity: 1;
-            transition: opacity 1500ms ease-in-out;
-            //transition: opacity 1000ms ease-in-out;
+            //@slidebg on enter
+            //transition: opacity 1500ms ease-in-out;
+            //@slidebg on enter
+            transition: opacity 1500ms $smooth;
         }
 
-        .picture__container {
-            transform: scale(1, 1);
-        }
+        //@slidebg on enter
+        // .picture__container {
+        //     transform: scale(1, 1);
+        // }
+        //@slidebg on enter
     }
 
     // &:hover {
 
     //     .picture__container {
-    //         transform: scale(1.05, 1.05);
-    //         transition: all 2000ms ease-in-out;
+    //         transform: scale(1.03, 1.03);
+    //         transition: all 1500ms ease-in-out;
     //     }
     // }
 

@@ -59,7 +59,8 @@
     .editorial__1col-full-img-caption--left {
 
         .picture {
-            @include aspect-clip(3, 2, 0.15);
+            // @include aspect-clip(3, 2, 0.15);
+            @include aspect-clip(3, 2);
         }
     }
 

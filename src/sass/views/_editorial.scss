@@ -513,14 +513,16 @@
         }
 
         .picture {
-            @include aspect-clip(1920, 1200, 0.15);
+            // @include aspect-clip(1920, 1200, 0.15);
+            @include aspect-clip(1920, 1200, 0);
 
             // @include sm-down {
             //     @include aspect-clip(1920, 1200, 0.15);
             // }
 
             @include xs-down {
-                @include aspect-clip(3, 4, 0.15);
+                // @include aspect-clip(3, 4, 0.15);
+                @include aspect-clip(3, 4, 0);
             }
         }
     }
@@ -680,14 +682,16 @@
         max-width: 100%;
 
         .picture {
-            @include aspect-clip(1920, 1200, 0.15);
+            // @include aspect-clip(1920, 1200, 0.15);
+            @include aspect-clip(1920, 1200);
 
             // @include sm-down {
             //     @include aspect-clip(16, 10, 0.15);
             // }
 
             @include xs-down {
-                @include aspect-clip(3, 4, 0.15);
+                // @include aspect-clip(3, 4, 0.15);
+                @include aspect-clip(3, 4);
             }
         }
     }
@@ -791,14 +795,23 @@
     }
 
     .picture {
-        @include aspect-clip(16, 8, 0.15);
+        // @include aspect-clip(16, 8, 0.15);
+
+        // @include sm-down {
+        //     @include aspect-clip(16, 10, 0.15);
+        // }
+
+        // @include xs-down {
+        //     @include aspect-clip(3, 4, 0.15);
+        // }
+        @include aspect-clip(16, 8, 0);
 
         @include sm-down {
-            @include aspect-clip(16, 10, 0.15);
+            @include aspect-clip(16, 10, 0);
         }
 
         @include xs-down {
-            @include aspect-clip(3, 4, 0.15);
+            @include aspect-clip(3, 4, 0);
         }
     }
 

@@ -729,15 +729,19 @@ export default class App {
                 // const y = intersection.center.y; // Math.min(1, Math.max(-1, intersection.center.y));
                 // const s = (100 + parallax * 2) / 100;
                 // currentY = ((-50) + (y * parallax * direction)).toFixed(3);
-                let y = (rect.top - window.innerHeight) / (window.innerHeight + rect.height);
+                // let y = (rect.top - window.innerHeight) / (window.innerHeight + rect.height);
+                let y = (rect.top - window.innerHeight) / (window.innerHeight);
                 y = Math.min(0, Math.max(-1, y));
                 // const y = 1 - (1 + Math.min(1, Math.max(-1, intersection.center.y))) / 2;
                 // currentY = (y * parallax * direction).toFixed(3);
-                currentY = (y * direction * parallax).toFixed(3);
+                currentY = 1 + (1 + y) * 0.12;
+                //currentY = (y * direction * parallax).toFixed(3);
                 if (node.currentY !== currentY) {
                     node.currentY = currentY;
                     // node.setAttribute('style', `height: ${s * 100}%; top: 50%; left: 50%; transform: translateX(-50%) translateY(${currentY}%);`);
-                    node.setAttribute('style', `transform: translateY(${currentY}%);`);
+                    //node.setAttribute('style', `transform: translateY(${currentY}%);`);
+                    // console.log(currentY);
+                    node.setAttribute('style', `transform: scale(${currentY},${currentY});`);
                 }
             }
         });
