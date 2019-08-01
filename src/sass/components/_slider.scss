@@ -133,44 +133,11 @@
     @extend .slider--carousel;
     margin-top: 0;
 
-    // .swiper-slide {
-    //     width: 60vw;
-
-    //     @include sm-down {
-    //         width: 65vw;
-    //     }
-
-    //     @include xs-down {
-    //         width: 80vw;
-    //     }
-
-    //     img {
-    //         max-width: 100%;
-    //         border: none;
-    //         outline: none;
-    //         opacity: 0;
-    //         transition: opacity 1s $smooth;
-    //     }
-
-    //     .slider__caption {
-    //         opacity: 0;
-    //         margin-top: 23px;
-    //         font-size: 1.1rem;
-    //         transition: opacity 1s $smooth;
-    //     }
-
-    //     .slider__caption--small {
-    //         font-size: 0.8rem;
-    //     }
-    // }
-
-    // .slider__picture {}
-
     .swiper-slide {
         width: 68vw;
 
         @include sm-down {
-            width: 65vw;
+            width: 80vw;
         }
 
         @include xs-down {
@@ -253,7 +220,6 @@
         }
     }
 }
-
 
 .slider--samples {
     margin-top: 60px;

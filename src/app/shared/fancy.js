@@ -7,6 +7,8 @@ let clickClose;
 let clickSwitch;
 let swiperInstance;
 let firstLoad;
+let noGroupId = 0;
+let groupItemId = 0;
 
 const body = document.querySelector('body');
 const html = document.getElementsByTagName('html')[0];
@@ -20,10 +22,17 @@ export default class Fancy {
 
     constructor(node, id) {
         this.node = node;
-        this.id = id;
+        this.group = node.getAttribute('data-fancy-group');
+
+        if (this.group) {
+            this.id = id;
+        } else {
+            this.id = noGroupId++;
+        }
         this.smallImageUrl = node.getAttribute('data-fancy-thumb');
         this.bigImageUrl = node.getAttribute('data-fancy-img');
         this.caption = node.getAttribute('data-fancy-caption');
+        this.groupCaption = node.getAttribute('data-fancy-group-caption');
 
         this.addListener();
     }
@@ -37,8 +46,9 @@ export default class Fancy {
         this.node.addEventListener('click', this.click);
     }
 
-    openDetailGallery() {
-        Fancy.initDetailGallery(this.id);
+    openDetailGallery(e) {
+        let groupId = this.group ? this.group : null;
+        Fancy.initDetailGallery(this.id, groupId);
     }
 
     destroy() {
@@ -71,10 +81,11 @@ export default class Fancy {
         if (document.querySelector('.detail-gallery__cta')) {
             document.querySelector('.detail-gallery__cta').removeEventListener('click', clickSwitch);
         }
+        noGroupId = 0;
     }
 
     //CREATE MARKUP FOR DETAIL GALLERY AND ADD CLOSE LISTENER
-    static initDetailGallery(id) {
+    static initDetailGallery(id, groupId) {
         let detailGallery = document.createElement('div');
         let detailGalleryClose = document.createElement('div');
         let detailGalleryBg = document.createElement('div');
@@ -101,23 +112,30 @@ export default class Fancy {
         detailGallery.appendChild(detailGalleryWrapper);
         detailGallery.appendChild(detailGalleryFooter);
 
-        detailGalleryFooter.innerHTML = `
-            <div class="detail-gallery__cta">${fullGalleryIcon}</div>
+        detailGalleryFooter.innerHTML = '';
+
+        if (!groupId) {
+            detailGalleryFooter.innerHTML += `<div class="detail-gallery__cta">${fullGalleryIcon}</div>`;
+        } else {
+            detailGalleryFooter.innerHTML += `<div class="detail-gallery__group-caption"></div>`;
+        }
+
+        detailGalleryFooter.innerHTML += `
             <div class="detail-gallery__caption"><span></span></div>
             <div class="detail-gallery__pagination"></div>
         `;
 
-        const detailGallerySwitch = document.querySelector('.detail-gallery__cta');
-
-        clickSwitch = (e) => {
-            Fancy.close(e, 'detailGallery', true, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, detailGallery);
-        };
-
-        detailGallerySwitch.addEventListener('click', clickSwitch);
+        if (!groupId) {
+            const detailGallerySwitch = document.querySelector('.detail-gallery__cta');
+            clickSwitch = (e) => {
+                Fancy.close(e, 'detailGallery', true, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, detailGallery);
+            };
+            detailGallerySwitch.addEventListener('click', clickSwitch);
+        }
 
         body.classList.add('detail-gallery-open');
         html.style.overflow = 'hidden';
-        Fancy.initSwiper('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id);
+        Fancy.initSwiper('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id, groupId);
 
     }
 
@@ -127,14 +145,26 @@ export default class Fancy {
     }
 
     // INIT SWIPER WITH OPTIONS AND EVENTS
-    static initSwiper(type, layer, close, wrapper, header, footer, id) {
+    static initSwiper(type, layer, close, wrapper, header, footer, id, groupId) {
         let sliderItems = Fancy.items.map((item) => {
             return {
                 id: item.id,
                 caption: item.caption,
-                url: item.bigImageUrl
+                url: item.bigImageUrl,
+                group: item.group,
+                groupCaption: item.groupCaption
             };
         });
+
+        if (groupId) {
+            sliderItems = sliderItems.filter(x => {
+                return x.group === groupId;
+            });
+        } else {
+            sliderItems = sliderItems.filter(x => {
+                return x.group === null;
+            });
+        }
 
         let slidersHtml = '';
         sliderItems.forEach(slider => {
@@ -207,15 +237,22 @@ export default class Fancy {
                 },
                 init: function () {
                     const caption = sliderItems[this.activeIndex].caption;
+                    const groupCaption = sliderItems[this.activeIndex].groupCaption;
                     const captionWrapper = document.querySelector('.detail-gallery__caption span');
+                    const groupCaptionWrapper = document.querySelector('.detail-gallery__group-caption');
                     firstLoad = true;
                     captionWrapper.innerHTML = caption;
+                    if (groupCaptionWrapper) {
+                        groupCaptionWrapper.innerHTML = groupCaption;
+                    }
                     this.slideTo(id, 0);
                 },
                 slideChange: function () {
                     const captionSpeed = (slideAnimationSpeed / 1000) / 2;
                     const caption = sliderItems[this.activeIndex].caption;
+                    const groupCaption = sliderItems[this.activeIndex].groupCaption;
                     const captionWrapper = document.querySelector('.detail-gallery__caption span');
+                    const groupCaptionWrapper = document.querySelector('.detail-gallery__group-caption');
                     TweenMax.set(captionWrapper, {
                         bottom: 0,
                     });
@@ -230,6 +267,9 @@ export default class Fancy {
                             });
                         }
                     });
+                    if (groupCaptionWrapper) {
+                        groupCaptionWrapper.innerHTML = groupCaption;
+                    }
                 },
                 lazyImageReady: function () {
                     if (firstLoad) {

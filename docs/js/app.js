@@ -14834,8 +14834,6 @@ var _scroll = _interopRequireDefault(require("./shared/scroll.anchors"));
 
 var _side = _interopRequireDefault(require("./shared/side.panel"));
 
-var _slider = _interopRequireDefault(require("./shared/slider.zoom"));
-
 var _sliders = _interopRequireDefault(require("./shared/sliders"));
 
 var _tabs = _interopRequireDefault(require("./shared/tabs"));
@@ -14855,7 +14853,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //settings
 var menuStyle = 1;
 var scrollSpeed = 8;
-var activateIntro = true;
+var activateIntro = false;
 var debug = true;
 var disableBarba = false;
 var breakTransition = false;
@@ -15134,7 +15132,7 @@ function () {
               app.onPageInit();
               /*
               window.daraLayer.push({
-                })
+               })
               gtm.push({
                   title: document.title,
                   href: window.href
@@ -15394,8 +15392,6 @@ function () {
 
 
       _tabs.default.init(debug);
-
-      _slider.default.init(debug);
 
       var delay = firstLoad ? 0 : 600;
       firstLoad = false;
@@ -15707,7 +15703,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/custom.select":315,"./shared/dom":316,"./shared/fancy":318,"./shared/fancy.detail":317,"./shared/fancy.view-all":320,"./shared/filters":321,"./shared/follower":322,"./shared/grid":323,"./shared/lazyload":324,"./shared/navigation":325,"./shared/rect":326,"./shared/samples":328,"./shared/scroll.anchors":329,"./shared/side.panel":330,"./shared/slider.zoom":331,"./shared/sliders":332,"./shared/tabs":333,"./shared/toggle.search":334,"./shared/utils":335,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/custom.select":315,"./shared/dom":316,"./shared/fancy":318,"./shared/fancy.detail":317,"./shared/fancy.view-all":320,"./shared/filters":321,"./shared/follower":322,"./shared/grid":323,"./shared/lazyload":324,"./shared/navigation":325,"./shared/rect":326,"./shared/samples":328,"./shared/scroll.anchors":329,"./shared/side.panel":330,"./shared/sliders":331,"./shared/tabs":332,"./shared/toggle.search":333,"./shared/utils":334,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16119,7 +16115,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":335}],317:[function(require,module,exports){
+},{"./utils":334}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16229,7 +16225,7 @@ function () {
 
 exports.default = FancyDetail;
 
-},{"./utils":335}],318:[function(require,module,exports){
+},{"./utils":334}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16259,6 +16255,8 @@ var clickClose;
 var clickSwitch;
 var swiperInstance;
 var firstLoad;
+var noGroupId = 0;
+var groupItemId = 0;
 var body = document.querySelector('body');
 var html = document.getElementsByTagName('html')[0];
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
@@ -16274,10 +16272,18 @@ function () {
     _classCallCheck(this, Fancy);
 
     this.node = node;
-    this.id = id;
+    this.group = node.getAttribute('data-fancy-group');
+
+    if (this.group) {
+      this.id = id;
+    } else {
+      this.id = noGroupId++;
+    }
+
     this.smallImageUrl = node.getAttribute('data-fancy-thumb');
     this.bigImageUrl = node.getAttribute('data-fancy-img');
     this.caption = node.getAttribute('data-fancy-caption');
+    this.groupCaption = node.getAttribute('data-fancy-group-caption');
     this.addListener();
   }
 
@@ -16297,8 +16303,9 @@ function () {
     }
   }, {
     key: "openDetailGallery",
-    value: function openDetailGallery() {
-      Fancy.initDetailGallery(this.id);
+    value: function openDetailGallery(e) {
+      var groupId = this.group ? this.group : null;
+      Fancy.initDetailGallery(this.id, groupId);
     }
   }, {
     key: "destroy",
@@ -16341,11 +16348,13 @@ function () {
       if (document.querySelector('.detail-gallery__cta')) {
         document.querySelector('.detail-gallery__cta').removeEventListener('click', clickSwitch);
       }
+
+      noGroupId = 0;
     } //CREATE MARKUP FOR DETAIL GALLERY AND ADD CLOSE LISTENER
 
   }, {
     key: "initDetailGallery",
-    value: function initDetailGallery(id) {
+    value: function initDetailGallery(id, groupId) {
       var detailGallery = document.createElement('div');
       var detailGalleryClose = document.createElement('div');
       var detailGalleryBg = document.createElement('div');
@@ -16368,17 +16377,29 @@ function () {
       detailGallery.appendChild(detailGalleryBg);
       detailGallery.appendChild(detailGalleryWrapper);
       detailGallery.appendChild(detailGalleryFooter);
-      detailGalleryFooter.innerHTML = "\n            <div class=\"detail-gallery__cta\">".concat(fullGalleryIcon, "</div>\n            <div class=\"detail-gallery__caption\"><span></span></div>\n            <div class=\"detail-gallery__pagination\"></div>\n        ");
-      var detailGallerySwitch = document.querySelector('.detail-gallery__cta');
+      detailGalleryFooter.innerHTML = '';
 
-      clickSwitch = function clickSwitch(e) {
-        Fancy.close(e, 'detailGallery', true, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, detailGallery);
-      };
+      if (!groupId) {
+        detailGalleryFooter.innerHTML += "<div class=\"detail-gallery__cta\">".concat(fullGalleryIcon, "</div>");
+      } else {
+        detailGalleryFooter.innerHTML += "<div class=\"detail-gallery__group-caption\"></div>";
+      }
 
-      detailGallerySwitch.addEventListener('click', clickSwitch);
+      detailGalleryFooter.innerHTML += "\n            <div class=\"detail-gallery__caption\"><span></span></div>\n            <div class=\"detail-gallery__pagination\"></div>\n        ";
+
+      if (!groupId) {
+        var detailGallerySwitch = document.querySelector('.detail-gallery__cta');
+
+        clickSwitch = function clickSwitch(e) {
+          Fancy.close(e, 'detailGallery', true, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, detailGallery);
+        };
+
+        detailGallerySwitch.addEventListener('click', clickSwitch);
+      }
+
       body.classList.add('detail-gallery-open');
       html.style.overflow = 'hidden';
-      Fancy.initSwiper('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id);
+      Fancy.initSwiper('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id, groupId);
     }
   }, {
     key: "close",
@@ -16390,14 +16411,27 @@ function () {
 
   }, {
     key: "initSwiper",
-    value: function initSwiper(type, layer, close, wrapper, header, footer, id) {
+    value: function initSwiper(type, layer, close, wrapper, header, footer, id, groupId) {
       var sliderItems = Fancy.items.map(function (item) {
         return {
           id: item.id,
           caption: item.caption,
-          url: item.bigImageUrl
+          url: item.bigImageUrl,
+          group: item.group,
+          groupCaption: item.groupCaption
         };
       });
+
+      if (groupId) {
+        sliderItems = sliderItems.filter(function (x) {
+          return x.group === groupId;
+        });
+      } else {
+        sliderItems = sliderItems.filter(function (x) {
+          return x.group === null;
+        });
+      }
+
       var slidersHtml = '';
       sliderItems.forEach(function (slider) {
         slidersHtml += "\n            <div class=\"swiper-slide\">\n                <div class=\"swiper-zoom-container\"><img  class=\"swiper-lazy\" data-src=\"".concat(slider.url, "\"></div>\n                <div class=\"swiper-lazy-preloader\"></div>\n            </div>");
@@ -16458,15 +16492,24 @@ function () {
           },
           init: function init() {
             var caption = sliderItems[this.activeIndex].caption;
+            var groupCaption = sliderItems[this.activeIndex].groupCaption;
             var captionWrapper = document.querySelector('.detail-gallery__caption span');
+            var groupCaptionWrapper = document.querySelector('.detail-gallery__group-caption');
             firstLoad = true;
             captionWrapper.innerHTML = caption;
+
+            if (groupCaptionWrapper) {
+              groupCaptionWrapper.innerHTML = groupCaption;
+            }
+
             this.slideTo(id, 0);
           },
           slideChange: function slideChange() {
             var captionSpeed = slideAnimationSpeed / 1000 / 2;
             var caption = sliderItems[this.activeIndex].caption;
+            var groupCaption = sliderItems[this.activeIndex].groupCaption;
             var captionWrapper = document.querySelector('.detail-gallery__caption span');
+            var groupCaptionWrapper = document.querySelector('.detail-gallery__group-caption');
             TweenMax.set(captionWrapper, {
               bottom: 0
             });
@@ -16481,6 +16524,10 @@ function () {
                 });
               }
             });
+
+            if (groupCaptionWrapper) {
+              groupCaptionWrapper.innerHTML = groupCaption;
+            }
           },
           lazyImageReady: function lazyImageReady() {
             if (firstLoad) {
@@ -17029,8 +17076,12 @@ function () {
           id: item.id,
           caption: item.caption,
           url: item.bigImageUrl,
-          html: "<div class=\"full-gallery__thumb\" data-index=\"".concat(item.id, "\"><img src=\"").concat(item.smallImageUrl, "\" alt=\"").concat(item.caption, "\"></div>")
+          html: "<div class=\"full-gallery__thumb\" data-index=\"".concat(item.id, "\"><img src=\"").concat(item.smallImageUrl, "\" alt=\"").concat(item.caption, "\"></div>"),
+          group: item.group
         };
+      });
+      thumbItems = thumbItems.filter(function (x) {
+        return x.group === null;
       });
       var thumbHtml = '';
       thumbItems.forEach(function (thumb) {
@@ -17212,7 +17263,7 @@ function () {
 
 exports.default = Filters;
 
-},{"./utils":335}],322:[function(require,module,exports){
+},{"./utils":334}],322:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17367,7 +17418,7 @@ function () {
 
 exports.default = Follower;
 
-},{"./utils":335}],323:[function(require,module,exports){
+},{"./utils":334}],323:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17806,7 +17857,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":335}],326:[function(require,module,exports){
+},{"./utils":334}],326:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18170,7 +18221,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":328,"./utils":335,"gsap/ScrollToPlugin":309}],328:[function(require,module,exports){
+},{"./samples":328,"./utils":334,"gsap/ScrollToPlugin":309}],328:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18874,69 +18925,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+var _utils = _interopRequireDefault(require("./utils"));
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-/* jshint esversion: 6 */
-var body = document.querySelector('body');
-var html = document.getElementsByTagName('html')[0];
-
-var SliderZoom =
-/*#__PURE__*/
-function () {
-  function SliderZoom(node, id) {
-    _classCallCheck(this, SliderZoom);
-
-    this.node = node;
-    this.id = id;
-  }
-
-  _createClass(SliderZoom, [{
-    key: "destroy",
-    value: function destroy() {}
-  }], [{
-    key: "destroyAll",
-    value: function destroyAll() {
-      SliderZoom.items.forEach(function (node) {
-        node.destroy();
-      });
-    }
-  }, {
-    key: "init",
-    value: function init(debug) {
-      SliderZoom.items = _toConsumableArray(document.querySelectorAll('[data-slider-zoom]')).map(function (node, id) {
-        return new SliderZoom(node, id);
-      });
-
-      if (debug) {
-        console.log('SliderZoom: ', SliderZoom.items);
-      }
-    }
-  }]);
-
-  return SliderZoom;
-}();
-
-exports.default = SliderZoom;
-
-},{}],332:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -18964,21 +18955,22 @@ function () {
 
     this.slider = slider;
     this.index = index;
-    this.options = this.setOptions();
     this.parent = this.slider.parentNode;
 
     if (this.parent.classList.contains('slider--categories') === true) {
-      this.tabs = _toConsumableArray(document.querySelectorAll('.slider__categories-wrapper ul li div'));
+      this.tabs = _toConsumableArray(this.parent.querySelectorAll('.slider__categories-wrapper ul li div'));
       this.slideToCategory = this.slideToCategory.bind(this);
     }
 
-    this.setOptions();
+    this.options = this.setOptions();
     this.initSlider();
   }
 
   _createClass(Sliders, [{
     key: "setOptions",
     value: function setOptions() {
+      var _this = this;
+
       var parentWrap = this.slider.parentNode;
       var options = {}; //Slider Carousel
 
@@ -19093,11 +19085,14 @@ function () {
         };
       } else if (parentWrap.classList.contains('slider--categories') === true) {
         var tabs = this.tabs;
+        tabs.forEach(function (tab) {
+          tab.addEventListener('click', _this.slideToCategory);
+        });
         options = {
           grabCursor: true,
           watchOverflow: true,
           centeredSlides: true,
-          loop: true,
+          loop: false,
           slidesPerView: 'auto',
           spaceBetween: 60,
           preloadImages: false,
@@ -19107,24 +19102,23 @@ function () {
           freeModeMomentumRatio: 1,
           freeModeMomentumVelocityRatio: 0.3,
           speed: 400,
-          on: {// init: function () {
-            //     tabs.forEach(tab => {
-            //         tab.addEventListener('click', this.slideToCategory);
-            //     });
-            // },
-            // lazyImageReady: function (slideEl) {
-            //     slideEl.classList.add('swiper-slide-loaded');
-            // },
-            // slideChange: function () {
-            //     const currentSlide = this.slides[this.activeIndex];
-            //     const currentCategory = tabs.find(tab => {
-            //         return (currentSlide.getAttribute('data-slider-cat-detail-id') === tab.getAttribute('data-slider-cat-id'));
-            //     });
-            //     tabs.forEach(tab => {
-            //         tab.classList.remove('active');
-            //     });
-            //     Utils.toggleClass(currentCategory, 'active');
-            // }
+          on: {
+            lazyImageReady: function lazyImageReady(slideEl) {
+              slideEl.classList.add('swiper-slide-loaded');
+            },
+            slideChange: function slideChange() {
+              var tabs = _toConsumableArray(this.el.parentNode.querySelectorAll('.slider__categories-wrapper ul li div'));
+
+              var currentSlide = this.slides[this.activeIndex];
+              var currentCategory = tabs.find(function (tab) {
+                return currentSlide.getAttribute('data-slider-cat-detail-id') === tab.getAttribute('data-slider-cat-id');
+              });
+              tabs.forEach(function (tab) {
+                tab.classList.remove('active');
+              });
+
+              _utils.default.toggleClass(currentCategory, 'active');
+            }
           },
           breakpoints: {
             576: {
@@ -19149,16 +19143,25 @@ function () {
   }, {
     key: "destroy",
     value: function destroy() {
+      var _this2 = this;
+
       this.swiperInstance.destroy();
 
-      if (this.tabs) {}
+      if (this.tabs) {
+        this.tabs.forEach(function (tab) {
+          tab.removeEventListener('click', _this2.slideToCategory);
+        });
+      }
     }
   }, {
     key: "slideToCategory",
     value: function slideToCategory(e) {
       var target = e.target;
+
+      var categoryParents = _toConsumableArray(document.querySelectorAll('[data-slider-cat-detail-id]'));
+
       var selectedParent = categoryParents.find(function (parent) {
-        return parent.getAttribute('data-sample-detail-id') === target.getAttribute('data-sample-id');
+        return parent.getAttribute('data-slider-cat-detail-id') === target.getAttribute('data-slider-cat-id');
       });
       this.swiperInstance.slideTo(Number(selectedParent.getAttribute('data-id')));
     }
@@ -19184,7 +19187,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],333:[function(require,module,exports){
+},{"./utils":334}],332:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19298,7 +19301,7 @@ function () {
 
 exports.default = Tabs;
 
-},{}],334:[function(require,module,exports){
+},{}],333:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19406,7 +19409,7 @@ function () {
 
 exports.default = ToggleSearch;
 
-},{"./utils":335}],335:[function(require,module,exports){
+},{"./utils":334}],334:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

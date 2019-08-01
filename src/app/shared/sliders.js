@@ -3,21 +3,20 @@
 
 let slidersArray = [];
 let clickTab;
+import Utils from './utils';
 
 export default class Sliders {
 
     constructor(slider, index) {
         this.slider = slider;
         this.index = index;
-        this.options = this.setOptions();
         this.parent = this.slider.parentNode;
-
         if (this.parent.classList.contains('slider--categories') === true) {
-            this.tabs = [...document.querySelectorAll('.slider__categories-wrapper ul li div')];
+            this.tabs = [...this.parent.querySelectorAll('.slider__categories-wrapper ul li div')];
             this.slideToCategory = this.slideToCategory.bind(this);
         }
 
-        this.setOptions();
+        this.options = this.setOptions();
         this.initSlider();
     }
 
@@ -138,13 +137,17 @@ export default class Sliders {
                 }
             };
         } else if (parentWrap.classList.contains('slider--categories') === true) {
+
             const tabs = this.tabs;
+            tabs.forEach(tab => {
+                tab.addEventListener('click', this.slideToCategory);
+            });
 
             options = {
                 grabCursor: true,
                 watchOverflow: true,
                 centeredSlides: true,
-                loop: true,
+                loop: false,
                 slidesPerView: 'auto',
                 spaceBetween: 60,
                 preloadImages: false,
@@ -155,25 +158,20 @@ export default class Sliders {
                 freeModeMomentumVelocityRatio: 0.3,
                 speed: 400,
                 on: {
-                    // init: function () {
-                    //     tabs.forEach(tab => {
-                    //         tab.addEventListener('click', this.slideToCategory);
-                    //     });
-                    // },
-                    // lazyImageReady: function (slideEl) {
-                    //     slideEl.classList.add('swiper-slide-loaded');
-                    // },
-                    // slideChange: function () {
-
-                    //     const currentSlide = this.slides[this.activeIndex];
-                    //     const currentCategory = tabs.find(tab => {
-                    //         return (currentSlide.getAttribute('data-slider-cat-detail-id') === tab.getAttribute('data-slider-cat-id'));
-                    //     });
-                    //     tabs.forEach(tab => {
-                    //         tab.classList.remove('active');
-                    //     });
-                    //     Utils.toggleClass(currentCategory, 'active');
-                    // }
+                    lazyImageReady: function (slideEl) {
+                        slideEl.classList.add('swiper-slide-loaded');
+                    },
+                    slideChange: function () {
+                        const tabs = [...this.el.parentNode.querySelectorAll('.slider__categories-wrapper ul li div')];
+                        const currentSlide = this.slides[this.activeIndex];
+                        const currentCategory = tabs.find(tab => {
+                            return (currentSlide.getAttribute('data-slider-cat-detail-id') === tab.getAttribute('data-slider-cat-id'));
+                        });
+                        tabs.forEach(tab => {
+                            tab.classList.remove('active');
+                        });
+                        Utils.toggleClass(currentCategory, 'active');
+                    }
                 },
                 breakpoints: {
                     576: {
@@ -184,7 +182,6 @@ export default class Sliders {
                     }
                 }
             };
-
         }
 
         return options;
@@ -199,14 +196,17 @@ export default class Sliders {
     destroy() {
         this.swiperInstance.destroy();
         if (this.tabs) {
-
+            this.tabs.forEach(tab => {
+                tab.removeEventListener('click', this.slideToCategory);
+            });
         }
     }
 
     slideToCategory(e) {
         const target = e.target;
+        const categoryParents = [...document.querySelectorAll('[data-slider-cat-detail-id]')];
         const selectedParent = categoryParents.find(parent => {
-            return (parent.getAttribute('data-sample-detail-id') === target.getAttribute('data-sample-id'));
+            return (parent.getAttribute('data-slider-cat-detail-id') === target.getAttribute('data-slider-cat-id'));
         });
         this.swiperInstance.slideTo(Number(selectedParent.getAttribute('data-id')));
     }

@@ -20,7 +20,6 @@ import Rect from './shared/rect';
 import Samples from './shared/samples';
 import ScrollAnchors from "./shared/scroll.anchors";
 import SidePanel from './shared/side.panel';
-import SliderZoom from "./shared/slider.zoom";
 import Sliders from './shared/sliders';
 import Tabs from './shared/tabs';
 import ToggleSearch from './shared/toggle.search';
@@ -29,7 +28,7 @@ import Utils from './shared/utils';
 //settings
 let menuStyle = 1;
 let scrollSpeed = 8;
-const activateIntro = true;
+const activateIntro = false;
 const debug = true;
 const disableBarba = false;
 const breakTransition = false;
@@ -548,7 +547,6 @@ export default class App {
         SidePanel.init(debug);
         // CustomSelect.init(debug);
         Tabs.init(debug);
-        SliderZoom.init(debug);
 
         let delay = firstLoad ? 0 : 600;
         firstLoad = false;
