@@ -289,11 +289,32 @@
     }
 }
 
+
 // 1col-slider-carousel
 .editorial__1col-slider-carousel {
 
     .box--title {
         text-align: center;
+
+        @include sm-down {
+            text-align: center;
+        }
+
+        .h2 {
+            @include xs-down {
+                font-size: 1.8rem;
+            }
+        }
+    }
+}
+
+//1col-slider-categories
+.editorial__1col-slider-categories {
+    padding-top: $col-width;
+
+    .box--title {
+        text-align: center;
+        margin-bottom: 40px;
 
         @include sm-down {
             text-align: center;

@@ -18,7 +18,9 @@ import LazyLoad from './shared/lazyload';
 import Navigation from "./shared/navigation";
 import Rect from './shared/rect';
 import Samples from './shared/samples';
+import ScrollAnchors from "./shared/scroll.anchors";
 import SidePanel from './shared/side.panel';
+import SliderZoom from "./shared/slider.zoom";
 import Sliders from './shared/sliders';
 import Tabs from './shared/tabs';
 import ToggleSearch from './shared/toggle.search';
@@ -27,7 +29,7 @@ import Utils from './shared/utils';
 //settings
 let menuStyle = 1;
 let scrollSpeed = 8;
-const activateIntro = false;
+const activateIntro = true;
 const debug = true;
 const disableBarba = false;
 const breakTransition = false;
@@ -536,7 +538,8 @@ export default class App {
         FancyViewAll.init();
         FancyDetail.init();
         Sliders.init();
-        Anchors.init(document.querySelector('.anchors__wrapper'), 200);
+        Anchors.init(document.querySelector('.anchors__wrapper'), 200, debug);
+        ScrollAnchors.init(debug);
         Samples.init();
         Utils.toggleGrid();
         Filters.init();
@@ -545,6 +548,7 @@ export default class App {
         SidePanel.init(debug);
         // CustomSelect.init(debug);
         Tabs.init(debug);
+        SliderZoom.init(debug);
 
         let delay = firstLoad ? 0 : 600;
         firstLoad = false;
@@ -564,6 +568,7 @@ export default class App {
         Samples.destroyAll();
         FancyViewAll.destroyAll();
         FancyDetail.destroyAll();
+        ScrollAnchors.destroyAll();
         Filters.destroyAll();
         ToggleSearch.destroyAll();
         Grid.destroyAll();
@@ -742,7 +747,8 @@ export default class App {
                 y = Math.min(0, Math.max(-1, y));
                 // const y = 1 - (1 + Math.min(1, Math.max(-1, intersection.center.y))) / 2;
                 // currentY = (y * parallax * direction).toFixed(3);
-                currentY = 1 + (1 + y) * 0.08;
+                // currentY = 1 + (1 + y) * 0.08;
+                currentY = 1 + (1 + y) * 0.1;
                 //currentY = (y * direction * parallax).toFixed(3);
                 if (node.currentY !== currentY) {
                     node.currentY = currentY;

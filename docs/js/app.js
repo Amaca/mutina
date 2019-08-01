@@ -14830,7 +14830,11 @@ var _rect = _interopRequireDefault(require("./shared/rect"));
 
 var _samples = _interopRequireDefault(require("./shared/samples"));
 
+var _scroll = _interopRequireDefault(require("./shared/scroll.anchors"));
+
 var _side = _interopRequireDefault(require("./shared/side.panel"));
+
+var _slider = _interopRequireDefault(require("./shared/slider.zoom"));
 
 var _sliders = _interopRequireDefault(require("./shared/sliders"));
 
@@ -14851,7 +14855,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //settings
 var menuStyle = 1;
 var scrollSpeed = 8;
-var activateIntro = false;
+var activateIntro = true;
 var debug = true;
 var disableBarba = false;
 var breakTransition = false;
@@ -15372,7 +15376,9 @@ function () {
 
       _sliders.default.init();
 
-      _anchors.default.init(document.querySelector('.anchors__wrapper'), 200);
+      _anchors.default.init(document.querySelector('.anchors__wrapper'), 200, debug);
+
+      _scroll.default.init(debug);
 
       _samples.default.init();
 
@@ -15388,6 +15394,8 @@ function () {
 
 
       _tabs.default.init(debug);
+
+      _slider.default.init(debug);
 
       var delay = firstLoad ? 0 : 600;
       firstLoad = false;
@@ -15413,6 +15421,8 @@ function () {
       _fancy3.default.destroyAll();
 
       _fancy2.default.destroyAll();
+
+      _scroll.default.destroyAll();
 
       _filters.default.destroyAll();
 
@@ -15622,8 +15632,9 @@ function () {
           var y = (rect.top - window.innerHeight) / window.innerHeight;
           y = Math.min(0, Math.max(-1, y)); // const y = 1 - (1 + Math.min(1, Math.max(-1, intersection.center.y))) / 2;
           // currentY = (y * parallax * direction).toFixed(3);
+          // currentY = 1 + (1 + y) * 0.08;
 
-          currentY = 1 + (1 + y) * 0.08; //currentY = (y * direction * parallax).toFixed(3);
+          currentY = 1 + (1 + y) * 0.1; //currentY = (y * direction * parallax).toFixed(3);
 
           if (node.currentY !== currentY) {
             node.currentY = currentY; // node.setAttribute('style', `height: ${s * 100}%; top: 50%; left: 50%; transform: translateX(-50%) translateY(${currentY}%);`);
@@ -15696,7 +15707,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/custom.select":315,"./shared/dom":316,"./shared/fancy":318,"./shared/fancy.detail":317,"./shared/fancy.view-all":320,"./shared/filters":321,"./shared/follower":322,"./shared/grid":323,"./shared/lazyload":324,"./shared/navigation":325,"./shared/rect":326,"./shared/samples":328,"./shared/side.panel":329,"./shared/sliders":330,"./shared/tabs":331,"./shared/toggle.search":332,"./shared/utils":333,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/custom.select":315,"./shared/dom":316,"./shared/fancy":318,"./shared/fancy.detail":317,"./shared/fancy.view-all":320,"./shared/filters":321,"./shared/follower":322,"./shared/grid":323,"./shared/lazyload":324,"./shared/navigation":325,"./shared/rect":326,"./shared/samples":328,"./shared/scroll.anchors":329,"./shared/side.panel":330,"./shared/slider.zoom":331,"./shared/sliders":332,"./shared/tabs":333,"./shared/toggle.search":334,"./shared/utils":335,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15721,6 +15732,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 /* jshint esversion: 6 */
 var body = document.querySelector('body');
 var header = document.querySelector('header');
+var page = document.querySelector('.page');
+var destroyed = false;
+var topControl;
 
 var Anchors =
 /*#__PURE__*/
@@ -15777,7 +15791,7 @@ function () {
     }
   }], [{
     key: "init",
-    value: function init(wrapper, gutter) {
+    value: function init(wrapper, gutter, debug) {
       if (Anchors.items > 0) {
         Anchors.destroyAll();
       }
@@ -15790,11 +15804,15 @@ function () {
         Anchors.items = _toConsumableArray(document.querySelectorAll('[data-anchor]')).map(function (element, index) {
           return new Anchors(element, wrapper, gutter, index);
         });
-        console.log('Anchors: ', Anchors.items);
+
+        if (debug) {
+          console.log('Anchors: ', Anchors.items);
+        }
 
         if (Anchors.items.length > 0) {
-          wrapper.parentElement.style.display = 'flex';
-          window.addEventListener('scroll', Anchors.onScroll);
+          wrapper.parentElement.style.display = 'flex'; // window.addEventListener('scroll', Anchors.onScroll);
+
+          Anchors.onScroll();
         } else {
           wrapper.parentElement.style.display = 'none';
         }
@@ -15803,18 +15821,26 @@ function () {
   }, {
     key: "onScroll",
     value: function onScroll() {
-      var anchor = Anchors.items.find(function (anchor, i, anchors) {
-        var top = anchor.node.getBoundingClientRect().top;
-        var bottom = i < anchors.length - 1 ? anchors[i + 1].node.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
-        anchors.forEach(function (elem, i) {
-          elem.anchor.classList.remove('active');
-        });
+      if (topControl !== page.style.transform) {
+        //controllo per requestanimationframe su contenitore dello scroll virtuale
+        topControl = page.style.transform;
+        var anchor = Anchors.items.find(function (anchor, i, anchors) {
+          var top = anchor.node.getBoundingClientRect().top;
+          var bottom = i < anchors.length - 1 ? anchors[i + 1].node.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
+          anchors.forEach(function (elem, i) {
+            elem.anchor.classList.remove('active');
+          });
 
-        if (top < Anchors.gutter && bottom > Anchors.gutter) {
-          anchors[i].anchor.classList.add('active');
-          return anchor;
-        }
-      });
+          if (top < Anchors.gutter && bottom > Anchors.gutter) {
+            anchors[i].anchor.classList.add('active');
+            return anchor;
+          }
+        });
+      }
+
+      if (!destroyed) {
+        requestAnimationFrame(Anchors.onScroll);
+      }
     }
   }, {
     key: "destroyAll",
@@ -15828,6 +15854,8 @@ function () {
       if (document.querySelector('ul.anchor-nav')) {
         document.querySelector('ul.anchor-nav').remove();
       }
+
+      destroyed = true;
     }
   }]);
 
@@ -16091,7 +16119,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":333}],317:[function(require,module,exports){
+},{"./utils":335}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16137,8 +16165,11 @@ function () {
         body.classList.add('fancy-page');
         body.appendChild(sidebarClone);
         sidebar.remove();
-        var sidebarButton = document.querySelector('.fancy-detail__panel-header');
-        sidebarButton.addEventListener('click', this.clickToggle);
+
+        if (!document.querySelector('.fancy-detail__sidebar--variant')) {
+          var sidebarButton = document.querySelector('.fancy-detail__panel-header');
+          sidebarButton.addEventListener('click', this.clickToggle);
+        }
       }
     }
   }, {
@@ -16151,8 +16182,11 @@ function () {
         body.classList.add('fancy-page');
         body.appendChild(panelClone);
         panel.remove();
-        var sidebarButton = document.querySelector('.fancy-detail__panel-header');
-        sidebarButton.addEventListener('click', this.clickToggle);
+
+        if (!document.querySelector('.fancy-detail__sidebar--variant')) {
+          var sidebarButton = document.querySelector('.fancy-detail__panel-header');
+          sidebarButton.addEventListener('click', this.clickToggle);
+        }
       }
     }
   }, {
@@ -16195,7 +16229,7 @@ function () {
 
 exports.default = FancyDetail;
 
-},{"./utils":333}],318:[function(require,module,exports){
+},{"./utils":335}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17178,7 +17212,7 @@ function () {
 
 exports.default = Filters;
 
-},{"./utils":333}],322:[function(require,module,exports){
+},{"./utils":335}],322:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17333,7 +17367,7 @@ function () {
 
 exports.default = Follower;
 
-},{"./utils":333}],323:[function(require,module,exports){
+},{"./utils":335}],323:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17772,7 +17806,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":333}],326:[function(require,module,exports){
+},{"./utils":335}],326:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18136,7 +18170,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":328,"./utils":333,"gsap/ScrollToPlugin":309}],328:[function(require,module,exports){
+},{"./samples":328,"./utils":335,"gsap/ScrollToPlugin":309}],328:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18442,7 +18476,157 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":319,"./samples.detail":327,"./side.panel":329,"gsap/ScrollToPlugin":309}],329:[function(require,module,exports){
+},{"./fancy.transition":319,"./samples.detail":327,"./side.panel":330,"gsap/ScrollToPlugin":309}],329:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* jshint esversion: 6 */
+var body = document.querySelector('body');
+var header = document.querySelector('header');
+
+var ScrollAnchors =
+/*#__PURE__*/
+function () {
+  function ScrollAnchors(node, id) {
+    var _this = this;
+
+    _classCallCheck(this, ScrollAnchors);
+
+    this.node = node;
+    this.id = id;
+    this.titles = _toConsumableArray(this.node.querySelectorAll('[data-scroll-title]'));
+    this.areas = _toConsumableArray(document.querySelectorAll('[data-scroll-area]')).filter(function (x) {
+      var relativeAreas = [];
+
+      _this.titles.forEach(function (y) {
+        if (x.getAttribute('data-scroll-area') === y.getAttribute('data-scroll-title')) {
+          relativeAreas.push(x);
+        }
+      });
+
+      return relativeAreas;
+    });
+    this.page = document.querySelector('.page');
+    this.offset = this.node.getAttribute('data-scroll-anchors');
+    this.goToAnchor = this.goToAnchor.bind(this);
+    this.onScroll = this.onScroll.bind(this);
+    this.addListeners();
+  }
+
+  _createClass(ScrollAnchors, [{
+    key: "addListeners",
+    value: function addListeners() {
+      var _this2 = this;
+
+      this.titles.forEach(function (title) {
+        title.addEventListener('click', _this2.goToAnchor);
+      });
+      this.onScroll();
+    }
+  }, {
+    key: "removeListeners",
+    value: function removeListeners() {
+      var _this3 = this;
+
+      this.destroyed = true;
+      this.titles.forEach(function (title) {
+        title.removeEventListener('click', _this3.goToAnchor);
+      });
+      window.removeEventListener('scroll', this.onScroll);
+    }
+  }, {
+    key: "goToAnchor",
+    value: function goToAnchor(e) {
+      var _this4 = this;
+
+      this.areas.forEach(function (area) {
+        if (area.getAttribute('data-scroll-area') === e.target.getAttribute('data-scroll-title')) {
+          window.scrollTo(0, _this4.getOffset(area) + 10);
+        }
+      });
+    }
+  }, {
+    key: "onScroll",
+    value: function onScroll(e) {
+      var _this5 = this;
+
+      if (this.top !== this.page.style.transform) {
+        //controllo per requestanimationframe su contenitore dello scroll virtuale
+        this.top = this.page.style.transform;
+        var anchor = this.areas.find(function (area, i) {
+          var top = area.getBoundingClientRect().top;
+          var bottom = i < _this5.areas.length - 1 ? _this5.areas[i + 1].getBoundingClientRect().top : Number.POSITIVE_INFINITY;
+
+          _this5.titles.forEach(function (title) {
+            title.classList.remove('active');
+          });
+
+          if (top < _this5.offset && bottom > _this5.offset) {
+            _this5.titles[i].classList.add('active');
+
+            return area;
+          }
+        });
+      }
+
+      if (!this.destroyed) {
+        requestAnimationFrame(this.onScroll);
+      }
+    }
+  }, {
+    key: "getOffset",
+    value: function getOffset(area) {
+      return area.offsetTop - this.offset;
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.removeListeners();
+    }
+  }], [{
+    key: "destroyAll",
+    value: function destroyAll() {
+      ScrollAnchors.items.forEach(function (node) {
+        node.destroy();
+      });
+    }
+  }, {
+    key: "init",
+    value: function init(debug) {
+      ScrollAnchors.items = _toConsumableArray(document.querySelectorAll('[data-scroll-anchors]')).map(function (node, id) {
+        return new ScrollAnchors(node, id);
+      });
+
+      if (debug) {
+        console.log('ScrollAnchors: ', ScrollAnchors.items);
+      }
+    }
+  }]);
+
+  return ScrollAnchors;
+}();
+
+exports.default = ScrollAnchors;
+
+},{}],330:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18682,7 +18866,71 @@ function () {
 
 exports.default = SidePanel;
 
-},{"./navigation":325}],330:[function(require,module,exports){
+},{"./navigation":325}],331:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* jshint esversion: 6 */
+var body = document.querySelector('body');
+var html = document.getElementsByTagName('html')[0];
+
+var SliderZoom =
+/*#__PURE__*/
+function () {
+  function SliderZoom(node, id) {
+    _classCallCheck(this, SliderZoom);
+
+    this.node = node;
+    this.id = id;
+  }
+
+  _createClass(SliderZoom, [{
+    key: "destroy",
+    value: function destroy() {}
+  }], [{
+    key: "destroyAll",
+    value: function destroyAll() {
+      SliderZoom.items.forEach(function (node) {
+        node.destroy();
+      });
+    }
+  }, {
+    key: "init",
+    value: function init(debug) {
+      SliderZoom.items = _toConsumableArray(document.querySelectorAll('[data-slider-zoom]')).map(function (node, id) {
+        return new SliderZoom(node, id);
+      });
+
+      if (debug) {
+        console.log('SliderZoom: ', SliderZoom.items);
+      }
+    }
+  }]);
+
+  return SliderZoom;
+}();
+
+exports.default = SliderZoom;
+
+},{}],332:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18706,6 +18954,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 /* jshint esversion: 6 */
 var slidersArray = [];
+var clickTab;
 
 var Sliders =
 /*#__PURE__*/
@@ -18716,6 +18965,13 @@ function () {
     this.slider = slider;
     this.index = index;
     this.options = this.setOptions();
+    this.parent = this.slider.parentNode;
+
+    if (this.parent.classList.contains('slider--categories') === true) {
+      this.tabs = _toConsumableArray(document.querySelectorAll('.slider__categories-wrapper ul li div'));
+      this.slideToCategory = this.slideToCategory.bind(this);
+    }
+
     this.setOptions();
     this.initSlider();
   }
@@ -18835,6 +19091,50 @@ function () {
             }
           }
         };
+      } else if (parentWrap.classList.contains('slider--categories') === true) {
+        var tabs = this.tabs;
+        options = {
+          grabCursor: true,
+          watchOverflow: true,
+          centeredSlides: true,
+          loop: true,
+          slidesPerView: 'auto',
+          spaceBetween: 60,
+          preloadImages: false,
+          lazy: true,
+          watchSlidesVisibility: true,
+          freeMode: true,
+          freeModeMomentumRatio: 1,
+          freeModeMomentumVelocityRatio: 0.3,
+          speed: 400,
+          on: {// init: function () {
+            //     tabs.forEach(tab => {
+            //         tab.addEventListener('click', this.slideToCategory);
+            //     });
+            // },
+            // lazyImageReady: function (slideEl) {
+            //     slideEl.classList.add('swiper-slide-loaded');
+            // },
+            // slideChange: function () {
+            //     const currentSlide = this.slides[this.activeIndex];
+            //     const currentCategory = tabs.find(tab => {
+            //         return (currentSlide.getAttribute('data-slider-cat-detail-id') === tab.getAttribute('data-slider-cat-id'));
+            //     });
+            //     tabs.forEach(tab => {
+            //         tab.classList.remove('active');
+            //     });
+            //     Utils.toggleClass(currentCategory, 'active');
+            // }
+          },
+          breakpoints: {
+            576: {
+              spaceBetween: 20
+            },
+            768: {
+              spaceBetween: 40
+            }
+          }
+        };
       }
 
       return options;
@@ -18850,6 +19150,17 @@ function () {
     key: "destroy",
     value: function destroy() {
       this.swiperInstance.destroy();
+
+      if (this.tabs) {}
+    }
+  }, {
+    key: "slideToCategory",
+    value: function slideToCategory(e) {
+      var target = e.target;
+      var selectedParent = categoryParents.find(function (parent) {
+        return parent.getAttribute('data-sample-detail-id') === target.getAttribute('data-sample-id');
+      });
+      this.swiperInstance.slideTo(Number(selectedParent.getAttribute('data-id')));
     }
   }], [{
     key: "init",
@@ -18873,7 +19184,7 @@ function () {
 
 exports.default = Sliders;
 
-},{}],331:[function(require,module,exports){
+},{}],333:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18987,7 +19298,7 @@ function () {
 
 exports.default = Tabs;
 
-},{}],332:[function(require,module,exports){
+},{}],334:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19095,7 +19406,7 @@ function () {
 
 exports.default = ToggleSearch;
 
-},{"./utils":333}],333:[function(require,module,exports){
+},{"./utils":335}],335:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

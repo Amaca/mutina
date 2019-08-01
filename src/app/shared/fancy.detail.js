@@ -21,8 +21,10 @@ export default class FancyDetail {
             body.classList.add('fancy-page');
             body.appendChild(sidebarClone);
             sidebar.remove();
-            const sidebarButton = document.querySelector('.fancy-detail__panel-header');
-            sidebarButton.addEventListener('click', this.clickToggle);
+            if (!document.querySelector('.fancy-detail__sidebar--variant')) {
+                const sidebarButton = document.querySelector('.fancy-detail__panel-header');
+                sidebarButton.addEventListener('click', this.clickToggle);
+            }
         }
     }
 
@@ -33,8 +35,10 @@ export default class FancyDetail {
             body.classList.add('fancy-page');
             body.appendChild(panelClone);
             panel.remove();
-            const sidebarButton = document.querySelector('.fancy-detail__panel-header');
-            sidebarButton.addEventListener('click', this.clickToggle);
+            if (!document.querySelector('.fancy-detail__sidebar--variant')) {
+                const sidebarButton = document.querySelector('.fancy-detail__panel-header');
+                sidebarButton.addEventListener('click', this.clickToggle);
+            }
         }
     }
 

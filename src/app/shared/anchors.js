@@ -3,7 +3,9 @@
 
 const body = document.querySelector('body');
 const header = document.querySelector('header');
-
+const page = document.querySelector('.page');
+let destroyed = false;
+let topControl;
 export default class Anchors {
 
     constructor(node, wrapper, gutter, index) {
@@ -52,7 +54,7 @@ export default class Anchors {
         return this.node.getBoundingClientRect().top;
     }
 
-    static init(wrapper, gutter) {
+    static init(wrapper, gutter, debug) {
         if (Anchors.items > 0) {
             Anchors.destroyAll();
         }
@@ -62,11 +64,13 @@ export default class Anchors {
             list.className = 'anchor-nav';
             wrapper.appendChild(list);
             Anchors.items = [...document.querySelectorAll('[data-anchor]')].map((element, index) => new Anchors(element, wrapper, gutter, index));
-            console.log('Anchors: ', Anchors.items);
-
+            if (debug) {
+                console.log('Anchors: ', Anchors.items);
+            }
             if (Anchors.items.length > 0) {
                 wrapper.parentElement.style.display = 'flex';
-                window.addEventListener('scroll', Anchors.onScroll);
+                // window.addEventListener('scroll', Anchors.onScroll);
+                Anchors.onScroll();
             } else {
                 wrapper.parentElement.style.display = 'none';
             }
@@ -75,17 +79,24 @@ export default class Anchors {
     }
 
     static onScroll() {
-        const anchor = Anchors.items.find((anchor, i, anchors) => {
-            const top = anchor.node.getBoundingClientRect().top;
-            const bottom = i < anchors.length - 1 ? anchors[i + 1].node.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
-            anchors.forEach((elem, i) => {
-                elem.anchor.classList.remove('active');
+        if (topControl !== page.style.transform) { //controllo per requestanimationframe su contenitore dello scroll virtuale
+            topControl = page.style.transform;
+            const anchor = Anchors.items.find((anchor, i, anchors) => {
+                const top = anchor.node.getBoundingClientRect().top;
+                const bottom = i < anchors.length - 1 ? anchors[i + 1].node.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
+                anchors.forEach((elem, i) => {
+                    elem.anchor.classList.remove('active');
+                });
+                if (top < Anchors.gutter && bottom > Anchors.gutter) {
+                    anchors[i].anchor.classList.add('active');
+                    return anchor;
+                }
             });
-            if (top < Anchors.gutter && bottom > Anchors.gutter) {
-                anchors[i].anchor.classList.add('active');
-                return anchor;
-            }
-        });
+        }
+
+        if (!destroyed) {
+            requestAnimationFrame(Anchors.onScroll);
+        }
     }
 
     static destroyAll() {
@@ -97,5 +108,6 @@ export default class Anchors {
         if (document.querySelector('ul.anchor-nav')) {
             document.querySelector('ul.anchor-nav').remove();
         }
+        destroyed = true;
     }
 }

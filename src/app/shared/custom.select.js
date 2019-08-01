@@ -12,7 +12,7 @@ export default class CustomSelect {
             searchEnabled: false,
             itemSelectText: '',
             shouldSort: false
-        });   
+        });
     }
 
     destroy() {
