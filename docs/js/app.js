@@ -15988,16 +15988,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _utils = _interopRequireDefault(require("./utils"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+/* jshint esversion: 6 */
 var Dom =
 /*#__PURE__*/
 function () {
@@ -16067,24 +16064,28 @@ function () {
 
       document.addEventListener('mousedown', onMouseDown);
 
-      var onScroll = function onScroll() {
-        var now = _utils.default.now();
-
-        if (Dom.lastScrollTime) {
-          var diff = now - Dom.lastScrollTime;
-
-          if (diff < 5) {
-            document.removeEventListener('scroll', onScroll);
-            Dom.fastscroll = true;
-            node.classList.add('fastscroll');
-            console.log('scroll', diff);
+      if (mobile) {
+        Dom.fastscroll = true;
+        node.classList.add('fastscroll');
+      }
+      /*
+      const onScroll = () => {
+          let now = Utils.now();
+          if (Dom.lastScrollTime) {
+              const diff = now - Dom.lastScrollTime;
+              if (diff < 4) {
+                  document.removeEventListener('scroll', onScroll);
+                  Dom.fastscroll = true;
+                  node.classList.add('fastscroll');
+                  console.log(`%c scroll ${diff}`, 'background: #222; color: #bada55');
+              }
           }
-        }
-
-        Dom.lastScrollTime = now;
+          Dom.lastScrollTime = now;
       };
-
+      console.log('%c addOnScroll', 'background: #222; color: #bada55');
       document.addEventListener('scroll', onScroll);
+      */
+
     }
   }, {
     key: "fragmentFirstElement",
@@ -16110,7 +16111,7 @@ function () {
 
 exports.default = Dom;
 
-},{"./utils":334}],317:[function(require,module,exports){
+},{}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
