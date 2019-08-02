@@ -7,8 +7,6 @@ let clickClose;
 let clickSwitch;
 let swiperInstance;
 let firstLoad;
-let noGroupId = 0;
-let groupItemId = 0;
 
 const body = document.querySelector('body');
 const html = document.getElementsByTagName('html')[0];
@@ -22,18 +20,12 @@ export default class Fancy {
 
     constructor(node, id) {
         this.node = node;
-        this.group = node.getAttribute('data-fancy-group');
-
-        if (this.group) {
-            this.id = id;
-        } else {
-            this.id = noGroupId++;
-        }
+        this.group = String(node.getAttribute('data-fancy-group'));
+        this.id = Fancy.groups[this.group] === undefined ? Fancy.groups[this.group] = 0 : ++Fancy.groups[this.group];
         this.smallImageUrl = node.getAttribute('data-fancy-thumb');
         this.bigImageUrl = node.getAttribute('data-fancy-img');
         this.caption = node.getAttribute('data-fancy-caption');
         this.groupCaption = node.getAttribute('data-fancy-group-caption');
-
         this.addListener();
     }
 
@@ -47,8 +39,7 @@ export default class Fancy {
     }
 
     openDetailGallery(e) {
-        let groupId = this.group ? this.group : null;
-        Fancy.initDetailGallery(this.id, groupId);
+        Fancy.initDetailGallery(this.id, this.group === 'null' ? null : this.group);
     }
 
     destroy() {
@@ -81,7 +72,7 @@ export default class Fancy {
         if (document.querySelector('.detail-gallery__cta')) {
             document.querySelector('.detail-gallery__cta').removeEventListener('click', clickSwitch);
         }
-        noGroupId = 0;
+        Fancy.groups = {};
     }
 
     //CREATE MARKUP FOR DETAIL GALLERY AND ADD CLOSE LISTENER
@@ -162,7 +153,7 @@ export default class Fancy {
             });
         } else {
             sliderItems = sliderItems.filter(x => {
-                return x.group === null;
+                return x.group === 'null';
             });
         }
 
@@ -308,3 +299,5 @@ export default class Fancy {
         }
     }
 }
+
+Fancy.groups = {};

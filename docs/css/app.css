@@ -2236,6 +2236,10 @@ img:not([src]) {
     cursor: pointer;
     width: 30px;
     height: 30px; }
+    @media (max-width: 768px) {
+      .tooltips .tooltips_item {
+        -webkit-transform: translate(-25%, -25%);
+                transform: translate(-25%, -25%); } }
     .tooltips .tooltips_item:after {
       content: '';
       position: absolute;
@@ -2247,6 +2251,10 @@ img:not([src]) {
       height: 11px;
       border: 2px solid var(--color-white);
       border-radius: 50%; }
+      @media (max-width: 768px) {
+        .tooltips .tooltips_item:after {
+          width: 8px;
+          height: 8px; } }
 
 [data-appear]:not(.splitting) {
   opacity: 0;
@@ -3637,6 +3645,57 @@ body.side-panel-open {
     @media (max-width: 576px) {
       body.side-panel-open .dark-layer {
         display: none; } }
+
+/*
+@function pow($number, $exp) {
+    $value: 1;
+
+    @if $exp > 0 {
+        @for $i from 1 through $exp {
+            $value: $value * $number;
+        }
+    }
+    @else if $exp < 0 {
+        @for $i from 1 through -$exp {
+            $value: $value / $number;
+        }
+    }
+
+    @return $value;
+}
+*/
+.tooltips {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%; }
+  .tooltips .tooltips_item {
+    position: absolute;
+    z-index: 1;
+    cursor: pointer;
+    width: 30px;
+    height: 30px; }
+    @media (max-width: 768px) {
+      .tooltips .tooltips_item {
+        -webkit-transform: translate(-25%, -25%);
+                transform: translate(-25%, -25%); } }
+    .tooltips .tooltips_item:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+              transform: translate(-50%, -50%);
+      width: 11px;
+      height: 11px;
+      border: 2px solid var(--color-white);
+      border-radius: 50%; }
+      @media (max-width: 768px) {
+        .tooltips .tooltips_item:after {
+          width: 8px;
+          height: 8px; } }
 
 input, input:active, input:focus, input:hover, input:visited {
   color: inherit;

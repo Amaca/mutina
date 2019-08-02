@@ -102,7 +102,7 @@ export default class FancyViewAll {
         });
 
         thumbItems = thumbItems.filter(x => {
-            return x.group === null;
+            return x.group === 'null';
         });
 
         let thumbHtml = '';

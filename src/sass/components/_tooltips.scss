@@ -1,0 +1,40 @@
+@import "../mixins";
+
+.tooltips {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    .tooltips_item {
+        position: absolute;
+        z-index: 1;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+
+        @include sm-down {
+            transform: translate(-25%, -25%);
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 11px;
+            height: 11px;
+            border: 2px solid $white;
+            border-radius: 50%;
+            // box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+
+            @include sm-down {
+                width: 8px;
+                height: 8px;
+            }
+        }
+    }
+}

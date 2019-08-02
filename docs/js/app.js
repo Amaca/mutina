@@ -15132,7 +15132,7 @@ function () {
               app.onPageInit();
               /*
               window.daraLayer.push({
-               })
+                })
               gtm.push({
                   title: document.title,
                   href: window.href
@@ -15591,56 +15591,51 @@ function () {
         this.body.removeAttribute('style');
         this.page.removeAttribute('style');
       } //parallax
+      // this.parallaxes.forEach((node, i) => {
+      //     // const parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 3;
+      //     const parallax = node.parallax || 15;
+      //     // const direction = i % 2 === 0 ? 1 : -1;
+      //     const direction = 1;
+      //     let currentY = node.currentY || 0;
+      //     let rect = Rect.fromNode(node);
+      //     rect = new Rect({
+      //         top: rect.top,
+      //         left: rect.left,
+      //         width: rect.width,
+      //         height: rect.height,
+      //     });
+      //     if (direction === -1) {
+      //         node.parentNode.classList.add('reverse');
+      //     }
+      //     const intersection = rect.intersection(this.windowRect);
+      //     /*
+      //     if (fullHeight) {
+      //     	console.log(intersection);
+      //     }
+      //     */
+      //     if (intersection.y > 0) {
+      //         // const y = intersection.center.y; // Math.min(1, Math.max(-1, intersection.center.y));
+      //         // const s = (100 + parallax * 2) / 100;
+      //         // currentY = ((-50) + (y * parallax * direction)).toFixed(3);
+      //         // let y = (rect.top - window.innerHeight) / (window.innerHeight + rect.height);
+      //         let y = (rect.top - window.innerHeight) / (window.innerHeight);
+      //         y = Math.min(0, Math.max(-1, y));
+      //         // const y = 1 - (1 + Math.min(1, Math.max(-1, intersection.center.y))) / 2;
+      //         // currentY = (y * parallax * direction).toFixed(3);
+      //         // currentY = 1 + (1 + y) * 0.08;
+      //         currentY = 1 + (1 + y) * 0.1;
+      //         //currentY = (y * direction * parallax).toFixed(3);
+      //         if (node.currentY !== currentY) {
+      //             node.currentY = currentY;
+      //             // node.setAttribute('style', `height: ${s * 100}%; top: 50%; left: 50%; transform: translateX(-50%) translateY(${currentY}%);`);
+      //             //node.setAttribute('style', `transform: translateY(${currentY}%);`);
+      //             // console.log(currentY);
+      //             node.setAttribute('style', `transform: scale(${currentY},${currentY});`);
+      //         }
+      //     }
+      // });
+      // appears
 
-
-      this.parallaxes.forEach(function (node, i) {
-        // const parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 3;
-        var parallax = node.parallax || 15; // const direction = i % 2 === 0 ? 1 : -1;
-
-        var direction = 1;
-        var currentY = node.currentY || 0;
-
-        var rect = _rect.default.fromNode(node);
-
-        rect = new _rect.default({
-          top: rect.top,
-          left: rect.left,
-          width: rect.width,
-          height: rect.height
-        });
-
-        if (direction === -1) {
-          node.parentNode.classList.add('reverse');
-        }
-
-        var intersection = rect.intersection(_this3.windowRect);
-        /*
-        if (fullHeight) {
-        	console.log(intersection);
-        }
-        */
-
-        if (intersection.y > 0) {
-          // const y = intersection.center.y; // Math.min(1, Math.max(-1, intersection.center.y));
-          // const s = (100 + parallax * 2) / 100;
-          // currentY = ((-50) + (y * parallax * direction)).toFixed(3);
-          // let y = (rect.top - window.innerHeight) / (window.innerHeight + rect.height);
-          var y = (rect.top - window.innerHeight) / window.innerHeight;
-          y = Math.min(0, Math.max(-1, y)); // const y = 1 - (1 + Math.min(1, Math.max(-1, intersection.center.y))) / 2;
-          // currentY = (y * parallax * direction).toFixed(3);
-          // currentY = 1 + (1 + y) * 0.08;
-
-          currentY = 1 + (1 + y) * 0.1; //currentY = (y * direction * parallax).toFixed(3);
-
-          if (node.currentY !== currentY) {
-            node.currentY = currentY; // node.setAttribute('style', `height: ${s * 100}%; top: 50%; left: 50%; transform: translateX(-50%) translateY(${currentY}%);`);
-            //node.setAttribute('style', `transform: translateY(${currentY}%);`);
-            // console.log(currentY);
-
-            node.setAttribute('style', "transform: scale(".concat(currentY, ",").concat(currentY, ");"));
-          }
-        }
-      }); // appears
 
       this.appears.forEach(function (node, i) {
         var rect = _rect.default.fromNode(node);
@@ -16255,8 +16250,6 @@ var clickClose;
 var clickSwitch;
 var swiperInstance;
 var firstLoad;
-var noGroupId = 0;
-var groupItemId = 0;
 var body = document.querySelector('body');
 var html = document.getElementsByTagName('html')[0];
 var closeIcon = "<svg><use xlink:href=\"#svg-close\"></use></svg>";
@@ -16272,14 +16265,8 @@ function () {
     _classCallCheck(this, Fancy);
 
     this.node = node;
-    this.group = node.getAttribute('data-fancy-group');
-
-    if (this.group) {
-      this.id = id;
-    } else {
-      this.id = noGroupId++;
-    }
-
+    this.group = String(node.getAttribute('data-fancy-group'));
+    this.id = Fancy.groups[this.group] === undefined ? Fancy.groups[this.group] = 0 : ++Fancy.groups[this.group];
     this.smallImageUrl = node.getAttribute('data-fancy-thumb');
     this.bigImageUrl = node.getAttribute('data-fancy-img');
     this.caption = node.getAttribute('data-fancy-caption');
@@ -16304,8 +16291,7 @@ function () {
   }, {
     key: "openDetailGallery",
     value: function openDetailGallery(e) {
-      var groupId = this.group ? this.group : null;
-      Fancy.initDetailGallery(this.id, groupId);
+      Fancy.initDetailGallery(this.id, this.group === 'null' ? null : this.group);
     }
   }, {
     key: "destroy",
@@ -16349,7 +16335,7 @@ function () {
         document.querySelector('.detail-gallery__cta').removeEventListener('click', clickSwitch);
       }
 
-      noGroupId = 0;
+      Fancy.groups = {};
     } //CREATE MARKUP FOR DETAIL GALLERY AND ADD CLOSE LISTENER
 
   }, {
@@ -16428,7 +16414,7 @@ function () {
         });
       } else {
         sliderItems = sliderItems.filter(function (x) {
-          return x.group === null;
+          return x.group === 'null';
         });
       }
 
@@ -16575,6 +16561,7 @@ function () {
 }();
 
 exports.default = Fancy;
+Fancy.groups = {};
 
 },{"./fancy.transition":319}],319:[function(require,module,exports){
 "use strict";
@@ -17081,7 +17068,7 @@ function () {
         };
       });
       thumbItems = thumbItems.filter(function (x) {
-        return x.group === null;
+        return x.group === 'null';
       });
       var thumbHtml = '';
       thumbItems.forEach(function (thumb) {

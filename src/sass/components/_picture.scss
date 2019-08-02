@@ -143,6 +143,9 @@ img:not([src]) {
         width: 30px;
         height: 30px;
 
+        @include sm-down {
+            transform: translate(-25%, -25%);
+        }
 
         &:after {
             content: '';
@@ -155,6 +158,11 @@ img:not([src]) {
             border: 2px solid $white;
             border-radius: 50%;
             // box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+
+            @include sm-down {
+                width: 8px;
+                height: 8px;
+            }
         }
     }
 }
