@@ -239,20 +239,26 @@
     }
 
     .swiper-slide {
-        width: 36vw;
+        width: auto;
+        // width: 36vw;
 
-        @include sm-down {
-            width: 65vw;
-        }
+        // @include sm-down {
+        //     width: 65vw;
+        // }
 
-        @include xs-down {
-            width: 80vw;
+        // @include xs-down {
+        //     width: 80vw;
+        // }
+
+        img {
+            height: 100%;
+            max-width: none;
         }
     }
 
     .slider__picture {
         text-align: center;
-        width: 100%;
+        //width: 100%;
         height: 36vw;
 
         @include sm-down {

@@ -4382,16 +4382,12 @@ Form
     width: 100%;
     height: 100%; }
   .slider--samples .swiper-slide {
-    width: 36vw; }
-    @media (max-width: 768px) {
-      .slider--samples .swiper-slide {
-        width: 65vw; } }
-    @media (max-width: 576px) {
-      .slider--samples .swiper-slide {
-        width: 80vw; } }
+    width: auto; }
+    .slider--samples .swiper-slide img {
+      height: 100%;
+      max-width: none; }
   .slider--samples .slider__picture {
     text-align: center;
-    width: 100%;
     height: 36vw; }
     @media (max-width: 768px) {
       .slider--samples .slider__picture {
