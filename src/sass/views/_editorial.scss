@@ -795,6 +795,20 @@
     }
 }
 
+.editorial__1col-full-img-link-caption {
+    @extend .editorial__1col-full-img-caption--left;
+
+    .editorial__caption {
+        margin-top: 20px;
+
+        a {
+            @include font($style:book);
+            font-size: 1.6rem;
+
+        }
+    }
+}
+
 // 1col full img caption centered
 .editorial__1col-full-overlay-title {
 

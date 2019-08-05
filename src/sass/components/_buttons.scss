@@ -176,16 +176,16 @@ a {
         @extend .btn--inline;
 
         &:after {
-            width: 0;
-            left: auto;
-            right: 0;
+            width: 0 !important;
+            left: auto !important;
+            right: 0 !important;
         }
 
         &:hover {
             &:after {
-                width: 100%;
-                left: 0;
-                right: auto;
+                width: 100% !important;
+                left: 0 !important;
+                right: auto !important;
             }
         }
     }

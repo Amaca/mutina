@@ -633,14 +633,14 @@ a {
     width: 0; }
 
 .btn--inline-alt:after {
-  width: 0;
-  left: auto;
-  right: 0; }
+  width: 0 !important;
+  left: auto !important;
+  right: 0 !important; }
 
 .btn--inline-alt:hover:after {
-  width: 100%;
-  left: 0;
-  right: auto; }
+  width: 100% !important;
+  left: 0 !important;
+  right: auto !important; }
 
 .btn--full {
   width: 100%;
@@ -1519,7 +1519,8 @@ html.full-gallery-open {
   .fancy-detail .editorial {
     padding-bottom: 2.083vw; }
   .fancy-detail .editorial__1col-full-img .picture,
-  .fancy-detail .editorial__1col-full-img-caption--left .picture {
+  .fancy-detail .editorial__1col-full-img-caption--left .picture,
+  .fancy-detail .editorial__1col-full-img-link-caption .picture {
     position: relative;
     width: 100%;
     padding-top: calc(66.66667% - 66.66667% * 0);
@@ -1528,8 +1529,11 @@ html.full-gallery-open {
     .fancy-detail .editorial__1col-full-img .picture video,
     .fancy-detail .editorial__1col-full-img .picture canvas,
     .fancy-detail .editorial__1col-full-img-caption--left .picture img,
+    .fancy-detail .editorial__1col-full-img-link-caption .picture img,
     .fancy-detail .editorial__1col-full-img-caption--left .picture video,
-    .fancy-detail .editorial__1col-full-img-caption--left .picture canvas {
+    .fancy-detail .editorial__1col-full-img-link-caption .picture video,
+    .fancy-detail .editorial__1col-full-img-caption--left .picture canvas,
+    .fancy-detail .editorial__1col-full-img-link-caption .picture canvas {
       position: absolute;
       top: 0;
       left: 0;
@@ -6105,20 +6109,22 @@ body.fancy-page main {
       .editorial__1col-full-img-caption .editorial__caption .btn--inline, .editorial__1col-full-img-caption .editorial__caption .btn--inline-alt {
         display: inline-block; } }
 
-.editorial__1col-full-img-caption--centered .editorial__caption, .editorial__1col-full-img-caption--left .editorial__caption {
+.editorial__1col-full-img-caption--centered .editorial__caption, .editorial__1col-full-img-caption--left .editorial__caption, .editorial__1col-full-img-link-caption .editorial__caption {
   margin-top: 24px;
   text-align: center; }
 
-.editorial__1col-full-img-caption--centered .picture, .editorial__1col-full-img-caption--left .picture {
+.editorial__1col-full-img-caption--centered .picture, .editorial__1col-full-img-caption--left .picture, .editorial__1col-full-img-link-caption .picture {
   position: relative;
   width: 100%;
   padding-top: calc(50% - 50% * 0);
   overflow: hidden; }
-  .editorial__1col-full-img-caption--centered .picture img, .editorial__1col-full-img-caption--left .picture img,
+  .editorial__1col-full-img-caption--centered .picture img, .editorial__1col-full-img-caption--left .picture img, .editorial__1col-full-img-link-caption .picture img,
   .editorial__1col-full-img-caption--centered .picture video,
   .editorial__1col-full-img-caption--left .picture video,
+  .editorial__1col-full-img-link-caption .picture video,
   .editorial__1col-full-img-caption--centered .picture canvas,
-  .editorial__1col-full-img-caption--left .picture canvas {
+  .editorial__1col-full-img-caption--left .picture canvas,
+  .editorial__1col-full-img-link-caption .picture canvas {
     position: absolute;
     top: 0;
     left: 0;
@@ -6128,16 +6134,18 @@ body.fancy-page main {
         object-fit: cover;
         */ }
   @media (max-width: 768px) {
-    .editorial__1col-full-img-caption--centered .picture, .editorial__1col-full-img-caption--left .picture {
+    .editorial__1col-full-img-caption--centered .picture, .editorial__1col-full-img-caption--left .picture, .editorial__1col-full-img-link-caption .picture {
       position: relative;
       width: 100%;
       padding-top: calc(62.5% - 62.5% * 0);
       overflow: hidden; }
-      .editorial__1col-full-img-caption--centered .picture img, .editorial__1col-full-img-caption--left .picture img,
+      .editorial__1col-full-img-caption--centered .picture img, .editorial__1col-full-img-caption--left .picture img, .editorial__1col-full-img-link-caption .picture img,
       .editorial__1col-full-img-caption--centered .picture video,
       .editorial__1col-full-img-caption--left .picture video,
+      .editorial__1col-full-img-link-caption .picture video,
       .editorial__1col-full-img-caption--centered .picture canvas,
-      .editorial__1col-full-img-caption--left .picture canvas {
+      .editorial__1col-full-img-caption--left .picture canvas,
+      .editorial__1col-full-img-link-caption .picture canvas {
         position: absolute;
         top: 0;
         left: 0;
@@ -6147,16 +6155,18 @@ body.fancy-page main {
         object-fit: cover;
         */ } }
   @media (max-width: 576px) {
-    .editorial__1col-full-img-caption--centered .picture, .editorial__1col-full-img-caption--left .picture {
+    .editorial__1col-full-img-caption--centered .picture, .editorial__1col-full-img-caption--left .picture, .editorial__1col-full-img-link-caption .picture {
       position: relative;
       width: 100%;
       padding-top: calc(133.33333% - 133.33333% * 0);
       overflow: hidden; }
-      .editorial__1col-full-img-caption--centered .picture img, .editorial__1col-full-img-caption--left .picture img,
+      .editorial__1col-full-img-caption--centered .picture img, .editorial__1col-full-img-caption--left .picture img, .editorial__1col-full-img-link-caption .picture img,
       .editorial__1col-full-img-caption--centered .picture video,
       .editorial__1col-full-img-caption--left .picture video,
+      .editorial__1col-full-img-link-caption .picture video,
       .editorial__1col-full-img-caption--centered .picture canvas,
-      .editorial__1col-full-img-caption--left .picture canvas {
+      .editorial__1col-full-img-caption--left .picture canvas,
+      .editorial__1col-full-img-link-caption .picture canvas {
         position: absolute;
         top: 0;
         left: 0;
@@ -6166,8 +6176,16 @@ body.fancy-page main {
         object-fit: cover;
         */ } }
 
-.editorial__1col-full-img-caption--left .editorial__caption {
+.editorial__1col-full-img-caption--left .editorial__caption, .editorial__1col-full-img-link-caption .editorial__caption {
   text-align: left; }
+
+.editorial__1col-full-img-link-caption .editorial__caption {
+  margin-top: 20px; }
+  .editorial__1col-full-img-link-caption .editorial__caption a {
+    font-family: 'futura-pt', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.6rem; }
 
 .editorial__1col-full-overlay-title .editorial__box-picture {
   position: relative;
