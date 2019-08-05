@@ -14844,6 +14844,14 @@ var _utils = _interopRequireDefault(require("./shared/utils"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -15132,7 +15140,7 @@ function () {
               app.onPageInit();
               /*
               window.daraLayer.push({
-                })
+               })
               gtm.push({
                   title: document.title,
                   href: window.href
@@ -15363,6 +15371,28 @@ function () {
           wrapper.appendChild(picture);
         }
       });
+
+      if (document.querySelector('main.main--accents > .cover--video')) {
+        var style = document.querySelector('main.main--accents > .cover--video').getAttribute('style');
+        var video = document.querySelector('main.main--accents > .cover--video video');
+
+        var subnavs = _toConsumableArray(document.querySelectorAll('.subnav'));
+
+        subnavs.forEach(function (x) {
+          return x.style = style;
+        });
+        this.header.style = style;
+        setTimeout(function (x) {
+          video.play();
+          console.log('play');
+        }, 200);
+      } else {
+        this.header.removeAttribute('style');
+
+        _toConsumableArray(document.querySelectorAll('.subnav')).forEach(function (x) {
+          return x.removeAttribute('style');
+        });
+      }
 
       _lazyload.default.init();
 

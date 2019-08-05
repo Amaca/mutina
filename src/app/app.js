@@ -532,6 +532,21 @@ export default class App {
             }
         });
 
+        if (document.querySelector('main.main--accents > .cover--video')) {
+            const style = document.querySelector('main.main--accents > .cover--video').getAttribute('style');
+            const video = document.querySelector('main.main--accents > .cover--video video');
+            const subnavs = [...document.querySelectorAll('.subnav')];
+            subnavs.forEach(x => x.style = style);
+            this.header.style = style;
+            setTimeout(x => {
+                video.play();
+                console.log('play');
+            }, 200);
+        } else {
+            this.header.removeAttribute('style');
+            [...document.querySelectorAll('.subnav')].forEach(x => x.removeAttribute('style'));
+        }
+
         LazyLoad.init();
         Fancy.init();
         FancyViewAll.init();

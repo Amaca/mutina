@@ -74,6 +74,11 @@ body {
     fill: $dark;
 }
 
+.border-top {
+    border-top: 2px solid $dark;
+    padding-top: 118px;
+}
+
 .svg-sprites {
     height: 0;
     width: 0;
