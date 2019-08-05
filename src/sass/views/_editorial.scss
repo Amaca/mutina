@@ -34,6 +34,14 @@
             margin-bottom: 0;
         }
     }
+
+    &--less-pad {
+        padding-bottom: $col-gutter;
+
+        @include sm-down {
+            padding-bottom: $col-gutter-half;
+        }
+    }
 }
 
 //2col text
@@ -879,6 +887,24 @@
     }
 }
 
+.editorial__1col-full-overlay-title--right {
+    @extend .editorial__1col-full-overlay-title;
+
+    .editorial__box-picture {
+
+        .box {
+            text-align: right;
+        }
+
+        .picture+.box {
+            padding: 0 $col-gutter $col-gutter-half $col-gutter;
+
+            @include sm-down {
+                padding: 0 $col-gutter-half $col-gutter-half $col-gutter-half;
+            }
+        }
+    }
+}
 
 //1col-full-video
 .editorial__1col-full-video {
