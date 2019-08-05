@@ -90,6 +90,10 @@ export default class Navigation {
             document.querySelectorAll('.subnav').forEach(x => x.style.height = '0');
             subnavOpen = false;
         }
+        // if (body.classList.contains('nav-mobile-open')) {
+        //     body.classList.remove('nav-mobile-open');
+        //     subnavOpen = false;
+        // }
     }
 
     static closeOnOutsideClick() { //chiudo il sottomenu se clicco fuori

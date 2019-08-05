@@ -445,8 +445,7 @@ body.subnav-open {
         display: block;
         overflow: hidden;
 
-        &:before {
-            content: '';
+        .nav__toggle-bg {
             position: absolute;
             z-index: 2;
             left: -28px;
@@ -511,7 +510,7 @@ body.subnav-open {
         }
 
         .nav__toggle {
-            &:before {
+            .nav__toggle-bg {
                 left: -2px;
                 transition: left 500ms $smooth 50ms;
             }

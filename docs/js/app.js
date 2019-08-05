@@ -15371,28 +15371,7 @@ function () {
           wrapper.appendChild(picture);
         }
       });
-
-      if (document.querySelector('main.main--accents > .cover--video')) {
-        var style = document.querySelector('main.main--accents > .cover--video').getAttribute('style');
-        var video = document.querySelector('main.main--accents > .cover--video video');
-
-        var subnavs = _toConsumableArray(document.querySelectorAll('.subnav'));
-
-        subnavs.forEach(function (x) {
-          return x.style = style;
-        });
-        this.header.style = style;
-        setTimeout(function (x) {
-          video.play();
-          console.log('play');
-        }, 200);
-      } else {
-        this.header.removeAttribute('style');
-
-        _toConsumableArray(document.querySelectorAll('.subnav')).forEach(function (x) {
-          return x.removeAttribute('style');
-        });
-      }
+      this.accentsInit();
 
       _lazyload.default.init();
 
@@ -15460,6 +15439,58 @@ function () {
 
 
       container.remove();
+    }
+  }, {
+    key: "accentsInit",
+    value: function accentsInit() {
+      var coverVideo = document.querySelector('main.main--accents > .cover--video');
+      var headerWrapper = document.querySelector('.header__wrapper');
+      var video = document.querySelector('video');
+      var headerSearch = document.querySelector('.header__search input');
+
+      var subnavs = _toConsumableArray(document.querySelectorAll('.subnav'));
+
+      var toggle = document.querySelector('.nav__toggle-bg');
+
+      if (coverVideo) {
+        this.body.classList.add('accents-page');
+        var style = coverVideo.getAttribute('style');
+        this.header.style = style;
+
+        if (window.innerWidth <= 768) {
+          headerSearch.style = style;
+          headerWrapper.style = style;
+          toggle.style = style;
+        }
+
+        subnavs.forEach(function (x) {
+          return x.style = style;
+        });
+        setTimeout(function (x) {
+          video.play();
+
+          if (debug) {
+            console.log('Video cover: play');
+          }
+        }, 200);
+      } else if (this.body.classList.contains('accents-page')) {
+        this.body.classList.remove('accents-page');
+        this.header.removeAttribute('style');
+
+        if (window.innerWidth <= 768) {
+          headerSearch.removeAttribute('style');
+          headerWrapper.removeAttribute('style');
+          toggle.removeAttribute('style');
+        }
+
+        subnavs.forEach(function (x) {
+          return x.removeAttribute('style');
+        });
+
+        if (video) {
+          video.stop();
+        }
+      }
     }
   }, {
     key: "addListeners",
@@ -17747,7 +17778,11 @@ function () {
           return x.style.height = '0';
         });
         subnavOpen = false;
-      }
+      } // if (body.classList.contains('nav-mobile-open')) {
+      //     body.classList.remove('nav-mobile-open');
+      //     subnavOpen = false;
+      // }
+
     }
   }, {
     key: "closeOnOutsideClick",

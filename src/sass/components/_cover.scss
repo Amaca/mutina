@@ -252,31 +252,34 @@
         }
 
         .cover__video-wrapper {
-            padding-bottom: 100px;
+            margin-bottom: 100px;
             position: relative;
+            z-index: 0;
 
             .box {
                 position: absolute;
                 z-index: 1;
-                top: 40%;
+                top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
                 width: 90%;
 
                 .h1 {
                     text-align: center;
+                    font-size: 3rem;
                 }
             }
 
             .cover__video-bg {
                 text-align: center;
-                width: 960px;
                 margin: 0 auto;
                 position: relative;
                 z-index: 0;
 
                 video {
                     display: block;
+                    height: 100vh;
+                    margin: 0 auto;
                 }
             }
         }
@@ -295,6 +298,14 @@
 
                     .box {
                         max-width: 70%;
+
+                        @include sm-down {
+                            max-width: 80%;
+                        }
+
+                        @include xs-down {
+                            max-width: none;
+                        }
                     }
                 }
 
@@ -308,6 +319,10 @@
                         font-weight: 300;
                         position: relative;
                         top: 10px;
+
+                        @include sm-down {
+                            top: 7px;
+                        }
                     }
                 }
             }

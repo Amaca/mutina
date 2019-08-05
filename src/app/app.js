@@ -532,20 +532,7 @@ export default class App {
             }
         });
 
-        if (document.querySelector('main.main--accents > .cover--video')) {
-            const style = document.querySelector('main.main--accents > .cover--video').getAttribute('style');
-            const video = document.querySelector('main.main--accents > .cover--video video');
-            const subnavs = [...document.querySelectorAll('.subnav')];
-            subnavs.forEach(x => x.style = style);
-            this.header.style = style;
-            setTimeout(x => {
-                video.play();
-                console.log('play');
-            }, 200);
-        } else {
-            this.header.removeAttribute('style');
-            [...document.querySelectorAll('.subnav')].forEach(x => x.removeAttribute('style'));
-        }
+        this.accentsInit();
 
         LazyLoad.init();
         Fancy.init();
@@ -588,6 +575,45 @@ export default class App {
         SidePanel.destroyAll();
         // CustomSelect.destroyAll();
         container.remove();
+    }
+
+    accentsInit() {
+        const coverVideo = document.querySelector('main.main--accents > .cover--video');
+        const headerWrapper = document.querySelector('.header__wrapper');
+        const video = document.querySelector('video');
+        const headerSearch = document.querySelector('.header__search input');
+        const subnavs = [...document.querySelectorAll('.subnav')];
+        const toggle = document.querySelector('.nav__toggle-bg');
+
+        if (coverVideo) {
+            this.body.classList.add('accents-page');
+            const style = coverVideo.getAttribute('style');
+            this.header.style = style;
+            if (window.innerWidth <= 768) {
+                headerSearch.style = style;
+                headerWrapper.style = style;
+                toggle.style = style;
+            }
+            subnavs.forEach(x => x.style = style);
+            setTimeout(x => {
+                video.play();
+                if (debug) {
+                    console.log('Video cover: play');
+                }
+            }, 200);
+        } else if (this.body.classList.contains('accents-page')) {
+            this.body.classList.remove('accents-page');
+            this.header.removeAttribute('style');
+            if (window.innerWidth <= 768) {
+                headerSearch.removeAttribute('style');
+                headerWrapper.removeAttribute('style');
+                toggle.removeAttribute('style');
+            }
+            subnavs.forEach(x => x.removeAttribute('style'));
+            if (video) {
+                video.stop();
+            }
+        }
     }
 
     addListeners() {
