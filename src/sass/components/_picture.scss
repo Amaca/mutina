@@ -14,9 +14,9 @@ img:not([src]) {
     //@slidebg on enter
 
     //transform: translateY(30px);
-    transition: all 1000ms $smooth;
-    @include aspect-clip(10, 6, 0);
     // @include aspect-clip(10, 6, 0.15);
+    transition: all 600ms cubic-bezier(0.320, 0.000, 0.290, 0.990);
+    @include aspect-clip(10, 6, 0);
 
     &:after {
         content: '';
@@ -29,6 +29,16 @@ img:not([src]) {
         height: 105%;
     }
 
+    img,
+    video {
+        display: block;
+        width: 100%;
+        position: absolute;
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 600ms cubic-bezier(0.320, 0.000, 0.290, 0.990);
+    }
+
     .picture__container {
         position: absolute;
         z-index: 1;
@@ -36,11 +46,21 @@ img:not([src]) {
         left: 0;
         width: 100%;
         height: 100%;
-        //transform: scale(1.05, 1.05);
+        transition: all 600ms cubic-bezier(0.320, 0.000, 0.290, 0.990);
+        transform: scale(1.05, 1.05) translateY(10px);
         //@slidebg on enter
         //transition: all 1000ms ease-in-out;
         //@slidebg on enter
-        transition: all 1000ms $smooth;
+
+        // img {
+        //     @include xs-down {
+        //         top: 50% !important;
+        //         left: 50% !important;
+        //         transform: translate(-50%, -50%) !important;
+        //         height: 100%;
+        //         width: auto !important;
+        //     }
+        // }
     }
 
     &.loaded {
@@ -50,44 +70,20 @@ img:not([src]) {
         //transform: translateY(0px);
 
         img {
-            transform: scale(1, 1);
             opacity: 1;
+
+            // transform: scale(1, 1);
             //@slidebg on enter
             //transition: opacity 1500ms ease-in-out;
             //@slidebg on enter
-            transition: opacity 1500ms $smooth;
         }
 
         //@slidebg on enter
-        // .picture__container {
-        //     transform: scale(1, 1);
-        // }
+        .picture__container {
+            transform: scale(1, 1) translateY(0);
+        }
+
         //@slidebg on enter
-    }
-
-    &--fit-cover {
-        top: 50%;
-        left: 50%;
-        width: auto;
-        transform: translate(-50%, -50%);
-        height: 100%;
-        object-fit: cover;
-    }
-
-    // &:hover {
-
-    //     .picture__container {
-    //         transform: scale(1.03, 1.03);
-    //         transition: all 1500ms ease-in-out;
-    //     }
-    // }
-
-    img,
-    video {
-        display: block;
-        width: 100%;
-        position: absolute;
-        opacity: 0;
     }
 
     &.reverse {
@@ -99,27 +95,40 @@ img:not([src]) {
         }
     }
 
-    // &:not(.picture--full-height) {
-    //     @include aspect-clip(10, 6);
-
-    //     img,
-    //     video {
-    //         position: absolute;
-    //         object-fit: cover;
-    //     }
-    // }
-
-
-    // &.picture--cover {
-    //     @include aspect-clip(1920, 1200, 0.15);
-
-    //     @include xs-down {
-    //         @include aspect-clip(3, 4, 0.15);
-    //     }
-    // }
-
     &.picture--frame {
         padding: 0 $col-gutter;
+    }
+
+    &.picture--animate {
+
+        &.loaded {
+            .picture__container {
+                transition: all 5s $smooth;
+
+                &:after {
+                    content: '';
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    z-index: 2;
+                    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+                    opacity: 0;
+                    transition: all 5s $smooth;
+                }
+            }
+
+            &:hover {
+                .picture__container {
+                    transform: scale(1.05);
+
+                    &:after {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
     }
 }
 

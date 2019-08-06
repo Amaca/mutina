@@ -28,13 +28,13 @@ export default class LazyLoad {
             const node = this.node;
             node.onload = () => {
                 // let time = this.parent.classList.contains('') ? 0 : delay;
-                // setTimeout(() => {
-                //     this.parent.classList.add('loaded');
-                //     node.onload = null;
-                // }, 2000);
+                setTimeout(() => {
+                    this.parent.classList.add('loaded');
+                    node.onload = null;
+                }, 400);
 
-                this.parent.classList.add('loaded');
-                node.onload = null;
+                // this.parent.classList.add('loaded');
+                // node.onload = null;
             };
             node.src = this.src;
         }

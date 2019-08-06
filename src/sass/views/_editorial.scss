@@ -35,12 +35,12 @@
         }
     }
 
-    &--less-pad {
+    &--less {
         padding-bottom: $col-gutter;
+    }
 
-        @include sm-down {
-            padding-bottom: $col-gutter-half;
-        }
+    &--null {
+        padding-bottom: 0;
     }
 }
 
@@ -565,6 +565,11 @@
             @include xs-down {
                 // @include aspect-clip(3, 4, 0.15);
                 @include aspect-clip(3, 4, 0);
+
+                .picture__container img {
+                    width: auto;
+                    height: 100%;
+                }
             }
         }
     }
@@ -624,6 +629,13 @@
         @include md-down {
             order: 1;
         }
+
+        @include xs-down {
+            .picture__container img {
+                width: auto;
+                height: 100%;
+            }
+        }
     }
 
     .editorial__caption {
@@ -645,11 +657,22 @@
     .editorial__wrapper {
         position: relative;
         z-index: 1;
+
+        &:after {
+            content: '';
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
     }
 
     .editorial__box-text {
         position: absolute;
-        z-index: 2;
+        z-index: 3;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -682,28 +705,18 @@
     }
 
     .editorial__box-picture {
+        position: relative;
+        z-index: 1;
+
         .picture {
             @include aspect-clip(16, 6);
-            transform: scale(1, 1);
 
-            .picture__container {
-                transform: scale(1, 1);
+            @include xs-down {
+                img {
+                    height: auto;
+                    width: 100%;
+                }
             }
-
-            @include sm-down {
-                @include aspect-clip(1, 1);
-            }
-        }
-
-        &:after {
-            content: '';
-            position: absolute;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
         }
     }
 }
@@ -734,6 +747,11 @@
             @include xs-down {
                 // @include aspect-clip(3, 4, 0.15);
                 @include aspect-clip(3, 4);
+
+                .picture__container img {
+                    width: auto;
+                    height: 100%;
+                }
             }
         }
     }
@@ -790,6 +808,11 @@
 
         @include xs-down {
             @include aspect-clip(3, 4);
+
+            .picture__container img {
+                width: auto;
+                height: 100%;
+            }
         }
     }
 }
@@ -851,15 +874,6 @@
     }
 
     .picture {
-        // @include aspect-clip(16, 8, 0.15);
-
-        // @include sm-down {
-        //     @include aspect-clip(16, 10, 0.15);
-        // }
-
-        // @include xs-down {
-        //     @include aspect-clip(3, 4, 0.15);
-        // }
         @include aspect-clip(16, 8, 0);
 
         @include sm-down {
@@ -868,6 +882,11 @@
 
         @include xs-down {
             @include aspect-clip(3, 4, 0);
+
+            .picture__container img {
+                width: auto;
+                height: 100%;
+            }
         }
     }
 

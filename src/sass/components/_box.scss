@@ -107,6 +107,14 @@
 
     .text+.cta {
         margin-top: 60px;
+
+        @include md-down {
+            margin-top: 30px;
+        }
+
+        @include xs-down {
+            margin-top: 15px;
+        }
     }
 }
 

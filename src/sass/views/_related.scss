@@ -18,8 +18,12 @@
         @include aspect-clip(880, 550, 0);
     }
 
-    &--no-pad {
+    &--less {
         padding: 0;
+
+        @include sm-down {
+            padding-bottom: 60px;
+        }
     }
 }
 

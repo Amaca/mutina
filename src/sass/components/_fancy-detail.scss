@@ -458,10 +458,13 @@
         }
     }
 
+    .fancy-detail__panel-wrapper {
+        overflow-y: auto;
+    }
+
     .fancy-detail__panel-content {
         width: 100%;
         height: calc(100vh - #{$header-height});
-        padding: 0 $col-gutter;
         position: relative;
         top: $header-height;
 
@@ -492,6 +495,9 @@
             text-align: center;
             transform: translateY(80px);
             transition: transform .6s $smooth .1s;
+            padding: 0 $col-gutter $col-gutter-half $col-gutter;
+            height: calc(100vh - #{$header-height});
+            overflow-y: auto;
 
             @include sm-down {
                 display: flex;
@@ -500,11 +506,26 @@
 
             .listing__item {
                 width: 100%;
-                margin-bottom: 15px;
+                margin-bottom: 20px;
 
                 &:last-child {
                     margin-bottom: 0;
                 }
+            }
+
+            .picture {
+
+                .picture__container {
+                    transform: scale(1) translate(0, 0);
+
+                    img {
+                        opacity: 1;
+                    }
+                }
+            }
+
+            .picture+.box {
+                margin-top: 15px;
             }
         }
     }

@@ -69,6 +69,7 @@ a {
 }
 
 .btn {
+    cursor: pointer;
 
     @include sm-down {
         display: block;
@@ -80,7 +81,6 @@ a {
         line-height: 1;
         position: relative;
         padding: 0 0 3px;
-        cursor: pointer;
 
         &:before,
         &:after {
@@ -132,7 +132,6 @@ a {
         border: 2px solid $dark;
         padding: 25px 38px;
         text-transform: uppercase;
-        cursor: pointer;
 
         @include sm-down {
             font-size: 0.8rem;
@@ -198,7 +197,6 @@ a {
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
         @include font($style:medium);
     }
 }
