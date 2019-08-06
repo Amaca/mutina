@@ -315,16 +315,32 @@ body.fancy-zoom {
             margin-bottom: $col-gutter;
         }
 
-        img {
-            max-width: 100%;
-            max-height: 250px;
+        .img {
+            background: $light-grey;
+            display: inline-block;
+            cursor: pointer;
 
-            @include sm-down {
-                max-height: 230px;
+            img {
+                opacity: 0;
+                transition: opacity .6s $smooth;
+                max-width: 100%;
+                max-height: 250px;
+
+                @include sm-down {
+                    max-height: 230px;
+                }
+
+                @include xs-down {
+                    max-height: 110px;
+                }
             }
+        }
 
-            @include xs-down {
-                max-height: 110px;
+        &.loaded {
+            .img {
+                img {
+                    opacity: 1;
+                }
             }
         }
     }

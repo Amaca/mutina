@@ -17002,6 +17002,8 @@ var _fancy = _interopRequireDefault(require("./fancy"));
 
 var _fancy2 = _interopRequireDefault(require("./fancy.transition"));
 
+var _lazyload = _interopRequireDefault(require("./lazyload"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -17124,7 +17126,7 @@ function () {
           id: item.id,
           caption: item.caption,
           url: item.bigImageUrl,
-          html: "<div class=\"full-gallery__thumb\" data-index=\"".concat(item.id, "\"><img src=\"").concat(item.smallImageUrl, "\" alt=\"").concat(item.caption, "\"></div>"),
+          html: "<div class=\"full-gallery__thumb\" data-index=\"".concat(item.id, "\"><div class=\"img\"><img data-load=\"").concat(item.smallImageUrl, "\" alt=\"").concat(item.caption, "\"></div></div>"),
           group: item.group
         };
       });
@@ -17136,6 +17138,8 @@ function () {
         thumbHtml += thumb.html;
       });
       container.innerHTML = "<div class=\"full-gallery__list\">".concat(thumbHtml, "</div>");
+
+      _lazyload.default.init();
 
       _toConsumableArray(container.querySelectorAll('.full-gallery__thumb')).forEach(function (thumb) {
         return thumb.addEventListener('click', FancyViewAll.onThumbClick);
@@ -17155,7 +17159,7 @@ function () {
 
 exports.default = FancyViewAll;
 
-},{"./fancy":318,"./fancy.transition":319}],321:[function(require,module,exports){
+},{"./fancy":318,"./fancy.transition":319,"./lazyload":324}],321:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18288,6 +18292,8 @@ var _samples = _interopRequireDefault(require("./samples.detail"));
 
 var _side = _interopRequireDefault(require("./side.panel"));
 
+var _lazyload = _interopRequireDefault(require("./lazyload"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -18438,11 +18444,14 @@ function () {
       this.data.samples.forEach(function (category) {
         var fullSamplesHtml = '';
         category.items.forEach(function (item) {
-          fullSamplesHtml += "\n                    <div class=\"full-samples-gallery__item\">\n                        <div class=\"img\">\n                            <img src=\"".concat(item.img, "\" alt=\"").concat(item.title, "\" data-sample-detail=\"").concat(item.id, "\">\n                        </div>\n                        <div class=\"box\">\n                            <h6 class=\"h6\">").concat(item.title, "</h6>\n                            <div class=\"text\">").concat(item.size, "</div>\n                            <div class=\"cta\"><a href=\"#\" class=\"btn--inline\">Add to samples</a></div>\n                        </div>\n                    </div>\n                ");
+          fullSamplesHtml += "\n                    <div class=\"full-samples-gallery__item\">\n                        <div class=\"img\">\n                            <img data-load=\"".concat(item.img, "\" alt=\"").concat(item.title, "\" data-sample-detail=\"").concat(item.id, "\">\n                        </div>\n                        <div class=\"box\">\n                            <h6 class=\"h6\">").concat(item.title, "</h6>\n                            <div class=\"text\">").concat(item.size, "</div>\n                            <div class=\"cta\"><a href=\"#\" class=\"btn--inline\">Add to samples</a></div>\n                        </div>\n                    </div>\n                ");
         });
-        containerHtml += "\n            <div class=\"full-samples-gallery__category\" data-sample-category=\"".concat(category.id, "\">\n                <div class=\"full-samples-gallery__cover\">\n                    <h2 class=\"h2\">").concat(category.color, "</h2>\n                    <div class=\"img\">\n                        <img src=\"").concat(category.img, "\">\n                    </div>\n                    <div class=\"box\">\n                        <h6 class=\"h6\">").concat(category.title, "</h6>\n                        <div class=\"text\">").concat(category.size, "</div>\n                    </div>\n                </div>\n                <div class=\"full-samples-gallery__listing\">\n                    ").concat(fullSamplesHtml, "                    \n                </div>\n            </div>\n        ");
+        containerHtml += "\n            <div class=\"full-samples-gallery__category\" data-sample-category=\"".concat(category.id, "\">\n                <div class=\"full-samples-gallery__cover\">\n                    <h2 class=\"h2\">").concat(category.color, "</h2>\n                    <div class=\"img\">\n                        <img data-load=\"").concat(category.img, "\">\n                    </div>\n                    <div class=\"box\">\n                        <h6 class=\"h6\">").concat(category.title, "</h6>\n                        <div class=\"text\">").concat(category.size, "</div>\n                    </div>\n                </div>\n                <div class=\"full-samples-gallery__listing\">\n                    ").concat(fullSamplesHtml, "                    \n                </div>\n            </div>\n        ");
       });
       wrapper.innerHTML = containerHtml;
+
+      _lazyload.default.init();
+
       var images = this.mapData();
 
       clickDetailGallery = function clickDetailGallery(e) {
@@ -18578,7 +18587,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":319,"./samples.detail":327,"./side.panel":330,"gsap/ScrollToPlugin":309}],329:[function(require,module,exports){
+},{"./fancy.transition":319,"./lazyload":324,"./samples.detail":327,"./side.panel":330,"gsap/ScrollToPlugin":309}],329:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

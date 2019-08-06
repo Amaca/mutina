@@ -4,6 +4,7 @@ import "gsap/ScrollToPlugin";
 import FancyTransition from "./fancy.transition";
 import SamplesDetail from "./samples.detail";
 import SidePanel from "./side.panel";
+import LazyLoad from "./lazyload";
 
 let clickClose;
 let scrollWrapper;
@@ -134,7 +135,7 @@ export default class Samples {
                 fullSamplesHtml += `
                     <div class="full-samples-gallery__item">
                         <div class="img">
-                            <img src="${item.img}" alt="${item.title}" data-sample-detail="${item.id}">
+                            <img data-load="${item.img}" alt="${item.title}" data-sample-detail="${item.id}">
                         </div>
                         <div class="box">
                             <h6 class="h6">${item.title}</h6>
@@ -150,7 +151,7 @@ export default class Samples {
                 <div class="full-samples-gallery__cover">
                     <h2 class="h2">${category.color}</h2>
                     <div class="img">
-                        <img src="${category.img}">
+                        <img data-load="${category.img}">
                     </div>
                     <div class="box">
                         <h6 class="h6">${category.title}</h6>
@@ -165,6 +166,8 @@ export default class Samples {
         });
 
         wrapper.innerHTML = containerHtml;
+        LazyLoad.init();
+
         const images = this.mapData();
 
         clickDetailGallery = (e) => {

@@ -355,8 +355,23 @@ $slider-samples-arrow-close-zoom-fill: white;
         .full-samples-gallery__cover {
             margin-bottom: 36px;
 
-            img {
-                max-width: 100%;
+            .img {
+                display: inline-block;
+                background: $light-grey;
+
+                img {
+                    opacity: 0;
+                    max-width: 100%;
+                    transition: opacity .6s $smooth;
+                }
+            }
+
+            &.loaded {
+                .img {
+                    img {
+                        opacity: 1;
+                    }
+                }
             }
         }
 
@@ -379,9 +394,18 @@ $slider-samples-arrow-close-zoom-fill: white;
 
                 .img {
                     cursor: crosshair;
+                    background: $light-grey;
 
                     img {
                         width: 100%; // @@@
+                        opacity: 0;
+                        transition: opacity .6s $smooth;
+                    }
+                }
+
+                &.loaded {
+                    .img img {
+                        opacity: 1;
                     }
                 }
             }

@@ -3,6 +3,7 @@
 
 import Fancy from './fancy';
 import FancyTransition from "./fancy.transition";
+import LazyLoad from './lazyload';
 
 let clickClose;
 
@@ -96,7 +97,7 @@ export default class FancyViewAll {
                 id: item.id,
                 caption: item.caption,
                 url: item.bigImageUrl,
-                html: `<div class="full-gallery__thumb" data-index="${item.id}"><img src="${item.smallImageUrl}" alt="${item.caption}"></div>`,
+                html: `<div class="full-gallery__thumb" data-index="${item.id}"><div class="img"><img data-load="${item.smallImageUrl}" alt="${item.caption}"></div></div>`,
                 group: item.group,
             };
         });
@@ -110,8 +111,9 @@ export default class FancyViewAll {
             thumbHtml += thumb.html;
         });
 
-
         container.innerHTML = `<div class="full-gallery__list">${thumbHtml}</div>`;
+
+        LazyLoad.init();
 
         [...container.querySelectorAll('.full-gallery__thumb')].forEach(thumb => thumb.addEventListener('click', FancyViewAll.onThumbClick));
 
