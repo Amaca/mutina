@@ -138,17 +138,16 @@ a {
         &:before {
             height: 100%;
             background: $dark;
-            z-index: 1;
-            display: none;
+            display: block;
+            z-index: 0;
         }
 
         &:hover {
-            transform: translateY(-5px);
-            background: $light-grey;
-            border-color: $light-grey;
+            border-color: $dark;
+            background: none;
 
             .char {
-                color: $grey;
+                color: $white;
                 transition: all 500ms cubic-bezier(0, 0.97, 0.43, 1) calc(400ms * var(--char-index) / var(--char-total));
             }
 
@@ -157,39 +156,6 @@ a {
                 transform-origin: right;
                 width: 100%;
                 left: 0;
-            }
-        }
-    }
-
-    &--primary-2 {
-        @extend .btn--primary;
-        transform: none;
-        background: none;
-
-        &:before {
-            background: $light-grey;
-            display: block;
-            z-index: 0;
-        }
-
-        &:hover {
-            background: none;
-
-        }
-    }
-
-    &--primary-3 {
-        @extend .btn--primary-2;
-
-        &:before {
-            background: $dark;
-        }
-
-        &:hover {
-            border-color: $dark;
-
-            .char {
-                color: $white;
             }
         }
     }
