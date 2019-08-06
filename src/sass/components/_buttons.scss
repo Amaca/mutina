@@ -133,7 +133,7 @@ a {
         border: 2px solid $dark;
         padding: 25px 38px;
         text-transform: uppercase;
-        transition: transform 1s $smooth, background 1s $smooth;
+        transition: transform 1s $smooth, background 1s $smooth, border-color 1s $smooth;
 
         &:before {
             height: 100%;
@@ -143,11 +143,12 @@ a {
         }
 
         &:hover {
-            transform: translateY(-5px) scale(0.98);
-            background: $dark;
+            transform: translateY(-5px);
+            background: $light-grey;
+            border-color: $light-grey;
 
             .char {
-                color: $white;
+                color: $grey;
                 transition: all 500ms cubic-bezier(0, 0.97, 0.43, 1) calc(400ms * var(--char-index) / var(--char-total));
             }
 
@@ -156,6 +157,39 @@ a {
                 transform-origin: right;
                 width: 100%;
                 left: 0;
+            }
+        }
+    }
+
+    &--primary-2 {
+        @extend .btn--primary;
+        transform: none;
+        background: none;
+
+        &:before {
+            background: $light-grey;
+            display: block;
+            z-index: 0;
+        }
+
+        &:hover {
+            background: none;
+
+        }
+    }
+
+    &--primary-3 {
+        @extend .btn--primary-2;
+
+        &:before {
+            background: $dark;
+        }
+
+        &:hover {
+            border-color: $dark;
+
+            .char {
+                color: $white;
             }
         }
     }
