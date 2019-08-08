@@ -125,15 +125,19 @@ export default class Follower {
 
         if (Array.isArray(node) && node) {
             node.forEach(image => {
-                image.addEventListener('mouseover', Follower.mouseEnter);
-                image.addEventListener('mouseout', Follower.mouseLeave);
+                if (!image.parentNode.classList.contains('tooltips')) {
+                    image.addEventListener('mouseover', Follower.mouseEnter);
+                    image.addEventListener('mouseout', Follower.mouseLeave);
+                }
                 //console.log('addevent foreach', image);
             });
         }
 
         if (!Array.isArray(node) && node) {
-            node.addEventListener('mouseover', Follower.mouseEnter);
-            node.addEventListener('mouseout', Follower.mouseLeave);
+            if (!node.parentNode.classList.contains('tooltips')) {
+                node.addEventListener('mouseover', Follower.mouseEnter);
+                node.addEventListener('mouseout', Follower.mouseLeave);
+            }
             //console.log('addlistener', node);
         }
     }
@@ -141,15 +145,19 @@ export default class Follower {
     static removeMouseListener(node) {
         if (Array.isArray(node) && node) {
             node.forEach(image => {
-                image.removeEventListener('mouseover', Follower.mouseEnter);
-                image.removeEventListener('mouseout', Follower.mouseLeave);
+                if (!image.parentNode.classList.contains('tooltips')) {
+                    image.removeEventListener('mouseover', Follower.mouseEnter);
+                    image.removeEventListener('mouseout', Follower.mouseLeave);
+                }
                 //console.log('removelistener foreach', image);
             });
         }
 
         if (!Array.isArray(node) && node) {
-            node.removeEventListener('mouseover', Follower.mouseEnter);
-            node.removeEventListener('mouseout', Follower.mouseLeave);
+            if (!node.parentNode.classList.contains('tooltips')) {
+                node.removeEventListener('mouseover', Follower.mouseEnter);
+                node.removeEventListener('mouseout', Follower.mouseLeave);
+            }
             //console.log('removelistener', node);
         }
     }

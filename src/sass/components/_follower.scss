@@ -152,5 +152,9 @@ $follower-width: 48px;
         .fancy-in-transition .picture img {
             cursor: none !important;
         }
+
+        .tooltips [data-fancy-img]:hover {
+            cursor: pointer !important;
+        }
     }
 }

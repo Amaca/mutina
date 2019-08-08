@@ -280,7 +280,9 @@ body {
   .follower-enabled .full-samples-gallery__item img,
   .follower-enabled .full-gallery__thumb .img,
   .follower-enabled .fancy-in-transition .picture img {
-    cursor: none !important; } }
+    cursor: none !important; }
+  .follower-enabled .tooltips [data-fancy-img]:hover {
+    cursor: pointer !important; } }
 
 .box .text p {
   margin-bottom: 3rem; }
