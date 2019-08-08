@@ -14866,8 +14866,8 @@ var debug = true;
 var disableBarba = false;
 var breakTransition = false;
 var barbaDebug = debug;
-var enabledFollower = false;
 var firstLoad = false;
+var scrollPosition = '';
 
 var App =
 /*#__PURE__*/
@@ -15211,8 +15211,10 @@ function () {
 
               _navigation.default.closeNav();
 
-              _navigation.default.closeSearch();
+              _navigation.default.closeSearch(); //set scroll position
 
+
+              scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
               TweenMax.set(line, {
                 width: 0
               });
@@ -15252,6 +15254,7 @@ function () {
             enter: function enter(data) {
               var done = this.async();
               var sidebar = document.querySelector('.fancy-detail__sidebar');
+              transitionLayer.style.pointerEvents = 'none';
               app.scrollTo(0, true);
               TweenMax.set(sidebar, {
                 left: -sidebar.clientWidth
@@ -15280,6 +15283,7 @@ function () {
               var done = this.async();
               var sidebar = document.querySelector('.fancy-detail__sidebar');
               var panel = document.querySelector('.fancy-detail__panel');
+              transitionLayer.style.pointerEvents = 'all';
 
               if (window.innerWidth > 768) {
                 TweenMax.to(sidebar, 1, {
@@ -15325,8 +15329,12 @@ function () {
               done();
             },
             enter: function enter(data) {
-              var done = this.async();
-              app.scrollTo(0, true);
+              var done = this.async(); //scroll to scroll position
+
+              setTimeout(function (x) {
+                app.scrollTo(Number(scrollPosition), true);
+                scrollPosition = 0;
+              }, 100);
               TweenMax.to(transitionLayer, 1, {
                 height: 0,
                 backgroundColor: '#CFCFCF',
@@ -16122,12 +16130,11 @@ function () {
         node.classList.add('mouse');
       };
 
-      document.addEventListener('mousedown', onMouseDown);
+      document.addEventListener('mousedown', onMouseDown); // if (mobile) {
+      //     Dom.fastscroll = true;
+      //     node.classList.add('fastscroll');
+      // }
 
-      if (mobile) {
-        Dom.fastscroll = true;
-        node.classList.add('fastscroll');
-      }
       /*
       const onScroll = () => {
           let now = Utils.now();
@@ -16145,7 +16152,6 @@ function () {
       console.log('%c addOnScroll', 'background: #222; color: #bada55');
       document.addEventListener('scroll', onScroll);
       */
-
     }
   }, {
     key: "fragmentFirstElement",
@@ -16291,6 +16297,10 @@ exports.default = void 0;
 
 var _fancy = _interopRequireDefault(require("./fancy.transition"));
 
+var _utils = _interopRequireDefault(require("./utils"));
+
+var _follower = _interopRequireDefault(require("./follower"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -16348,6 +16358,8 @@ function () {
 
       this.click = click;
       this.node.addEventListener('click', this.click);
+
+      _follower.default.addMouseListener(this.node);
     }
   }, {
     key: "openDetailGallery",
@@ -16358,6 +16370,8 @@ function () {
     key: "destroy",
     value: function destroy() {
       this.node.removeEventListener('click', this.click);
+
+      _follower.default.removeMouseListener(this.node);
     } //INIT
 
   }], [{
@@ -16451,6 +16465,10 @@ function () {
   }, {
     key: "close",
     value: function close(e, type, isSwitch, bg, _close, wrapper, header, footer, container) {
+      var images = _toConsumableArray(document.querySelectorAll('.detail-gallery__swiper .swiper-lazy'));
+
+      _follower.default.removeMouseListener(images);
+
       _fancy.default.closeLayer(type, isSwitch, bg, _close, wrapper, header, footer, container);
 
       e.preventDefault();
@@ -16481,24 +16499,30 @@ function () {
 
       var slidersHtml = '';
       sliderItems.forEach(function (slider) {
-        slidersHtml += "\n            <div class=\"swiper-slide\">\n                <div class=\"swiper-zoom-container\"><img  class=\"swiper-lazy\" data-src=\"".concat(slider.url, "\"></div>\n                <div class=\"swiper-lazy-preloader\"></div>\n            </div>");
+        slidersHtml += "\n            <div class=\"swiper-slide\">\n                <div class=\"swiper-zoom-container\"><img class=\"swiper-lazy\" data-src=\"".concat(slider.url, "\"></div>\n                <div class=\"swiper-lazy-preloader\"></div>\n            </div>");
       });
-      var swiperMarkup = "\n        <div class=\"swiper-container\">\n            <div class=\"swiper-wrapper\">".concat(slidersHtml, "</div>\n            <div class=\"swiper-button-prev\">").concat(prevIcon, "</div>\n            <div class=\"swiper-button-next\">").concat(nextIcon, "</div>  \n        </div>");
+      var swiperMarkup = "\n        <div class=\"swiper-container\">\n            <div class=\"swiper-wrapper\">".concat(slidersHtml, "</div>\n        </div>\n        <div class=\"swiper-button-prev\">").concat(prevIcon, "</div>\n            <div class=\"swiper-button-next\">").concat(nextIcon, "</div> \n        ");
       var detailGallerySwiper = document.createElement('div');
       detailGallerySwiper.classList.add('detail-gallery__swiper');
       detailGallerySwiper.innerHTML = swiperMarkup;
       wrapper.appendChild(detailGallerySwiper);
       firstLoad = false;
+
+      var images = _toConsumableArray(document.querySelectorAll('.detail-gallery__swiper .swiper-lazy'));
+
+      _follower.default.addMouseListener(images);
+
       var options = {
         watchOverflow: true,
         centeredSlides: true,
         slidesPerView: 1,
         spaceBetween: 60,
-        touch: true,
+        touchRatio: 0,
+        simulateTouch: true,
         speed: slideAnimationSpeed,
         zoom: {
           maxRatio: 2,
-          toggle: true
+          toggle: false
         },
         preloadImages: false,
         lazy: true,
@@ -16515,26 +16539,46 @@ function () {
           }
         },
         on: {
-          doubleTap: function doubleTap() {
+          tap: function tap(e) {
             var detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper ');
-            Fancy.toggleClass(body, 'fancy-zoom');
+            var follower = document.querySelector('.follower__secondary');
+
+            _utils.default.toggleClass(body, 'fancy-zoom');
+
+            _utils.default.toggleClass(follower, 'zoom-out');
+
+            this.zoom.toggle();
 
             if (body.classList.contains('fancy-zoom')) {
               this.allowSlidePrev = false;
               this.allowSlideNext = false;
               this.allowTouchMove = false;
-              TweenMax.to(detailGalleryWrapper, 0.5, {
+              TweenMax.to(detailGalleryWrapper, 0.2, {
                 height: window.innerHeight - 60,
                 ease: Expo.easeInOut
-              });
+              }); // TweenMax.to(e.target, 0.2, {
+              //     transform: 'scale(2)',
+              //     ease: Expo.easeInOut
+              // });
+              // console.log('attivo');
+              // e.target.addEventListener('dragstart', dragStart);
+              // e.target.addEventListener('drag', dragMove);
+              // e.target.addEventListener('dragend', dragEnd);
             } else {
               this.allowSlidePrev = true;
               this.allowSlideNext = true;
               this.allowTouchMove = true;
-              TweenMax.to(detailGalleryWrapper, 0.5, {
+              TweenMax.to(detailGalleryWrapper, 0.2, {
                 height: window.innerHeight - 65 - 60,
                 ease: Expo.easeInOut
-              });
+              }); // TweenMax.to(e.target, 0.2, {
+              //     transform: 'scale(1)',
+              //     ease: Expo.easeInOut
+              // });
+              // console.log('disattivo')
+              // e.target.removeEventListener('dragstart', dragStart);
+              // e.target.removeEventListener('drag', dragMove);
+              // e.target.removeEventListener('dragend', dragEnd);
             }
           },
           init: function init() {
@@ -16549,6 +16593,7 @@ function () {
               groupCaptionWrapper.innerHTML = groupCaption;
             }
 
+            this.keyboard.enable();
             this.slideTo(id, 0);
           },
           slideChange: function slideChange() {
@@ -16579,8 +16624,6 @@ function () {
           lazyImageReady: function lazyImageReady() {
             if (firstLoad) {
               _fancy.default.openLayer(type, layer, close, wrapper, null, footer, id);
-
-              console.log('lazy');
             }
 
             firstLoad = false;
@@ -16593,9 +16636,14 @@ function () {
   }, {
     key: "zoomOutOnClose",
     value: function zoomOutOnClose() {
+      var follower = document.querySelector('.follower__secondary');
+
+      _utils.default.toggleClass(follower, 'zoom-out');
+
       swiperInstance.allowSlidePrev = true;
       swiperInstance.allowSlideNext = true;
       swiperInstance.zoom.out();
+      swiperInstance.zoom.disable();
     }
   }, {
     key: "destroySwiper",
@@ -16624,7 +16672,7 @@ function () {
 exports.default = Fancy;
 Fancy.groups = {};
 
-},{"./fancy.transition":319}],319:[function(require,module,exports){
+},{"./fancy.transition":319,"./follower":322,"./utils":334}],319:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17004,6 +17052,8 @@ var _fancy2 = _interopRequireDefault(require("./fancy.transition"));
 
 var _lazyload = _interopRequireDefault(require("./lazyload"));
 
+var _follower = _interopRequireDefault(require("./follower"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -17099,6 +17149,10 @@ function () {
       fullGalleryClose.innerHTML = closeIcon;
 
       clickClose = function clickClose(e) {
+        var images = _toConsumableArray(document.querySelectorAll('.full-gallery__thumb img'));
+
+        _follower.default.removeMouseListener(images);
+
         _fancy2.default.closeLayer('fullGallery', false, fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, null, fullGallery);
 
         e.preventDefault();
@@ -17141,6 +17195,10 @@ function () {
 
       _lazyload.default.init();
 
+      var images = _toConsumableArray(document.querySelectorAll('.full-gallery__thumb img'));
+
+      _follower.default.addMouseListener(images);
+
       _toConsumableArray(container.querySelectorAll('.full-gallery__thumb')).forEach(function (thumb) {
         return thumb.addEventListener('click', FancyViewAll.onThumbClick);
       });
@@ -17159,7 +17217,7 @@ function () {
 
 exports.default = FancyViewAll;
 
-},{"./fancy":318,"./fancy.transition":319,"./lazyload":324}],321:[function(require,module,exports){
+},{"./fancy":318,"./fancy.transition":319,"./follower":322,"./lazyload":324}],321:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17345,10 +17403,10 @@ function () {
 
     _classCallCheck(this, Follower);
 
-    this.enabled = false;
+    this.enabled = true;
     this.node = node;
-    this.div1 = node.querySelectorAll('div')[0];
-    this.div2 = node.querySelectorAll('div')[1];
+    this.div1 = node.querySelector('.follower__primary');
+    this.div2 = node.querySelector('.follower__secondary');
     this.x = 0;
     this.y = 0;
     this.x2 = 0;
@@ -17462,6 +17520,48 @@ function () {
         });
         */
       }
+    }
+  }], [{
+    key: "addMouseListener",
+    value: function addMouseListener(node) {
+      if (Array.isArray(node) && node) {
+        node.forEach(function (image) {
+          image.addEventListener('mouseover', Follower.mouseEnter);
+          image.addEventListener('mouseout', Follower.mouseLeave); //console.log('addevent foreach', image);
+        });
+      }
+
+      if (!Array.isArray(node) && node) {
+        node.addEventListener('mouseover', Follower.mouseEnter);
+        node.addEventListener('mouseout', Follower.mouseLeave); //console.log('addlistener', node);
+      }
+    }
+  }, {
+    key: "removeMouseListener",
+    value: function removeMouseListener(node) {
+      if (Array.isArray(node) && node) {
+        node.forEach(function (image) {
+          image.removeEventListener('mouseover', Follower.mouseEnter);
+          image.removeEventListener('mouseout', Follower.mouseLeave); //console.log('removelistener foreach', image);
+        });
+      }
+
+      if (!Array.isArray(node) && node) {
+        node.removeEventListener('mouseover', Follower.mouseEnter);
+        node.removeEventListener('mouseout', Follower.mouseLeave); //console.log('removelistener', node);
+      }
+    }
+  }, {
+    key: "mouseEnter",
+    value: function mouseEnter(e) {
+      var follower = document.querySelector('.follower');
+      follower.style.opacity = 1;
+    }
+  }, {
+    key: "mouseLeave",
+    value: function mouseLeave(e) {
+      var follower = document.querySelector('.follower');
+      follower.style.opacity = 0;
     }
   }]);
 
@@ -18197,6 +18297,7 @@ function () {
         spaceBetween: 60,
         preloadImages: false,
         lazy: true,
+        loadPrevNext: true,
         watchSlidesVisibility: true,
         freeMode: true,
         freeModeMomentumRatio: 1,
@@ -18294,6 +18395,8 @@ var _side = _interopRequireDefault(require("./side.panel"));
 
 var _lazyload = _interopRequireDefault(require("./lazyload"));
 
+var _follower = _interopRequireDefault(require("./follower"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -18386,6 +18489,10 @@ function () {
       fullSamplesBack.innerHTML = backIcon;
 
       _clickClose = function clickClose(e) {
+        var imagesSamples = _toConsumableArray(document.querySelectorAll('.full-samples-gallery__item img'));
+
+        _follower.default.removeMouseListener(imagesSamples);
+
         _fancy.default.closeLayer('fullSamplesGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, fullSamplesGallery);
 
         fullSamplesClose.removeEventListener('click', _clickClose);
@@ -18451,6 +18558,10 @@ function () {
       wrapper.innerHTML = containerHtml;
 
       _lazyload.default.init();
+
+      var imagesSamples = _toConsumableArray(document.querySelectorAll('.full-samples-gallery__item img'));
+
+      _follower.default.addMouseListener(imagesSamples);
 
       var images = this.mapData();
 
@@ -18587,7 +18698,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":319,"./lazyload":324,"./samples.detail":327,"./side.panel":330,"gsap/ScrollToPlugin":309}],329:[function(require,module,exports){
+},{"./fancy.transition":319,"./follower":322,"./lazyload":324,"./samples.detail":327,"./side.panel":330,"gsap/ScrollToPlugin":309}],329:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

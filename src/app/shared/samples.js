@@ -5,6 +5,7 @@ import FancyTransition from "./fancy.transition";
 import SamplesDetail from "./samples.detail";
 import SidePanel from "./side.panel";
 import LazyLoad from "./lazyload";
+import Follower from "./follower";
 
 let clickClose;
 let scrollWrapper;
@@ -70,6 +71,8 @@ export default class Samples {
         fullSamplesBack.innerHTML = backIcon;
 
         clickClose = (e) => {
+            const imagesSamples = [...document.querySelectorAll('.full-samples-gallery__item img')];
+            Follower.removeMouseListener(imagesSamples);
             FancyTransition.closeLayer('fullSamplesGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, fullSamplesGallery);
             fullSamplesClose.removeEventListener('click', clickClose);
             e.preventDefault();
@@ -167,6 +170,9 @@ export default class Samples {
 
         wrapper.innerHTML = containerHtml;
         LazyLoad.init();
+
+        const imagesSamples = [...document.querySelectorAll('.full-samples-gallery__item img')];
+        Follower.addMouseListener(imagesSamples);
 
         const images = this.mapData();
 

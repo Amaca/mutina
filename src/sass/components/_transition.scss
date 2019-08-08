@@ -13,7 +13,7 @@
     //background: #f7f7f7;
     background: white;
     overflow: hidden;
-    pointer-events: none;
+    pointer-events: all;
 
     &:after {
         content: '';
@@ -60,11 +60,13 @@
     .logo__square-primary {
         fill: $light-grey;
         width: 0;
+        pointer-events: none;
     }
 
     .logo__square-secondary {
         fill: $light-grey;
         width: 0;
+        pointer-events: none;
     }
 
     .logo__char-m,

@@ -163,6 +163,7 @@ export default class SamplesDetail {
             spaceBetween: 60,
             preloadImages: false,
             lazy: true,
+            loadPrevNext: true,
             watchSlidesVisibility: true,
             freeMode: true,
             freeModeMomentumRatio: 1,

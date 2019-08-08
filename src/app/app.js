@@ -33,8 +33,9 @@ const debug = true;
 const disableBarba = false;
 const breakTransition = false;
 const barbaDebug = debug;
-const enabledFollower = false;
+
 let firstLoad = false;
+let scrollPosition = '';
 
 export default class App {
 
@@ -376,6 +377,8 @@ export default class App {
                             const done = this.async();
                             Navigation.closeNav();
                             Navigation.closeSearch();
+                            //set scroll position
+                            scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
                             TweenMax.set(line, {
                                 width: 0,
                             });
@@ -384,7 +387,7 @@ export default class App {
                                 bottom: 0,
                                 opacity: 1,
                                 top: 'auto',
-                                height: 0,
+                                height: 0
                             });
                             TweenMax.to(data.current.container, 1, {
                                 transform: 'translateY(-60px)',
@@ -414,7 +417,8 @@ export default class App {
                         },
                         enter(data) {
                             const done = this.async();
-                            const sidebar = document.querySelector('.fancy-detail__sidebar')
+                            const sidebar = document.querySelector('.fancy-detail__sidebar');
+                            transitionLayer.style.pointerEvents = 'none';
                             app.scrollTo(0, true);
                             TweenMax.set(sidebar, {
                                 left: -sidebar.clientWidth
@@ -445,6 +449,7 @@ export default class App {
                             const done = this.async();
                             const sidebar = document.querySelector('.fancy-detail__sidebar');
                             const panel = document.querySelector('.fancy-detail__panel');
+                            transitionLayer.style.pointerEvents = 'all';
                             if (window.innerWidth > 768) {
                                 TweenMax.to(sidebar, 1, {
                                     left: -sidebar.clientWidth - 10,
@@ -490,7 +495,11 @@ export default class App {
                         },
                         enter(data) {
                             const done = this.async();
-                            app.scrollTo(0, true);
+                            //scroll to scroll position
+                            setTimeout(x => {
+                                app.scrollTo(Number(scrollPosition), true);
+                                scrollPosition = 0;
+                            }, 100);
                             TweenMax.to(transitionLayer, 1, {
                                 height: 0,
                                 backgroundColor: '#CFCFCF',

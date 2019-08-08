@@ -38,3 +38,12 @@
         }
     }
 }
+
+.swiper-lazy+.tooltips {
+    opacity: 0;
+    transition: opacity .1s $smooth;
+}
+
+.swiper-lazy-loaded+.tooltips {
+    opacity: 1;
+}

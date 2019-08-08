@@ -114,8 +114,8 @@ export default class Utils {
     }
 
     static getClosest(elem, selector) {
-        for ( ; elem && elem !== document; elem = elem.parentNode ) {
-            if ( elem.matches( selector ) ) return elem;
+        for (; elem && elem !== document; elem = elem.parentNode) {
+            if (elem.matches(selector)) return elem;
         }
         return null;
     }

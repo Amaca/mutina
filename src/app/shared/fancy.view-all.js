@@ -4,6 +4,7 @@
 import Fancy from './fancy';
 import FancyTransition from "./fancy.transition";
 import LazyLoad from './lazyload';
+import Follower from './follower';
 
 let clickClose;
 
@@ -70,6 +71,8 @@ export default class FancyViewAll {
         fullGalleryClose.innerHTML = closeIcon;
 
         clickClose = (e) => {
+            const images = [...document.querySelectorAll('.full-gallery__thumb img')];
+            Follower.removeMouseListener(images);
             FancyTransition.closeLayer('fullGallery', false, fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, null, fullGallery);
             e.preventDefault();
         };
@@ -114,6 +117,9 @@ export default class FancyViewAll {
         container.innerHTML = `<div class="full-gallery__list">${thumbHtml}</div>`;
 
         LazyLoad.init();
+
+        const images = [...document.querySelectorAll('.full-gallery__thumb img')];
+        Follower.addMouseListener(images);
 
         [...container.querySelectorAll('.full-gallery__thumb')].forEach(thumb => thumb.addEventListener('click', FancyViewAll.onThumbClick));
 

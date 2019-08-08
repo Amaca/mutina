@@ -1,7 +1,9 @@
 /* jshint esversion: 6 */
 /* tweenmax & swiper needed */
 
-import FancyTransition from "./fancy.transition";
+import FancyTransition from './fancy.transition';
+import Utils from './utils';
+import Follower from './follower';
 
 let clickClose;
 let clickSwitch;
@@ -36,6 +38,7 @@ export default class Fancy {
         };
         this.click = click;
         this.node.addEventListener('click', this.click);
+        Follower.addMouseListener(this.node);
     }
 
     openDetailGallery(e) {
@@ -44,6 +47,7 @@ export default class Fancy {
 
     destroy() {
         this.node.removeEventListener('click', this.click);
+        Follower.removeMouseListener(this.node);
     }
 
     //INIT
@@ -72,6 +76,7 @@ export default class Fancy {
         if (document.querySelector('.detail-gallery__cta')) {
             document.querySelector('.detail-gallery__cta').removeEventListener('click', clickSwitch);
         }
+
         Fancy.groups = {};
     }
 
@@ -131,6 +136,8 @@ export default class Fancy {
     }
 
     static close(e, type, isSwitch, bg, close, wrapper, header, footer, container) {
+        const images = [...document.querySelectorAll('.detail-gallery__swiper .swiper-lazy')];
+        Follower.removeMouseListener(images);
         FancyTransition.closeLayer(type, isSwitch, bg, close, wrapper, header, footer, container);
         e.preventDefault();
     }
@@ -161,7 +168,7 @@ export default class Fancy {
         sliderItems.forEach(slider => {
             slidersHtml += `
             <div class="swiper-slide">
-                <div class="swiper-zoom-container"><img  class="swiper-lazy" data-src="${slider.url}"></div>
+                <div class="swiper-zoom-container"><img class="swiper-lazy" data-src="${slider.url}"></div>
                 <div class="swiper-lazy-preloader"></div>
             </div>`;
         });
@@ -169,26 +176,32 @@ export default class Fancy {
         let swiperMarkup = `
         <div class="swiper-container">
             <div class="swiper-wrapper">${slidersHtml}</div>
-            <div class="swiper-button-prev">${prevIcon}</div>
-            <div class="swiper-button-next">${nextIcon}</div>  
-        </div>`;
+        </div>
+        <div class="swiper-button-prev">${prevIcon}</div>
+            <div class="swiper-button-next">${nextIcon}</div> 
+        `;
 
         let detailGallerySwiper = document.createElement('div');
         detailGallerySwiper.classList.add('detail-gallery__swiper');
         detailGallerySwiper.innerHTML = swiperMarkup;
+
         wrapper.appendChild(detailGallerySwiper);
         firstLoad = false;
+
+        const images = [...document.querySelectorAll('.detail-gallery__swiper .swiper-lazy')];
+        Follower.addMouseListener(images);
 
         let options = {
             watchOverflow: true,
             centeredSlides: true,
             slidesPerView: 1,
             spaceBetween: 60,
-            touch: true,
+            touchRatio: 0,
+            simulateTouch: true,
             speed: slideAnimationSpeed,
             zoom: {
                 maxRatio: 2,
-                toggle: true
+                toggle: false
             },
             preloadImages: false,
             lazy: true,
@@ -205,25 +218,45 @@ export default class Fancy {
                 },
             },
             on: {
-                doubleTap: function () {
+                tap: function (e) {
                     const detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper ');
-                    Fancy.toggleClass(body, 'fancy-zoom');
+                    const follower = document.querySelector('.follower__secondary');
+
+                    Utils.toggleClass(body, 'fancy-zoom');
+                    Utils.toggleClass(follower, 'zoom-out');
+                    this.zoom.toggle();
                     if (body.classList.contains('fancy-zoom')) {
                         this.allowSlidePrev = false;
                         this.allowSlideNext = false;
                         this.allowTouchMove = false;
-                        TweenMax.to(detailGalleryWrapper, 0.5, {
+                        TweenMax.to(detailGalleryWrapper, 0.2, {
                             height: window.innerHeight - 60,
                             ease: Expo.easeInOut
                         });
+                        // TweenMax.to(e.target, 0.2, {
+                        //     transform: 'scale(2)',
+                        //     ease: Expo.easeInOut
+                        // });
+                        // console.log('attivo');
+                        // e.target.addEventListener('dragstart', dragStart);
+                        // e.target.addEventListener('drag', dragMove);
+                        // e.target.addEventListener('dragend', dragEnd);
                     } else {
                         this.allowSlidePrev = true;
                         this.allowSlideNext = true;
                         this.allowTouchMove = true;
-                        TweenMax.to(detailGalleryWrapper, 0.5, {
+                        TweenMax.to(detailGalleryWrapper, 0.2, {
                             height: window.innerHeight - 65 - 60,
                             ease: Expo.easeInOut
                         });
+                        // TweenMax.to(e.target, 0.2, {
+                        //     transform: 'scale(1)',
+                        //     ease: Expo.easeInOut
+                        // });
+                        // console.log('disattivo')
+                        // e.target.removeEventListener('dragstart', dragStart);
+                        // e.target.removeEventListener('drag', dragMove);
+                        // e.target.removeEventListener('dragend', dragEnd);
                     }
                 },
                 init: function () {
@@ -236,6 +269,7 @@ export default class Fancy {
                     if (groupCaptionWrapper) {
                         groupCaptionWrapper.innerHTML = groupCaption;
                     }
+                    this.keyboard.enable();
                     this.slideTo(id, 0);
                 },
                 slideChange: function () {
@@ -265,7 +299,6 @@ export default class Fancy {
                 lazyImageReady: function () {
                     if (firstLoad) {
                         FancyTransition.openLayer(type, layer, close, wrapper, null, footer, id);
-                        console.log('lazy');
                     }
                     firstLoad = false;
                 }
@@ -278,9 +311,12 @@ export default class Fancy {
     }
 
     static zoomOutOnClose() {
+        const follower = document.querySelector('.follower__secondary');
+        Utils.toggleClass(follower, 'zoom-out');
         swiperInstance.allowSlidePrev = true;
         swiperInstance.allowSlideNext = true;
         swiperInstance.zoom.out();
+        swiperInstance.zoom.disable();
     }
 
     static destroySwiper() {

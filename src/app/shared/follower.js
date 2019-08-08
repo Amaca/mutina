@@ -10,10 +10,10 @@ const size = 20;
 export default class Follower {
 
     constructor(node) {
-        this.enabled = false;
+        this.enabled = true;
         this.node = node;
-        this.div1 = node.querySelectorAll('div')[0];
-        this.div2 = node.querySelectorAll('div')[1];
+        this.div1 = node.querySelector('.follower__primary');
+        this.div2 = node.querySelector('.follower__secondary');
         this.x = 0;
         this.y = 0;
         this.x2 = 0;
@@ -119,6 +119,49 @@ export default class Follower {
             });
             */
         }
+    }
+
+    static addMouseListener(node) {
+
+        if (Array.isArray(node) && node) {
+            node.forEach(image => {
+                image.addEventListener('mouseover', Follower.mouseEnter);
+                image.addEventListener('mouseout', Follower.mouseLeave);
+                //console.log('addevent foreach', image);
+            });
+        }
+
+        if (!Array.isArray(node) && node) {
+            node.addEventListener('mouseover', Follower.mouseEnter);
+            node.addEventListener('mouseout', Follower.mouseLeave);
+            //console.log('addlistener', node);
+        }
+    }
+
+    static removeMouseListener(node) {
+        if (Array.isArray(node) && node) {
+            node.forEach(image => {
+                image.removeEventListener('mouseover', Follower.mouseEnter);
+                image.removeEventListener('mouseout', Follower.mouseLeave);
+                //console.log('removelistener foreach', image);
+            });
+        }
+
+        if (!Array.isArray(node) && node) {
+            node.removeEventListener('mouseover', Follower.mouseEnter);
+            node.removeEventListener('mouseout', Follower.mouseLeave);
+            //console.log('removelistener', node);
+        }
+    }
+
+    static mouseEnter(e) {
+        const follower = document.querySelector('.follower');
+        follower.style.opacity = 1;
+    }
+
+    static mouseLeave(e) {
+        const follower = document.querySelector('.follower');
+        follower.style.opacity = 0;
     }
 
 }
