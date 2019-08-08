@@ -531,7 +531,6 @@ export default class App {
     updateViewPortHeight() {
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
-        console.log('ao');
     }
 
     onPageInit() {
@@ -680,6 +679,7 @@ export default class App {
         });
         Navigation.closeNav();
         Navigation.closeSearch();
+        this.updateViewPortHeight();
     }
 
     onScroll(e) {
@@ -689,6 +689,10 @@ export default class App {
 
         Navigation.closeNav();
         Navigation.closeSearch();
+
+        if (this.body.classList.contains('mobile')) {
+            this.updateViewPortHeight();
+        }
 
         // fastscroll mobile
         if (Dom.fastscroll) {

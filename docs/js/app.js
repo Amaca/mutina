@@ -15369,7 +15369,6 @@ function () {
     value: function updateViewPortHeight() {
       var vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', "".concat(vh, "px"));
-      console.log('ao');
     }
   }, {
     key: "onPageInit",
@@ -15565,6 +15564,8 @@ function () {
       _navigation.default.closeNav();
 
       _navigation.default.closeSearch();
+
+      this.updateViewPortHeight();
     }
   }, {
     key: "onScroll",
@@ -15576,7 +15577,11 @@ function () {
 
       _navigation.default.closeNav();
 
-      _navigation.default.closeSearch(); // fastscroll mobile
+      _navigation.default.closeSearch();
+
+      if (this.body.classList.contains('mobile')) {
+        this.updateViewPortHeight();
+      } // fastscroll mobile
 
 
       if (_dom.default.fastscroll) {

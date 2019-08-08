@@ -173,6 +173,7 @@
     left: 0;
     width: 25vw;
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     background: $dark;
 
     @include lg-down {
@@ -465,11 +466,13 @@
     .fancy-detail__panel-content {
         width: 100%;
         height: calc(100vh - #{$header-height});
+        height: calc(calc(var(--vh, 1vh) * 100) - #{$header-height});
         position: relative;
         top: $header-height;
 
         @include sm-down {
             height: calc(100vh - #{$header-height-mobile});
+            height: calc(calc(var(--vh, 1vh) * 100) - #{$header-height-mobile});
             top: $header-height-mobile;
         }
 
@@ -497,6 +500,7 @@
             transition: transform .6s $smooth .1s;
             padding: 0 $col-gutter $col-gutter-half $col-gutter;
             height: calc(100vh - #{$header-height});
+            height: calc(calc(var(--vh, 1vh) * 100) - #{$header-height});
             overflow-y: auto;
 
             @include sm-down {
@@ -535,6 +539,7 @@ body.fancy-detail-panel-open {
 
     .fancy-detail__panel {
         height: calc(100vh + 2px);
+        height: calc(calc(var(--vh, 1vh) * 100) + 2px);
 
         @include sm-down {
             overflow: auto;

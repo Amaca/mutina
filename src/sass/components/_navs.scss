@@ -253,6 +253,7 @@ body {
         content: '';
         width: 100vw;
         height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
         background: black;
         position: fixed;
         z-index: 1;
@@ -413,6 +414,7 @@ body.subnav-open {
         left: calc(100% + 4px);
         background: $white;
         height: 75vh;
+        height: calc(var(--vh, 1vh) * 75);
         width: 100%;
         pointer-events: all;
         overflow: auto;
@@ -518,6 +520,7 @@ body.subnav-open {
         header.header {
             .header__wrapper {
                 height: 75vh;
+                height: calc(var(--vh, 1vh) * 75);
                 pointer-events: all;
             }
         }
