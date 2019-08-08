@@ -22,6 +22,8 @@
         padding: $col-width;
         text-align: center;
         height: 100%;
+        cursor: pointer;
+        transition: background .6s $smooth;
 
         @include md-down {
             padding: $col-gutter;
@@ -35,6 +37,18 @@
 
             &:last-child {
                 border: 0;
+            }
+        }
+
+        &:hover {
+            background: $light-grey;
+
+            .btn--inline-alt {
+                &:after {
+                    width: 100% !important;
+                    left: 0 !important;
+                    right: auto !important;
+                }
             }
         }
 

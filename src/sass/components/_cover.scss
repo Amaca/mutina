@@ -49,11 +49,13 @@
         .cover__wrapper {
             width: 100vw;
             height: calc(100vh - #{$header-height});
+            height: calc(calc(var(--vh, 1vh) * 100) - #{$header-height});
             display: flex;
             flex-direction: row;
 
             @include sm-down {
                 height: calc(100vh - #{$header-height-mobile});
+                height: calc(calc(var(--vh, 1vh) * 100) - #{$header-height-mobile});
             }
 
             @include xs-down {

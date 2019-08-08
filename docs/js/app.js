@@ -15365,6 +15365,13 @@ function () {
       this.page.previousTop = top + 1;
     }
   }, {
+    key: "updateViewPortHeight",
+    value: function updateViewPortHeight() {
+      var vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', "".concat(vh, "px"));
+      console.log('ao');
+    }
+  }, {
     key: "onPageInit",
     value: function onPageInit() {
       var _this = this;
@@ -15380,6 +15387,7 @@ function () {
         }
       });
       this.accentsInit();
+      this.updateViewPortHeight();
 
       _lazyload.default.init();
 
@@ -15410,14 +15418,18 @@ function () {
 
       _tabs.default.init(debug);
 
+      var fancyInTransition = _toConsumableArray(document.querySelectorAll('.fancy-in-transition .picture img'));
+
+      _follower.default.addMouseListener(fancyInTransition);
+
       var delay = firstLoad ? 0 : 600;
       firstLoad = false;
       setTimeout(function (x) {
-        _this.appears = _appears.default.init();
+        _this.appears = _appears.default.init(); // if (window.innerWidth > 768) {
+        //     Splitting();
+        // }
 
-        if (window.innerWidth > 768) {
-          Splitting();
-        }
+        Splitting();
       }, delay);
     }
   }, {
@@ -15445,6 +15457,12 @@ function () {
 
       _side.default.destroyAll(); // CustomSelect.destroyAll();
 
+
+      _tabs.default.destroyAll(debug);
+
+      var fancyInTransition = _toConsumableArray(document.querySelectorAll('.fancy-in-transition .picture img'));
+
+      _follower.default.removeMouseListener(fancyInTransition);
 
       container.remove();
     }

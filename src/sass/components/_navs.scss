@@ -205,11 +205,45 @@ $subnav-bg-transition: all var(--close-nav-speed) cubic-bezier(0, 0.97, 0.43, 1)
         }
     }
 
+    .btn--inline-alt {
+        text-transform: none;
+        font-size: 1.2rem;
+        font-weight: 400;
+        margin-top: 15px;
+        @include font($style:book);
+
+        @include xs-down {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+    }
+
     .subnav__wrapper>a {
         // flex: 0 0 25%;
         // max-width: 25%;
         padding: 0 $col-gutter-half;
         display: block;
+        min-width: 25%;
+
+        &:hover {
+
+            .picture__container {
+                transform: scale(1.05);
+
+                &:after {
+                    opacity: 1;
+                }
+            }
+
+            .btn--inline-alt {
+
+                &:after {
+                    width: 100% !important;
+                    left: 0 !important;
+                    right: auto !important;
+                }
+            }
+        }
     }
 }
 

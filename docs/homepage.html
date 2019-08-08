@@ -33,7 +33,7 @@
             <div class="header__logo">
                 <a href="#"><img src="assets/img/logo.svg"></a>
             </div>
-            <a class="nav__counter">
+            <a class="nav__counter" data-side-panel="samples">
                 <span>10</span>
             </a>
             <div class="header__wrapper">
@@ -68,34 +68,34 @@
                                     <div class="subnav__wrapper">
                                         <a href="listing-collection.html" data-transition="Collection">
                                             <div class="subnav__item">
-                                                <div class="subnav__picture">
+                                                <div class="picture picture--animate loaded">
                                                     <img src="assets/img/nav-01.jpg" alt="">
                                                 </div>
-                                                <div class="subnav__caption">Collections</div>
+                                                <div class="btn btn--inline-alt">Collections</div>
                                             </div>
                                         </a>
                                         <a href="listing-designers.html" data-transition="Designers">
-                                            <div class="subnav__item">
-                                                <div class="subnav__picture">
+                                            <div class="subnav__item ">
+                                                <div class="picture picture--animate  loaded">
                                                     <img src="assets/img/nav-02.jpg" alt="">
                                                 </div>
-                                                <div class="subnav__caption">Designers</div>
+                                                <div class="btn btn--inline-alt">Designers</div>
                                             </div>
                                         </a>
                                         <a href="accents.html" data-transition="Accents">
                                             <div class="subnav__item">
-                                                <div class="subnav__picture">
+                                                <div class="picture picture--animate loaded">
                                                     <img src="assets/img/nav-03.jpg" alt="">
                                                 </div>
-                                                <div class="subnav__caption">Accents</div>
+                                                <div class="btn btn--inline-alt">Accents</div>
                                             </div>
                                         </a>
                                         <a href="listing-spaces.html" data-transition="In use">
                                             <div class="subnav__item">
-                                                <div class="subnav__picture">
+                                                <div class="picture picture--animate loaded">
                                                     <img src="assets/img/nav-04.jpg" alt="">
                                                 </div>
-                                                <div class="subnav__caption">In use</div>
+                                                <div class="btn btn--inline-alt">In use</div>
                                             </div>
                                         </a>
                                     </div>
@@ -120,26 +120,26 @@
                                     <div class="subnav__wrapper">
                                         <a href="listing-exhibitions.html" data-transition="Exhibitions">
                                             <div class="subnav__item">
-                                                <div class="subnav__picture">
+                                                <div class="picture picture--animate loaded">
                                                     <img src="assets/img/nav-04.jpg" alt="">
                                                 </div>
-                                                <div class="subnav__caption">Exhibitions</div>
+                                                <div class="btn btn--inline-alt">Exhibitions</div>
                                             </div>
                                         </a>
                                         <a href="listing-exhibitions.html" data-transition="Dialogues">
                                             <div class="subnav__item">
-                                                <div class="subnav__picture">
+                                                <div class="picture picture--animate loaded">
                                                     <img src="assets/img/nav-03.jpg" alt="">
                                                 </div>
-                                                <div class="subnav__caption">Dialogues</div>
+                                                <div class="btn btn--inline-alt">Dialogues</div>
                                             </div>
                                         </a>
                                         <a href="listing-exhibitions.html" data-transition="This is not a prize">
                                             <div class="subnav__item">
-                                                <div class="subnav__picture">
+                                                <div class="picture picture--animate loaded">
                                                     <img src="assets/img/nav-02.jpg" alt="">
                                                 </div>
-                                                <div class="subnav__caption">This is not a prize</div>
+                                                <div class="btn btn--inline-alt">This is not a prize</div>
                                             </div>
                                         </a>
                                     </div>
@@ -147,7 +147,7 @@
                             </div>
                         </li>
                         <li>
-                            <a href="journal.html" class="btn--split" data-splitting data-transition="Journal">
+                            <a href="listing-journal.html" class="btn--split" data-splitting data-transition="Journal">
                                 Journal
                                 <svg>
                                     <use xlink:href="#svg-arrow-right"></use>
@@ -160,7 +160,9 @@
                     <ul>
                         <li><a href="about.html" class="btn--split" data-splitting data-transition="About">About</a>
                         </li>
-                        <li><a href="#" class="btn--split" data-splitting>Dealers</a></li>
+                        <li>
+                            <div class="btn--split" data-side-panel="dealers" data-splitting>Dealers</div>
+                        </li>
                         <li class="nav__mobile-hidden">
                             <button class="nav__search">
                                 <svg>
@@ -168,7 +170,9 @@
                                 </svg>
                             </button>
                         </li>
-                        <li class="nav__mobile-hidden"><a href="#" class="btn--split">Samples (0)</a></li>
+                        <li class="nav__mobile-hidden">
+                            <div data-side-panel="samples" class="btn--split">Samples (0)</div>
+                        </li>
                         <li class="nav__mobile-only"><a href="#" class="btn--split">Press</a></li>
                         <li class="nav__mobile-only"><a href="#" class="btn--split">Contacts</a></li>
                     </ul>
@@ -176,7 +180,6 @@
             </div>
         </div>
     </header>
-
     <section class="anchors">
         <div class="anchors__wrapper"></div>
         <div class="anchors__buttons">
@@ -191,7 +194,7 @@
             <main class="main">
                 <section class="cover cover--main">
                     <div class="cover__wrapper">
-                        <a href="#" class="cover__primary">
+                        <a href="listing-collection.html" class="cover__primary" data-transition="Collections">
                             <div class="picture picture--animate">
                                 <img data-load="assets/img/home-cover-01.jpg" alt="">
                             </div>
@@ -200,7 +203,7 @@
                                 <div class="text">new collection designed by Barber & Osgerby</div>
                             </div>
                         </a>
-                        <a href="#" class="cover__secondary">
+                        <a href="listing-exhibitions.html" class="cover__secondary" data-transition="Exhibitions">
                             <div class="picture picture--animate">
                                 <img data-load="assets/img/home-cover-02.jpg" alt="">
                             </div>
@@ -214,22 +217,26 @@
                 <section class="related related--less">
                     <div class="container--big">
                         <div class="listing listing--grid-2">
-                            <a href="listing-collection.html" class="listing__item" data-transition="Collections">
-                                <div class="picture " data-appear>
-                                    <img data-load="assets/img/related-thumb-01.jpg" alt="" data-parallax>
-                                </div>
-                                <div class="box" data-appear>
-                                    <h3 class="h3">Discover Our Collections</h3>
-                                </div>
-                            </a>
-                            <a href="listing-designers.html" class="listing__item" data-transition="Designers">
-                                <div class="picture " data-appear>
-                                    <img data-load="assets/img/related-thumb-02.jpg" alt="" data-parallax>
-                                </div>
-                                <div class="box" data-appear>
-                                    <h3 class="h3">Meet Our Designers</h3>
-                                </div>
-                            </a>
+                            <div class="listing__item">
+                                <a href="listing-collection.html" data-transition="Collections">
+                                    <div class="picture picture--animate" data-appear>
+                                        <img data-load="assets/img/related-thumb-01.jpg" alt="" data-parallax>
+                                    </div>
+                                    <div class="box" data-appear>
+                                        <div class=" btn btn--inline-alt">Discover Our Collections</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="listing__item">
+                                <a href="listing-designers.html" data-transition="Designers">
+                                    <div class="picture picture--animate" data-appear>
+                                        <img data-load="assets/img/related-thumb-02.jpg" alt="" data-parallax>
+                                    </div>
+                                    <div class="box" data-appear>
+                                        <div class="btn btn--inline-alt">Meet Our Designers</div>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -289,7 +296,8 @@
                 </section>
                 <section class="highlights highlights--col-2">
                     <div class="highlights__wrapper">
-                        <div class="highlights__box">
+                        <!-- Versione con link url -->
+                        <a href="#" data-transition="Contacts" class="highlights__box">
                             <div class="box">
                                 <h2 class="h2">Get in contact</h2>
                                 <div class="text">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -298,14 +306,15 @@
                                     <div class="btn btn--inline-alt">Contact us</div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="highlights__box">
+                        </a>
+                        <!-- Versione con apertura pannello laterale -->
+                        <div class="highlights__box" data-side-panel="dealers">
                             <div class="box">
                                 <h2 class="h2">Dealers</h2>
                                 <div class="text"> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
                                     nisi ut aliquip ex ea commodo.</div>
                                 <div class="cta">
-                                    <div class="btn btn--inline-alt" data-side-panel="dealers">Find a dealer</div>
+                                    <div class="btn btn--inline-alt">Find a dealer</div>
                                 </div>
                             </div>
                         </div>
@@ -321,9 +330,9 @@
                     <div class="container--big">
                         <div class="listing--grid">
                             <div class="listing__item listing__item--small-right">
-                                <a href="article-journal.html" data-transition="Journal" class="listing__wrapper"
-                                    data-appear>
-                                    <div class="listing__picture picture" style="padding-top: 110.30%">
+                                <a href="article-listing-journal.html" data-transition="Journal"
+                                    class="listing__wrapper" data-appear>
+                                    <div class="listing__picture picture picture--animate" style="padding-top: 110.30%">
                                         <img data-load="assets/img/article_1.jpg" data-parallax />
                                     </div>
                                     <div class="listing__box" data-appear>
@@ -341,7 +350,7 @@
                             <div class="listing__item">
                                 <a href="article-journal-b.html" data-transition="Journal" class="listing__wrapper"
                                     data-appear>
-                                    <div class="listing__picture picture" style="padding-top: 100.30%">
+                                    <div class="listing__picture picture picture--animate" style="padding-top: 100.30%">
                                         <img data-load="assets/img/article_2.jpg" data-parallax />
                                     </div>
                                     <div class="listing__box" data-appear>
@@ -358,7 +367,7 @@
                             </div>
                             <div class="listing__item listing__item--small-left">
                                 <a href="article-journal-c.html" data-transition="Journal" class="listing__wrapper">
-                                    <div class="listing__picture picture" data-appear>
+                                    <div class="listing__picture picture picture--animate" data-appear>
                                         <img data-load="assets/img/article_3.jpg" data-parallax />
                                     </div>
                                     <div class="listing__box" data-appear>

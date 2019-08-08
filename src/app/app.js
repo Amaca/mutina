@@ -528,6 +528,12 @@ export default class App {
         this.page.previousTop = top + 1;
     }
 
+    updateViewPortHeight() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        console.log('ao');
+    }
+
     onPageInit() {
         this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
         this.pictures = [].slice.call(document.querySelectorAll('.picture img'));
@@ -542,6 +548,7 @@ export default class App {
         });
 
         this.accentsInit();
+        this.updateViewPortHeight();
 
         LazyLoad.init();
         Fancy.init();
@@ -559,14 +566,18 @@ export default class App {
         // CustomSelect.init(debug);
         Tabs.init(debug);
 
+        const fancyInTransition = [...document.querySelectorAll('.fancy-in-transition .picture img')];
+        Follower.addMouseListener(fancyInTransition);
+
         let delay = firstLoad ? 0 : 600;
         firstLoad = false;
 
         setTimeout(x => {
             this.appears = Appears.init();
-            if (window.innerWidth > 768) {
-                Splitting();
-            }
+            // if (window.innerWidth > 768) {
+            //     Splitting();
+            // }
+            Splitting();
         }, delay);
     }
 
@@ -583,6 +594,11 @@ export default class App {
         Grid.destroyAll();
         SidePanel.destroyAll();
         // CustomSelect.destroyAll();
+        Tabs.destroyAll(debug);
+
+        const fancyInTransition = [...document.querySelectorAll('.fancy-in-transition .picture img')];
+        Follower.removeMouseListener(fancyInTransition);
+
         container.remove();
     }
 

@@ -3,6 +3,34 @@
     flex-direction: row;
     flex-wrap: wrap;
 
+    .listing__item {
+
+        a {
+
+            .btn--inline-alt {
+                @include font($style:book);
+            }
+
+            &:hover {
+                .picture__container {
+                    transform: scale(1.05);
+
+                    &:after {
+                        opacity: 1;
+                    }
+                }
+
+                .btn--inline-alt {
+                    &:after {
+                        width: 100% !important;
+                        left: 0 !important;
+                        right: auto !important;
+                    }
+                }
+            }
+        }
+    }
+
     &--fullwidth {
 
         @include sm-down {
@@ -75,6 +103,14 @@
         .picture {
             // @include aspect-clip(880, 550, 0.15);
             @include aspect-clip(880, 550, 0);
+        }
+
+        .btn--inline-alt {
+            font-size: 1.6rem;
+
+            @include sm-down {
+                font-size: 1.4rem;
+            }
         }
     }
 
@@ -294,11 +330,29 @@
         margin-bottom: $col-width-2;
     }
 
+    a {
+        &:hover {
+            .picture__container {
+                transform: scale(1.03) !important;
+            }
+
+            .btn--inline-alt {
+
+                &:after {
+                    width: 100% !important;
+                    left: 0 !important;
+                    right: auto !important;
+                }
+            }
+        }
+    }
+
     .listing__item {
         text-align: center;
 
-        .h2 {
+        .btn--inline-alt {
             font-size: 2.2rem;
+            @include font($style:book);
 
             @include md-down {
                 font-size: 1.8rem;

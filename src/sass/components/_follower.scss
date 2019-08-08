@@ -148,7 +148,8 @@ $follower-width: 48px;
         [data-fancy-img]:hover,
         .detail-gallery__swiper .swiper-lazy-loaded,
         .full-samples-gallery__item img,
-        .full-gallery__thumb .img {
+        .full-gallery__thumb .img,
+        .fancy-in-transition .picture img {
             cursor: none !important;
         }
     }
