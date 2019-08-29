@@ -3,7 +3,7 @@
 
 import "@babel/polyfill";
 import barba from '@barba/core';
-import "css-vars-ponyfill";
+import cssVars from 'css-vars-ponyfill';
 import Anchors from './shared/anchors';
 import Appears from './shared/appears';
 import CustomSelect from './shared/custom.select';
@@ -13,6 +13,7 @@ import FancyDetail from './shared/fancy.detail';
 import FancyViewAll from "./shared/fancy.view-all";
 import Filters from './shared/filters';
 import Follower from './shared/follower';
+import Forms from './shared/forms';
 import Grid from './shared/grid';
 import LazyLoad from './shared/lazyload';
 import Navigation from "./shared/navigation";
@@ -24,24 +25,33 @@ import Sliders from './shared/sliders';
 import Tabs from './shared/tabs';
 import ToggleSearch from './shared/toggle.search';
 import Utils from './shared/utils';
+import Wishlist from './shared/wishlist';
 
 //settings
 let menuStyle = 1;
 let scrollSpeed = 8;
 const activateIntro = false;
 const debug = true;
-const disableBarba = false;
+let disableBarba = false;
 const breakTransition = false;
 const barbaDebug = debug;
 
 let firstLoad = false;
 let scrollPosition = '';
 
+const userAgent = navigator.userAgent.toLowerCase();
+const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+console.log('isIE', isIE11)
+
 export default class App {
 
     constructor() {}
 
     init() {
+        if (isIE11) {
+            this.polyfill();
+            cssVars();
+        }
         console.log('%c Coded by Websolute ', 'background: #01c0f6; color: #fff; border-radius: 20px; padding: 10px;');
         const body = document.querySelector('body');
         const page = document.querySelector('.page');
@@ -74,7 +84,6 @@ export default class App {
         this.addListeners();
         this.transitions();
 
-
         Element.prototype.scrollIntoView_ = Element.prototype.scrollIntoView;
         Element.prototype.scrollIntoView = function () {
             if (Dom.fastscroll) {
@@ -91,6 +100,15 @@ export default class App {
         body.classList.add('ready');
     }
 
+    static initScript(data) {
+        var scripts = data.next.container.querySelectorAll('script[data-products]');
+        if (scripts) {
+            scripts.forEach(function (x) {
+                window.eval(x.innerHTML);
+            });
+        }
+    }
+
     transitions() {
         const transitionLayer = document.querySelector('.transition');
         const textFront = document.querySelector('.transition__text .box--front .text');
@@ -100,7 +118,9 @@ export default class App {
         const page = this.page;
         if (!disableBarba) {
             barba.init({
-                timeout: 5000,
+                //cacheIgnore: true,
+                //prefetchIgnore: true,
+                timeout: 20000,
                 debug: barbaDebug,
                 transitions: [{
                         name: 'default',
@@ -223,12 +243,17 @@ export default class App {
                                     }
                                 }, '-=0.6');
                             } else {
-                                app.onPageInit();
+
                                 TweenMax.set(transitionLayer, {
                                     height: 0,
                                     top: 0,
                                     bottom: 'auto',
                                 });
+                                TweenMax.set(logoWrapper, {
+                                    height: 0,
+                                });
+                                app.onPageInit();
+                                console.log(logoWrapper);
                                 transitionLayer.classList.add('transition--no-top-line');
                                 done();
                             }
@@ -276,18 +301,11 @@ export default class App {
                             TweenMax.to(textFront, 1, {
                                 transform: 'translateY(0)',
                                 ease: Expo.easeInOut,
-                            }).delay(0.4);
-                            TweenMax.to(line, 1, {
-                                width: '100%',
-                                ease: Expo.easeInOut,
-                            }).delay(1.2);
-                            TweenMax.to(boxBack, 1, {
-                                width: '100%',
-                                ease: Expo.easeInOut,
                                 onComplete: (e) => {
                                     done();
                                 }
-                            }).delay(1.2);
+                            }).delay(0.4);
+
                         },
                         afterLeave(data) {
                             const done = this.async();
@@ -296,10 +314,50 @@ export default class App {
                         },
                         beforeEnter(data) {
                             const done = this.async();
+                            App.initScript(data);
                             if (breakTransition) {
                                 throw new Error('stop!');
                             }
+
+                            let perfData = window.performance.timing,
+                                EstimatedTime = -(perfData.loadEventEnd - perfData.navigationStart),
+                                time = parseInt((EstimatedTime / 1000) % 60) * 100,
+                                start = 0,
+                                end = 100,
+                                durataion = time;
+
+                            animateValue(start, end, durataion);
+
+                            function animateValue(start, end, duration) {
+
+                                let range = end - start,
+                                    current = start,
+                                    increment = end > start ? 1 : -1,
+                                    stepTime = Math.abs(Math.floor(duration / range));
+
+                                let timer = setInterval(function () {
+                                    current += increment;
+                                    TweenMax.to(line, time, {
+                                        width: current + '%',
+                                        ease: Expo.easeInOut,
+                                    })
+                                    TweenMax.to(boxBack, time, {
+                                        width: current + '%',
+                                        ease: Expo.easeInOut,
+                                    })
+
+                                    //console.log('current', current);
+
+                                    if (current == end) {
+                                        clearInterval(timer);
+
+                                        done();
+                                    }
+                                }, stepTime);
+                            }
+
                             app.onPageInit();
+
                             /*
                             window.daraLayer.push({
 
@@ -309,7 +367,7 @@ export default class App {
                                 href: window.href
                             })
                             */
-                            done();
+                            //done();
                         },
                         enter(data) {
                             const done = this.async();
@@ -333,7 +391,7 @@ export default class App {
                                     done();
                                 }
                             }).delay(0.3);
-                        },
+                        }
                         ////////////////////////////////////////////////////
                     },
                     {
@@ -356,13 +414,14 @@ export default class App {
                         },
                         beforeEnter(data) {
                             const done = this.async();
+                            App.initScript(data);
                             app.onPageInit();
                             done();
                         },
                         enter(data) {
                             const done = this.async();
                             done();
-                        },
+                        }
                     },
                     {
                         name: 'fancy-in-transition',
@@ -387,7 +446,7 @@ export default class App {
                                 bottom: 0,
                                 opacity: 1,
                                 top: 'auto',
-                                height: 0
+                                height: 0,
                             });
                             TweenMax.to(data.current.container, 1, {
                                 transform: 'translateY(-60px)',
@@ -412,6 +471,7 @@ export default class App {
                         },
                         beforeEnter(data) {
                             const done = this.async();
+                            App.initScript(data);
                             app.onPageInit();
                             done();
                         },
@@ -434,7 +494,7 @@ export default class App {
                                     done();
                                 }
                             });
-                        },
+                        }
                     },
                     {
                         name: 'fancy-out-transition',
@@ -490,6 +550,7 @@ export default class App {
                         },
                         beforeEnter(data) {
                             const done = this.async();
+                            App.initScript(data);
                             app.onPageInit();
                             done();
                         },
@@ -508,11 +569,14 @@ export default class App {
                                     done();
                                 }
                             });
-                        },
+                        }
                     }
                 ],
             });
         } else {
+            if (debug) {
+                console.log('barba disabled');
+            }
             const transition = document.querySelector('.transition');
             transition.remove();
             this.onPageInit();
@@ -558,12 +622,15 @@ export default class App {
         ScrollAnchors.init(debug);
         Samples.init();
         Utils.toggleGrid();
-        Filters.init();
+        if (typeof _products != 'undefined')
+            Filters.init();
         ToggleSearch.init(debug);
         Grid.init(debug);
         SidePanel.init(debug);
         // CustomSelect.init(debug);
         Tabs.init(debug);
+        Forms.init();
+        Wishlist.init();
 
         const fancyInTransition = [...document.querySelectorAll('.fancy-in-transition .picture img')];
         Follower.addMouseListener(fancyInTransition);
@@ -594,6 +661,9 @@ export default class App {
         SidePanel.destroyAll();
         // CustomSelect.destroyAll();
         Tabs.destroyAll(debug);
+        Forms.destroyAll();
+        Wishlist.destroyAll();
+        LazyLoad.destroyAll();
 
         const fancyInTransition = [...document.querySelectorAll('.fancy-in-transition .picture img')];
         Follower.removeMouseListener(fancyInTransition);
@@ -868,6 +938,43 @@ export default class App {
 
     pause() {
         this.playing = false;
+    }
+
+    polyfill() {
+        if ('NodeList' in window && !NodeList.prototype.forEach) {
+            console.info('polyfill for IE11');
+            NodeList.prototype.forEach = function (callback, thisArg) {
+                thisArg = thisArg || window;
+                for (var i = 0; i < this.length; i++) {
+                    callback.call(thisArg, this[i], i, this);
+                }
+            };
+        }
+
+        if (!('remove' in Element.prototype)) {
+            Element.prototype.remove = function () {
+                if (this.parentNode) {
+                    this.parentNode.removeChild(this);
+                }
+            };
+        }
+
+        if (typeof window.CustomEvent === "function") return false; //If not IE
+
+        function CustomEvent(event, params) {
+            params = params || {
+                bubbles: false,
+                cancelable: false,
+                detail: undefined
+            };
+            var evt = document.createEvent('CustomEvent');
+            evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+            return evt;
+        }
+
+        CustomEvent.prototype = window.Event.prototype;
+
+        window.CustomEvent = CustomEvent;
     }
 
 }

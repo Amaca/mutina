@@ -104,7 +104,19 @@ img:not([src]) {
         &.loaded {
             .picture__container {
                 transition: all 5s $smooth;
+            }
 
+            &:hover {
+                .picture__container {
+                    transform: scale(1.05);
+                }
+            }
+        }
+    }
+
+    &.picture--shadow {
+        &.loaded {
+            .picture__container {
                 &:after {
                     content: '';
                     width: 100%;
@@ -121,8 +133,6 @@ img:not([src]) {
 
             &:hover {
                 .picture__container {
-                    transform: scale(1.05);
-
                     &:after {
                         opacity: 1;
                     }

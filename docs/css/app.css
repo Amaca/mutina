@@ -2584,24 +2584,24 @@ img:not([src]) {
   .picture.picture--animate.loaded .picture__container {
     -webkit-transition: all 5s cubic-bezier(0, 0.97, 0.43, 1);
     transition: all 5s cubic-bezier(0, 0.97, 0.43, 1); }
-    .picture.picture--animate.loaded .picture__container:after {
-      content: '';
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 2;
-      background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(0, 0, 0, 0.6)), to(rgba(0, 0, 0, 0)));
-      background-image: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
-      opacity: 0;
-      -webkit-transition: all 5s cubic-bezier(0, 0.97, 0.43, 1);
-      transition: all 5s cubic-bezier(0, 0.97, 0.43, 1); }
   .picture.picture--animate.loaded:hover .picture__container {
     -webkit-transform: scale(1.05);
             transform: scale(1.05); }
-    .picture.picture--animate.loaded:hover .picture__container:after {
-      opacity: 1; }
+  .picture.picture--shadow.loaded .picture__container:after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(0, 0, 0, 0.6)), to(rgba(0, 0, 0, 0)));
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+    opacity: 0;
+    -webkit-transition: all 5s cubic-bezier(0, 0.97, 0.43, 1);
+    transition: all 5s cubic-bezier(0, 0.97, 0.43, 1); }
+  .picture.picture--shadow.loaded:hover .picture__container:after {
+    opacity: 1; }
 
 .picture + .picture__caption {
   margin-top: 20px; }
@@ -5651,25 +5651,31 @@ body.fancy-page main {
     @media (max-width: 768px) {
       .listing .picture + .box {
         margin-top: 10px; } }
-  .listing--double-img > a .picture .picture__container,
-  .listing--double-img > div .picture .picture__container {
+  .listing--double-img a .picture__container {
     z-index: 2; }
-    .listing--double-img > a .picture .picture__container img,
-    .listing--double-img > div .picture .picture__container img {
-      -webkit-transition: opacity 1s cubic-bezier(0, 0.97, 0.43, 1);
-      transition: opacity 1s cubic-bezier(0, 0.97, 0.43, 1); }
-  .listing--double-img > a .picture .picture__secondary,
-  .listing--double-img > div .picture .picture__secondary {
-    z-index: 1;
+    .listing--double-img a .picture__container:after {
+      display: none; }
+    .listing--double-img a .picture__container .picture__primary {
+      -webkit-transition: opacity 300ms cubic-bezier(0.32, 0, 0.29, 0.99);
+      transition: opacity 300ms cubic-bezier(0.32, 0, 0.29, 0.99); }
+  .listing--double-img a .picture__secondary {
     opacity: 0;
-    -webkit-transition: all 1s cubic-bezier(0, 0.97, 0.43, 1);
-    transition: all 1s cubic-bezier(0, 0.97, 0.43, 1); }
-  .listing--double-img > a:hover .picture.loaded .picture__container img,
-  .listing--double-img > div:hover .picture.loaded .picture__container img {
-    opacity: 0; }
-  .listing--double-img > a:hover .picture.loaded .picture__secondary,
-  .listing--double-img > div:hover .picture.loaded .picture__secondary {
-    opacity: 1; }
+    z-index: 1; }
+  .listing--double-img a:hover .picture__container {
+    -webkit-transform: scale(1.05) !important;
+            transform: scale(1.05) !important;
+    -webkit-transition: -webkit-transform 200ms cubic-bezier(0.32, 0, 0.29, 0.99) 650ms !important;
+    transition: -webkit-transform 200ms cubic-bezier(0.32, 0, 0.29, 0.99) 650ms !important;
+    transition: transform 200ms cubic-bezier(0.32, 0, 0.29, 0.99) 650ms !important;
+    transition: transform 200ms cubic-bezier(0.32, 0, 0.29, 0.99) 650ms, -webkit-transform 200ms cubic-bezier(0.32, 0, 0.29, 0.99) 650ms !important; }
+    .listing--double-img a:hover .picture__container .picture__primary {
+      opacity: 0;
+      -webkit-transition: opacity 600ms cubic-bezier(0.32, 0, 0.29, 0.99) 50ms;
+      transition: opacity 600ms cubic-bezier(0.32, 0, 0.29, 0.99) 50ms; }
+  .listing--double-img a:hover .picture__secondary {
+    opacity: 1;
+    -webkit-transition: opacity 150ms cubic-bezier(0.32, 0, 0.29, 0.99);
+    transition: opacity 150ms cubic-bezier(0.32, 0, 0.29, 0.99); }
 
 .archive {
   margin-top: 4.166vw;

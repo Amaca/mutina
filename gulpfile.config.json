@@ -22,6 +22,8 @@
                     "node_modules/splitting/dist/splitting.js",
                     "node_modules/swiper/dist/js/swiper.js",
                     "node_modules/choices.js/public/assets/scripts/choices.js",
+                    "node_modules/jquery-validation/dist/jquery.validate.js",
+                    "node_modules/handlebars/dist/handlebars.js",
                     "node_modules/muuri/dist/muuri.js"
                 ],
                 "output": "docs/js/vendors.js",

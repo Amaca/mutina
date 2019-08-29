@@ -9631,7 +9631,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 /*!
  * css-vars-ponyfill
- * v2.0.2
+ * v2.1.1
  * https://jhildenbiddle.github.io/css-vars-ponyfill/
  * (c) 2018-2019 John Hildenbiddle <http://hildenbiddle.com>
  * MIT license
@@ -10321,12 +10321,12 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }
 
     function at_media() {
-      var m = match(/^@media *([^{]+)/);
+      var m = match(/^@media([^{]+)*/);
 
       if (m) {
         return {
           type: "media",
-          media: m[1].trim(),
+          media: (m[1] || "").trim(),
           rules: rules()
         };
       }
@@ -10402,7 +10402,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         var balancedMatch$1 = balancedMatch("{", "}", css);
 
         if (balancedMatch$1) {
-          var hasVarDecl = balancedMatch$1.pre.indexOf(":root") !== -1 && /--\S*\s*:/.test(balancedMatch$1.body);
+          var hasVarDecl = /:(?:root|host)(?![.:#(])/.test(balancedMatch$1.pre) && /--\S*\s*:/.test(balancedMatch$1.body);
           var hasVarFunc = /var\(/.test(balancedMatch$1.body);
 
           if (!hasVarDecl && !hasVarFunc) {
@@ -10415,7 +10415,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       var sel = selector() || [];
       var decls = settings.preserveStatic ? declarations() : declarations().filter(function (decl) {
         var hasVarDecl = sel.some(function (s) {
-          return s.indexOf(":root") !== -1;
+          return /:(?:root|host)(?![.:#(])/.test(s);
         }) && /^--\S/.test(decl.property);
         var hasVarFunc = /var\(/.test(decl.value);
         return hasVarDecl || hasVarFunc;
@@ -10467,22 +10467,23 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   function parseVars(cssData) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var defaults = {
+      parseHost: false,
       store: {},
       onWarning: function onWarning() {}
     };
 
     var settings = _extends({}, defaults, options);
 
+    var reVarDeclSelectors = new RegExp(":".concat(settings.parseHost ? "host" : "root", "(?![.:#(])"));
+
     if (typeof cssData === "string") {
       cssData = parseCss(cssData, settings);
     }
 
     cssData.stylesheet.rules.forEach(function (rule) {
-      if (rule.type !== "rule") {
-        return;
-      }
-
-      if (rule.selectors.length !== 1 || rule.selectors[0] !== ":root") {
+      if (rule.type !== "rule" || !rule.selectors.some(function (s) {
+        return reVarDeclSelectors.test(s);
+      })) {
         return;
       }
 
@@ -10685,7 +10686,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     function resolveFunc(value) {
       var name = value.split(",")[0].replace(/[\s\n\t]/g, "");
       var fallback = (value.match(/(?:\s*,\s*){1}(.*)?/) || [])[1];
-      var match = settings.variables.hasOwnProperty(name) ? String(settings.variables[name]) : undefined;
+      var match = Object.prototype.hasOwnProperty.call(settings.variables, name) ? String(settings.variables[name]) : undefined;
       var replacement = match || (fallback ? String(fallback) : undefined);
       var unresolvedFallback = __recursiveFallback || value;
 
@@ -10749,11 +10750,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     cssComments: /\/\*[\s\S]+?\*\//g,
     cssKeyframes: /@(?:-\w*-)?keyframes/,
     cssMediaQueries: /@media[^{]+\{([\s\S]+?})\s*}/g,
-    cssRootRules: /(?::root\s*{\s*[^}]*})/g,
     cssUrls: /url\((?!['"]?(?:data|http|\/\/):)['"]?([^'")]*)['"]?\)/g,
+    cssVarDeclRules: /(?::(?:root|host)(?![.:#(])[\s,]*[^{]*{\s*[^}]*})/g,
     cssVarDecls: /(?:[\s;]*)(-{2}\w[\w-]*)(?:\s*:\s*)([^;]*);/g,
     cssVarFunc: /var\(\s*--[\w-]/,
-    cssVars: /(?:(?::root\s*{\s*[^;]*;*\s*)|(?:var\(\s*))(--[^:)]+)(?:\s*[:)])/
+    cssVars: /(?:(?::(?:root|host)(?![.:#(])[\s,]*[^{]*{\s*[^;]*;*\s*)|(?:var\(\s*))(--[^:)]+)(?:\s*[:)])/
   };
   var variableStore = {
     dom: {},
@@ -10924,7 +10925,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }
 
     if (document.readyState !== "loading") {
-      var isShadowElm = settings.shadowDOM || settings.rootElement.shadowRoot || settings.rootElement.host;
+      var isShadowElm = Boolean(settings.shadowDOM || settings.rootElement.shadowRoot || settings.rootElement.host);
 
       if (isNativeSupport && settings.onlyLegacy) {
         if (settings.updateDOM) {
@@ -10940,7 +10941,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           exclude: settings.exclude,
           onSuccess: function onSuccess(cssText, node, url) {
             cssText = cssText.replace(regex.cssComments, "").replace(regex.cssMediaQueries, "");
-            cssText = (cssText.match(regex.cssRootRules) || []).join("");
+            cssText = (cssText.match(regex.cssVarDeclRules) || []).join("");
             return cssText || false;
           },
           onComplete: function onComplete(cssText, cssArray, nodeArray) {
@@ -10988,6 +10989,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
                     removeComments: true
                   });
                   parseVars(cssTree, {
+                    parseHost: isShadowElm,
                     store: jobVars,
                     onWarning: handleWarning
                   });
@@ -14800,7 +14802,7 @@ require("@babel/polyfill");
 
 var _core = _interopRequireDefault(require("@barba/core"));
 
-require("css-vars-ponyfill");
+var _cssVarsPonyfill = _interopRequireDefault(require("css-vars-ponyfill"));
 
 var _anchors = _interopRequireDefault(require("./shared/anchors"));
 
@@ -14819,6 +14821,8 @@ var _fancy3 = _interopRequireDefault(require("./shared/fancy.view-all"));
 var _filters = _interopRequireDefault(require("./shared/filters"));
 
 var _follower = _interopRequireDefault(require("./shared/follower"));
+
+var _forms = _interopRequireDefault(require("./shared/forms"));
 
 var _grid = _interopRequireDefault(require("./shared/grid"));
 
@@ -14841,6 +14845,8 @@ var _tabs = _interopRequireDefault(require("./shared/tabs"));
 var _toggle = _interopRequireDefault(require("./shared/toggle.search"));
 
 var _utils = _interopRequireDefault(require("./shared/utils"));
+
+var _wishlist = _interopRequireDefault(require("./shared/wishlist"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14868,6 +14874,9 @@ var breakTransition = false;
 var barbaDebug = debug;
 var firstLoad = false;
 var scrollPosition = '';
+var userAgent = navigator.userAgent.toLowerCase();
+var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+console.log('isIE', isIE11);
 
 var App =
 /*#__PURE__*/
@@ -14879,6 +14888,11 @@ function () {
   _createClass(App, [{
     key: "init",
     value: function init() {
+      if (isIE11) {
+        this.polyfill();
+        (0, _cssVarsPonyfill.default)();
+      }
+
       console.log('%c Coded by Websolute ', 'background: #01c0f6; color: #fff; border-radius: 20px; padding: 10px;');
       var body = document.querySelector('body');
       var page = document.querySelector('.page');
@@ -14946,7 +14960,9 @@ function () {
 
       if (!disableBarba) {
         _core.default.init({
-          timeout: 5000,
+          //cacheIgnore: true,
+          //prefetchIgnore: true,
+          timeout: 20000,
           debug: barbaDebug,
           transitions: [{
             name: 'default',
@@ -15057,12 +15073,16 @@ function () {
                   }
                 }, '-=0.6');
               } else {
-                app.onPageInit();
                 TweenMax.set(transitionLayer, {
                   height: 0,
                   top: 0,
                   bottom: 'auto'
                 });
+                TweenMax.set(logoWrapper, {
+                  height: 0
+                });
+                app.onPageInit();
+                console.log(logoWrapper);
                 transitionLayer.classList.add('transition--no-top-line');
                 done();
               }
@@ -15111,19 +15131,11 @@ function () {
               }).delay(0.3);
               TweenMax.to(textFront, 1, {
                 transform: 'translateY(0)',
-                ease: Expo.easeInOut
-              }).delay(0.4);
-              TweenMax.to(line, 1, {
-                width: '100%',
-                ease: Expo.easeInOut
-              }).delay(1.2);
-              TweenMax.to(boxBack, 1, {
-                width: '100%',
                 ease: Expo.easeInOut,
                 onComplete: function onComplete(e) {
                   done();
                 }
-              }).delay(1.2);
+              }).delay(0.4);
             },
             afterLeave: function afterLeave(data) {
               var done = this.async();
@@ -15132,22 +15144,53 @@ function () {
             },
             beforeEnter: function beforeEnter(data) {
               var done = this.async();
+              App.initScript(data);
 
               if (breakTransition) {
                 throw new Error('stop!');
               }
 
+              var perfData = window.performance.timing,
+                  EstimatedTime = -(perfData.loadEventEnd - perfData.navigationStart),
+                  time = parseInt(EstimatedTime / 1000 % 60) * 100,
+                  start = 0,
+                  end = 100,
+                  durataion = time;
+              animateValue(start, end, durataion);
+
+              function animateValue(start, end, duration) {
+                var range = end - start,
+                    current = start,
+                    increment = end > start ? 1 : -1,
+                    stepTime = Math.abs(Math.floor(duration / range));
+                var timer = setInterval(function () {
+                  current += increment;
+                  TweenMax.to(line, time, {
+                    width: current + '%',
+                    ease: Expo.easeInOut
+                  });
+                  TweenMax.to(boxBack, time, {
+                    width: current + '%',
+                    ease: Expo.easeInOut
+                  }); //console.log('current', current);
+
+                  if (current == end) {
+                    clearInterval(timer);
+                    done();
+                  }
+                }, stepTime);
+              }
+
               app.onPageInit();
               /*
               window.daraLayer.push({
-               })
+                })
               gtm.push({
                   title: document.title,
                   href: window.href
               })
               */
-
-              done();
+              //done();
             },
             enter: function enter(data) {
               var done = this.async();
@@ -15171,7 +15214,8 @@ function () {
                   done();
                 }
               }).delay(0.3);
-            }
+            } ////////////////////////////////////////////////////
+
           }, {
             name: 'fast-transition',
             from: {
@@ -15191,6 +15235,7 @@ function () {
             },
             beforeEnter: function beforeEnter(data) {
               var done = this.async();
+              App.initScript(data);
               app.onPageInit();
               done();
             },
@@ -15248,6 +15293,7 @@ function () {
             },
             beforeEnter: function beforeEnter(data) {
               var done = this.async();
+              App.initScript(data);
               app.onPageInit();
               done();
             },
@@ -15325,6 +15371,7 @@ function () {
             },
             beforeEnter: function beforeEnter(data) {
               var done = this.async();
+              App.initScript(data);
               app.onPageInit();
               done();
             },
@@ -15347,6 +15394,10 @@ function () {
           }]
         });
       } else {
+        if (debug) {
+          console.log('barba disabled');
+        }
+
         var transition = document.querySelector('.transition');
         transition.remove();
         this.onPageInit();
@@ -15406,7 +15457,7 @@ function () {
 
       _utils.default.toggleGrid();
 
-      _filters.default.init();
+      if (typeof _products != 'undefined') _filters.default.init();
 
       _toggle.default.init(debug);
 
@@ -15416,6 +15467,10 @@ function () {
 
 
       _tabs.default.init(debug);
+
+      _forms.default.init();
+
+      _wishlist.default.init();
 
       var fancyInTransition = _toConsumableArray(document.querySelectorAll('.fancy-in-transition .picture img'));
 
@@ -15458,6 +15513,12 @@ function () {
 
 
       _tabs.default.destroyAll(debug);
+
+      _forms.default.destroyAll();
+
+      _wishlist.default.destroyAll();
+
+      _lazyload.default.destroyAll();
 
       var fancyInTransition = _toConsumableArray(document.querySelectorAll('.fancy-in-transition .picture img'));
 
@@ -15776,6 +15837,56 @@ function () {
     value: function pause() {
       this.playing = false;
     }
+  }, {
+    key: "polyfill",
+    value: function polyfill() {
+      if ('NodeList' in window && !NodeList.prototype.forEach) {
+        console.info('polyfill for IE11');
+
+        NodeList.prototype.forEach = function (callback, thisArg) {
+          thisArg = thisArg || window;
+
+          for (var i = 0; i < this.length; i++) {
+            callback.call(thisArg, this[i], i, this);
+          }
+        };
+      }
+
+      if (!('remove' in Element.prototype)) {
+        Element.prototype.remove = function () {
+          if (this.parentNode) {
+            this.parentNode.removeChild(this);
+          }
+        };
+      }
+
+      if (typeof window.CustomEvent === "function") return false; //If not IE
+
+      function CustomEvent(event, params) {
+        params = params || {
+          bubbles: false,
+          cancelable: false,
+          detail: undefined
+        };
+        var evt = document.createEvent('CustomEvent');
+        evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+        return evt;
+      }
+
+      CustomEvent.prototype = window.Event.prototype;
+      window.CustomEvent = CustomEvent;
+    }
+  }], [{
+    key: "initScript",
+    value: function initScript(data) {
+      var scripts = data.next.container.querySelectorAll('script[data-products]');
+
+      if (scripts) {
+        scripts.forEach(function (x) {
+          window.eval(x.innerHTML);
+        });
+      }
+    }
   }]);
 
   return App;
@@ -15789,7 +15900,7 @@ window.onload = function () {
   app.play();
 };
 
-},{"./shared/anchors":313,"./shared/appears":314,"./shared/custom.select":315,"./shared/dom":316,"./shared/fancy":318,"./shared/fancy.detail":317,"./shared/fancy.view-all":320,"./shared/filters":321,"./shared/follower":322,"./shared/grid":323,"./shared/lazyload":324,"./shared/navigation":325,"./shared/rect":326,"./shared/samples":328,"./shared/scroll.anchors":329,"./shared/side.panel":330,"./shared/sliders":331,"./shared/tabs":332,"./shared/toggle.search":333,"./shared/utils":334,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
+},{"./shared/anchors":313,"./shared/appears":314,"./shared/custom.select":315,"./shared/dom":316,"./shared/fancy":318,"./shared/fancy.detail":317,"./shared/fancy.view-all":320,"./shared/filters":321,"./shared/follower":322,"./shared/forms":323,"./shared/grid":324,"./shared/lazyload":325,"./shared/navigation":326,"./shared/rect":327,"./shared/samples":329,"./shared/scroll.anchors":330,"./shared/side.panel":331,"./shared/sliders":332,"./shared/tabs":333,"./shared/toggle.search":334,"./shared/utils":335,"./shared/wishlist":336,"@babel/polyfill":1,"@barba/core":3,"css-vars-ponyfill":308}],313:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16310,7 +16421,7 @@ function () {
 
 exports.default = FancyDetail;
 
-},{"./utils":334}],318:[function(require,module,exports){
+},{"./utils":335}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16695,7 +16806,7 @@ function () {
 exports.default = Fancy;
 Fancy.groups = {};
 
-},{"./fancy.transition":319,"./follower":322,"./utils":334}],319:[function(require,module,exports){
+},{"./fancy.transition":319,"./follower":322,"./utils":335}],319:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17061,7 +17172,7 @@ function () {
 
 exports.default = FancyTransition;
 
-},{"./fancy":318,"./fancy.view-all":320,"./samples.detail":327}],320:[function(require,module,exports){
+},{"./fancy":318,"./fancy.view-all":320,"./samples.detail":328}],320:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17240,7 +17351,7 @@ function () {
 
 exports.default = FancyViewAll;
 
-},{"./fancy":318,"./fancy.transition":319,"./follower":322,"./lazyload":324}],321:[function(require,module,exports){
+},{"./fancy":318,"./fancy.transition":319,"./follower":322,"./lazyload":325}],321:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17396,7 +17507,7 @@ function () {
 
 exports.default = Filters;
 
-},{"./utils":334}],322:[function(require,module,exports){
+},{"./utils":335}],322:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17605,7 +17716,249 @@ function () {
 
 exports.default = Follower;
 
-},{"./utils":334}],323:[function(require,module,exports){
+},{"./utils":335}],323:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* jshint esversion: 6 */
+$.validator.defaults.getDataToSend = function (form) {
+  return {
+    data: GetJsonData(form)
+  };
+};
+
+$.validator.defaults.callbackHandler = function (data, form) {
+  if (data.d.Status) {
+    $(form).find(".form-results").removeClass("error");
+  } else {
+    $(form).find("[type=submit]").show();
+    $(form).find(".form-results").addClass("error");
+  }
+
+  $(form).find(".form-results").html(data.d.HTML);
+};
+
+$.validator.defaults.sendActionsToGTM = function (data, form) {
+  if (data.d.Status && data.d.Actions) sendActionsToGTM(data.d.Actions);
+};
+
+$.validator.defaults.errorPlacement = function (label, element) {};
+
+$.validator.defaults.submitHandler = function () {
+  var validator = this,
+      form = validator.currentForm;
+  $(form).find(".form-results").html('<img src="/assets/img/loading.gif" />');
+  $(form).find("[type=submit]").hide();
+  $.ajax({
+    type: "POST",
+    url: $(form).attr('action'),
+    cache: false,
+    contentType: "application/json; charset=utf-8",
+    data: JSON.stringify(validator.settings.getDataToSend(form)),
+    dataType: "json",
+    success: function success(data) {
+      try {
+        validator.settings.sendActionsToGTM(data, form);
+      } catch (ex) {}
+
+      validator.settings.callbackHandler(data, form);
+    },
+    error: function error(data) {
+      $(form).find(".form-results").html('');
+      $(form).find("[type=submit]").show();
+      alert("Web-Service Error!!");
+    }
+  });
+  return false;
+};
+
+$.validator.defaults.ignore = ':hidden:not(select):not([type=checkbox])';
+$.validator.defaults.highlight_base = $.validator.defaults.highlight;
+
+$.validator.defaults.highlight = function (element, errorClass, validClass) {
+  $.validator.defaults.highlight_base.call(this, element, errorClass, validClass);
+
+  if ($(element).hasClass("require-one")) {
+    var elName = $(element).attr("name");
+    $(this.currentForm).find('[name=' + elName + ']').removeClass(validClass).addClass(errorClass);
+  }
+
+  var select = $(element).filter('select');
+  if (select.length && select.data('selectpicker')) select.data('selectpicker').button.removeClass(validClass).addClass(errorClass);
+};
+
+$.validator.defaults.unhighlight_base = $.validator.defaults.unhighlight;
+
+$.validator.defaults.unhighlight = function (element, errorClass, validClass) {
+  $.validator.defaults.unhighlight_base.call(this, element, errorClass, validClass);
+
+  if ($(element).hasClass("require-one")) {
+    var elName = $(element).attr("name");
+    $(this.currentForm).find('[name=' + elName + ']').removeClass(errorClass).addClass(validClass);
+  }
+
+  var select = $(element).filter('select');
+  if (select.length && select.data('selectpicker')) select.data('selectpicker').button.removeClass(errorClass).addClass(validClass);
+};
+
+$.validator.addMethod('require-one', function (value, element) {
+  var elName = $(element).attr("name");
+  return $(this.currentForm).find('[name=' + elName + '].require-one:checked').length > 0;
+});
+
+function GetJsonData(formObj) {
+  var d = {};
+  var form = $(formObj);
+  var fields = form.find("input[name!=''][type!=submit][type!=reset]")
+  /*.filter("[type=email], [type=text], [type=password], [type=checkbox], [type=radio], [type=hidden]")*/
+  ;
+  fields.each(function () {
+    var type = $(this).attr("type"),
+        name = $(this).attr("name"),
+        value;
+
+    switch (type) {
+      case "checkbox":
+      case "radio":
+        var list = fields.filter('[name=' + name + '][type=' + type + ']');
+        if (list.length === 1) value = $(this).is(':checked');else {
+          if (d[name]) return;
+          var values = [];
+          list.each(function () {
+            if ($(this).is(':checked')) values.push($(this).val());
+          });
+          value = values.join(',');
+        }
+        break;
+
+      default:
+        value = $(this).val();
+        value = $.trim(value);
+        break;
+    }
+
+    d[name] = value;
+  });
+  form.find("select[name!=''], textarea[name!='']").each(function () {
+    var name = $(this).attr("name");
+    d[name] = $(this).val();
+  });
+  return d;
+}
+
+function sendActionsToGTM(obj) {
+  if (obj === null) return;
+
+  try {
+    var actions;
+    if (!jQuery.isArray(obj)) actions = [obj];else actions = obj;
+
+    for (var i = 0; i < actions.length; i++) {
+      dataLayer.push({
+        "event": "Action Complete",
+        "wsActionComplete": actions[i]
+      });
+    }
+  } catch (ex) {}
+}
+
+var Forms =
+/*#__PURE__*/
+function () {
+  function Forms(element, index) {
+    _classCallCheck(this, Forms);
+
+    this.element = element;
+    this.index = index;
+    this.initForm();
+  }
+
+  _createClass(Forms, [{
+    key: "initForm",
+    value: function initForm() {
+      var option = {};
+
+      if (this.element.attributes['data-nosubmit']) {
+        option.submitHandler = null;
+      }
+
+      if (this.element.attributes['data-submithandler']) {
+        option.submitHandler = this[this.element.attributes['data-submithandler'].value];
+      }
+
+      this.validator = $(this.element).validate(option);
+    }
+  }, {
+    key: "submitGetInTouch",
+    value: function submitGetInTouch() {
+      var validator = this,
+          form = validator.currentForm;
+      $.ajax({
+        type: "POST",
+        url: $(form).attr('action'),
+        cache: false,
+        contentType: "application/json; charseta=utf-8",
+        data: JSON.stringify(validator.settings.getDataToSend(form)),
+        dataType: "json",
+        success: function success(data) {
+          document.querySelector(".side-panel__results").innerHTML = data.d.HTML;
+          Forms.destroyAll();
+          Forms.init();
+        },
+        error: function error(data) {
+          $(form).find(".side-panel__results").html('');
+          $(form).find("[type=submit]").show();
+          alert("Web-Service Error!!");
+        }
+      });
+      return false;
+    }
+  }], [{
+    key: "init",
+    value: function init() {
+      Forms.items = _toConsumableArray(document.querySelectorAll('.contact-form')).map(function (element, index) {
+        return new Forms(element, index);
+      });
+
+      if (document.querySelector("#submit-samples")) {
+        document.querySelector("#submit-samples").addEventListener('click', function () {
+          $("#form-samples").submit();
+        });
+      }
+    }
+  }, {
+    key: "destroyAll",
+    value: function destroyAll() {
+      Forms.items.forEach(function (form) {
+        form.validator.destroy();
+      });
+    }
+  }]);
+
+  return Forms;
+}();
+
+exports.default = Forms;
+
+},{}],324:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17673,7 +18026,7 @@ function () {
 
 exports.default = Grid;
 
-},{}],324:[function(require,module,exports){
+},{}],325:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17777,7 +18130,7 @@ function () {
 exports.default = LazyLoad;
 LazyLoad.items = [];
 
-},{"./rect":326}],325:[function(require,module,exports){
+},{"./rect":327}],326:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18047,7 +18400,7 @@ function () {
 
 exports.default = Navigation;
 
-},{"./utils":334}],326:[function(require,module,exports){
+},{"./utils":335}],327:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18166,7 +18519,7 @@ function () {
 
 exports.default = Rect;
 
-},{}],327:[function(require,module,exports){
+},{}],328:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18412,7 +18765,7 @@ function () {
 
 exports.default = SamplesDetail;
 
-},{"./samples":328,"./utils":334,"gsap/ScrollToPlugin":309}],328:[function(require,module,exports){
+},{"./samples":329,"./utils":335,"gsap/ScrollToPlugin":309}],329:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18733,7 +19086,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":319,"./follower":322,"./lazyload":324,"./samples.detail":327,"./side.panel":330,"gsap/ScrollToPlugin":309}],329:[function(require,module,exports){
+},{"./fancy.transition":319,"./follower":322,"./lazyload":325,"./samples.detail":328,"./side.panel":331,"gsap/ScrollToPlugin":309}],330:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18883,7 +19236,7 @@ function () {
 
 exports.default = ScrollAnchors;
 
-},{}],330:[function(require,module,exports){
+},{}],331:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19123,7 +19476,7 @@ function () {
 
 exports.default = SidePanel;
 
-},{"./navigation":325}],331:[function(require,module,exports){
+},{"./navigation":326}],332:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19393,7 +19746,7 @@ function () {
 
 exports.default = Sliders;
 
-},{"./utils":334}],332:[function(require,module,exports){
+},{"./utils":335}],333:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19507,7 +19860,7 @@ function () {
 
 exports.default = Tabs;
 
-},{}],333:[function(require,module,exports){
+},{}],334:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19615,7 +19968,7 @@ function () {
 
 exports.default = ToggleSearch;
 
-},{"./utils":334}],334:[function(require,module,exports){
+},{"./utils":335}],335:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19791,6 +20144,120 @@ function () {
 }();
 
 exports.default = Utils;
+
+},{}],336:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* jshint esversion: 6 */
+var Wishlist =
+/*#__PURE__*/
+function () {
+  function Wishlist() {
+    _classCallCheck(this, Wishlist);
+  }
+
+  _createClass(Wishlist, null, [{
+    key: "Config",
+    value: function Config() {
+      Wishlist.items = [];
+      Wishlist.lblAdd = 'add to samples';
+      Wishlist.lblRemove = 'remove to samples';
+      Wishlist.attribute = 'data-wishid';
+      Wishlist.attributeSelector = '[data-wishid]';
+      Wishlist.attributeCountSelector = '[data-wishcount]';
+      Wishlist.attributeListSelector = 'input[data-wishlist]';
+      Wishlist.localstorageKey = 'wishlist';
+      Wishlist.containerSelector = '.side-panel__list';
+    }
+  }, {
+    key: "loadHtml",
+    value: function loadHtml() {
+      $.ajax({
+        type: "POST",
+        url: '/WS/wsWishlist.asmx/Html',
+        data: JSON.stringify({
+          listId: Wishlist.items
+        }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function success(data) {
+          document.querySelector(Wishlist.containerSelector).innerHTML = data.d.HTML;
+          Wishlist.buttons();
+        },
+        error: function error(data) {
+          console.log(data);
+        }
+      });
+    }
+  }, {
+    key: "addOrRemove",
+    value: function addOrRemove(e) {
+      var wishid = e.target.attributes[Wishlist.attribute].value;
+
+      if (Wishlist.items && Wishlist.items.includes(wishid)) {
+        e.target.innerHTML = Wishlist.lblAdd;
+        Wishlist.items = Wishlist.items.filter(function (v) {
+          return v != wishid;
+        });
+      } else {
+        e.target.innerHTML = Wishlist.lblRemove;
+        Wishlist.items.push(wishid);
+      }
+
+      localStorage.setItem(Wishlist.localstorageKey, JSON.stringify(Wishlist.items));
+      Wishlist.loadHtml();
+    }
+  }, {
+    key: "buttons",
+    value: function buttons() {
+      var _this = this;
+
+      document.querySelectorAll(Wishlist.attributeSelector).forEach(function (e) {
+        e.innerHTML = Wishlist.items.some(function (x) {
+          return x == e.attributes[Wishlist.attribute].value;
+        }) ? Wishlist.lblRemove : Wishlist.lblAdd;
+        e.addEventListener('click', _this.addOrRemove);
+      });
+      document.querySelectorAll(Wishlist.attributeCountSelector).forEach(function (x) {
+        return x.innerHTML = Wishlist.items.length;
+      });
+      document.querySelectorAll(Wishlist.attributeListSelector).forEach(function (x) {
+        return x.value = Wishlist.items.join(',');
+      });
+    }
+  }, {
+    key: "destroyAll",
+    value: function destroyAll() {
+      var _this2 = this;
+
+      document.querySelectorAll(Wishlist.attributeSelector).forEach(function (x) {
+        return x.removeEventListener('click', _this2.addOrRemove);
+      });
+    }
+  }, {
+    key: "init",
+    value: function init() {
+      Wishlist.Config();
+      if (localStorage.getItem(Wishlist.localstorageKey)) Wishlist.items = JSON.parse(localStorage.getItem(Wishlist.localstorageKey));
+      Wishlist.loadHtml();
+    }
+  }]);
+
+  return Wishlist;
+}();
+
+exports.default = Wishlist;
 
 },{}]},{},[312]);
 //# sourceMappingURL=app.js.map
