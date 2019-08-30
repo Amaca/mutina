@@ -30,7 +30,7 @@ export default class Sliders {
                 grabCursor: true,
                 watchOverflow: true,
                 centeredSlides: true,
-                loop: true,
+                loop: this.slider.querySelectorAll('.swiper-slide').length <= 2 ? false : true,
                 slidesPerView: 'auto',
                 spaceBetween: 60,
                 preloadImages: false,
@@ -66,7 +66,7 @@ export default class Sliders {
                 speed: 800,
                 preloadImages: false,
                 lazy: true,
-                autoHeight: 'auto',
+                autoHeight: true,
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',

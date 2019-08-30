@@ -143,6 +143,15 @@
             flex: 0 0 66.666%;
             max-width: 66.666%;
         }
+
+        &.listing .picture+.box {
+            margin-top: 20px;
+        }
+
+        .btn--inline-alt {
+            font-size: 1.4rem;
+
+        }
     }
 
     &--grid-4 {

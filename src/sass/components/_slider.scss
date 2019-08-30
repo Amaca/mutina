@@ -390,6 +390,7 @@
             outline: none;
             opacity: 0;
             transition: opacity 1s $smooth;
+            margin: 0 auto;
         }
 
         .slider__caption {
@@ -399,7 +400,17 @@
         }
 
         .slider__picture {
-            @include aspect-clip(16, 9);
+            // @include aspect-clip(16, 9);
+            display: inline-block;
+            background: none;
+
+            .slider__picture-wrap {
+                background: $light-grey;
+            }
+
+            img {
+                height: 95vh;
+            }
         }
     }
 

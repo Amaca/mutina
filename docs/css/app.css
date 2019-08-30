@@ -4934,36 +4934,20 @@ Form
     outline: none;
     opacity: 0;
     -webkit-transition: opacity 1s cubic-bezier(0, 0.97, 0.43, 1);
-    transition: opacity 1s cubic-bezier(0, 0.97, 0.43, 1); }
+    transition: opacity 1s cubic-bezier(0, 0.97, 0.43, 1);
+    margin: 0 auto; }
   .slider--fullscreen .swiper-slide .slider__caption {
     opacity: 0;
     margin-top: 24px;
     -webkit-transition: opacity 1s cubic-bezier(0, 0.97, 0.43, 1);
     transition: opacity 1s cubic-bezier(0, 0.97, 0.43, 1); }
   .slider--fullscreen .swiper-slide .slider__picture {
-    position: relative;
-    width: 100%;
-    padding-top: calc(56.25% - 56.25% * 0);
-    overflow: hidden; }
-    .slider--fullscreen .swiper-slide .slider__picture img,
-    .slider--fullscreen .swiper-slide .slider__picture video,
-    .slider--fullscreen .swiper-slide .slider__picture canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%; }
-      @media (max-width: 576px) {
-        .slider--fullscreen .swiper-slide .slider__picture img,
-        .slider--fullscreen .swiper-slide .slider__picture video,
-        .slider--fullscreen .swiper-slide .slider__picture canvas {
-          max-width: none;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          -webkit-transform: translate(-50%, -50%);
-                  transform: translate(-50%, -50%);
-          min-width: 100%;
-          min-height: 100%; } }
+    display: inline-block;
+    background: none; }
+    .slider--fullscreen .swiper-slide .slider__picture .slider__picture-wrap {
+      background: var(--color-light-grey); }
+    .slider--fullscreen .swiper-slide .slider__picture img {
+      height: 95vh; }
 
 .slider--fullscreen .swiper-slide-loaded img {
   opacity: 1; }
@@ -5554,6 +5538,10 @@ body.fancy-page main {
         -ms-flex: 0 0 66.666%;
             flex: 0 0 66.666%;
     max-width: 66.666%; }
+  .listing--grid-3.listing .picture + .box {
+    margin-top: 20px; }
+  .listing--grid-3 .btn--inline-alt {
+    font-size: 1.4rem; }
   .listing--grid-4 > a,
   .listing--grid-4 > div {
     display: block;
