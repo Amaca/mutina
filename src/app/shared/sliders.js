@@ -182,6 +182,17 @@ export default class Sliders {
                     }
                 }
             };
+        } else if (parentWrap.classList.contains('slider--squared') === true) {
+            options = {
+                loop: true,
+                slidesPerView: 1,
+                spaceBetween: 0,
+                effect: 'fade',
+                autoplay: {
+                    delay: 3000,
+                },
+                speed: 400
+            };
         }
 
         return options;

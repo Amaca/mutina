@@ -1,92 +1,95 @@
 .specs {
-	padding-bottom: 120px;
+    padding-bottom: 120px;
 
-	@include sm-down {
-		padding-bottom: 80px;
-	}
+    @include sm-down {
+        padding-bottom: 80px;
+    }
 
-	.box--title {
-		text-align: left;
-	}
+    .box--title {
+        text-align: left;
+    }
 }
 
 .specs__wrapper {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .specs__primary {
-	flex: 0 0 $col-width-5;
-	max-width: $col-width-5;
+    flex: 0 0 $col-width-5;
+    max-width: $col-width-5;
 
-	@include sm-down {
-		flex: 0 0 100%;
-		max-width: 100%;
-		margin-bottom: 80px;
-	}
+    @include sm-down {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 80px;
+    }
 }
 
 .specs__secondary {
-	flex: 0 0 $col-width-4;
-	max-width: $col-width-4;
-	padding: 0 $col-gutter;
-	text-align: center;
+    flex: 0 0 $col-width-4;
+    max-width: $col-width-4;
+    padding: 0 $col-gutter;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
-	@include md-down {
-		padding: 0;
-	}
+    @include md-down {
+        padding: 0;
+    }
 
-	@include sm-down {
-		flex: 0 0 70%;
-		max-width: 70%;
-		margin: 0 auto 0 auto;
-	}
+    @include sm-down {
+        flex: 0 0 70%;
+        max-width: 70%;
+        margin: 0 auto 0 auto;
+    }
 
-	@include xs-down {
-		flex: 0 0 100%;
-		max-width: 100%;
-	}
+    @include xs-down {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
 
-	a.specs__picture {
-		display: block;
-		margin-bottom: 46px;
+    a.specs__picture {
+        display: block;
+        margin-bottom: 46px;
 
-		@include sm-down {
-			margin-bottom: 20px;
-		}
-	}
+        @include sm-down {
+            margin-bottom: 20px;
+        }
+    }
 }
 
 .specs__list {
 
-	.specs__item {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		padding: 20px;
-		border-bottom: 2px solid $dark;
+    .specs__item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 20px;
+        border-bottom: 2px solid $dark;
 
-		.specs__title {
-			flex: 0 0 30%;
-			max-width: 30%;
+        .specs__title {
+            flex: 0 0 30%;
+            max-width: 30%;
 
-			@include md-down {
-				flex: 0 0 40%;
-				max-width: 40%;
-			}
-		}
+            @include md-down {
+                flex: 0 0 40%;
+                max-width: 40%;
+            }
+        }
 
-		.specs__data {
-			flex: 0 0 70%;
-			max-width: 70%;
-			text-align: left;
+        .specs__data {
+            flex: 0 0 70%;
+            max-width: 70%;
+            text-align: left;
 
-			@include md-down {
-				flex: 0 0 60%;
-				max-width: 60%;
-			}
-		}
-	}
+            @include md-down {
+                flex: 0 0 60%;
+                max-width: 60%;
+            }
+        }
+    }
 }

@@ -421,11 +421,11 @@
                 </section>
                 <section class="specs" data-anchor="Sizes & Colors">
                     <div class="container--mid">
+                        <div class="box box--title">
+                            <h2 class="h2" data-splitting data-appear>Sizes & Colors</h2>
+                        </div>
                         <div class="specs__wrapper">
                             <div class="specs__primary">
-                                <div class="box box--title">
-                                    <h2 class="h2" data-splitting data-appear>Sizes & Colors</h2>
-                                </div>
                                 <div class="specs__list" data-appear>
                                     <div class="specs__item">
                                         <div class="specs__title">Tiles</div>
@@ -448,16 +448,35 @@
                                         <div class="specs__title">Thickness</div>
                                         <div class="specs__data">10mm</div>
                                     </div>
+
                                 </div>
                             </div>
                             <div class="specs__secondary">
-                                <a href="#" class="specs__picture">
-                                    <div class="picture " style="padding-top: 100%">
-                                        <img data-load="assets/img/specs-thumb-01.jpg" alt="">
+                                <div class="slider slider--squared">
+                                    <div class="swiper-container">
+                                        <div class="swiper-wrapper">
+                                            <div class="swiper-slide">
+                                                <div class="picture picture--animate" data-samples="assets/json/samples.json" style="padding-top: 100%">
+                                                    <img src="assets/img/specs-thumb-01.jpg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="swiper-slide">
+                                                <div class="picture picture--animate" data-samples="assets/json/samples.json" style="padding-top: 100%">
+                                                    <img src="assets/img/samples/hd/Nero_cubo.jpg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="swiper-slide">
+                                                <div class="picture picture--animate" data-samples="assets/json/samples.json" style="padding-top: 100%">
+                                                    <img src="assets/img/samples/hd/Nero_diagonal.jpg" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </a>
-                                <a href="#" class="btn btn--primary" data-samples="assets/json/samples.json" data-splitting>View all
-                                    colors & combinations</a>
+                                </div>
+                                <div class="specs__button">
+                                    <a href="#" class="btn btn--primary" data-samples="assets/json/samples.json" data-splitting>View all
+                                        colors & combinations</a>
+                                </div>
                             </div>
                         </div>
                     </div>
