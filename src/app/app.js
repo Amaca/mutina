@@ -267,8 +267,7 @@ export default class App {
                             textBack.innerHTML = '';
                             textFront.innerHTML = title;
                             textBack.innerHTML = title;
-                            Navigation.closeNav();
-                            Navigation.closeSearch();
+                            Navigation.reset();
                             TweenMax.set(transitionLayer, {
                                 backgroundColor: '#CFCFCF',
                                 width: window.innerWidth,
@@ -434,8 +433,7 @@ export default class App {
                         },
                         leave(data) {
                             const done = this.async();
-                            Navigation.closeNav();
-                            Navigation.closeSearch();
+                            Navigation.reset();
                             //set scroll position
                             scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
                             TweenMax.set(line, {
@@ -657,6 +655,7 @@ export default class App {
         ScrollAnchors.destroyAll();
         Filters.destroyAll();
         ToggleSearch.destroyAll();
+
         Grid.destroyAll();
         SidePanel.destroyAll();
         // CustomSelect.destroyAll();
@@ -747,8 +746,7 @@ export default class App {
             width: window.innerWidth,
             height: window.innerHeight,
         });
-        Navigation.closeNav();
-        Navigation.closeSearch();
+        Navigation.reset();
         this.updateViewPortHeight();
     }
 
@@ -757,8 +755,7 @@ export default class App {
         const anchorPanel = document.querySelector('.anchors');
         const filterPanel = document.querySelector('.filters');
 
-        Navigation.closeNav();
-        Navigation.closeSearch();
+        Navigation.reset();
 
         if (this.body.classList.contains('mobile')) {
             this.updateViewPortHeight();

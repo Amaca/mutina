@@ -40,10 +40,21 @@ export default class LazyLoad {
         }
     }
 
+    destroy() {
+        this.node.removeAttribute('src');
+    }
+
     //INIT
     static init() {
         LazyLoad.items = [...document.querySelectorAll('[data-load]')].map((element, id) => new LazyLoad(element, id));
         console.log('Lazy load: ', LazyLoad.items);
+    }
+
+    //LAZYLOAD
+    static destroyAll() {
+        LazyLoad.items.forEach(elem => {
+            elem.destroy();
+        });
     }
 
     //render

@@ -15096,9 +15096,7 @@ function () {
               textFront.innerHTML = title;
               textBack.innerHTML = title;
 
-              _navigation.default.closeNav();
-
-              _navigation.default.closeSearch();
+              _navigation.default.reset();
 
               TweenMax.set(transitionLayer, {
                 backgroundColor: '#CFCFCF',
@@ -15254,9 +15252,7 @@ function () {
             leave: function leave(data) {
               var done = this.async();
 
-              _navigation.default.closeNav();
-
-              _navigation.default.closeSearch(); //set scroll position
+              _navigation.default.reset(); //set scroll position
 
 
               scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
@@ -15622,9 +15618,7 @@ function () {
         height: window.innerHeight
       });
 
-      _navigation.default.closeNav();
-
-      _navigation.default.closeSearch();
+      _navigation.default.reset();
 
       this.updateViewPortHeight();
     }
@@ -15636,9 +15630,7 @@ function () {
       var anchorPanel = document.querySelector('.anchors');
       var filterPanel = document.querySelector('.filters');
 
-      _navigation.default.closeNav();
-
-      _navigation.default.closeSearch();
+      _navigation.default.reset();
 
       if (this.body.classList.contains('mobile')) {
         this.updateViewPortHeight();
@@ -18094,6 +18086,11 @@ function () {
 
         node.src = this.src;
       }
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.node.removeAttribute('src');
     } //INIT
 
   }], [{
@@ -18103,6 +18100,14 @@ function () {
         return new LazyLoad(element, id);
       });
       console.log('Lazy load: ', LazyLoad.items);
+    } //LAZYLOAD
+
+  }, {
+    key: "destroyAll",
+    value: function destroyAll() {
+      LazyLoad.items.forEach(function (elem) {
+        elem.destroy();
+      });
     } //render
 
   }, {
@@ -18280,7 +18285,7 @@ function () {
       //chiudo il sottomenu se clicco fuori
       document.addEventListener('click', function (e) {
         if (!header.contains(e.target)) {
-          Navigation.closeNav();
+          Navigation.reset();
         }
       });
     }
@@ -18372,6 +18377,7 @@ function () {
             }
           } else {
             body.classList.add('nav-mobile-open');
+            Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
           }
         });
         parents.forEach(function (parent) {
@@ -18391,6 +18397,33 @@ function () {
             e.preventDefault();
           });
         });
+      }
+    }
+  }, {
+    key: "closeMobileNav",
+    value: function closeMobileNav() {
+      //chiudo il sottomenu
+      if (body.classList.contains('nav-mobile-open')) {
+        body.classList.remove('nav-mobile-open');
+        parents.forEach(function (x) {
+          if (x.parentNode.classList.contains('active')) {
+            x.parentNode.classList.remove('active');
+            setTimeout(function () {
+              x.parentNode.style.zIndex = 1;
+            }, 500);
+          }
+        });
+        subnavOpen = false;
+      }
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      if (window.innerWidth > 768) {
+        Navigation.closeNav();
+        Navigation.closeSearch();
+      } else {
+        Navigation.closeMobileNav();
       }
     }
   }]);

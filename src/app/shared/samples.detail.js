@@ -57,13 +57,13 @@ export default class SamplesDetail {
         TweenMax.to(back, 1, {
             transform: 'translateX(0)',
             ease: Expo.easeInOut
-        })
+        });
         TweenMax.to(headerCat, 1, {
             marginLeft: '146px',
             maxWidth: (viewportWidth - 146) + 'px',
             flex: '0 0 ' + (viewportWidth - 146) + 'px',
             ease: Expo.easeInOut
-        })
+        });
     }
 
     static closeLayer(wrapper, back, headerCat, viewportWidth) {

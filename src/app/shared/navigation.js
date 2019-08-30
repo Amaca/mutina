@@ -99,7 +99,7 @@ export default class Navigation {
     static closeOnOutsideClick() { //chiudo il sottomenu se clicco fuori
         document.addEventListener('click', (e) => {
             if (!header.contains(e.target)) {
-                Navigation.closeNav();
+                Navigation.reset();
             }
         });
     }
@@ -181,6 +181,7 @@ export default class Navigation {
                     }
                 } else {
                     body.classList.add('nav-mobile-open');
+                    Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
                 }
             });
 
@@ -202,6 +203,30 @@ export default class Navigation {
                     e.preventDefault();
                 });
             });
+        }
+    }
+
+    static closeMobileNav() { //chiudo il sottomenu
+        if (body.classList.contains('nav-mobile-open')) {
+            body.classList.remove('nav-mobile-open');
+            parents.forEach(x => {
+                if (x.parentNode.classList.contains('active')) {
+                    x.parentNode.classList.remove('active');
+                    setTimeout(() => {
+                        x.parentNode.style.zIndex = 1;
+                    }, 500);
+                }
+            });
+            subnavOpen = false;
+        }
+    }
+
+    static reset() {
+        if (window.innerWidth > 768) {
+            Navigation.closeNav();
+            Navigation.closeSearch();
+        } else {
+            Navigation.closeMobileNav();
         }
     }
 }
