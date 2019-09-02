@@ -15425,7 +15425,7 @@ function () {
       this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
       this.pictures = [].slice.call(document.querySelectorAll('.picture img'));
       this.pictures.forEach(function (picture) {
-        if (!picture.classList.contains('picture__secondary')) {
+        if (!picture.classList.contains('picture__secondary') && !picture.parentNode.classList.contains('picture__container')) {
           var wrapper = document.createElement('div');
           wrapper.classList.add('picture__container');
           picture.parentNode.insertBefore(wrapper, picture);
@@ -16423,9 +16423,9 @@ exports.default = void 0;
 
 var _fancy = _interopRequireDefault(require("./fancy.transition"));
 
-var _utils = _interopRequireDefault(require("./utils"));
-
 var _follower = _interopRequireDefault(require("./follower"));
+
+var _utils = _interopRequireDefault(require("./utils"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16468,6 +16468,7 @@ function () {
     this.bigImageUrl = node.getAttribute('data-fancy-img');
     this.caption = node.getAttribute('data-fancy-caption');
     this.groupCaption = node.getAttribute('data-fancy-group-caption');
+    this.zoom = node.getAttribute('data-zoom') === 'true' || window.innerWidth <= 768 ? true : false;
     this.addListener();
   }
 
@@ -16609,7 +16610,8 @@ function () {
           caption: item.caption,
           url: item.bigImageUrl,
           group: item.group,
-          groupCaption: item.groupCaption
+          groupCaption: item.groupCaption,
+          zoom: item.zoom
         };
       });
 
@@ -16625,7 +16627,7 @@ function () {
 
       var slidersHtml = '';
       sliderItems.forEach(function (slider) {
-        slidersHtml += "\n            <div class=\"swiper-slide\">\n                <div class=\"swiper-zoom-container\"><img class=\"swiper-lazy\" data-src=\"".concat(slider.url, "\"></div>\n                <div class=\"swiper-lazy-preloader\"></div>\n            </div>");
+        slidersHtml += "\n            <div class=\"swiper-slide\">\n                <div class=\"swiper-zoom-container\"><img class=\"swiper-lazy\" data-src=\"".concat(slider.url, "\" data-fancy-zoom=\"").concat(slider.zoom, "\"></div>\n                <div class=\"swiper-lazy-preloader\"></div>\n            </div>");
       });
       var swiperMarkup = "\n        <div class=\"swiper-container\">\n            <div class=\"swiper-wrapper\">".concat(slidersHtml, "</div>\n        </div>\n        <div class=\"swiper-button-prev\">").concat(prevIcon, "</div>\n            <div class=\"swiper-button-next\">").concat(nextIcon, "</div> \n        ");
       var detailGallerySwiper = document.createElement('div');
@@ -16634,7 +16636,11 @@ function () {
       wrapper.appendChild(detailGallerySwiper);
       firstLoad = false;
 
-      var images = _toConsumableArray(document.querySelectorAll('.detail-gallery__swiper .swiper-lazy'));
+      var images = _toConsumableArray(document.querySelectorAll('.detail-gallery__swiper .swiper-lazy')).filter(function (x) {
+        return x.getAttribute('data-fancy-zoom') === 'true';
+      });
+
+      console.log('images', images);
 
       _follower.default.addMouseListener(images);
 
@@ -16652,6 +16658,11 @@ function () {
         },
         preloadImages: false,
         lazy: true,
+        breakpoints: {
+          768: {
+            touchRatio: 1
+          }
+        },
         navigation: {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev'
@@ -16665,46 +16676,14 @@ function () {
           }
         },
         on: {
+          doubleTap: function doubleTap(e) {
+            if (window.innerWidth <= 768) {
+              Fancy.zoomBehaviour(this, sliderItems);
+            }
+          },
           tap: function tap(e) {
-            var detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper ');
-            var follower = document.querySelector('.follower__secondary');
-
-            _utils.default.toggleClass(body, 'fancy-zoom');
-
-            _utils.default.toggleClass(follower, 'zoom-out');
-
-            this.zoom.toggle();
-
-            if (body.classList.contains('fancy-zoom')) {
-              this.allowSlidePrev = false;
-              this.allowSlideNext = false;
-              this.allowTouchMove = false;
-              TweenMax.to(detailGalleryWrapper, 0.2, {
-                height: window.innerHeight - 60,
-                ease: Expo.easeInOut
-              }); // TweenMax.to(e.target, 0.2, {
-              //     transform: 'scale(2)',
-              //     ease: Expo.easeInOut
-              // });
-              // console.log('attivo');
-              // e.target.addEventListener('dragstart', dragStart);
-              // e.target.addEventListener('drag', dragMove);
-              // e.target.addEventListener('dragend', dragEnd);
-            } else {
-              this.allowSlidePrev = true;
-              this.allowSlideNext = true;
-              this.allowTouchMove = true;
-              TweenMax.to(detailGalleryWrapper, 0.2, {
-                height: window.innerHeight - 65 - 60,
-                ease: Expo.easeInOut
-              }); // TweenMax.to(e.target, 0.2, {
-              //     transform: 'scale(1)',
-              //     ease: Expo.easeInOut
-              // });
-              // console.log('disattivo')
-              // e.target.removeEventListener('dragstart', dragStart);
-              // e.target.removeEventListener('drag', dragMove);
-              // e.target.removeEventListener('dragend', dragEnd);
+            if (window.innerWidth > 768) {
+              Fancy.zoomBehaviour(this, sliderItems);
             }
           },
           init: function init() {
@@ -16712,6 +16691,7 @@ function () {
             var groupCaption = sliderItems[this.activeIndex].groupCaption;
             var captionWrapper = document.querySelector('.detail-gallery__caption span');
             var groupCaptionWrapper = document.querySelector('.detail-gallery__group-caption');
+            var activateZoom = sliderItems[this.activeIndex].zoom;
             firstLoad = true;
             captionWrapper.innerHTML = caption;
 
@@ -16721,6 +16701,12 @@ function () {
 
             this.keyboard.enable();
             this.slideTo(id, 0);
+
+            if (activateZoom) {
+              this.zoom.enable();
+            } else {
+              this.zoom.disable();
+            }
           },
           slideChange: function slideChange() {
             var captionSpeed = slideAnimationSpeed / 1000 / 2;
@@ -16728,6 +16714,7 @@ function () {
             var groupCaption = sliderItems[this.activeIndex].groupCaption;
             var captionWrapper = document.querySelector('.detail-gallery__caption span');
             var groupCaptionWrapper = document.querySelector('.detail-gallery__group-caption');
+            var activateZoom = sliderItems[this.activeIndex].zoom;
             TweenMax.set(captionWrapper, {
               bottom: 0
             });
@@ -16746,6 +16733,12 @@ function () {
             if (groupCaptionWrapper) {
               groupCaptionWrapper.innerHTML = groupCaption;
             }
+
+            if (activateZoom) {
+              this.zoom.enable();
+            } else {
+              this.zoom.disable();
+            }
           },
           lazyImageReady: function lazyImageReady() {
             if (firstLoad) {
@@ -16758,6 +16751,53 @@ function () {
       };
       swiperInstance = new Swiper(document.querySelector('.detail-gallery__swiper .swiper-container'), options);
       swiperInstance.init();
+    }
+  }, {
+    key: "zoomBehaviour",
+    value: function zoomBehaviour(instance, items) {
+      var detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper ');
+      var follower = document.querySelector('.follower__secondary');
+      var activateZoom = items[instance.activeIndex].zoom;
+
+      if (activateZoom) {
+        _utils.default.toggleClass(body, 'fancy-zoom');
+
+        _utils.default.toggleClass(follower, 'zoom-out');
+
+        instance.zoom.toggle();
+
+        if (body.classList.contains('fancy-zoom')) {
+          instance.allowSlidePrev = false;
+          instance.allowSlideNext = false;
+          instance.allowTouchMove = false;
+          TweenMax.to(detailGalleryWrapper, 0.2, {
+            height: window.innerHeight - 60,
+            ease: Expo.easeInOut
+          }); // TweenMax.to(e.target, 0.2, {
+          //     transform: 'scale(2)',
+          //     ease: Expo.easeInOut
+          // });
+          // console.log('attivo');
+          // e.target.addEventListener('dragstart', dragStart);
+          // e.target.addEventListener('drag', dragMove);
+          // e.target.addEventListener('dragend', dragEnd);
+        } else {
+          instance.allowSlidePrev = true;
+          instance.allowSlideNext = true;
+          instance.allowTouchMove = true;
+          TweenMax.to(detailGalleryWrapper, 0.2, {
+            height: window.innerHeight - 65 - 60,
+            ease: Expo.easeInOut
+          }); // TweenMax.to(e.target, 0.2, {
+          //     transform: 'scale(1)',
+          //     ease: Expo.easeInOut
+          // });
+          // console.log('disattivo')
+          // e.target.removeEventListener('dragstart', dragStart);
+          // e.target.removeEventListener('drag', dragMove);
+          // e.target.removeEventListener('dragend', dragEnd);
+        }
+      }
     }
   }, {
     key: "zoomOutOnClose",

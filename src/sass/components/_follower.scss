@@ -146,7 +146,7 @@ $follower-width: 48px;
     .follower-enabled {
 
         [data-fancy-img]:hover,
-        .detail-gallery__swiper .swiper-lazy-loaded,
+        .detail-gallery__swiper .swiper-lazy-loaded[data-fancy-zoom="true"],
         .full-samples-gallery__item img,
         .full-gallery__thumb .img,
         .fancy-in-transition .picture img {

@@ -2,8 +2,8 @@
 /* tweenmax & swiper needed */
 
 import FancyTransition from './fancy.transition';
-import Utils from './utils';
 import Follower from './follower';
+import Utils from './utils';
 
 let clickClose;
 let clickSwitch;
@@ -28,6 +28,7 @@ export default class Fancy {
         this.bigImageUrl = node.getAttribute('data-fancy-img');
         this.caption = node.getAttribute('data-fancy-caption');
         this.groupCaption = node.getAttribute('data-fancy-group-caption');
+        this.zoom = node.getAttribute('data-zoom') === 'true' || window.innerWidth <= 768 ? true : false;
         this.addListener();
     }
 
@@ -150,7 +151,8 @@ export default class Fancy {
                 caption: item.caption,
                 url: item.bigImageUrl,
                 group: item.group,
-                groupCaption: item.groupCaption
+                groupCaption: item.groupCaption,
+                zoom: item.zoom
             };
         });
 
@@ -168,7 +170,7 @@ export default class Fancy {
         sliderItems.forEach(slider => {
             slidersHtml += `
             <div class="swiper-slide">
-                <div class="swiper-zoom-container"><img class="swiper-lazy" data-src="${slider.url}"></div>
+                <div class="swiper-zoom-container"><img class="swiper-lazy" data-src="${slider.url}" data-fancy-zoom="${slider.zoom}"></div>
                 <div class="swiper-lazy-preloader"></div>
             </div>`;
         });
@@ -188,7 +190,9 @@ export default class Fancy {
         wrapper.appendChild(detailGallerySwiper);
         firstLoad = false;
 
-        const images = [...document.querySelectorAll('.detail-gallery__swiper .swiper-lazy')];
+        const images = [...document.querySelectorAll('.detail-gallery__swiper .swiper-lazy')].filter(x => x.getAttribute('data-fancy-zoom') === 'true');
+
+        console.log('images', images);
         Follower.addMouseListener(images);
 
         let options = {
@@ -205,6 +209,11 @@ export default class Fancy {
             },
             preloadImages: false,
             lazy: true,
+            breakpoints: {
+                768: {
+                    touchRatio: 1,
+                }
+            },
             navigation: {
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
@@ -218,45 +227,14 @@ export default class Fancy {
                 },
             },
             on: {
+                doubleTap: function (e) {
+                    if (window.innerWidth <= 768) {
+                        Fancy.zoomBehaviour(this, sliderItems);
+                    }
+                },
                 tap: function (e) {
-                    const detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper ');
-                    const follower = document.querySelector('.follower__secondary');
-
-                    Utils.toggleClass(body, 'fancy-zoom');
-                    Utils.toggleClass(follower, 'zoom-out');
-                    this.zoom.toggle();
-                    if (body.classList.contains('fancy-zoom')) {
-                        this.allowSlidePrev = false;
-                        this.allowSlideNext = false;
-                        this.allowTouchMove = false;
-                        TweenMax.to(detailGalleryWrapper, 0.2, {
-                            height: window.innerHeight - 60,
-                            ease: Expo.easeInOut
-                        });
-                        // TweenMax.to(e.target, 0.2, {
-                        //     transform: 'scale(2)',
-                        //     ease: Expo.easeInOut
-                        // });
-                        // console.log('attivo');
-                        // e.target.addEventListener('dragstart', dragStart);
-                        // e.target.addEventListener('drag', dragMove);
-                        // e.target.addEventListener('dragend', dragEnd);
-                    } else {
-                        this.allowSlidePrev = true;
-                        this.allowSlideNext = true;
-                        this.allowTouchMove = true;
-                        TweenMax.to(detailGalleryWrapper, 0.2, {
-                            height: window.innerHeight - 65 - 60,
-                            ease: Expo.easeInOut
-                        });
-                        // TweenMax.to(e.target, 0.2, {
-                        //     transform: 'scale(1)',
-                        //     ease: Expo.easeInOut
-                        // });
-                        // console.log('disattivo')
-                        // e.target.removeEventListener('dragstart', dragStart);
-                        // e.target.removeEventListener('drag', dragMove);
-                        // e.target.removeEventListener('dragend', dragEnd);
+                    if (window.innerWidth > 768) {
+                        Fancy.zoomBehaviour(this, sliderItems);
                     }
                 },
                 init: function () {
@@ -264,6 +242,7 @@ export default class Fancy {
                     const groupCaption = sliderItems[this.activeIndex].groupCaption;
                     const captionWrapper = document.querySelector('.detail-gallery__caption span');
                     const groupCaptionWrapper = document.querySelector('.detail-gallery__group-caption');
+                    const activateZoom = sliderItems[this.activeIndex].zoom;
                     firstLoad = true;
                     captionWrapper.innerHTML = caption;
                     if (groupCaptionWrapper) {
@@ -271,6 +250,12 @@ export default class Fancy {
                     }
                     this.keyboard.enable();
                     this.slideTo(id, 0);
+                    if (activateZoom) {
+                        this.zoom.enable();
+                    } else {
+                        this.zoom.disable();
+
+                    }
                 },
                 slideChange: function () {
                     const captionSpeed = (slideAnimationSpeed / 1000) / 2;
@@ -278,6 +263,7 @@ export default class Fancy {
                     const groupCaption = sliderItems[this.activeIndex].groupCaption;
                     const captionWrapper = document.querySelector('.detail-gallery__caption span');
                     const groupCaptionWrapper = document.querySelector('.detail-gallery__group-caption');
+                    const activateZoom = sliderItems[this.activeIndex].zoom;
                     TweenMax.set(captionWrapper, {
                         bottom: 0,
                     });
@@ -295,6 +281,11 @@ export default class Fancy {
                     if (groupCaptionWrapper) {
                         groupCaptionWrapper.innerHTML = groupCaption;
                     }
+                    if (activateZoom) {
+                        this.zoom.enable();
+                    } else {
+                        this.zoom.disable();
+                    }
                 },
                 lazyImageReady: function () {
                     if (firstLoad) {
@@ -308,6 +299,50 @@ export default class Fancy {
         swiperInstance = new Swiper(document.querySelector('.detail-gallery__swiper .swiper-container'), options);
         swiperInstance.init();
 
+    }
+
+    static zoomBehaviour(instance, items) {
+        const detailGalleryWrapper = document.querySelector('.detail-gallery__wrapper ');
+        const follower = document.querySelector('.follower__secondary');
+        const activateZoom = items[instance.activeIndex].zoom;
+        if (activateZoom) {
+            Utils.toggleClass(body, 'fancy-zoom');
+            Utils.toggleClass(follower, 'zoom-out');
+            instance.zoom.toggle();
+            if (body.classList.contains('fancy-zoom')) {
+                instance.allowSlidePrev = false;
+                instance.allowSlideNext = false;
+                instance.allowTouchMove = false;
+                TweenMax.to(detailGalleryWrapper, 0.2, {
+                    height: window.innerHeight - 60,
+                    ease: Expo.easeInOut
+                });
+                // TweenMax.to(e.target, 0.2, {
+                //     transform: 'scale(2)',
+                //     ease: Expo.easeInOut
+                // });
+                // console.log('attivo');
+                // e.target.addEventListener('dragstart', dragStart);
+                // e.target.addEventListener('drag', dragMove);
+                // e.target.addEventListener('dragend', dragEnd);
+            } else {
+                instance.allowSlidePrev = true;
+                instance.allowSlideNext = true;
+                instance.allowTouchMove = true;
+                TweenMax.to(detailGalleryWrapper, 0.2, {
+                    height: window.innerHeight - 65 - 60,
+                    ease: Expo.easeInOut
+                });
+                // TweenMax.to(e.target, 0.2, {
+                //     transform: 'scale(1)',
+                //     ease: Expo.easeInOut
+                // });
+                // console.log('disattivo')
+                // e.target.removeEventListener('dragstart', dragStart);
+                // e.target.removeEventListener('drag', dragMove);
+                // e.target.removeEventListener('dragend', dragEnd);
+            }
+        }
     }
 
     static zoomOutOnClose() {

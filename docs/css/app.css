@@ -276,7 +276,7 @@ body {
 
 @media (min-width: 768px) {
   .follower-enabled [data-fancy-img]:hover,
-  .follower-enabled .detail-gallery__swiper .swiper-lazy-loaded,
+  .follower-enabled .detail-gallery__swiper .swiper-lazy-loaded[data-fancy-zoom="true"],
   .follower-enabled .full-samples-gallery__item img,
   .follower-enabled .full-gallery__thumb .img,
   .follower-enabled .fancy-in-transition .picture img {
@@ -2581,12 +2581,14 @@ img:not([src]) {
     bottom: 0; }
   .picture.picture--frame {
     padding: 0 4.166vw; }
-  .picture.picture--animate.loaded .picture__container {
-    -webkit-transition: all 5s cubic-bezier(0, 0.97, 0.43, 1);
-    transition: all 5s cubic-bezier(0, 0.97, 0.43, 1); }
-  .picture.picture--animate.loaded:hover .picture__container {
-    -webkit-transform: scale(1.05);
-            transform: scale(1.05); }
+  .picture.picture--animate {
+    cursor: pointer; }
+    .picture.picture--animate.loaded .picture__container {
+      -webkit-transition: all 5s cubic-bezier(0, 0.97, 0.43, 1);
+      transition: all 5s cubic-bezier(0, 0.97, 0.43, 1); }
+    .picture.picture--animate.loaded:hover .picture__container {
+      -webkit-transform: scale(1.05);
+              transform: scale(1.05); }
   .picture.picture--shadow.loaded .picture__container:after {
     content: '';
     width: 100%;

@@ -600,7 +600,7 @@ export default class App {
         this.pictures = [].slice.call(document.querySelectorAll('.picture img'));
 
         this.pictures.forEach(picture => {
-            if (!picture.classList.contains('picture__secondary')) {
+            if (!picture.classList.contains('picture__secondary') && !picture.parentNode.classList.contains('picture__container')) {
                 let wrapper = document.createElement('div');
                 wrapper.classList.add('picture__container');
                 picture.parentNode.insertBefore(wrapper, picture);
