@@ -18861,6 +18861,8 @@ var _lazyload = _interopRequireDefault(require("./lazyload"));
 
 var _samples = _interopRequireDefault(require("./samples.detail"));
 
+var _scroll = _interopRequireDefault(require("./scroll.anchors"));
+
 var _side = _interopRequireDefault(require("./side.panel"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -18929,8 +18931,6 @@ function () {
   }, {
     key: "initFullSamplesGallery",
     value: function initFullSamplesGallery() {
-      var _this2 = this;
-
       var fullSamplesGallery = document.createElement('div');
       var fullSamplesHeader = document.createElement('div');
       var fullSamplesClose = document.createElement('div');
@@ -18979,13 +18979,11 @@ function () {
       fullSamplesHeaderButton.innerHTML = 'Samples (0)';
       sidePanelButton = new _side.default(fullSamplesHeaderButton, null, 'samples');
       body.classList.add('samples-gallery-open');
-      html.style.overflow = 'hidden';
+      html.style.overflow = 'hidden'; // scrollWrapper = (e) => {
+      //     this.scrollWrapper(e);
+      // };
+      // fullSamplesWrapper.addEventListener('scroll', scrollWrapper);
 
-      scrollWrapper = function scrollWrapper(e) {
-        _this2.scrollWrapper(e);
-      };
-
-      fullSamplesWrapper.addEventListener('scroll', scrollWrapper);
       this.addCategories(fullSamplesCat);
       this.addImages(fullSamplesContainer);
 
@@ -18994,13 +18992,12 @@ function () {
   }, {
     key: "addCategories",
     value: function addCategories(wrapper) {
-      var categoriesHtml = '<ul>';
+      var categoriesHtml = '<ul data-scroll-anchors="50">';
       this.data.samples.forEach(function (category) {
-        categoriesHtml += "\n                <li><a href=\"#\" data-sample-id=\"".concat(category.id, "\">").concat(category.color, "</a></li>\n            ");
+        categoriesHtml += "\n                <li><a href=\"#\" data-scroll-title=\"".concat(category.id, "\" data-sample-id=\"").concat(category.id, "\">").concat(category.color, "</a></li>\n            ");
       });
       categoriesHtml += '</ul>';
       wrapper.innerHTML = categoriesHtml;
-      Samples.addTabsListeners();
     }
   }, {
     key: "scrollWrapper",
@@ -19010,7 +19007,7 @@ function () {
   }, {
     key: "addImages",
     value: function addImages(wrapper) {
-      var _this3 = this;
+      var _this2 = this;
 
       var containerHtml = '';
       this.data.samples.forEach(function (category) {
@@ -19018,7 +19015,7 @@ function () {
         category.items.forEach(function (item) {
           fullSamplesHtml += "\n                    <div class=\"full-samples-gallery__item\">\n                        <div class=\"img\">\n                            <img data-load=\"".concat(item.img, "\" alt=\"").concat(item.title, "\" data-sample-detail=\"").concat(item.id, "\">\n                        </div>\n                        <div class=\"box\">\n                            <h6 class=\"h6\">").concat(item.title, "</h6>\n                            <div class=\"text\">").concat(item.size, "</div>\n                            <div class=\"cta\"><a href=\"#\" class=\"btn--inline\">Add to samples</a></div>\n                        </div>\n                    </div>\n                ");
         });
-        containerHtml += "<div class=\"full-samples-gallery__category\" data-sample-category=\"".concat(category.id, "\">");
+        containerHtml += "<div class=\"full-samples-gallery__category\" data-scroll-area=\"".concat(category.id, "\" data-sample-category=\"").concat(category.id, "\">");
 
         if (category.img !== null) {
           containerHtml += "\n                <div class=\"full-samples-gallery__cover\">\n                    <h2 class=\"h2\">".concat(category.color, "</h2>\n                    <div class=\"img\">\n                        <img data-load=\"").concat(category.img, "\">\n                    </div>\n                    <div class=\"box\">\n                        <h6 class=\"h6\">").concat(category.title, "</h6>\n                        <div class=\"text\">").concat(category.size, "</div>\n                    </div>\n                </div>");
@@ -19027,6 +19024,7 @@ function () {
         containerHtml += "<div class=\"full-samples-gallery__listing\">".concat(fullSamplesHtml, "</div></div>");
       });
       wrapper.innerHTML = containerHtml;
+      Samples.addTabsListeners();
 
       _lazyload.default.init();
 
@@ -19037,7 +19035,7 @@ function () {
       var images = this.mapData();
 
       clickDetailGallery = function clickDetailGallery(e) {
-        _this3.openDetailGallery(e, images);
+        _this2.openDetailGallery(e, images);
       };
 
       images.forEach(function (image) {
@@ -19085,10 +19083,10 @@ function () {
   }, {
     key: "addListeners",
     value: function addListeners() {
-      var _this4 = this;
+      var _this3 = this;
 
       var click = function click(e) {
-        _this4.getData();
+        _this3.getData();
 
         e.preventDefault();
       };
@@ -19121,27 +19119,23 @@ function () {
           offsetY: 36,
           ease: Expo.easeInOut
         }
-      });
-      Utils.toggleClass(e.target, 'active');
+      }); // Utils.toggleClass(e.target, 'active');
+
       e.preventDefault();
     }
   }, {
     key: "removeTabsListeners",
-    value: function removeTabsListeners() {
-      var _this5 = this;
-
-      _toConsumableArray(document.querySelectorAll('[data-sample-id]')).forEach(function (x) {
-        x.removeEventListener('click', _this5.scrollToColor);
-      });
+    value: function removeTabsListeners() {// [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
+      //     x.removeEventListener('click', this.scrollToColor);
+      // });
     }
   }, {
     key: "addTabsListeners",
     value: function addTabsListeners() {
-      var _this6 = this;
-
-      _toConsumableArray(document.querySelectorAll('[data-sample-id]')).forEach(function (x) {
-        x.addEventListener('click', _this6.scrollToColor);
-      });
+      // [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
+      //     x.addEventListener('click', this.scrollToColor);
+      // });
+      new _scroll.default(document.querySelector('.full-samples-gallery [data-scroll-anchors]'), 0, document.querySelector('.full-samples-gallery__wrapper'));
     }
   }, {
     key: "destroyAll",
@@ -19169,7 +19163,7 @@ function () {
 
 exports.default = Samples;
 
-},{"./fancy.transition":319,"./follower":322,"./lazyload":325,"./samples.detail":328,"./side.panel":331,"gsap/ScrollToPlugin":309}],330:[function(require,module,exports){
+},{"./fancy.transition":319,"./follower":322,"./lazyload":325,"./samples.detail":328,"./scroll.anchors":330,"./side.panel":331,"gsap/ScrollToPlugin":309}],330:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19198,7 +19192,7 @@ var header = document.querySelector('header');
 var ScrollAnchors =
 /*#__PURE__*/
 function () {
-  function ScrollAnchors(node, id) {
+  function ScrollAnchors(node, id, wrapper) {
     var _this = this;
 
     _classCallCheck(this, ScrollAnchors);
@@ -19217,9 +19211,11 @@ function () {
 
       return relativeAreas;
     });
+    this.wrapper = wrapper;
     this.page = document.querySelector('.page');
     this.offset = this.node.getAttribute('data-scroll-anchors');
     this.goToAnchor = this.goToAnchor.bind(this);
+    this.onWrapperScroll = this.onWrapperScroll.bind(this);
     this.onScroll = this.onScroll.bind(this);
     this.addListeners();
   }
@@ -19232,7 +19228,12 @@ function () {
       this.titles.forEach(function (title) {
         title.addEventListener('click', _this2.goToAnchor);
       });
-      this.onScroll();
+
+      if (this.wrapper !== window) {
+        this.wrapper.addEventListener('scroll', this.onWrapperScroll);
+      } else {
+        this.onScroll();
+      }
     }
   }, {
     key: "removeListeners",
@@ -19243,7 +19244,10 @@ function () {
       this.titles.forEach(function (title) {
         title.removeEventListener('click', _this3.goToAnchor);
       });
-      window.removeEventListener('scroll', this.onScroll);
+
+      if (this.wrapper !== window) {
+        this.wrapper.removeEventListener('scroll', this.onWrapperScroll);
+      }
     }
   }, {
     key: "goToAnchor",
@@ -19252,28 +19256,57 @@ function () {
 
       this.areas.forEach(function (area) {
         if (area.getAttribute('data-scroll-area') === e.target.getAttribute('data-scroll-title')) {
-          window.scrollTo(0, _this4.getOffset(area) + 10);
+          if (_this4.wrapper !== window) {
+            TweenMax.to(_this4.wrapper, 0.8, {
+              scrollTo: {
+                y: _this4.getOffset(area) + 10,
+                ease: Expo.easeInOut
+              }
+            });
+          } else {
+            window.scrollTo(0, _this4.getOffset(area) + 10);
+          }
+        }
+      });
+    }
+  }, {
+    key: "onWrapperScroll",
+    value: function onWrapperScroll(e) {
+      var _this5 = this;
+
+      var anchor = this.areas.find(function (area, i) {
+        var top = area.getBoundingClientRect().top;
+        var bottom = i < _this5.areas.length - 1 ? _this5.areas[i + 1].getBoundingClientRect().top : Number.POSITIVE_INFINITY;
+
+        _this5.titles.forEach(function (title) {
+          title.classList.remove('active');
+        });
+
+        if (top < _this5.offset && bottom > _this5.offset) {
+          _this5.titles[i].classList.add('active');
+
+          return area;
         }
       });
     }
   }, {
     key: "onScroll",
     value: function onScroll(e) {
-      var _this5 = this;
+      var _this6 = this;
 
       if (this.top !== this.page.style.transform) {
         //controllo per requestanimationframe su contenitore dello scroll virtuale
         this.top = this.page.style.transform;
         var anchor = this.areas.find(function (area, i) {
           var top = area.getBoundingClientRect().top;
-          var bottom = i < _this5.areas.length - 1 ? _this5.areas[i + 1].getBoundingClientRect().top : Number.POSITIVE_INFINITY;
+          var bottom = i < _this6.areas.length - 1 ? _this6.areas[i + 1].getBoundingClientRect().top : Number.POSITIVE_INFINITY;
 
-          _this5.titles.forEach(function (title) {
+          _this6.titles.forEach(function (title) {
             title.classList.remove('active');
           });
 
-          if (top < _this5.offset && bottom > _this5.offset) {
-            _this5.titles[i].classList.add('active');
+          if (top < _this6.offset && bottom > _this6.offset) {
+            _this6.titles[i].classList.add('active');
 
             return area;
           }
@@ -19305,7 +19338,7 @@ function () {
     key: "init",
     value: function init(debug) {
       ScrollAnchors.items = _toConsumableArray(document.querySelectorAll('[data-scroll-anchors]')).map(function (node, id) {
-        return new ScrollAnchors(node, id);
+        return new ScrollAnchors(node, id, window);
       });
 
       if (debug) {

@@ -5,6 +5,7 @@ import FancyTransition from "./fancy.transition";
 import Follower from "./follower";
 import LazyLoad from "./lazyload";
 import SamplesDetail from "./samples.detail";
+import ScrollAnchors from "./scroll.anchors";
 import SidePanel from "./side.panel";
 
 let clickClose;
@@ -97,11 +98,11 @@ export default class Samples {
         body.classList.add('samples-gallery-open');
         html.style.overflow = 'hidden';
 
-        scrollWrapper = (e) => {
-            this.scrollWrapper(e);
-        };
+        // scrollWrapper = (e) => {
+        //     this.scrollWrapper(e);
+        // };
 
-        fullSamplesWrapper.addEventListener('scroll', scrollWrapper);
+        // fullSamplesWrapper.addEventListener('scroll', scrollWrapper);
 
         this.addCategories(fullSamplesCat);
         this.addImages(fullSamplesContainer);
@@ -111,16 +112,14 @@ export default class Samples {
     }
 
     addCategories(wrapper) {
-        let categoriesHtml = '<ul>';
+        let categoriesHtml = '<ul data-scroll-anchors="50">';
         this.data.samples.forEach(category => {
             categoriesHtml += `
-                <li><a href="#" data-sample-id="${category.id}">${category.color}</a></li>
+                <li><a href="#" data-scroll-title="${category.id}" data-sample-id="${category.id}">${category.color}</a></li>
             `;
         });
         categoriesHtml += '</ul>';
         wrapper.innerHTML = categoriesHtml;
-
-        Samples.addTabsListeners();
     }
 
     scrollWrapper(e) {
@@ -148,7 +147,7 @@ export default class Samples {
                 `;
             });
 
-            containerHtml += `<div class="full-samples-gallery__category" data-sample-category="${category.id}">`;
+            containerHtml += `<div class="full-samples-gallery__category" data-scroll-area="${category.id}" data-sample-category="${category.id}">`;
 
             if (category.img !== null) {
                 containerHtml += `
@@ -169,6 +168,7 @@ export default class Samples {
         });
 
         wrapper.innerHTML = containerHtml;
+        Samples.addTabsListeners();
         LazyLoad.init();
 
         const imagesSamples = [...document.querySelectorAll('.full-samples-gallery__item img')];
@@ -235,7 +235,6 @@ export default class Samples {
         }
     }
 
-
     static scrollToColor(e) {
         const id = e.target.getAttribute('data-sample-id');
         const wrapper = document.querySelector('.full-samples-gallery__wrapper');
@@ -250,20 +249,21 @@ export default class Samples {
             }
         });
 
-        Utils.toggleClass(e.target, 'active');
+        // Utils.toggleClass(e.target, 'active');
         e.preventDefault();
     }
 
     static removeTabsListeners() {
-        [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
-            x.removeEventListener('click', this.scrollToColor);
-        });
+        // [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
+        //     x.removeEventListener('click', this.scrollToColor);
+        // });
     }
 
     static addTabsListeners() {
-        [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
-            x.addEventListener('click', this.scrollToColor);
-        });
+        // [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
+        //     x.addEventListener('click', this.scrollToColor);
+        // });
+        new ScrollAnchors(document.querySelector('.full-samples-gallery [data-scroll-anchors]'), 0, document.querySelector('.full-samples-gallery__wrapper'));
     }
 
     static destroyAll() {
