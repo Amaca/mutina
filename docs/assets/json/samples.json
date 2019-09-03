@@ -4,8 +4,8 @@
             "color": "Nero",
             "title": "Combination nero",
             "size": "180cm 60cm",
-            "img": "assets/img/samples/thumb/combination_nero.jpg",
-            "imgHd": "assets/img/samples/hd/combination_nero.jpg",
+            "img": null,
+            "imgHd": null,
             "items": [{
                     "id": "0",
                     "title": "Nero cubo",

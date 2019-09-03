@@ -221,7 +221,7 @@ export default class FancyTransition {
                 //     right: 0,
                 // });
                 TweenMax.to(captionWrapper, captionSpeed, {
-                    bottom: -captionWrapper.offsetHeight,
+                    bottom: -captionWrapper.parentNode.offsetHeight,
                     ease: Expo.easeInOut,
                 });
                 TweenMax.to(close, 1, {

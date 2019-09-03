@@ -14876,7 +14876,6 @@ var firstLoad = false;
 var scrollPosition = '';
 var userAgent = navigator.userAgent.toLowerCase();
 var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
-console.log('isIE', isIE11);
 
 var App =
 /*#__PURE__*/
@@ -15584,10 +15583,10 @@ function () {
       });
       window.addEventListener('scroll', _utils.default.throttle(function () {
         _this2.onScroll();
-      }, 1000 / 25));
-      window.addEventListener('wheel', function (e) {
-        _this2.onWheel(e);
-      });
+      }, 1000 / 25)); // window.addEventListener('wheel', (e) => {
+      //     this.onWheel(e);
+      // });
+
       window.addEventListener('mousemove', function (e) {
         _this2.onMouseMove(e);
       });
@@ -15653,6 +15652,16 @@ function () {
           }
         } else {
           _dom.default.scrolling = false;
+        }
+      } else {
+        var diff = scrollTop - this.page.previousTop;
+
+        if (diff > 0) {
+          this.body.classList.add('scroll-up');
+          this.body.classList.remove('scroll-down');
+        } else {
+          this.body.classList.remove('scroll-up');
+          this.body.classList.add('scroll-down');
         }
       } //header animation
 
@@ -15833,8 +15842,6 @@ function () {
     key: "polyfill",
     value: function polyfill() {
       if ('NodeList' in window && !NodeList.prototype.forEach) {
-        console.info('polyfill for IE11');
-
         NodeList.prototype.forEach = function (callback, thisArg) {
           thisArg = thisArg || window;
 
@@ -16640,8 +16647,6 @@ function () {
         return x.getAttribute('data-fancy-zoom') === 'true';
       });
 
-      console.log('images', images);
-
       _follower.default.addMouseListener(images);
 
       var options = {
@@ -17091,7 +17096,7 @@ function () {
           // });
 
           TweenMax.to(captionWrapper, captionSpeed, {
-            bottom: -captionWrapper.offsetHeight,
+            bottom: -captionWrapper.parentNode.offsetHeight,
             ease: Expo.easeInOut
           });
           TweenMax.to(close, 1, {
@@ -18850,13 +18855,13 @@ require("gsap/ScrollToPlugin");
 
 var _fancy = _interopRequireDefault(require("./fancy.transition"));
 
-var _samples = _interopRequireDefault(require("./samples.detail"));
-
-var _side = _interopRequireDefault(require("./side.panel"));
+var _follower = _interopRequireDefault(require("./follower"));
 
 var _lazyload = _interopRequireDefault(require("./lazyload"));
 
-var _follower = _interopRequireDefault(require("./follower"));
+var _samples = _interopRequireDefault(require("./samples.detail"));
+
+var _side = _interopRequireDefault(require("./side.panel"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18984,8 +18989,7 @@ function () {
       this.addCategories(fullSamplesCat);
       this.addImages(fullSamplesContainer);
 
-      _fancy.default.openLayer('fullSamplesGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, this.id); //https://gomakethings.com/how-to-update-a-url-without-reloading-the-page-using-vanilla-javascript/
-
+      _fancy.default.openLayer('fullSamplesGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, this.id);
     }
   }, {
     key: "addCategories",
@@ -19014,7 +19018,13 @@ function () {
         category.items.forEach(function (item) {
           fullSamplesHtml += "\n                    <div class=\"full-samples-gallery__item\">\n                        <div class=\"img\">\n                            <img data-load=\"".concat(item.img, "\" alt=\"").concat(item.title, "\" data-sample-detail=\"").concat(item.id, "\">\n                        </div>\n                        <div class=\"box\">\n                            <h6 class=\"h6\">").concat(item.title, "</h6>\n                            <div class=\"text\">").concat(item.size, "</div>\n                            <div class=\"cta\"><a href=\"#\" class=\"btn--inline\">Add to samples</a></div>\n                        </div>\n                    </div>\n                ");
         });
-        containerHtml += "\n            <div class=\"full-samples-gallery__category\" data-sample-category=\"".concat(category.id, "\">\n                <div class=\"full-samples-gallery__cover\">\n                    <h2 class=\"h2\">").concat(category.color, "</h2>\n                    <div class=\"img\">\n                        <img data-load=\"").concat(category.img, "\">\n                    </div>\n                    <div class=\"box\">\n                        <h6 class=\"h6\">").concat(category.title, "</h6>\n                        <div class=\"text\">").concat(category.size, "</div>\n                    </div>\n                </div>\n                <div class=\"full-samples-gallery__listing\">\n                    ").concat(fullSamplesHtml, "                    \n                </div>\n            </div>\n        ");
+        containerHtml += "<div class=\"full-samples-gallery__category\" data-sample-category=\"".concat(category.id, "\">");
+
+        if (category.img !== null) {
+          containerHtml += "\n                <div class=\"full-samples-gallery__cover\">\n                    <h2 class=\"h2\">".concat(category.color, "</h2>\n                    <div class=\"img\">\n                        <img data-load=\"").concat(category.img, "\">\n                    </div>\n                    <div class=\"box\">\n                        <h6 class=\"h6\">").concat(category.title, "</h6>\n                        <div class=\"text\">").concat(category.size, "</div>\n                    </div>\n                </div>");
+        }
+
+        containerHtml += "<div class=\"full-samples-gallery__listing\">".concat(fullSamplesHtml, "</div></div>");
       });
       wrapper.innerHTML = containerHtml;
 
@@ -19111,8 +19121,8 @@ function () {
           offsetY: 36,
           ease: Expo.easeInOut
         }
-      }); //Utils.toggleClass(e.target, 'active');
-
+      });
+      Utils.toggleClass(e.target, 'active');
       e.preventDefault();
     }
   }, {
@@ -19691,7 +19701,7 @@ function () {
           grabCursor: true,
           watchOverflow: true,
           centeredSlides: true,
-          loop: true,
+          loop: this.slider.querySelectorAll('.swiper-slide').length <= 2 ? false : true,
           slidesPerView: 'auto',
           spaceBetween: 60,
           preloadImages: false,

@@ -715,6 +715,10 @@
         .text {
             @include font($style:medium);
 
+            @include xs-down {
+                line-height: 1;
+            }
+
             .btn--inline-alt {
                 font-size: 0.9rem;
                 color: $white;

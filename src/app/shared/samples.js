@@ -2,10 +2,10 @@
 
 import "gsap/ScrollToPlugin";
 import FancyTransition from "./fancy.transition";
+import Follower from "./follower";
+import LazyLoad from "./lazyload";
 import SamplesDetail from "./samples.detail";
 import SidePanel from "./side.panel";
-import LazyLoad from "./lazyload";
-import Follower from "./follower";
 
 let clickClose;
 let scrollWrapper;
@@ -108,7 +108,6 @@ export default class Samples {
 
         FancyTransition.openLayer('fullSamplesGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, this.id);
 
-        //https://gomakethings.com/how-to-update-a-url-without-reloading-the-page-using-vanilla-javascript/
     }
 
     addCategories(wrapper) {
@@ -149,8 +148,10 @@ export default class Samples {
                 `;
             });
 
-            containerHtml += `
-            <div class="full-samples-gallery__category" data-sample-category="${category.id}">
+            containerHtml += `<div class="full-samples-gallery__category" data-sample-category="${category.id}">`;
+
+            if (category.img !== null) {
+                containerHtml += `
                 <div class="full-samples-gallery__cover">
                     <h2 class="h2">${category.color}</h2>
                     <div class="img">
@@ -160,12 +161,11 @@ export default class Samples {
                         <h6 class="h6">${category.title}</h6>
                         <div class="text">${category.size}</div>
                     </div>
-                </div>
-                <div class="full-samples-gallery__listing">
-                    ${fullSamplesHtml}                    
-                </div>
-            </div>
-        `;
+                </div>`;
+            }
+
+            containerHtml += `<div class="full-samples-gallery__listing">${fullSamplesHtml}</div></div>`;
+
         });
 
         wrapper.innerHTML = containerHtml;
@@ -250,7 +250,7 @@ export default class Samples {
             }
         });
 
-        //Utils.toggleClass(e.target, 'active');
+        Utils.toggleClass(e.target, 'active');
         e.preventDefault();
     }
 

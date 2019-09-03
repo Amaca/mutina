@@ -192,7 +192,6 @@ export default class Fancy {
 
         const images = [...document.querySelectorAll('.detail-gallery__swiper .swiper-lazy')].filter(x => x.getAttribute('data-fancy-zoom') === 'true');
 
-        console.log('images', images);
         Follower.addMouseListener(images);
 
         let options = {

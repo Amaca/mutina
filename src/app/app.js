@@ -41,7 +41,6 @@ let scrollPosition = '';
 
 const userAgent = navigator.userAgent.toLowerCase();
 const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
-console.log('isIE', isIE11)
 
 export default class App {
 
@@ -718,9 +717,9 @@ export default class App {
             this.onScroll();
         }, 1000 / 25));
 
-        window.addEventListener('wheel', (e) => {
-            this.onWheel(e);
-        });
+        // window.addEventListener('wheel', (e) => {
+        //     this.onWheel(e);
+        // });
 
         window.addEventListener('mousemove', (e) => {
             this.onMouseMove(e);
@@ -776,6 +775,15 @@ export default class App {
                 }
             } else {
                 Dom.scrolling = false;
+            }
+        } else {
+            const diff = scrollTop - this.page.previousTop;
+            if (diff > 0) {
+                this.body.classList.add('scroll-up');
+                this.body.classList.remove('scroll-down');
+            } else {
+                this.body.classList.remove('scroll-up');
+                this.body.classList.add('scroll-down');
             }
         }
 
@@ -939,7 +947,6 @@ export default class App {
 
     polyfill() {
         if ('NodeList' in window && !NodeList.prototype.forEach) {
-            console.info('polyfill for IE11');
             NodeList.prototype.forEach = function (callback, thisArg) {
                 thisArg = thisArg || window;
                 for (var i = 0; i < this.length; i++) {
