@@ -15723,14 +15723,21 @@ function () {
   }, {
     key: "updateViewPortHeight",
     value: function updateViewPortHeight() {
-      var vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', "".concat(vh, "px"));
+      if (_dom.default.fastscroll) {
+        var vh = window.innerHeight * 0.01;
+
+        if (this.vh !== vh) {
+          this.vh = vh;
+          document.documentElement.style.setProperty('--vh', "".concat(vh, "px"));
+        }
+      }
     }
   }, {
     key: "onPageInit",
     value: function onPageInit() {
       var _this = this;
 
+      console.log('onPageInit');
       this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
       this.pictures = [].slice.call(document.querySelectorAll('.picture img'));
       this.pictures.forEach(function (picture) {
@@ -15946,10 +15953,7 @@ function () {
 
       _navigation.default.reset();
 
-      if (this.body.classList.contains('mobile')) {
-        this.updateViewPortHeight();
-      } // fastscroll mobile
-
+      this.updateViewPortHeight(); // fastscroll mobile
 
       if (_dom.default.fastscroll) {
         var newTop = Math.round(scrollTop * 10) / 5;
@@ -19423,13 +19427,13 @@ require("gsap/ScrollToPlugin");
 
 var _fancy = _interopRequireDefault(require("./fancy.transition"));
 
-var _samples = _interopRequireDefault(require("./samples.detail"));
-
-var _side = _interopRequireDefault(require("./side.panel"));
+var _follower = _interopRequireDefault(require("./follower"));
 
 var _lazyload = _interopRequireDefault(require("./lazyload"));
 
-var _follower = _interopRequireDefault(require("./follower"));
+var _samples = _interopRequireDefault(require("./samples.detail"));
+
+var _side = _interopRequireDefault(require("./side.panel"));
 
 var _wishlist = _interopRequireDefault(require("./wishlist"));
 

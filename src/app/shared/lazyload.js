@@ -32,7 +32,6 @@ export default class LazyLoad {
                     this.parent.classList.add('loaded');
                     node.onload = null;
                 }, 400);
-
                 // this.parent.classList.add('loaded');
                 // node.onload = null;
             };

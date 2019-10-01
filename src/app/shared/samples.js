@@ -2,10 +2,10 @@
 
 import "gsap/ScrollToPlugin";
 import FancyTransition from "./fancy.transition";
+import Follower from "./follower";
+import LazyLoad from "./lazyload";
 import SamplesDetail from "./samples.detail";
 import SidePanel from "./side.panel";
-import LazyLoad from "./lazyload";
-import Follower from "./follower";
 import Wishlist from "./wishlist";
 
 let clickClose;
@@ -79,7 +79,9 @@ export default class Samples {
             fullSamplesClose.removeEventListener('click', clickClose);
 
             if (!window.NoTrackHistory)
-                history.pushState({ samples: false }, null, location.pathname);
+                history.pushState({
+                    samples: false
+                }, null, location.pathname);
 
             window.NoTrackHistory = false;
 
@@ -111,7 +113,9 @@ export default class Samples {
         FancyTransition.openLayer('fullSamplesGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, this.id);
 
         if (!window.NoTrackHistory)
-            history.pushState({ samples: true }, null, location.pathname + '?samples=open');
+            history.pushState({
+                samples: true
+            }, null, location.pathname + '?samples=open');
 
         window.NoTrackHistory = false;
 
@@ -234,7 +238,6 @@ export default class Samples {
 
     destroy() {
         this.node.removeEventListener('click', this.click);
-
         if (document.querySelector('full-samples-gallery__wrapper')) {
             document.querySelector('full-samples-gallery__wrapper').removeEventListener('scroll', scrollWrapper);
         }

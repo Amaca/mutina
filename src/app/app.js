@@ -609,11 +609,17 @@ export default class App {
     }
 
     updateViewPortHeight() {
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        if (Dom.fastscroll) {
+            let vh = window.innerHeight * 0.01;
+            if (this.vh !== vh) {
+                this.vh = vh;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+            }
+        }
     }
 
     onPageInit() {
+        console.log('onPageInit');
 
         this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
         this.pictures = [].slice.call(document.querySelectorAll('.picture img'));
@@ -779,9 +785,7 @@ export default class App {
 
         Navigation.reset();
 
-        if (this.body.classList.contains('mobile')) {
-            this.updateViewPortHeight();
-        }
+        this.updateViewPortHeight();
 
         // fastscroll mobile
         if (Dom.fastscroll) {
