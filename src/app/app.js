@@ -13,6 +13,7 @@ import FancyDetail from './shared/fancy.detail';
 import FancyViewAll from "./shared/fancy.view-all";
 import Filters from './shared/filters';
 import Follower from './shared/follower';
+import Forms from './shared/forms';
 import Grid from './shared/grid';
 import LazyLoad from './shared/lazyload';
 import Navigation from "./shared/navigation";
@@ -24,12 +25,11 @@ import Sliders from './shared/sliders';
 import Tabs from './shared/tabs';
 import ToggleSearch from './shared/toggle.search';
 import Utils from './shared/utils';
-import Forms from './shared/forms';
 import Wishlist from './shared/wishlist';
 
 //settings
 let scrollSpeed = 8;
-const activateIntro = false; 
+const activateIntro = false;
 const debug = false;
 let disableBarba = false;
 const breakTransition = false;
@@ -46,7 +46,7 @@ export default class App {
     constructor() {}
 
     init() {
-        if (isIE11) {  
+        if (isIE11) {
             this.polyfill();
             cssVars();
             document.querySelector('body').classList.add('ie11');
@@ -100,7 +100,7 @@ export default class App {
 
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
-        } 
+        }
     }
 
     static initScript(data) {
@@ -126,468 +126,467 @@ export default class App {
                 timeout: 20000,
                 debug: barbaDebug,
                 transitions: [{
-                    name: 'default',
-                    appear(data) {
-                        const done = this.async();
-                        const transitionLayer = document.querySelector('.transition');
-                        const logoWrapper = document.querySelector('.transition .logo__wrapper');
-                        if (activateIntro) {
-                            let tl = new TimelineMax();
-                            const speed = 0.5;
-                            const transform = -10;
-                            tl.timeScale(0.9);
+                        name: 'default',
+                        appear(data) {
+                            const done = this.async();
+                            const transitionLayer = document.querySelector('.transition');
+                            const logoWrapper = document.querySelector('.transition .logo__wrapper');
+                            if (activateIntro) {
+                                let tl = new TimelineMax();
+                                const speed = 0.5;
+                                const transform = -10;
+                                tl.timeScale(0.9);
 
-                            const logo = [{
-                                name: 'charM',
-                                selector: document.querySelector('.logo__char-m'),
-                                move: transform,
-                                width: null,
-                            },
-                            {
-                                name: 'charU',
-                                selector: document.querySelector('.logo__char-u'),
-                                move: transform,
-                                width: null,
-                            },
-                            {
-                                name: 'squarePrimary',
-                                selector: document.querySelector('.logo__square-primary'),
-                                width: document.querySelector('.logo__square-primary').width.baseVal.value,
-                            },
-                            {
-                                name: 'charT',
-                                selector: document.querySelector('.logo__char-t'),
-                                move: transform,
-                                width: null,
-                            },
-                            {
-                                name: 'charI',
-                                selector: document.querySelector('.logo__char-i'),
-                                move: transform,
-                                width: null,
-                            },
-                            {
-                                name: 'squareSecondary',
-                                selector: document.querySelector('.logo__square-secondary'),
-                                move: transform,
-                                width: document.querySelector('.logo__square-secondary').width.baseVal.value,
-                            },
-                            {
-                                name: 'charN',
-                                selector: document.querySelector('.logo__char-n'),
-                                move: transform,
-                                width: null,
-                            },
-                            {
-                                name: 'groupA',
-                                selector: document.querySelector('.logo__group-a'),
-                                move: transform,
-                                width: null,
-                            }
-                            ];
+                                const logo = [{
+                                        name: 'charM',
+                                        selector: document.querySelector('.logo__char-m'),
+                                        move: transform,
+                                        width: null,
+                                    },
+                                    {
+                                        name: 'charU',
+                                        selector: document.querySelector('.logo__char-u'),
+                                        move: transform,
+                                        width: null,
+                                    },
+                                    {
+                                        name: 'squarePrimary',
+                                        selector: document.querySelector('.logo__square-primary'),
+                                        width: document.querySelector('.logo__square-primary').width.baseVal.value,
+                                    },
+                                    {
+                                        name: 'charT',
+                                        selector: document.querySelector('.logo__char-t'),
+                                        move: transform,
+                                        width: null,
+                                    },
+                                    {
+                                        name: 'charI',
+                                        selector: document.querySelector('.logo__char-i'),
+                                        move: transform,
+                                        width: null,
+                                    },
+                                    {
+                                        name: 'squareSecondary',
+                                        selector: document.querySelector('.logo__square-secondary'),
+                                        move: transform,
+                                        width: document.querySelector('.logo__square-secondary').width.baseVal.value,
+                                    },
+                                    {
+                                        name: 'charN',
+                                        selector: document.querySelector('.logo__char-n'),
+                                        move: transform,
+                                        width: null,
+                                    },
+                                    {
+                                        name: 'groupA',
+                                        selector: document.querySelector('.logo__group-a'),
+                                        move: transform,
+                                        width: null,
+                                    }
+                                ];
 
-                            tl.set(transitionLayer, {
-                                height: window.innerHeight + 2,
-                            });
+                                tl.set(transitionLayer, {
+                                    height: window.innerHeight + 2,
+                                });
 
-                            logo.forEach(item => {
-                                if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
-                                    tl.set(item.selector, {
-                                        width: 0,
-                                        transform: 'translateX(' + item.move + 'px)',
-                                        opacity: 1
-                                    });
-                                } else {
-                                    tl.set(item.selector, {
-                                        transform: 'translateX(' + item.move + 'px)',
-                                        opacity: 0
-                                    });
-                                }
-                            });
+                                logo.forEach(item => {
+                                    if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
+                                        tl.set(item.selector, {
+                                            width: 0,
+                                            transform: 'translateX(' + item.move + 'px)',
+                                            opacity: 1
+                                        });
+                                    } else {
+                                        tl.set(item.selector, {
+                                            transform: 'translateX(' + item.move + 'px)',
+                                            opacity: 0
+                                        });
+                                    }
+                                });
 
-                            logo.forEach((item, index) => {
-                                let delay = '-=0.4';
-                                if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
-                                    tl.to(item.selector, speed, {
-                                        width: item.width,
-                                        transform: 'translateX(0px)',
-                                        opacity: 1,
-                                        ease: Expo.easeInOut
-                                    }, delay);
-                                } else {
-                                    tl.to(item.selector, speed, {
-                                        transform: 'translateX(0px)',
-                                        opacity: 1,
-                                        ease: Expo.easeInOut,
-                                        onComplete: () => {
-                                            if (index === logo.length - 1) {
-                                                console.log('pageinit');
-                                                app.onPageInit();
+                                logo.forEach((item, index) => {
+                                    let delay = '-=0.4';
+                                    if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
+                                        tl.to(item.selector, speed, {
+                                            width: item.width,
+                                            transform: 'translateX(0px)',
+                                            opacity: 1,
+                                            ease: Expo.easeInOut
+                                        }, delay);
+                                    } else {
+                                        tl.to(item.selector, speed, {
+                                            transform: 'translateX(0px)',
+                                            opacity: 1,
+                                            ease: Expo.easeInOut,
+                                            onComplete: () => {
+                                                if (index === logo.length - 1) {
+                                                    console.log('pageinit');
+                                                    app.onPageInit();
+                                                }
                                             }
-                                        }
-                                    }, delay);
-                                }
-                            });
+                                        }, delay);
+                                    }
+                                });
 
-                            tl.to(logoWrapper, 0.8, {
+                                tl.to(logoWrapper, 0.8, {
+                                    height: 0,
+                                    ease: Expo.easeInOut,
+                                }, '+=0.5');
+
+                                tl.to(transitionLayer, 1, {
+                                    height: 2,
+                                    top: app.header.clientHeight - 2,
+                                    bottom: 'auto',
+                                    ease: Expo.easeInOut,
+                                    onComplete: function () {
+                                        transitionLayer.style.height = 0;
+                                        transitionLayer.classList.add('transition--no-top-line');
+                                        done();
+                                    }
+                                }, '-=0.6');
+                            } else {
+
+                                TweenMax.set(transitionLayer, {
+                                    height: 0,
+                                    top: 0,
+                                    bottom: 'auto',
+                                });
+                                TweenMax.set(logoWrapper, {
+                                    height: 0,
+                                });
+                                app.onPageInit();
+                                transitionLayer.classList.add('transition--no-top-line');
+                                done();
+                            }
+                        },
+                        /////////////////////////////////////////////
+                        beforeLeave() {
+                            LazyLoad.items = [];
+                        },
+                        leave(data) {
+
+                            const done = this.async();
+                            const title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'Mutina';
+
+                            textFront.innerHTML = '';
+                            textBack.innerHTML = '';
+                            textFront.innerHTML = title;
+                            textBack.innerHTML = title;
+                            Navigation.reset();
+                            TweenMax.set(transitionLayer, {
+                                backgroundColor: '#CFCFCF',
+                                width: window.innerWidth,
+                                bottom: 0,
+                                opacity: 1,
+                                top: 'auto',
                                 height: 0,
+                            });
+                            TweenMax.set(textFront, {
+                                transform: 'translateY(100%)',
+                                opacity: 1
+                            });
+                            TweenMax.set(textBack, {
+                                transform: 'translateY(0)',
+                            });
+                            TweenMax.set(boxBack, {
+                                width: 0,
+                            });
+                            TweenMax.set(line, {
+                                width: 0,
+                            });
+                            TweenMax.to(data.current.container, 1, {
+                                transform: 'translateY(-60px)',
+                                ease: Expo.easeInOut
+                            }).delay(0.3);
+                            TweenMax.to(transitionLayer, 1, {
+                                height: window.innerHeight,
+                                ease: Expo.easeInOut
+                            }).delay(0.3);
+                            TweenMax.to(textFront, 1, {
+                                transform: 'translateY(0)',
                                 ease: Expo.easeInOut,
-                            }, '+=0.5');
-
-                            tl.to(transitionLayer, 1, {
-                                height: 2,
-                                top: app.header.clientHeight - 2,
-                                bottom: 'auto',
-                                ease: Expo.easeInOut,
-                                onComplete: function () {
-                                    transitionLayer.style.height = 0;
-                                    transitionLayer.classList.add('transition--no-top-line');
+                                onComplete: (e) => {
                                     done();
                                 }
-                            }, '-=0.6');
-                        } else {
-                             
-                            TweenMax.set(transitionLayer, {
+                            }).delay(0.4);
+                        },
+                        afterLeave(data) {
+                            const done = this.async();
+                            app.destroyAll(data.current.container);
+                            done();
+                        },
+                        beforeEnter(data) {
+                            const done = this.async();
+                            App.initScript(data);
+                            if (breakTransition) {
+                                throw new Error('stop!');
+                            }
+
+                            let perfData = window.performance.timing,
+                                EstimatedTime = -(perfData.loadEventEnd - perfData.navigationStart),
+                                time = parseInt((EstimatedTime / 1000) % 60) * 100,
+                                start = 0,
+                                end = 100,
+                                durataion = time;
+
+                            animateValue(start, end, durataion);
+
+                            function animateValue(start, end, duration) {
+
+                                let range = end - start,
+                                    current = start,
+                                    increment = end > start ? 1 : -1,
+                                    stepTime = Math.abs(Math.floor(duration / range));
+
+                                let timer = setInterval(function () {
+                                    current += increment;
+                                    TweenMax.to(line, time, {
+                                        width: current + '%',
+                                        ease: Expo.easeInOut,
+                                    });
+                                    TweenMax.to(boxBack, time, {
+                                        width: current + '%',
+                                        ease: Expo.easeInOut,
+                                    });
+
+                                    //console.log('current', current);
+
+                                    if (current == end) {
+                                        clearInterval(timer);
+
+                                        done();
+                                    }
+                                }, stepTime);
+                            }
+
+                            app.onPageInit();
+
+                            /*
+                            window.daraLayer.push({
+
+                            })
+                            gtm.push({
+                                title: document.title,
+                                href: window.href
+                            })
+                            */
+                            //done();
+                        },
+                        enter(data) {
+                            const done = this.async();
+                            const header = document.querySelector('header');
+                            app.scrollTo(0, false);
+                            header.style.top = 0;
+                            TweenMax.to(textBack, 1, {
+                                transform: 'translateY(-100%)',
+                                ease: Expo.easeInOut,
+                            }).delay(0.1);
+                            TweenMax.to(textFront, 1, {
+                                transform: 'translateY(-100%)',
+                                ease: Expo.easeInOut,
+                            }).delay(0.1);
+                            TweenMax.to(transitionLayer, 1, {
                                 height: 0,
                                 top: 0,
                                 bottom: 'auto',
-                            });
-                            TweenMax.set(logoWrapper, {
-                                height: 0,
-                            });
+                                ease: Expo.easeInOut,
+                                onComplete: (e) => {
+                                    done();
+                                }
+                            }).delay(0.3);
+                        }
+                        ////////////////////////////////////////////////////
+                    },
+                    {
+                        name: 'fast-transition',
+                        from: {
+                            custom: ({
+                                trigger
+                            }) => {
+                                return trigger.classList && trigger.classList.contains('fast-transition');
+                            },
+                        },
+                        beforeLeave() {
+                            const done = this.async();
+                            LazyLoad.items = [];
+                            done();
+                        },
+                        leave(data) {
+                            const done = this.async();
+                            //scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
+                            //console.log('SCROLLPOSITION'scrollPosition);
+                            done();
+                        },
+                        afterLeave(data) {
+                            const done = this.async();
+                            app.destroyAll(data.current.container);
+                            done();
+                        },
+                        beforeEnter(data) {
+                            const done = this.async();
+                            App.initScript(data);
                             app.onPageInit();
-                            transitionLayer.classList.add('transition--no-top-line');
+                            done();
+                        },
+                        enter(data) {
+                            const done = this.async();
                             done();
                         }
                     },
-                    /////////////////////////////////////////////
-                    beforeLeave() {
-                        LazyLoad.items = []; 
-                    },
-                    leave(data) {
-
-                        const done = this.async();
-                        const title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'Mutina';
-                        
-
-                        textFront.innerHTML = '';
-                        textBack.innerHTML = '';
-                        textFront.innerHTML = title;
-                        textBack.innerHTML = title;
-                        Navigation.reset();
-                        TweenMax.set(transitionLayer, {
-                            backgroundColor: '#CFCFCF',
-                            width: window.innerWidth,
-                            bottom: 0,
-                            opacity: 1,
-                            top: 'auto',
-                            height: 0,
-                        });
-                        TweenMax.set(textFront, {
-                            transform: 'translateY(100%)',
-                            opacity: 1
-                        });
-                        TweenMax.set(textBack, {
-                            transform: 'translateY(0)',
-                        });
-                        TweenMax.set(boxBack, {
-                            width: 0,
-                        });
-                        TweenMax.set(line, {
-                            width: 0,
-                        });
-                        TweenMax.to(data.current.container, 1, {
-                            transform: 'translateY(-60px)',
-                            ease: Expo.easeInOut
-                        }).delay(0.3);
-                        TweenMax.to(transitionLayer, 1, {
-                            height: window.innerHeight,
-                            ease: Expo.easeInOut
-                        }).delay(0.3);
-                        TweenMax.to(textFront, 1, {
-                            transform: 'translateY(0)',
-                            ease: Expo.easeInOut,
-                            onComplete: (e) => {
-                                done();
-                            }
-                        }).delay(0.4);
-                    },
-                    afterLeave(data) {
-                        const done = this.async();
-                        app.destroyAll(data.current.container);
-                        done();
-                    },
-                    beforeEnter(data) {
-                        const done = this.async();
-                        App.initScript(data);
-                        if (breakTransition) {
-                            throw new Error('stop!');
-                        }
-                       
-                        let perfData = window.performance.timing,
-                            EstimatedTime = -(perfData.loadEventEnd - perfData.navigationStart),
-                            time = parseInt((EstimatedTime / 1000) % 60) * 100,
-                            start = 0,
-                            end = 100,
-                            durataion = time;
-
-                        animateValue(start, end, durataion);
-                        
-                        function animateValue( start, end, duration) {
-
-                            let range = end - start,
-                                current = start,
-                                increment = end > start ? 1 : -1,
-                                stepTime = Math.abs(Math.floor(duration / range));
-                            
-                            let timer = setInterval(function () {
-                                current += increment;
-                                TweenMax.to(line, time, {
-                                    width: current + '%',
-                                    ease: Expo.easeInOut,
-                                })
-                                TweenMax.to(boxBack, time, {
-                                    width: current + '%',
-                                    ease: Expo.easeInOut,
-                                })
-                                
-                                //console.log('current', current);
-
-                                if (current == end) {
-                                    clearInterval(timer);
-                                    
+                    {
+                        name: 'fancy-in-transition',
+                        from: {
+                            custom: ({
+                                trigger
+                            }) => {
+                                return trigger.classList && trigger.classList.contains('fancy-in-transition');
+                            },
+                        },
+                        beforeLeave() {
+                            LazyLoad.items = [];
+                        },
+                        leave(data) {
+                            const done = this.async();
+                            Navigation.reset();
+                            //set scroll position
+                            scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
+                            TweenMax.set(line, {
+                                width: 0,
+                            });
+                            TweenMax.set(transitionLayer, {
+                                backgroundColor: '#CFCFCF',
+                                bottom: 0,
+                                opacity: 1,
+                                top: 'auto',
+                                height: 0,
+                            });
+                            TweenMax.to(data.current.container, 1, {
+                                transform: 'translateY(-60px)',
+                                ease: Expo.easeInOut
+                            });
+                            TweenMax.to(transitionLayer, 1, {
+                                height: window.innerHeight,
+                                ease: Expo.easeInOut,
+                            });
+                            TweenMax.to(transitionLayer, 0.8, {
+                                backgroundColor: '#ffffff',
+                                ease: Power1.easeOut,
+                                onComplete: (e) => {
                                     done();
                                 }
-                            }, stepTime);
-                        }
-
-                        app.onPageInit();
-                        
-                        /*
-                        window.daraLayer.push({
-
-                        })
-                        gtm.push({
-                            title: document.title,
-                            href: window.href
-                        })
-                        */
-                        //done();
-                    },
-                    enter(data) {
-                        const done = this.async();
-                        const header = document.querySelector('header');
-                        app.scrollTo(0, false);
-                        header.style.top = 0;
-                        TweenMax.to(textBack, 1, {
-                            transform: 'translateY(-100%)',
-                            ease: Expo.easeInOut,
-                        }).delay(0.1);
-                        TweenMax.to(textFront, 1, {
-                            transform: 'translateY(-100%)',
-                            ease: Expo.easeInOut,
-                        }).delay(0.1);
-                        TweenMax.to(transitionLayer, 1, {
-                            height: 0,
-                            top: 0,
-                            bottom: 'auto',
-                            ease: Expo.easeInOut,
-                            onComplete: (e) => {
-                                done();
-                            }
-                        }).delay(0.3);
-                    }
-                    ////////////////////////////////////////////////////
-                },
-                {
-                    name: 'fast-transition',
-                    from: {
-                        custom: ({
-                            trigger
-                        }) => {
-                            return trigger.classList && trigger.classList.contains('fast-transition');
+                            }).delay(0.4);
                         },
-                    },
-                    beforeLeave() {
-                        const done = this.async();
-                        LazyLoad.items = [];
-                        done();
-                    },
-                    leave(data) {
-                        const done = this.async();
-                        //scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
-                        //console.log('SCROLLPOSITION'scrollPosition);
-                        done();
-                    },
-                    afterLeave(data) {
-                        const done = this.async();
-                        app.destroyAll(data.current.container);
-                        done();
-                    },
-                    beforeEnter(data) {
-                        const done = this.async();
-                        App.initScript(data);
-                        app.onPageInit();
-                        done();
-                    },
-                    enter(data) {
-                        const done = this.async();
-                        done();
-                    }
-                },
-                {
-                    name: 'fancy-in-transition',
-                    from: {
-                        custom: ({
-                            trigger
-                        }) => {
-                            return trigger.classList && trigger.classList.contains('fancy-in-transition');
+                        afterLeave(data) {
+                            const done = this.async();
+                            app.destroyAll(data.current.container);
+                            done();
                         },
-                    },
-                    beforeLeave() {
-                        LazyLoad.items = [];
-                    },
-                    leave(data) {
-                        const done = this.async();
-                        Navigation.reset();
-                        //set scroll position
-                        scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
-                        TweenMax.set(line, {
-                            width: 0,
-                        });
-                        TweenMax.set(transitionLayer, {
-                            backgroundColor: '#CFCFCF',
-                            bottom: 0,
-                            opacity: 1,
-                            top: 'auto',
-                            height: 0,
-                        });
-                        TweenMax.to(data.current.container, 1, {
-                            transform: 'translateY(-60px)',
-                            ease: Expo.easeInOut
-                        });
-                        TweenMax.to(transitionLayer, 1, {
-                            height: window.innerHeight,
-                            ease: Expo.easeInOut,
-                        });
-                        TweenMax.to(transitionLayer, 0.8, {
-                            backgroundColor: '#ffffff',
-                            ease: Power1.easeOut,
-                            onComplete: (e) => {
-                                done();
-                            }
-                        }).delay(0.4);
-                    },
-                    afterLeave(data) {
-                        const done = this.async();
-                        app.destroyAll(data.current.container);
-                        done();
-                    },
-                    beforeEnter(data) {
-                        const done = this.async();
-                        App.initScript(data);
-                        app.onPageInit();
-                        done();
-                    },
-                    enter(data) {
-                        const done = this.async();
-                        const sidebar = document.querySelector('.fancy-detail__sidebar');
-                        transitionLayer.style.pointerEvents = 'none';
-                        app.scrollTo(0, true);
-                        TweenMax.set(sidebar, {
-                            left: -sidebar.clientWidth
-                        });
-                        TweenMax.to(transitionLayer, 1, {
-                            opacity: 0,
-                            ease: Expo.easeInOut,
-                        });
-                        TweenMax.to(sidebar, 1.5, {
-                            left: 0,
-                            ease: Expo.easeInOut,
-                            onComplete: (e) => {
-                                done();
-                            }
-                        });
-                    }
-                },
-                {
-                    name: 'fancy-out-transition',
-                    from: {
-                        custom: ({
-                            trigger
-                        }) => {
-                            return trigger.classList && trigger.classList.contains('fancy-out-transition');
+                        beforeEnter(data) {
+                            const done = this.async();
+                            App.initScript(data);
+                            app.onPageInit();
+                            done();
                         },
-                    },
-                    beforeLeave() {
-                        LazyLoad.items = [];
-                    },
-                    leave(data) {
-                        const done = this.async();
-                        const sidebar = document.querySelector('.fancy-detail__sidebar');
-                        const panel = document.querySelector('.fancy-detail__panel');
-                        transitionLayer.style.pointerEvents = 'all';
-                        if (window.innerWidth > 768) {
-                            TweenMax.to(sidebar, 1, {
-                                left: -sidebar.clientWidth - 10,
-                                ease: Expo.easeInOut,
+                        enter(data) {
+                            const done = this.async();
+                            const sidebar = document.querySelector('.fancy-detail__sidebar');
+                            transitionLayer.style.pointerEvents = 'none';
+                            app.scrollTo(0, true);
+                            TweenMax.set(sidebar, {
+                                left: -sidebar.clientWidth
                             });
-                        } else {
-                            TweenMax.to(sidebar, 1, {
+                            TweenMax.to(transitionLayer, 1, {
                                 opacity: 0,
-                                transform: 'translateY(60px)',
                                 ease: Expo.easeInOut,
                             });
-                            TweenMax.to(panel, 1, {
-                                bottom: -panel.clientHeight,
+                            TweenMax.to(sidebar, 1.5, {
+                                left: 0,
                                 ease: Expo.easeInOut,
+                                onComplete: (e) => {
+                                    done();
+                                }
                             });
                         }
+                    },
+                    {
+                        name: 'fancy-out-transition',
+                        from: {
+                            custom: ({
+                                trigger
+                            }) => {
+                                return trigger.classList && trigger.classList.contains('fancy-out-transition');
+                            },
+                        },
+                        beforeLeave() {
+                            LazyLoad.items = [];
+                        },
+                        leave(data) {
+                            const done = this.async();
+                            const sidebar = document.querySelector('.fancy-detail__sidebar');
+                            const panel = document.querySelector('.fancy-detail__panel');
+                            transitionLayer.style.pointerEvents = 'all';
+                            if (window.innerWidth > 768) {
+                                TweenMax.to(sidebar, 1, {
+                                    left: -sidebar.clientWidth - 10,
+                                    ease: Expo.easeInOut,
+                                });
+                            } else {
+                                TweenMax.to(sidebar, 1, {
+                                    opacity: 0,
+                                    transform: 'translateY(60px)',
+                                    ease: Expo.easeInOut,
+                                });
+                                TweenMax.to(panel, 1, {
+                                    bottom: -panel.clientHeight,
+                                    ease: Expo.easeInOut,
+                                });
+                            }
 
-                        TweenMax.to(data.current.container, 1, {
-                            opacity: 0,
-                            transform: 'translateY(100px)',
-                            ease: Expo.easeInOut,
-                            onComplete: (e) => {
-                                done();
-                            }
-                        });
-                    },
-                    afterLeave(data) {
-                        const done = this.async();
-                        TweenMax.set(transitionLayer, {
-                            top: 'auto',
-                            bottom: 0,
-                            height: window.innerHeight,
-                            backgroundColor: '#ffffff',
-                            opacity: 1,
-                        });
-                        app.destroyAll(data.current.container);
-                        done();
-                    },
-                    beforeEnter(data) {
-                        const done = this.async();
-                        App.initScript(data);
-                        app.onPageInit();
-                        done();
-                    },
-                    enter(data) {
-                        const done = this.async();
-                        //scroll to scroll position
-                        setTimeout(x => {
-                            app.scrollTo(Number(scrollPosition), true);
-                            scrollPosition = 0;
-                        }, 100);
-                        TweenMax.to(transitionLayer, 1, {
-                            height: 0,
-                            backgroundColor: '#CFCFCF',
-                            ease: Expo.easeInOut,
-                            onComplete: (e) => {
-                                done();
-                            }
-                        });
+                            TweenMax.to(data.current.container, 1, {
+                                opacity: 0,
+                                transform: 'translateY(100px)',
+                                ease: Expo.easeInOut,
+                                onComplete: (e) => {
+                                    done();
+                                }
+                            });
+                        },
+                        afterLeave(data) {
+                            const done = this.async();
+                            TweenMax.set(transitionLayer, {
+                                top: 'auto',
+                                bottom: 0,
+                                height: window.innerHeight,
+                                backgroundColor: '#ffffff',
+                                opacity: 1,
+                            });
+                            app.destroyAll(data.current.container);
+                            done();
+                        },
+                        beforeEnter(data) {
+                            const done = this.async();
+                            App.initScript(data);
+                            app.onPageInit();
+                            done();
+                        },
+                        enter(data) {
+                            const done = this.async();
+                            //scroll to scroll position
+                            setTimeout(x => {
+                                app.scrollTo(Number(scrollPosition), true);
+                                scrollPosition = 0;
+                            }, 100);
+                            TweenMax.to(transitionLayer, 1, {
+                                height: 0,
+                                backgroundColor: '#CFCFCF',
+                                ease: Expo.easeInOut,
+                                onComplete: (e) => {
+                                    done();
+                                }
+                            });
+                        }
                     }
-                }
                 ],
             });
         } else {
@@ -615,6 +614,7 @@ export default class App {
     }
 
     onPageInit() {
+
         this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
         this.pictures = [].slice.call(document.querySelectorAll('.picture img'));
 
@@ -657,9 +657,12 @@ export default class App {
 
         setTimeout(x => {
             this.appears = Appears.init();
-             //if (window.innerWidth > 768) {
-                 Splitting();
-             //}
+            //if (window.innerWidth > 768) {
+            Splitting();
+            //}
+            if (Dom.fastscroll) {
+                app.onScrollDidChange();
+            }
         }, delay);
     }
 
@@ -725,7 +728,7 @@ export default class App {
             }
         }
     }
-       
+
     addListeners() {
         window.addEventListener('resize', () => {
             this.onResize();
@@ -779,7 +782,7 @@ export default class App {
         if (this.body.classList.contains('mobile')) {
             this.updateViewPortHeight();
         }
-        
+
         // fastscroll mobile
         if (Dom.fastscroll) {
             const newTop = Math.round(scrollTop * 10) / 5;
@@ -793,6 +796,7 @@ export default class App {
                     this.body.classList.remove('scroll-up');
                     this.body.classList.add('scroll-down');
                 }
+                this.onScrollDidChange();
             } else {
                 Dom.scrolling = false;
             }
@@ -807,7 +811,6 @@ export default class App {
             }
         }
 
-       
         //header animation
         if (this.header && scrollTop > 300 && !this.body.classList.contains('nav-mobile-open')) {
             this.header.style.top = -this.header.clientHeight + 'px';
@@ -830,6 +833,7 @@ export default class App {
                 }
             }
         }
+
     }
 
     onWheel(e) {
@@ -843,7 +847,6 @@ export default class App {
     }
 
     render() {
-
         // smoothscroll desktop
         // if (!Dom.overscroll && !Dom.touch) {
         if (!Dom.fastscroll) {
@@ -874,10 +877,38 @@ export default class App {
             } else {
                 Dom.scrolling = false;
             }
+            this.onScrollDidChange();
+
         } else if (this.body.hasAttribute('style')) {
             this.body.removeAttribute('style');
             this.page.removeAttribute('style');
         }
+
+        this.onRequestAnimDidChange();
+    }
+
+    onScrollDidChange() {
+        // appears
+        this.appears.forEach((node, i) => {
+            let rect = Rect.fromNode(node);
+            const intersection = rect.intersection(this.windowRect);
+            if (intersection.y > 0.0) {
+                if (!node.to) {
+                    node.to = setTimeout(() => {
+                        node.classList.add('appeared');
+                    }, 150 * node.appearingIndex);
+                }
+            } else {
+                // if (node.classList.contains('appeared')) {
+                //     node.to = null;
+                //     node.classList.remove('appeared');
+                // }
+            }
+        });
+
+        Anchors.onScroll();
+        ScrollAnchors.onScroll();
+        LazyLoad.render(this.windowRect);
 
         //parallax
         // this.parallaxes.forEach((node, i) => {
@@ -922,27 +953,9 @@ export default class App {
         //         }
         //     }
         // });
+    }
 
-        // appears
-        this.appears.forEach((node, i) => {
-            let rect = Rect.fromNode(node);
-            const intersection = rect.intersection(this.windowRect);
-            if (intersection.y > 0.0) {
-                if (!node.to) {
-                    node.to = setTimeout(() => {
-                        node.classList.add('appeared');
-                    }, 150 * node.appearingIndex);
-                }
-            } else {
-                // if (node.classList.contains('appeared')) {
-                //     node.to = null;
-                //     node.classList.remove('appeared');
-                // }
-            }
-        });
-        
-        LazyLoad.render(this.windowRect);
-
+    onRequestAnimDidChange() {
         if (this.follower.enabled) {
             this.follower.render();
         }
@@ -987,7 +1000,11 @@ export default class App {
         if (typeof window.CustomEvent === "function") return false; //If not IE
 
         function CustomEvent(event, params) {
-            params = params || { bubbles: false, cancelable: false, detail: undefined };
+            params = params || {
+                bubbles: false,
+                cancelable: false,
+                detail: undefined
+            };
             var evt = document.createEvent('CustomEvent');
             evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
             return evt;
@@ -1006,5 +1023,3 @@ window.onload = () => {
     app.init();
     app.play();
 };
-
-

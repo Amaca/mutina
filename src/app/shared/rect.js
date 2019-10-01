@@ -9,6 +9,14 @@ export default class Rect {
         this.left = 0;
         this.width = 0;
         this.height = 0;
+        this.intersection_ = {
+            x: 0,
+            y: 0,
+            center: {
+                x: 0,
+                y: 0
+            }
+        };
         this.set(rect);
     }
 
@@ -24,19 +32,23 @@ export default class Rect {
     }
 
     static fromNode(node) {
-        if (!node.getClientRects().length) {
-            return new Rect();
+        const rect = node.rect || (node.rect = new Rect());
+        if (node.getClientRects().length) {
+            let boundingRect = node.getBoundingClientRect();
+            // const defaultView = node.ownerDocument.defaultView;
+            node.rect.set(boundingRect);
         }
-        let rect = node.getBoundingClientRect();
-        // const defaultView = node.ownerDocument.defaultView;
+        return node.rect;
+        /*
         return new Rect({
             // top: rect.top + defaultView.pageYOffset,
             // left: rect.left + defaultView.pageXOffset,
-            top: rect.top,
-            left: rect.left,
-            width: rect.width,
-            height: rect.height,
+            top: boundingRect.top,
+            left: boundingRect.left,
+            width: boundingRect.width,
+            height: boundingRect.height,
         });
+        */
     }
 
     set(rect) {
@@ -62,10 +74,9 @@ export default class Rect {
     }
 
     intersection(rect) {
-        const center = {
-            x: (this.center.x - rect.center.x) / (rect.width / 2),
-            y: (this.center.y - rect.center.y) / (rect.height / 2),
-        };
+        const intersection = this.intersection_;
+        intersection.center.x = (this.center.x - rect.center.x) / (rect.width / 2);
+        intersection.center.y = (this.center.y - rect.center.y) / (rect.height / 2);
         if (this.intersect(rect)) {
             let dx = this.left > rect.left ? 0 : Math.abs(rect.left - this.left);
             let dy = this.top > rect.top ? 0 : Math.abs(rect.top - this.top);
@@ -73,18 +84,13 @@ export default class Rect {
             let y = dy ? (1 - dy / this.height) : ((rect.top + rect.height) - this.top) / this.height;
             x = Math.min(1, x);
             y = Math.min(1, y);
-            return {
-                x: x,
-                y: y,
-                center: center
-            };
+            intersection.x = x;
+            intersection.y = y;
         } else {
-            return {
-                x: 0,
-                y: 0,
-                center: center
-            };
+            intersection.x = 0;
+            intersection.y = 0;
         }
+        return intersection;
     }
 
 }

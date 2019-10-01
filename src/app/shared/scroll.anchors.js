@@ -80,22 +80,8 @@ export default class ScrollAnchors {
     }
 
     onScroll(e) {
-        if (this.top !== this.page.style.transform) { //controllo per requestanimationframe su contenitore dello scroll virtuale
-            this.top = this.page.style.transform;
-            const anchor = this.areas.find((area, i) => {
-                const top = area.getBoundingClientRect().top;
-                const bottom = i < this.areas.length - 1 ? this.areas[i + 1].getBoundingClientRect().top : Number.POSITIVE_INFINITY;
-                this.titles.forEach(title => {
-                    title.classList.remove('active');
-                });
-                if (top < this.offset && bottom > this.offset) {
-                    this.titles[i].classList.add('active');
-                    return area;
-                }
-            });
-        }
         if (!this.destroyed) {
-            requestAnimationFrame(this.onScroll);
+            this.onWrapperScroll(e);
         }
     }
 
@@ -119,4 +105,13 @@ export default class ScrollAnchors {
             console.log('ScrollAnchors: ', ScrollAnchors.items);
         }
     }
+
+    static onScroll(e) {
+        ScrollAnchors.items.forEach(node => {
+            node.onScroll(e);
+        });
+    }
+
 }
+
+ScrollAnchors.items = [];

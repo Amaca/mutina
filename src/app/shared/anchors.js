@@ -4,7 +4,7 @@
 const body = document.querySelector('body');
 const header = document.querySelector('header');
 const page = document.querySelector('.page');
-let destroyed = false;
+let destroyed = true;
 let topControl;
 export default class Anchors {
 
@@ -69,7 +69,7 @@ export default class Anchors {
             }
             if (Anchors.items.length > 0) {
                 wrapper.parentElement.style.display = 'flex';
-                // window.addEventListener('scroll', Anchors.onScroll);
+                destroyed = false;
                 Anchors.onScroll();
             } else {
                 wrapper.parentElement.style.display = 'none';
@@ -79,8 +79,7 @@ export default class Anchors {
     }
 
     static onScroll() {
-        if (topControl !== page.style.transform) { //controllo per requestanimationframe su contenitore dello scroll virtuale
-            topControl = page.style.transform;
+        if (!destroyed) {
             const anchor = Anchors.items.find((anchor, i, anchors) => {
                 const top = anchor.node.getBoundingClientRect().top;
                 const bottom = i < anchors.length - 1 ? anchors[i + 1].node.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
@@ -92,10 +91,6 @@ export default class Anchors {
                     return anchor;
                 }
             });
-        }
-
-        if (!destroyed) {
-            requestAnimationFrame(Anchors.onScroll);
         }
     }
 

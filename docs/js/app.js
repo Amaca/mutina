@@ -9631,7 +9631,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 /*!
  * css-vars-ponyfill
- * v2.1.1
+ * v2.1.2
  * https://jhildenbiddle.github.io/css-vars-ponyfill/
  * (c) 2018-2019 John Hildenbiddle <http://hildenbiddle.com>
  * MIT license
@@ -10925,8 +10925,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }
 
     if (document.readyState !== "loading") {
-      var isShadowElm = Boolean(settings.shadowDOM || settings.rootElement.shadowRoot || settings.rootElement.host);
-
       if (isNativeSupport && settings.onlyLegacy) {
         if (settings.updateDOM) {
           var targetElm = settings.rootElement.host || (settings.rootElement === document ? document.documentElement : settings.rootElement);
@@ -10934,7 +10932,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
             targetElm.style.setProperty(key, settings.variables[key]);
           });
         }
-      } else if (isShadowElm && !isShadowDOMReady) {
+      } else if (!isShadowDOMReady && (settings.shadowDOM || settings.rootElement.shadowRoot || settings.rootElement.host)) {
         getCssData({
           rootElement: defaults.rootElement,
           include: defaults.include,
@@ -10989,7 +10987,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
                     removeComments: true
                   });
                   parseVars(cssTree, {
-                    parseHost: isShadowElm,
+                    parseHost: Boolean(settings.rootElement.host),
                     store: jobVars,
                     onWarning: handleWarning
                   });
@@ -11100,8 +11098,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
                 for (var i = 0, elm; elm = elms[i]; ++i) {
                   if (elm.shadowRoot && elm.shadowRoot.querySelector("style")) {
                     var shadowSettings = _extends({}, settings, {
-                      rootElement: elm.shadowRoot,
-                      variables: variableStore.dom
+                      rootElement: elm.shadowRoot
                     });
 
                     cssVars(shadowSettings);
@@ -15116,6 +15113,8 @@ var _filters = _interopRequireDefault(require("./shared/filters"));
 
 var _follower = _interopRequireDefault(require("./shared/follower"));
 
+var _forms = _interopRequireDefault(require("./shared/forms"));
+
 var _grid = _interopRequireDefault(require("./shared/grid"));
 
 var _lazyload = _interopRequireDefault(require("./shared/lazyload"));
@@ -15137,8 +15136,6 @@ var _tabs = _interopRequireDefault(require("./shared/tabs"));
 var _toggle = _interopRequireDefault(require("./shared/toggle.search"));
 
 var _utils = _interopRequireDefault(require("./shared/utils"));
-
-var _forms = _interopRequireDefault(require("./shared/forms"));
 
 var _wishlist = _interopRequireDefault(require("./shared/wishlist"));
 
@@ -15481,7 +15478,7 @@ function () {
               app.onPageInit();
               /*
               window.daraLayer.push({
-                })
+               })
               gtm.push({
                   title: document.title,
                   href: window.href
@@ -15790,6 +15787,10 @@ function () {
         _this.appears = _appears.default.init(); //if (window.innerWidth > 768) {
 
         Splitting(); //}
+
+        if (_dom.default.fastscroll) {
+          app.onScrollDidChange();
+        }
       }, delay);
     }
   }, {
@@ -15964,6 +15965,8 @@ function () {
             this.body.classList.remove('scroll-up');
             this.body.classList.add('scroll-down');
           }
+
+          this.onScrollDidChange();
         } else {
           _dom.default.scrolling = false;
         }
@@ -16018,8 +16021,6 @@ function () {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
-
       // smoothscroll desktop
       // if (!Dom.overscroll && !Dom.touch) {
       if (!_dom.default.fastscroll) {
@@ -16055,10 +16056,44 @@ function () {
         } else {
           _dom.default.scrolling = false;
         }
+
+        this.onScrollDidChange();
       } else if (this.body.hasAttribute('style')) {
         this.body.removeAttribute('style');
         this.page.removeAttribute('style');
-      } //parallax
+      }
+
+      this.onRequestAnimDidChange();
+    }
+  }, {
+    key: "onScrollDidChange",
+    value: function onScrollDidChange() {
+      var _this3 = this;
+
+      // appears
+      this.appears.forEach(function (node, i) {
+        var rect = _rect.default.fromNode(node);
+
+        var intersection = rect.intersection(_this3.windowRect);
+
+        if (intersection.y > 0.0) {
+          if (!node.to) {
+            node.to = setTimeout(function () {
+              node.classList.add('appeared');
+            }, 150 * node.appearingIndex);
+          }
+        } else {// if (node.classList.contains('appeared')) {
+          //     node.to = null;
+          //     node.classList.remove('appeared');
+          // }
+        }
+      });
+
+      _anchors.default.onScroll();
+
+      _scroll.default.onScroll();
+
+      _lazyload.default.render(this.windowRect); //parallax
       // this.parallaxes.forEach((node, i) => {
       //     // const parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 3;
       //     const parallax = node.parallax || 15;
@@ -16101,29 +16136,11 @@ function () {
       //         }
       //     }
       // });
-      // appears
 
-
-      this.appears.forEach(function (node, i) {
-        var rect = _rect.default.fromNode(node);
-
-        var intersection = rect.intersection(_this3.windowRect);
-
-        if (intersection.y > 0.0) {
-          if (!node.to) {
-            node.to = setTimeout(function () {
-              node.classList.add('appeared');
-            }, 150 * node.appearingIndex);
-          }
-        } else {// if (node.classList.contains('appeared')) {
-          //     node.to = null;
-          //     node.classList.remove('appeared');
-          // }
-        }
-      });
-
-      _lazyload.default.render(this.windowRect);
-
+    }
+  }, {
+    key: "onRequestAnimDidChange",
+    value: function onRequestAnimDidChange() {
       if (this.follower.enabled) {
         this.follower.render();
       }
@@ -16239,7 +16256,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var body = document.querySelector('body');
 var header = document.querySelector('header');
 var page = document.querySelector('.page');
-var destroyed = false;
+var destroyed = true;
 var topControl;
 
 var Anchors =
@@ -16316,8 +16333,8 @@ function () {
         }
 
         if (Anchors.items.length > 0) {
-          wrapper.parentElement.style.display = 'flex'; // window.addEventListener('scroll', Anchors.onScroll);
-
+          wrapper.parentElement.style.display = 'flex';
+          destroyed = false;
           Anchors.onScroll();
         } else {
           wrapper.parentElement.style.display = 'none';
@@ -16327,9 +16344,7 @@ function () {
   }, {
     key: "onScroll",
     value: function onScroll() {
-      if (topControl !== page.style.transform) {
-        //controllo per requestanimationframe su contenitore dello scroll virtuale
-        topControl = page.style.transform;
+      if (!destroyed) {
         var anchor = Anchors.items.find(function (anchor, i, anchors) {
           var top = anchor.node.getBoundingClientRect().top;
           var bottom = i < anchors.length - 1 ? anchors[i + 1].node.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
@@ -16342,10 +16357,6 @@ function () {
             return anchor;
           }
         });
-      }
-
-      if (!destroyed) {
-        requestAnimationFrame(Anchors.onScroll);
       }
     }
   }, {
@@ -16577,11 +16588,12 @@ function () {
         node.classList.add('mouse');
       };
 
-      document.addEventListener('mousedown', onMouseDown); //if (mobile) {
-      //    Dom.fastscroll = true;
-      //    node.classList.add('fastscroll');
-      //}
+      document.addEventListener('mousedown', onMouseDown);
 
+      if (mobile) {
+        Dom.fastscroll = true;
+        node.classList.add('fastscroll');
+      }
       /*
       const onScroll = () => {
           let now = Utils.now();
@@ -16599,6 +16611,7 @@ function () {
       console.log('%c addOnScroll', 'background: #222; color: #bada55');
       document.addEventListener('scroll', onScroll);
       */
+
     }
   }, {
     key: "fragmentFirstElement",
@@ -19048,6 +19061,14 @@ function () {
     this.left = 0;
     this.width = 0;
     this.height = 0;
+    this.intersection_ = {
+      x: 0,
+      y: 0,
+      center: {
+        x: 0,
+        y: 0
+      }
+    };
     this.set(rect);
   }
 
@@ -19080,10 +19101,9 @@ function () {
   }, {
     key: "intersection",
     value: function intersection(rect) {
-      var center = {
-        x: (this.center.x - rect.center.x) / (rect.width / 2),
-        y: (this.center.y - rect.center.y) / (rect.height / 2)
-      };
+      var intersection = this.intersection_;
+      intersection.center.x = (this.center.x - rect.center.x) / (rect.width / 2);
+      intersection.center.y = (this.center.y - rect.center.y) / (rect.height / 2);
 
       if (this.intersect(rect)) {
         var dx = this.left > rect.left ? 0 : Math.abs(rect.left - this.left);
@@ -19092,18 +19112,14 @@ function () {
         var y = dy ? 1 - dy / this.height : (rect.top + rect.height - this.top) / this.height;
         x = Math.min(1, x);
         y = Math.min(1, y);
-        return {
-          x: x,
-          y: y,
-          center: center
-        };
+        intersection.x = x;
+        intersection.y = y;
       } else {
-        return {
-          x: 0,
-          y: 0,
-          center: center
-        };
+        intersection.x = 0;
+        intersection.y = 0;
       }
+
+      return intersection;
     }
   }], [{
     key: "contains",
@@ -19118,20 +19134,25 @@ function () {
   }, {
     key: "fromNode",
     value: function fromNode(node) {
-      if (!node.getClientRects().length) {
-        return new Rect();
+      var rect = node.rect || (node.rect = new Rect());
+
+      if (node.getClientRects().length) {
+        var boundingRect = node.getBoundingClientRect(); // const defaultView = node.ownerDocument.defaultView;
+
+        node.rect.set(boundingRect);
       }
 
-      var rect = node.getBoundingClientRect(); // const defaultView = node.ownerDocument.defaultView;
-
+      return node.rect;
+      /*
       return new Rect({
-        // top: rect.top + defaultView.pageYOffset,
-        // left: rect.left + defaultView.pageXOffset,
-        top: rect.top,
-        left: rect.left,
-        width: rect.width,
-        height: rect.height
+          // top: rect.top + defaultView.pageYOffset,
+          // left: rect.left + defaultView.pageXOffset,
+          top: boundingRect.top,
+          left: boundingRect.left,
+          width: boundingRect.width,
+          height: boundingRect.height,
       });
+      */
     }
   }]);
 
@@ -19850,29 +19871,8 @@ function () {
   }, {
     key: "onScroll",
     value: function onScroll(e) {
-      var _this6 = this;
-
-      if (this.top !== this.page.style.transform) {
-        //controllo per requestanimationframe su contenitore dello scroll virtuale
-        this.top = this.page.style.transform;
-        var anchor = this.areas.find(function (area, i) {
-          var top = area.getBoundingClientRect().top;
-          var bottom = i < _this6.areas.length - 1 ? _this6.areas[i + 1].getBoundingClientRect().top : Number.POSITIVE_INFINITY;
-
-          _this6.titles.forEach(function (title) {
-            title.classList.remove('active');
-          });
-
-          if (top < _this6.offset && bottom > _this6.offset) {
-            _this6.titles[i].classList.add('active');
-
-            return area;
-          }
-        });
-      }
-
       if (!this.destroyed) {
-        requestAnimationFrame(this.onScroll);
+        this.onWrapperScroll(e);
       }
     }
   }, {
@@ -19903,12 +19903,20 @@ function () {
         console.log('ScrollAnchors: ', ScrollAnchors.items);
       }
     }
+  }, {
+    key: "onScroll",
+    value: function onScroll(e) {
+      ScrollAnchors.items.forEach(function (node) {
+        node.onScroll(e);
+      });
+    }
   }]);
 
   return ScrollAnchors;
 }();
 
 exports.default = ScrollAnchors;
+ScrollAnchors.items = [];
 
 },{}],333:[function(require,module,exports){
 "use strict";
