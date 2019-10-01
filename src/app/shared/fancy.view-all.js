@@ -41,9 +41,11 @@ export default class FancyViewAll {
     }
 
     //INIT
-    static init() {
+    static init(debug) {
         FancyViewAll.items = [...document.querySelectorAll('[data-fancy-view-all]')].map((element, id) => new FancyViewAll(element, id));
-        console.log('FancyViewAll: ', FancyViewAll.items);
+        if (debug) {
+            console.log('FancyViewAll: ', FancyViewAll.items);
+        }
     }
 
     //DESTROY ALL NODES AND CREATED CONTAINER ELEMENTS
@@ -113,7 +115,7 @@ export default class FancyViewAll {
         thumbItems.forEach(thumb => {
             thumbHtml += thumb.html;
         });
-
+               
         container.innerHTML = `<div class="full-gallery__list">${thumbHtml}</div>`;
 
         LazyLoad.init();

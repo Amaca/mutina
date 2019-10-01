@@ -1,3 +1,6 @@
+@import "../mixins";
+@import "../variables";
+
 .highlights {
     border-top: 2px solid $dark;
     border-bottom: 2px solid $dark;
@@ -75,6 +78,15 @@
         }
     }
 
+    &.highlights--col-1 {
+
+        .highlights__box { 
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+
+
     &.highlights--col-2 {
 
         .highlights__wrapper {
@@ -121,7 +133,6 @@
                 position: absolute;
                 z-index: 1;
                 top: 0;
-
                 background: $dark;
                 left: calc(33.333% - 2px);
 

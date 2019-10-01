@@ -1,4 +1,5 @@
 @import "../mixins";
+@import "../variables";
 
 .filters {
     position: relative;
@@ -41,7 +42,7 @@
         height: 100%;
     }
 
-    &>.container--big {
+    & > .container--big {
         @include xs-down {
             max-width: 100vw;
         }
@@ -75,7 +76,6 @@
                 display: none;
             }
         }
-
     }
 
     .filters__secondary {
@@ -206,8 +206,7 @@
             bottom: 0;
             left: 0;
             opacity: 0;
-            transition: opacity .6s $smooth;
-
+            transition: opacity .6s $smooth .5s;
         }
 
         &:after {
@@ -273,14 +272,14 @@
         }
     }
 
-    &>ul {
+    & > ul {
         list-style: none;
         padding: 0;
         margin: 0;
         height: 100%;
         display: flex;
 
-        &>li {
+        & > li {
             height: 100%;
             display: flex;
             align-items: center;
@@ -294,7 +293,7 @@
                 height: 100%;
                 width: 1px;
                 background: #e4e4e4;
-                transition: opacity .6s $smooth;
+                transition: opacity .6s $smooth .5s;
                 opacity: 0;
             }
 
@@ -600,7 +599,8 @@ body.filters-open {
     .filters {
         &:after {
             background: #e4e4e4;
-            transition: background .6s $smooth;
+            //transition: background .6s $smooth;
+            transition: all var(--close-filters-speed) cubic-bezier(0, 0.97, 0.43, 1) ;
         }
     }
 
@@ -611,6 +611,7 @@ body.filters-open {
             &:after,
             &:before {
                 opacity: 1;
+                transition: opacity .6s $smooth;
             }
 
             .subfilters {
@@ -635,6 +636,7 @@ body.filters-open {
 
                 &:before {
                     opacity: 1;
+                    transition: all .6s $smooth;
                 }
             }
         }

@@ -75,12 +75,16 @@ export default class FancyTransition {
         }
 
         if (isFullSamplesGallery) {
+            const catHeader = document.querySelector('.full-samples-gallery__header-cat');
             TweenMax.set(wrapper, {
                 bottom: -wrapperHeight,
             });
             TweenMax.set(header, {
                 top: -header.offsetHeight,
             });
+            TweenMax.set(catHeader, {
+                transform: 'translateY(-200%)'
+            })
         }
 
         TweenMax.to(layer, 1, {
@@ -123,6 +127,7 @@ export default class FancyTransition {
                 ease: Expo.easeInOut
             });
         } else if (isFullSamplesGallery) {
+            const catHeader = document.querySelector('.full-samples-gallery__header-cat');
             TweenMax.to(wrapper, 0.8, {
                 bottom: 0,
                 ease: Expo.easeIn
@@ -133,6 +138,10 @@ export default class FancyTransition {
             });
             TweenMax.to(close, 1, {
                 height: closeHeight,
+                ease: Expo.easeInOut
+            }).delay(0.5);
+            TweenMax.to(catHeader, 1, {
+                transform: 'translateY(0)',
                 ease: Expo.easeInOut
             }).delay(0.5);
         } else {
@@ -267,9 +276,19 @@ export default class FancyTransition {
                     top: -header.offsetHeight,
                     ease: Expo.easeInOut
                 }).delay(0.2);
+                const catHeader = document.querySelector('.full-samples-gallery__header-cat');
+                TweenMax.to(catHeader, 1, {
+                    transform: 'translateY(-200%)',
+                    ease: Expo.easeInOut
+                });
                 if (isSampleDetailAndFull) {
                     TweenMax.set(wrapper, {
                         bottom: -wrapperHeight,
+                    })
+                    const back = document.querySelector('.full-samples-gallery__back');
+                    TweenMax.to(back, 1, {
+                        transform: 'translateY(-' + back.offsetHeight + 'px)',
+                        ease: Expo.easeInOut
                     })
                     TweenMax.to(detailSamplesGalleryWrapper, 0.8, {
                         bottom: -detailSamplesGalleryWrapper.offsetHeight,

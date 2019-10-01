@@ -1,3 +1,6 @@
+@import "../mixins";
+@import "../variables";
+
 .slider {
     margin-bottom: 150px;
     position: relative;
@@ -82,6 +85,12 @@
         margin-top: 40px;
     }
 
+    .box--title {
+        @include sm-down {
+            text-align: center;
+        }
+    }
+
     .swiper-wrapper {
         transition-timing-function: cubic-bezier(0, 0.97, 0.43, 1);
     }
@@ -115,6 +124,11 @@
             margin-top: 23px;
             font-size: 1.1rem;
             transition: opacity 1s $smooth;
+
+            @include sm-down {
+                margin-top: 15px;
+                font-size: 1.2rem;
+            }
         }
 
         .slider__caption--small {
@@ -187,6 +201,10 @@
             padding: 0 $col-gutter;
         }
 
+        @include xs-down {
+            justify-content: flex-start;
+        }
+
         ul {
             padding: 0;
             margin: 0;
@@ -215,10 +233,11 @@
                     display: block;
                 }
 
-                &>div {
+                & > div {
                     @include font($style:medium);
                     color: #808080;
                     cursor: pointer;
+                    white-space: nowrap;
 
                     &.active {
                         color: $dark;
@@ -329,7 +348,8 @@
     .swiper-wrapper {
         align-items: flex-start;
 
-        @include xs-down {}
+        @include xs-down {
+        }
     }
 
     .swiper-slide {
@@ -338,6 +358,31 @@
 
         @include xs-down {
             width: 50%;
+        }
+    }
+
+    a {
+
+        .btn--inline-alt {
+            @include font($style:book);
+        }
+
+        &:hover {
+            .picture__container {
+                transform: scale(1.05);
+
+                &:after {
+                    opacity: 1;
+                }
+            }
+
+            .btn--inline-alt {
+                &:after {
+                    width: 100% !important;
+                    left: 0 !important;
+                    right: auto !important;
+                }
+            }
         }
     }
 
@@ -362,7 +407,6 @@
         @include xs-down {
             margin-bottom: 10px;
         }
-
     }
 
     .slider__caption-title {

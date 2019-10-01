@@ -28,7 +28,7 @@ export default class Navigation {
                 parent.addEventListener('click', (e) => {
                     e.preventDefault();
                     const activeNav = Utils.getClosest(event.target, 'ul li'); //seleziono ul li attiva appena cliccata
-                    const subnavItemHeight = activeNav.querySelector('.subnav__item').clientHeight;
+                    const subnavItemHeight = activeNav.querySelector('.subnav__item') ? activeNav.querySelector('.subnav__item').clientHeight : 0;
                     const height = subnavItemHeight + (subnavItemHeight / 2) + 'px';
                     const thisParent = parent.parentNode;
                     if (!subnavOpen) { //se i sottomenu sono chiusi
@@ -38,8 +38,10 @@ export default class Navigation {
                             setTimeout(x => { //timeout per definite l'animazione di chiusura della ricerca per mostrare il sottomenu
                                 body.classList.add('subnav-open');
                                 thisParent.classList.add('active');
-                                activeNav.querySelector('.subnav').style.height = height;
-                                activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
+                                if (activeNav.querySelector('.subnav')) {
+                                    activeNav.querySelector('.subnav').style.height = height;
+                                    activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
+                                }
                                 Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
                                 subnavOpen = true;
                             }, closeNavFast);
@@ -47,8 +49,10 @@ export default class Navigation {
                             document.documentElement.style.setProperty('--close-nav-speed', closeNavSlow);
                             body.classList.add('subnav-open');
                             thisParent.classList.add('active');
-                            activeNav.querySelector('.subnav').style.height = height;
-                            activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
+                            if (activeNav.querySelector('.subnav')) {
+                                activeNav.querySelector('.subnav').style.height = height;
+                                activeNav.querySelector('.subnav__wrapper').style.top = (subnavItemHeight / 4) + 'px';
+                            }
                             Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
                             subnavOpen = true;
                         }
@@ -90,10 +94,6 @@ export default class Navigation {
             document.querySelectorAll('.subnav').forEach(x => x.style.height = '0');
             subnavOpen = false;
         }
-        // if (body.classList.contains('nav-mobile-open')) {
-        //     body.classList.remove('nav-mobile-open');
-        //     subnavOpen = false;
-        // }
     }
 
     static closeOnOutsideClick() { //chiudo il sottomenu se clicco fuori
@@ -132,7 +132,7 @@ export default class Navigation {
     }
 
     static toggleSearch() {
-        const inputText = document.querySelector('.header__search input');
+        const inputText = document.querySelector('.header__search input[type=text]');
         if (inputText) {
             Utils.toggleClass(body, 'search-bar-open');
             searchOpen = body.classList.contains('search-bar-open') ? true : false;
@@ -147,7 +147,7 @@ export default class Navigation {
     }
 
     static closeSearch() {
-        const inputText = document.querySelector('.header__search input');
+        const inputText = document.querySelector('.header__search input[type=text]');
         if (inputText) {
             body.classList.remove('search-bar-open');
             searchOpen = false;
@@ -181,7 +181,6 @@ export default class Navigation {
                     }
                 } else {
                     body.classList.add('nav-mobile-open');
-                    Navigation.closeOnOutsideClick(); //se clicchi fuori dal menu si chiude
                 }
             });
 

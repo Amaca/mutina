@@ -1,3 +1,6 @@
+@import "../mixins";
+@import "../variables";
+
 .transition {
     position: fixed;
     z-index: 3;
@@ -117,6 +120,10 @@
                 bottom: 0;
                 display: inline-block;
                 white-space: nowrap;
+
+                @include xs-down {
+                    font-size: 3.6rem;
+                }
             }
         }
 
@@ -138,10 +145,13 @@
                 bottom: 0;
                 display: inline-block;
                 white-space: nowrap;
+
+                @include xs-down {
+                    font-size: 3.6rem;
+                }
             }
         }
     }
-
 }
 
 .dark-layer {

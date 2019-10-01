@@ -6,7 +6,7 @@ const body = document.querySelector('body');
 
 export default class FancyDetail {
 
-    static init() {
+    static init(debug) {
         if (window.innerWidth > 768) {
             this.initDesktopSidebar();
         } else {

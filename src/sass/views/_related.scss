@@ -1,3 +1,6 @@
+@import "../mixins";
+@import "../variables";
+
 .related {
     padding: 0 0 120px 0;
 
@@ -19,7 +22,7 @@
     }
 
     &--less {
-        padding: 0;
+        padding: 0 0 60px 0;
 
         @include sm-down {
             padding-bottom: 60px;
@@ -32,6 +35,7 @@
 
     padding-top: 80px;
     border-top: 2px solid $dark;
+
 }
 
 .schedule+.related--slider {

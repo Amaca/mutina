@@ -1,6 +1,9 @@
+@import "../mixins";
+@import "../variables";
+
 .nav {
     @include font($style:heavy);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
 
     a {
         color: $dark;
@@ -213,7 +216,7 @@ $subnav-bg-transition: all var(--close-nav-speed) cubic-bezier(0, 0.97, 0.43, 1)
         @include font($style:book);
 
         @include xs-down {
-            margin-top: 10px;
+            margin-top: 0px;
             font-size: 1rem;
         }
     }

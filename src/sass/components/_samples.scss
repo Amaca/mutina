@@ -1,3 +1,6 @@
+@import "../mixins";
+@import "../variables";
+
 $detail-samples-full-bg: #cfcfcf;
 $detail-samples-wrapper-bg: transparent;
 $detail-samples-footer-bg: white;
@@ -142,7 +145,8 @@ $slider-samples-arrow-close-zoom-fill: white;
             display: inline-block;
             padding: 0 20px;
 
-            a {
+            div {
+                cursor: pointer;
                 color: $grey;
                 transition: color .6s $smooth;
 

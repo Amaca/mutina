@@ -1,6 +1,5 @@
 /* jshint esversion: 6 */
 
-
 const body = document.querySelector('body');
 const header = document.querySelector('header');
 

@@ -1,3 +1,6 @@
+@import "../mixins";
+@import "../variables";
+
 html,
 body {
     width: 100%;
@@ -120,6 +123,41 @@ body {
                 font-size: 24px;
                 display: block;
             }
+        }
+    }
+}
+
+#acceptcookie {
+    background: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    font-size: 0.8rem;
+
+    @include xs-down {
+        line-height: 1.4;
+    }
+
+    .btn--primary {
+        padding: 16px 30px;
+        min-width: 100px;
+        margin-left: 20px;
+
+        @include xs-down {
+            margin: 10px 0 0 0;
+            width: 100%;
+        }
+    }
+
+    .btn--inline {
+        font-size: 0.9rem;
+        top: -1px;
+        text-transform: uppercase;
+
+        @include sm-down {
+            display: inline-block;
         }
     }
 }

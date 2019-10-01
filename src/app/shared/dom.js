@@ -57,10 +57,10 @@ export default class Dom {
             node.classList.add('mouse');
         };
         document.addEventListener('mousedown', onMouseDown);
-        // if (mobile) {
-        //     Dom.fastscroll = true;
-        //     node.classList.add('fastscroll');
-        // }
+        //if (mobile) {
+        //    Dom.fastscroll = true;
+        //    node.classList.add('fastscroll');
+        //}
         /*
         const onScroll = () => {
             let now = Utils.now();

@@ -1,4 +1,5 @@
 @import "../mixins";
+@import "../variables";
 
 img:not([src]) {
     content: url("data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==");
@@ -8,13 +9,6 @@ img:not([src]) {
     display: flex;
     position: relative;
     overflow: hidden;
-    width: 100%;
-    //@slidebg on enter
-    // transform: scale(0.97, 0.97);
-    //@slidebg on enter
-
-    //transform: translateY(30px);
-    // @include aspect-clip(10, 6, 0.15);
     transition: all 600ms cubic-bezier(0.320, 0.000, 0.290, 0.990);
     @include aspect-clip(10, 6, 0);
 
@@ -50,42 +44,16 @@ img:not([src]) {
         height: 100%;
         transition: all 600ms cubic-bezier(0.320, 0.000, 0.290, 0.990);
         transform: scale(1.05, 1.05) translateY(10px);
-        //@slidebg on enter
-        //transition: all 1000ms ease-in-out;
-        //@slidebg on enter
-
-        // img {
-        //     @include xs-down {
-        //         top: 50% !important;
-        //         left: 50% !important;
-        //         transform: translate(-50%, -50%) !important;
-        //         height: 100%;
-        //         width: auto !important;
-        //     }
-        // }
     }
 
     &.loaded {
-        //@slidebg on enter
-        // transform: scale(1, 1);
-        //@slidebg on enter
-        //transform: translateY(0px);
-
         img {
             opacity: 1;
-
-            // transform: scale(1, 1);
-            //@slidebg on enter
-            //transition: opacity 1500ms ease-in-out;
-            //@slidebg on enter
+            
         }
-
-        //@slidebg on enter
         .picture__container {
             transform: scale(1, 1) translateY(0);
         }
-
-        //@slidebg on enter
     }
 
     &.reverse {
@@ -134,7 +102,17 @@ img:not([src]) {
                 }
             }
 
-            &:hover {
+            @media (hover: hover) {
+                &:hover {
+                    .picture__container {
+                        &:after {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+
+            @include sm-down {
                 .picture__container {
                     &:after {
                         opacity: 1;
@@ -145,8 +123,16 @@ img:not([src]) {
     }
 }
 
-.picture+.picture__caption {
+.picture + .picture__caption {
     margin-top: 20px;
+
+    @include sm-down {
+        margin-top: 10px;
+    }
+
+    @include xs-down {
+        margin-top: 0;
+    }
 }
 
 

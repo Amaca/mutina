@@ -1,4 +1,5 @@
 /* jshint esversion: 6 */
+import Utils from './utils';
 
 export default class Wishlist {
 
@@ -12,6 +13,8 @@ export default class Wishlist {
         Wishlist.attributeListSelector = 'input[data-wishlist]';
         Wishlist.localstorageKey = 'wishlist';
         Wishlist.containerSelector = '.side-panel__list';
+        Wishlist.requestBtnSelector = '.side-panel__footer .cta--next'; 
+        Wishlist.requestBtnClass = 'disable';
     }
 
     static loadHtml() {
@@ -43,6 +46,7 @@ export default class Wishlist {
         }
         localStorage.setItem(Wishlist.localstorageKey, JSON.stringify(Wishlist.items));
         Wishlist.loadHtml();
+        Wishlist.checkCounter();
     }
 
     static buttons() {
@@ -64,8 +68,17 @@ export default class Wishlist {
             .forEach(x => x.removeEventListener('click', this.addOrRemove));
     }
 
-    static init() {
+    static checkCounter() {
+        if (Wishlist.items.length === 0) {
+            document.querySelector(Wishlist.requestBtnSelector).classList.add(Wishlist.requestBtnClass);
+        } else {
+            document.querySelector(Wishlist.requestBtnSelector).classList.remove(Wishlist.requestBtnClass);
+        }
+    }
+
+    static init(debug) {
         Wishlist.Config();
+        Wishlist.checkCounter();
         if (localStorage.getItem(Wishlist.localstorageKey))
             Wishlist.items = JSON.parse(localStorage.getItem(Wishlist.localstorageKey));
         Wishlist.loadHtml();

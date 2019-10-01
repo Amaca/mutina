@@ -1,3 +1,6 @@
+@import "../mixins";
+@import "../variables";
+
 input {
 
     &,
@@ -41,6 +44,9 @@ Form
         margin-bottom: 0;
     }
 
+    .error {
+        border-bottom: 2px solid #d30000 !important;
+    }
 
     .form-group {
         display: block;
@@ -48,8 +54,8 @@ Form
         z-index: 1;
 
         input,
-        input[type="radio"]+label,
-        input[type="checkbox"]+label:before,
+        input[type="radio"] + label,
+        input[type="checkbox"] + label:before,
         select option,
         select,
         textarea {
@@ -94,8 +100,6 @@ Form
                 font-weight: normal;
             }
         }
-
-
         //control radio btn
         .control-radio-btn {
 
@@ -107,7 +111,7 @@ Form
                 display: none;
             }
 
-            input[type="radio"]+label {
+            input[type="radio"] + label {
                 display: inline-block;
                 width: 50%;
                 text-align: center;
@@ -116,18 +120,17 @@ Form
             }
 
 
-            input[type="radio"]+label i {
+            input[type="radio"] + label i {
                 padding-right: 0.4em;
             }
 
-            input[type="radio"]:checked+label,
-            input:checked+label:before {
+            input[type="radio"]:checked + label,
+            input:checked + label:before {
                 background-color: $form-main;
                 color: $form-white;
                 border-color: $form-main;
             }
         }
-
         //control radio inline
         .control-radio-inline {
 
@@ -135,7 +138,7 @@ Form
                 display: none;
             }
 
-            input[type="radio"]+label {
+            input[type="radio"] + label {
                 position: relative;
                 display: block;
                 padding-left: 1.6em;
@@ -150,7 +153,7 @@ Form
                 }
             }
 
-            input[type="radio"]+label:before {
+            input[type="radio"] + label:before {
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -164,7 +167,7 @@ Form
                 color: $form-main;
             }
 
-            input[type="radio"]+label:after {
+            input[type="radio"] + label:after {
                 position: absolute;
                 top: 0.62em;
                 left: 0.4em;
@@ -175,17 +178,16 @@ Form
                 content: "\f111";
             }
 
-            input[type="radio"]:checked+label:after {
+            input[type="radio"]:checked + label:after {
                 opacity: 1;
             }
         }
-
         //control checkbox
         input[type="checkbox"] {
             display: none;
         }
 
-        input[type="checkbox"]+label {
+        input[type="checkbox"] + label {
             position: relative;
             display: block;
             padding-left: 1.6em;
@@ -197,7 +199,11 @@ Form
             }
         }
 
-        input[type="checkbox"]+label:before {
+        input[type="checkbox"].error + label:before {
+            border: 2px solid #d30000;
+        }
+
+        input[type="checkbox"] + label:before {
             position: absolute;
             top: 0.2em;
             left: 0;
@@ -208,7 +214,7 @@ Form
             content: '';
         }
 
-        input[type="checkbox"]+label:after {
+        input[type="checkbox"] + label:after {
             content: '';
             position: absolute;
             top: 0.2em;
@@ -222,7 +228,7 @@ Form
             transition: all .3s $smooth;
         }
 
-        input:checked+label:after {
+        input:checked + label:after {
             width: 1em;
             height: 1em;
         }
@@ -233,7 +239,6 @@ Form
             }
         }
     }
-
     //form thin
     &.form-thin {
 
@@ -281,7 +286,6 @@ Form
             }
         }
     }
-
     //form tiny
     &.form-tiny {
 
@@ -317,7 +321,7 @@ Form
             }
         }
 
-        input[type="checkbox"]+label {
+        input[type="checkbox"] + label {
             font-size: 14px;
         }
     }
@@ -342,7 +346,7 @@ Form
         border-bottom: 2px solid #d30000 !important;
     }
 
-    .error+label {
+    .error + label {
         color: $form-red !important;
     }
 
@@ -354,7 +358,6 @@ Form
             border-bottom: 2px solid #d30000 !important;
         }
     }
-
     //form columns
     .form-row {
         zoom: 1;
@@ -447,15 +450,25 @@ Form
 
     .choices__inner {
         border: 0;
-        border-bottom: 2px solid black;
+        border-radius: 0;
         background: $light-grey;
         text-align: left;
-        padding: 8px 10px 2px 10px;
+        //padding: 8px 10px 2px 10px;
+        padding: 0;
         font-size: 0.65rem;
         text-transform: uppercase;
         font-weight: 500;
         vertical-align: unset;
         min-height: 40px;
+    }
+
+    .choices__list--single {
+        padding: 8px 10px 2px 10px;
+        border-bottom: 2px solid black;
+    }
+
+    select.error + .choices__list--single {
+        border-bottom: 2px solid #d30000;
     }
 
     &[data-type*="select-one"] .choices__inner {
@@ -476,16 +489,14 @@ Form
         pointer-events: none;
         right: 25px;
         top: 50%;
-        margin-top: -9.5px;
+        margin-top: -12.5px;
         pointer-events: none;
         transform: rotate(90deg);
         // transition: all .6s $smooth;
     }
-
     // &[data-type*="select-one"].is-open:after {
     //     transform: rotate(-90deg);
     // }
-
     .choices__list--dropdown {
         top: 0;
         border: 0;
@@ -500,4 +511,40 @@ Form
         }
     }
 
+    .is-flipped & {
+        top: auto;
+        bottom: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+        border-radius: 0;
+    }
+}
+
+
+.form .form-group--select {
+    position: relative;
+    z-index: 2;
+
+    .choices {
+        .choices__inner {
+        }
+
+        .choices__list--dropdown {
+            background-color: #f9f9f9;
+            border: 2px solid #e8eaea;
+        }
+
+        .choices__list--single {
+            padding: 16px;
+            line-height: 1.4;
+            background-color: #f9f9f9;
+            border: 2px solid #e8eaea;
+            border-radius: 0;
+            font-size: 0.7rem;
+        }
+    }
+
+    select.error + .choices__list--single {
+        border-bottom: 2px solid #d30000;
+    }
 }

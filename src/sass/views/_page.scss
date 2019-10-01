@@ -1,3 +1,6 @@
+@import "../mixins";
+@import "../variables";
+
 .page {
     display: block;
     position: fixed;
@@ -27,6 +30,97 @@
 
         @include sm-down {
             padding-top: $header-height-mobile;
+        }
+    }
+}
+
+.landing-preview {
+    .editorial__1col-mid-text {
+        text-align: center;
+    }
+}
+
+.landing {
+    height: calc(100vh - #{$header-height});
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    @include sm-down {
+        height: calc(100vh - #{$header-height-mobile});
+    }
+
+    .box--title {
+        margin-bottom: 40px;
+        max-width: none;
+    }
+
+    .landing__text {
+        .box {
+            max-width: 500px;
+            text-align: center;
+            font-size: 0.75rem;
+            margin: 0 auto;
+
+            p {
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    .form {
+
+        .error {
+            display: inline-block;
+        }
+
+        .form-row--results {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        & > .form-row--subscribe {
+            padding-bottom: 30px;
+            display: flex;
+            justify-content: center;
+
+            @include xs-down {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .form-group {
+                @include xs-down {
+                    width: 100%;
+                }
+            }
+
+            input {
+                height: 100%;
+                padding: 20px 30px;
+                border-right: 0;
+                min-width: 400px;
+                font-size: 0.8rem;
+
+                @include xs-down {
+                    min-width: auto;
+                    width: 100%;
+                    border: 2px solid #e8eaea;
+                }
+
+                &::placeholder {
+                    font-size: 0.8rem;
+                }
+            }
+
+            .btn--primary {
+                @include xs-down {
+                    width: 100%;
+                    padding: 20px 30px;
+                }
+            }
         }
     }
 }

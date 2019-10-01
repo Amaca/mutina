@@ -112,7 +112,7 @@ export default class Sliders {
                 grabCursor: true,
                 watchOverflow: true,
                 centeredSlides: true,
-                loop: this.slider.querySelectorAll('.swiper-slide').length <= 2 ? false : true,
+                loop: this.slider.querySelectorAll('.swiper-slide').length <= 3 ? false : true,
                 slidesPerView: 'auto',
                 spaceBetween: 60,
                 preloadImages: false,
@@ -222,9 +222,11 @@ export default class Sliders {
         this.swiperInstance.slideTo(Number(selectedParent.getAttribute('data-id')));
     }
 
-    static init() {
+    static init(debug) {
         Sliders.items = [...document.querySelectorAll('.swiper-container')].map((slider, index) => new Sliders(slider, index));
-        console.log('sliders: ', Sliders.items);
+        if (debug) {
+            console.log('Sliders: ', Sliders.items);
+        };
     }
 
     static destroyAll() {

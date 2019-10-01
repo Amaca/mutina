@@ -1,4 +1,5 @@
 @import "../mixins";
+@import "../variables";
 
 .fancy-detail {
     position: relative;
@@ -49,18 +50,33 @@
             border-top: 2px solid $dark;
             padding-bottom: 0;
         }
+
+        .editorial__wrapper {
+            transform: translateY(0px);
+        }
     }
 
     .editorial {
         padding-bottom: $col-gutter-half;
+
+        @include sm-down {
+            padding-bottom: $col-gutter;
+        }
+    }
+
+    .editorial--2col-img + .editorial--2col-img,
+    .editorial--2col-text + .editorial--2col-text {
+        margin-top: 0;
     }
 
     .editorial__1col-full-img,
     .editorial__1col-full-img-caption--left {
-
+        /*.container--big {
+            max-width: none;
+        }*/
         .picture {
             // @include aspect-clip(3, 2, 0.15);
-            @include aspect-clip(1400, 899);
+            @include aspect-clip(1920, 1200);
         }
     }
 
@@ -77,12 +93,33 @@
 
         .editorial__box-content {
             padding: 0;
+
+            @include xs-down {
+                margin-bottom: #{$col-gutter};
+            }
         }
 
         .editorial__caption {
             padding: 0 #{$col-gutter-half / 2};
             margin-top: $col-gutter-half;
         }
+    }
+    /*.editorial--2col-img {
+        .container--big {
+            max-width: none;
+        }
+    }*/
+    .editorial--2col-img + .editorial--2col-img,
+    .editorial--2col-text + .editorial--2col-text,
+    .editorial--1col-mid-text + .editorial--1col-mid-text,
+    .editorial--1col-full-img-caption + .editorial--1col-full-img-caption,
+    .editorial--1col-full-img-caption + .editorial--2col-img,
+    .editorial--2col-img + .editorial--1col-full-img-caption {
+        margin-top: 0;
+    }
+
+    .editorial--1col-full-img-caption + .archive {
+        margin-top: 0;
     }
 
     .archive {
@@ -99,11 +136,13 @@
         .listing__item {
             padding: 0 #{$col-gutter-half / 2};
 
-            .picture+.box {
+            .picture + .box {
                 margin-top: 20px;
             }
 
             .box {
+
+
                 .h3 {
                     font-size: 1.2rem;
                 }
@@ -118,12 +157,15 @@
                     }
                 }
             }
+
+
+            .box .text + .cta {
+                margin-top: 5px;
+            }
         }
 
         .container--big {
-            padding: 0;
-            margin: 0;
-            max-width: 100%;
+            max-width: calc(100% - #{$col-gutter});
         }
     }
 
@@ -131,6 +173,10 @@
 
         .box--title {
             margin-bottom: 50px;
+
+            @include sm-down {
+                text-align: center;
+            }
 
             .eyelet {
                 text-transform: uppercase;
@@ -146,7 +192,7 @@
                 padding-bottom: 50px;
             }
 
-            &>div {
+            & > div {
                 margin-bottom: 0;
             }
         }
@@ -162,6 +208,12 @@
         .fancy-detail__footer {
             .editorial {
                 padding-bottom: 0;
+            }
+        }
+
+        .editorial__1col-full-img-caption--left {
+            .picture {
+                padding-top: 100% !important;
             }
         }
     }
@@ -188,6 +240,16 @@
         height: auto;
     }
 
+    .close__logo {
+        text-align: center;
+        position: relative;
+        top: 40px;
+
+        img {
+            width: 100px;
+        }
+    }
+
     &.fancy-detail__sidebar--white {
         background: $white;
         border-right: 2px solid $dark;
@@ -201,7 +263,7 @@
         }
 
         .fancy-detail__sidebar-content {
-            &>.box {
+            & > .box {
                 color: $dark;
             }
         }
@@ -210,6 +272,14 @@
     &.fancy-detail__sidebar--variant {
 
         .fancy-detail__sidebar-content {
+
+            .box {
+                @include sm-down {
+                    margin-top: 20px;
+                    padding: 0;
+                }
+            }
+
             .h1 {
                 margin-bottom: 40px;
 
@@ -300,6 +370,7 @@
     top: 50%;
     transform: translateY(-50%);
     width: 100%;
+    padding: 0 $col-gutter;
 
     @include sm-down {
         transform: none;

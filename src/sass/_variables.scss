@@ -43,10 +43,10 @@ $header-height: 81px;
 $header-height-mobile: 60px;
 
 //main colors
-$white: var(--color-white);
-$dark: var(--color-dark);
-$grey: var(--color-grey);
-$light-grey: var(--color-light-grey);
+$white: #ffffff;
+$dark: #121212;
+$grey: #808080;
+$light-grey: #ECECEC;
 
 //font
 $font-size: 20px;
@@ -55,9 +55,9 @@ $font-size-md: 16px;
 $font-size-sm: 14px;
 
 //buttons
-$btn-radius: var(--btn-radius);
-$card-radius: var(--card-radius);
-$bullet-size: var(--bullet-size);
+$btn-radius: 0;
+$card-radius: 0;
+$bullet-size: 12px;
 
 //animations
 $expo: cubic-bezier(1.000, 0.000, 0.000, 1.000);

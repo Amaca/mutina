@@ -1,4 +1,4 @@
-@import "fonts";
+/*@import "fonts";*/
 @import "mixins";
 @import "variables";
 
@@ -18,7 +18,7 @@
 @import "components/appear";
 @import "components/samples";
 @import "components/filters";
-@import "components/toggle-search";
+@import "components/toggle-search"; 
 @import "components/side-panel";
 @import "components/tooltips";
 @import "components/forms";
@@ -26,12 +26,11 @@
 @import "components/slider";
 
 @import "views/page";
-@import "views/header";
+@import "views/header"; 
 @import "views/footer";
-
+ 
 @import "views/listing";
 @import "views/editorial";
-@import "views/product";
 @import "views/related";
 @import "views/elements";
 @import "views/schedule";

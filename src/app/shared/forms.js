@@ -187,7 +187,7 @@ export default class Forms {
         return false;
     }
 
-    static init() {
+    static init(debug) {
         Forms.items = [...document.querySelectorAll('.contact-form')]
             .map((element, index) => new Forms(element, index));
 
@@ -195,6 +195,10 @@ export default class Forms {
             document.querySelector("#submit-samples").addEventListener('click', function () {
                 $("#form-samples").submit();
             });
+        }
+
+        if (debug) {
+            console.log('Forms: ', Forms.items);
         }
     }
 

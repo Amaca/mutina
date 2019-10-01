@@ -52,9 +52,11 @@ export default class Fancy {
     }
 
     //INIT
-    static init() {
+    static init(debug) {
         Fancy.items = [...document.querySelectorAll('[data-fancy-img]')].map((element, id) => new Fancy(element, id));
-        console.log('Fancy: ', Fancy.items);
+        if (debug) {
+            console.log('Fancy: ', Fancy.items);
+        }        
     }
 
     //DESTROY ALL NODES AND CREATED CONTAINER ELEMENTS
@@ -192,7 +194,7 @@ export default class Fancy {
 
         const images = [...document.querySelectorAll('.detail-gallery__swiper .swiper-lazy')].filter(x => x.getAttribute('data-fancy-zoom') === 'true');
 
-        Follower.addMouseListener(images);
+        Follower.addMouseListener(images); 
 
         let options = {
             watchOverflow: true,
@@ -267,7 +269,7 @@ export default class Fancy {
                         bottom: 0,
                     });
                     TweenMax.to(captionWrapper, captionSpeed, {
-                        bottom: -captionWrapper.offsetHeight,
+                        bottom: -captionWrapper.parentNode.offsetHeight,
                         ease: Expo.easeInOut,
                         onComplete: () => {
                             captionWrapper.innerHTML = caption;

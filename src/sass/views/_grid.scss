@@ -1,3 +1,6 @@
+@import "../mixins";
+@import "../variables";
+
 .listing--grid {
     position: relative;
     margin: 0 -#{$col-gutter};

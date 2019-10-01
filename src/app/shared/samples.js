@@ -2,11 +2,11 @@
 
 import "gsap/ScrollToPlugin";
 import FancyTransition from "./fancy.transition";
-import Follower from "./follower";
-import LazyLoad from "./lazyload";
 import SamplesDetail from "./samples.detail";
-import ScrollAnchors from "./scroll.anchors";
 import SidePanel from "./side.panel";
+import LazyLoad from "./lazyload";
+import Follower from "./follower";
+import Wishlist from "./wishlist";
 
 let clickClose;
 let scrollWrapper;
@@ -41,6 +41,7 @@ export default class Samples {
             let jsonResponse = JSON.parse(req.responseText);
             this.data = jsonResponse;
             this.initFullSamplesGallery();
+            Wishlist.init();
         };
         req.send(null);
     }
@@ -62,7 +63,7 @@ export default class Samples {
         fullSamplesClose.classList.add('full-samples-gallery__close');
         fullSamplesBack.classList.add('full-samples-gallery__back');
         fullSamplesCat.classList.add('full-samples-gallery__header-cat');
-        fullSamplesHeaderCta.classList.add('full-samples-gallery__header-cta');
+        //fullSamplesHeaderCta.classList.add('full-samples-gallery__header-cta');
         fullSamplesHeaderButton.classList.add('full-samples-gallery__header-button');
         fullSamplesBg.classList.add('full-samples-gallery__bg');
         fullSamplesWrapper.classList.add('full-samples-gallery__wrapper');
@@ -76,6 +77,12 @@ export default class Samples {
             Follower.removeMouseListener(imagesSamples);
             FancyTransition.closeLayer('fullSamplesGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, fullSamplesGallery);
             fullSamplesClose.removeEventListener('click', clickClose);
+
+            if (!window.NoTrackHistory)
+                history.pushState({ samples: false }, null, location.pathname);
+
+            window.NoTrackHistory = false;
+
             e.preventDefault();
         };
         fullSamplesClose.addEventListener('click', clickClose);
@@ -85,45 +92,43 @@ export default class Samples {
         fullSamplesHeader.appendChild(fullSamplesClose);
         fullSamplesHeader.appendChild(fullSamplesBack);
         fullSamplesHeader.appendChild(fullSamplesCat);
-        fullSamplesHeader.appendChild(fullSamplesHeaderCta);
-        fullSamplesHeaderCta.appendChild(fullSamplesHeaderButton);
+        //fullSamplesHeader.appendChild(fullSamplesHeaderCta);
+        //fullSamplesHeaderCta.appendChild(fullSamplesHeaderButton);
         fullSamplesGallery.appendChild(fullSamplesBg);
         fullSamplesGallery.appendChild(fullSamplesWrapper);
         fullSamplesWrapper.appendChild(fullSamplesContainer);
 
-        fullSamplesHeaderButton.innerHTML = 'Samples (0)';
+        fullSamplesHeaderButton.innerHTML = ''; //`Samples (<span data-wishcount>0</span>)`;
 
         sidePanelButton = new SidePanel(fullSamplesHeaderButton, null, 'samples');
 
         body.classList.add('samples-gallery-open');
         html.style.overflow = 'hidden';
 
-        // scrollWrapper = (e) => {
-        //     this.scrollWrapper(e);
-        // };
-
-        // fullSamplesWrapper.addEventListener('scroll', scrollWrapper);
-
         this.addCategories(fullSamplesCat);
         this.addImages(fullSamplesContainer);
 
         FancyTransition.openLayer('fullSamplesGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, this.id);
 
+        if (!window.NoTrackHistory)
+            history.pushState({ samples: true }, null, location.pathname + '?samples=open');
+
+        window.NoTrackHistory = false;
+
+        //https://gomakethings.com/how-to-update-a-url-without-reloading-the-page-using-vanilla-javascript/
     }
 
     addCategories(wrapper) {
-        let categoriesHtml = '<ul data-scroll-anchors="50">';
+        let categoriesHtml = '<ul>';
         this.data.samples.forEach(category => {
             categoriesHtml += `
-                <li><a href="#" data-scroll-title="${category.id}" data-sample-id="${category.id}">${category.color}</a></li>
+                <li><div data-sample-id="${category.id}">${category.title}</div></li>
             `;
         });
         categoriesHtml += '</ul>';
         wrapper.innerHTML = categoriesHtml;
-    }
 
-    scrollWrapper(e) {
-        const wrapper = document.querySelector('.full-samples-gallery__wrapper');
+        Samples.addTabsListeners();
     }
 
     addImages(wrapper) {
@@ -141,7 +146,7 @@ export default class Samples {
                         <div class="box">
                             <h6 class="h6">${item.title}</h6>
                             <div class="text">${item.size}</div>
-                            <div class="cta"><a href="#" class="btn--inline">Add to samples</a></div>
+                            <!--div class="cta"><div class="btn--inline" data-wishid="${item.code}">Add to samples</div></div-->
                         </div>
                     </div>
                 `;
@@ -149,14 +154,14 @@ export default class Samples {
 
             containerHtml += `<div class="full-samples-gallery__category" data-scroll-area="${category.id}" data-sample-category="${category.id}">`;
 
-            if (category.img !== null) {
+            if (category.img && category.img !== null) {
                 containerHtml += `
                 <div class="full-samples-gallery__cover">
                     <h2 class="h2">${category.color}</h2>
                     <div class="img">
                         <img data-load="${category.img}">
                     </div>
-                    <div class="box">
+                    <div class="box"> 
                         <h6 class="h6">${category.title}</h6>
                         <div class="text">${category.size}</div>
                     </div>
@@ -168,7 +173,6 @@ export default class Samples {
         });
 
         wrapper.innerHTML = containerHtml;
-        Samples.addTabsListeners();
         LazyLoad.init();
 
         const imagesSamples = [...document.querySelectorAll('.full-samples-gallery__item img')];
@@ -181,7 +185,7 @@ export default class Samples {
         };
 
         images.forEach(image => {
-            image.node.addEventListener('click', clickDetailGallery);
+            image.node.querySelector('.img').addEventListener('click', clickDetailGallery);
         });
     }
 
@@ -198,6 +202,7 @@ export default class Samples {
             category.items.forEach((item, index) => {
                 categoryItems.push({
                     id: item.id,
+                    code: item.code,
                     node: thumbs[item.id],
                     img: item.img,
                     imgHd: item.imgHd,
@@ -249,21 +254,20 @@ export default class Samples {
             }
         });
 
-        // Utils.toggleClass(e.target, 'active');
+        //Utils.toggleClass(e.target, 'active');
         e.preventDefault();
     }
 
     static removeTabsListeners() {
-        // [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
-        //     x.removeEventListener('click', this.scrollToColor);
-        // });
+        [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
+            x.removeEventListener('click', this.scrollToColor);
+        });
     }
 
     static addTabsListeners() {
-        // [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
-        //     x.addEventListener('click', this.scrollToColor);
-        // });
-        new ScrollAnchors(document.querySelector('.full-samples-gallery [data-scroll-anchors]'), 0, document.querySelector('.full-samples-gallery__wrapper'));
+        [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
+            x.addEventListener('click', this.scrollToColor);
+        });
     }
 
     static destroyAll() {
@@ -275,8 +279,10 @@ export default class Samples {
         Samples.removeTabsListeners();
     }
 
-    static init() {
+    static init(debug) {
         Samples.items = [...document.querySelectorAll('[data-samples]')].map((element, id) => new Samples(element, id));
-        console.log('Samples: ', Samples.items);
+        if (debug) {
+            console.log('Samples: ', Samples.items);
+        }
     }
 }

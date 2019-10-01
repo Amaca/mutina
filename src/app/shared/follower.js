@@ -65,20 +65,20 @@ export default class Follower {
                 return p;
             }
         }, {
-            match: false,
-            x: this.mouse.x,
-            y: this.mouse.y,
-            width: size,
-            height: size,
-            radius: 75,
-            scale: 0.25,
-            opacity: 0.15,
-        });
+                match: false,
+                x: this.mouse.x,
+                y: this.mouse.y,
+                width: size,
+                height: size,
+                radius: 75,
+                scale: 0.25,
+                opacity: 0.15,
+            });
         this.magnet = magnet;
     }
 
     render() {
-        if (window.innerWidth >= 1024 && this.mouse.x && this.mouse.y) {
+        if (window.innerWidth >= 768 && this.mouse.x && this.mouse.y) {
             this.setMagnetThrottled();
             const magnet = this.magnet;
             //

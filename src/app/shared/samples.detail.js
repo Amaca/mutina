@@ -3,6 +3,7 @@
 import "gsap/ScrollToPlugin";
 import Samples from "./samples";
 import Utils from "./utils";
+import Wishlist from "./wishlist";
 
 let clickTab;
 let scrollWrapper;
@@ -23,6 +24,7 @@ export default class SamplesDetail {
         wrapper.appendChild(detailSampleGalleryWrapper);
 
         SamplesDetail.initSwiper(id, data, detailSampleGalleryWrapper);
+        Wishlist.init();
 
         body.classList.add('detail-sample-gallery-open');
         //html.style.overflow = 'hidden';
@@ -57,13 +59,13 @@ export default class SamplesDetail {
         TweenMax.to(back, 1, {
             transform: 'translateX(0)',
             ease: Expo.easeInOut
-        });
+        })
         TweenMax.to(headerCat, 1, {
             marginLeft: '146px',
             maxWidth: (viewportWidth - 146) + 'px',
             flex: '0 0 ' + (viewportWidth - 146) + 'px',
             ease: Expo.easeInOut
-        });
+        })
     }
 
     static closeLayer(wrapper, back, headerCat, viewportWidth) {
@@ -102,7 +104,7 @@ export default class SamplesDetail {
     static destroyAll() {
         const wrapper = document.querySelector('.detail-samples-gallery__wrapper');
         const back = document.querySelector('.full-samples-gallery__back svg');
-        const tabs = [...document.querySelectorAll('.full-samples-gallery__header-cat ul li a')];
+        const tabs = [...document.querySelectorAll('.full-samples-gallery__header-cat ul li div')];
 
         body.classList.remove('detail-sample-gallery-open');
         //html.style.overflow = 'initial';
@@ -133,7 +135,7 @@ export default class SamplesDetail {
                     <div class="box">
                         <h6 class="h6">${item.title}</h6>
                         <div class="text">${item.size}</div>
-                        <div class="cta"><a href="#" class="btn--inline">Add to samples</a></div>
+                        <!--div class="cta"><div class="btn--inline" data-wishid="${item.code}">Add to samples</div></div-->
                     </div>
                 </div>
             </div>
@@ -163,7 +165,6 @@ export default class SamplesDetail {
             spaceBetween: 60,
             preloadImages: false,
             lazy: true,
-            loadPrevNext: true,
             watchSlidesVisibility: true,
             freeMode: true,
             freeModeMomentumRatio: 1,
@@ -185,7 +186,7 @@ export default class SamplesDetail {
                     SamplesDetail.openLayer(wrapper);
                 },
                 slideChange: function () {
-                    const tabs = [...document.querySelectorAll('.full-samples-gallery__header-cat ul li a')];
+                    const tabs = [...document.querySelectorAll('.full-samples-gallery__header-cat ul li div')];
                     const currentSlide = this.slides[this.activeIndex];
                     const currentCategory = tabs.find(tab => {
                         return (currentSlide.getAttribute('data-sample-detail-id') === tab.getAttribute('data-sample-id'));
@@ -204,7 +205,7 @@ export default class SamplesDetail {
     }
 
     static initTabs(id) {
-        const tabs = [...document.querySelectorAll('.full-samples-gallery__header-cat ul li a')];
+        const tabs = [...document.querySelectorAll('.full-samples-gallery__header-cat ul li div')];
         const categoryParents = [...document.querySelectorAll('[data-sample-detail-id]')];
 
         clickTab = (e) => {

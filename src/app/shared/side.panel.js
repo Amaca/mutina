@@ -73,6 +73,9 @@ export default class SidePanel {
 
         //click next
         clickNext = (e) => {
+            if (this.type == 'dealers' && !$('#form-getintouch').valid()) {
+                return;
+            }
             this.nextPanel();
         }
         this.clickNext = clickNext;
