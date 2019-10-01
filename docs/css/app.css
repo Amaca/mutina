@@ -69,6 +69,10 @@
   --base-ease: cubic-bezier(0.25, 0.46, 0.45, 0.84);
   --vh: 1vh; }
 
+* {
+  -webkit-transition: none !important;
+  transition: none !important; }
+
 html,
 body {
   width: 100%;

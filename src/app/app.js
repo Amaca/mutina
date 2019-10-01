@@ -664,7 +664,7 @@ export default class App {
         setTimeout(x => {
             this.appears = Appears.init();
             //if (window.innerWidth > 768) {
-            Splitting();
+            window.Splitting();
             //}
             if (Dom.fastscroll) {
                 app.onScrollDidChange();
@@ -689,10 +689,8 @@ export default class App {
         Forms.destroyAll();
         Wishlist.destroyAll();
         LazyLoad.destroyAll();
-
         const fancyInTransition = [...document.querySelectorAll('.fancy-in-transition .picture img')];
         Follower.removeMouseListener(fancyInTransition);
-
         container.remove();
     }
 
@@ -768,26 +766,20 @@ export default class App {
     }
 
     onResize() {
-        this.windowRect = new Rect({
-            top: 0,
-            left: 0,
-            width: window.innerWidth,
-            height: window.innerHeight,
-        });
+        this.windowRect = this.windowRect || new Rect();
+        this.windowRect.width = window.innerWidth;
+        this.windowRect.height = window.innerHeight;
+        this.windowRect.set(this.windowRect);
         Navigation.reset();
         this.updateViewPortHeight();
     }
 
     onScroll(e) {
-        const scrollTop = Dom.scrollTop();
-        const anchorPanel = document.querySelector('.anchors');
-        const filterPanel = document.querySelector('.filters');
-
         Navigation.reset();
-
         this.updateViewPortHeight();
 
         // fastscroll mobile
+        const scrollTop = Dom.scrollTop();
         if (Dom.fastscroll) {
             const newTop = Math.round(scrollTop * 10) / 5;
             if (this.page.previousTop !== newTop) {
@@ -820,6 +812,7 @@ export default class App {
             this.header.style.top = -this.header.clientHeight + 'px';
             this.header.style.transition = 'top .15s linear';
 
+            const anchorPanel = document.querySelector('.anchors');
             if (anchorPanel) {
                 anchorPanel.style.top = -anchorPanel.clientHeight + 'px';
                 anchorPanel.style.transition = 'top .15s linear';
@@ -836,6 +829,8 @@ export default class App {
                     anchorPanel.style.top = 0;
                 }
             }
+
+            // const filterPanel = document.querySelector('.filters');        
         }
 
     }
@@ -851,6 +846,7 @@ export default class App {
     }
 
     render() {
+
         // smoothscroll desktop
         // if (!Dom.overscroll && !Dom.touch) {
         if (!Dom.fastscroll) {

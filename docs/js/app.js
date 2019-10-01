@@ -15793,7 +15793,7 @@ function () {
       setTimeout(function (x) {
         _this.appears = _appears.default.init(); //if (window.innerWidth > 768) {
 
-        Splitting(); //}
+        window.Splitting(); //}
 
         if (_dom.default.fastscroll) {
           app.onScrollDidChange();
@@ -15932,12 +15932,10 @@ function () {
   }, {
     key: "onResize",
     value: function onResize() {
-      this.windowRect = new _rect.default({
-        top: 0,
-        left: 0,
-        width: window.innerWidth,
-        height: window.innerHeight
-      });
+      this.windowRect = this.windowRect || new _rect.default();
+      this.windowRect.width = window.innerWidth;
+      this.windowRect.height = window.innerHeight;
+      this.windowRect.set(this.windowRect);
 
       _navigation.default.reset();
 
@@ -15946,14 +15944,11 @@ function () {
   }, {
     key: "onScroll",
     value: function onScroll(e) {
-      var scrollTop = _dom.default.scrollTop();
-
-      var anchorPanel = document.querySelector('.anchors');
-      var filterPanel = document.querySelector('.filters');
-
       _navigation.default.reset();
 
       this.updateViewPortHeight(); // fastscroll mobile
+
+      var scrollTop = _dom.default.scrollTop();
 
       if (_dom.default.fastscroll) {
         var newTop = Math.round(scrollTop * 10) / 5;
@@ -15990,6 +15985,7 @@ function () {
       if (this.header && scrollTop > 300 && !this.body.classList.contains('nav-mobile-open')) {
         this.header.style.top = -this.header.clientHeight + 'px';
         this.header.style.transition = 'top .15s linear';
+        var anchorPanel = document.querySelector('.anchors');
 
         if (anchorPanel) {
           anchorPanel.style.top = -anchorPanel.clientHeight + 'px';
@@ -16008,7 +16004,8 @@ function () {
           if (anchorPanel) {
             anchorPanel.style.top = 0;
           }
-        }
+        } // const filterPanel = document.querySelector('.filters');        
+
       }
     }
   }, {
