@@ -1,4 +1,5 @@
 /* jshint esversion: 6 */
+import SidePanel from "./side.panel";
 
 $.validator.defaults.getDataToSend = function (form) {
     return { data: GetJsonData(form) };
@@ -23,7 +24,7 @@ $.validator.defaults.submitHandler = function () {
     var validator = this,
         form = validator.currentForm;
     $(form).find(".form-results").html('<img src="/assets/img/loading.gif" />');
-    $(form).find("[type=submit]").hide();
+    $(form).find("[type=submit]").css('pointer-events', 'none');
 
     $.ajax({
         type: "POST",
@@ -40,7 +41,7 @@ $.validator.defaults.submitHandler = function () {
         },
         error: function (data) {
             $(form).find(".form-results").html('');
-            $(form).find("[type=submit]").show();
+            $(form).find("[type=submit]").css('pointer-events', 'unset');
             alert("Web-Service Error!!");
         }
     });
@@ -158,6 +159,9 @@ export default class Forms {
         if (this.element.attributes['data-submithandler']) {
             option.submitHandler = this[this.element.attributes['data-submithandler'].value];
         }
+        if (this.element.attributes['data-callbackhandler']) {
+            option.callbackHandler = this[this.element.attributes['data-callbackhandler'].value];
+        }
         this.validator = $(this.element).validate(option);
     }
 
@@ -179,33 +183,91 @@ export default class Forms {
             },
             error: function (data) {
                 $(form).find(".side-panel__results").html('');
-                $(form).find("[type=submit]").show();
+                $(form).find("[type=submit]").css('pointer-events', 'unset');
                 alert("Web-Service Error!!");
             }
         });
 
         return false;
     }
+    callbackLogin(data, form) {
+        $(form).find(".form-results").removeClass("error");
+        if (data.d.Status) {
+            $(".nav__login").attr("data-islogged", 1);
+            location.href = $(form).attr("data-reloadurl");
+        }
+        else {
+            if (data.d.Props.DoReset) {
+                SidePanel.reset();
+                $(form).find("[type=submit]").css('pointer-events', 'unset');
+                $(form).find(".form-results").html('');
+            } else {
+                $(form).find("[type=submit]").css('pointer-events', 'unset');
+                $(form).find(".form-results").addClass("error");
+                $(form).find(".form-results").html(data.d.HTML);
+            }
+        }
+    }
+
+    static viewLogin(e) {
+        document.querySelector('#form-login').style.display = 'block';
+        document.querySelector('#form-lostpassword').style.display = 'none';
+        e.preventDefault();
+    }
+    static viewPasswordRecovery(e) {
+        document.querySelector('#form-login').style.display = 'none';
+        document.querySelector('#form-lostpassword').style.display = 'block';
+        e.preventDefault();
+    }
+    static logout(e) {
+        $.ajax({
+            type: "POST",
+            url: "/WS/wsUsers.asmx/Logout",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: '{"w":"s"}',
+            dataType: "json",
+            success: function (data) {
+                if (data != null) {
+                    if (data.d.Status) {
+                        document.location.reload();
+                    }
+                }
+            },
+            error: function (data) {
+                alert("Web-Service Error!!");
+            }
+        });
+        e.preventDefault();
+    }
 
     static init(debug) {
         Forms.items = [...document.querySelectorAll('.contact-form')]
             .map((element, index) => new Forms(element, index));
 
-        if (document.querySelector("#submit-samples")) {
-            document.querySelector("#submit-samples").addEventListener('click', function () {
-                $("#form-samples").submit();
-            });
-        }
+        if (document.querySelector("#lost-password-button"))
+            document.querySelector("#lost-password-button").addEventListener('click', this.viewPasswordRecovery);
 
-        if (debug) {
+        if (document.querySelector("#annulla-forgot-password"))
+            document.querySelector("#annulla-forgot-password").addEventListener('click', this.viewLogin);
+
+        [...document.querySelectorAll('.btn-logout')].forEach(x => { x.addEventListener('click', this.logout); });
+
+        if (debug)
             console.log('Forms: ', Forms.items);
-        }
     }
 
     static destroyAll() {
-        Forms.items.forEach(form => {
-            form.validator.destroy();
-        });
+        Forms.items.forEach(form => { form.validator.destroy(); });
+
+        if (document.querySelector("#lost-password-button"))
+            document.querySelector("#lost-password-button").removeEventListener('click', this.viewPasswordRecovery);
+
+        if (document.querySelector("#annulla-forgot-password"))
+            document.querySelector("#annulla-forgot-password").removeEventListener('click', this.viewLogin);
+
+        [...document.querySelectorAll('.btn-logout')].forEach(x => { x.removeEventListener('click', this.logout); });
+
     }
 
 }

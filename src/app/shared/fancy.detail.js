@@ -3,14 +3,18 @@
 import Utils from './utils';
 
 const body = document.querySelector('body');
+const html = document.getElementsByTagName('html')[0];
+let desktopVersion;
 
 export default class FancyDetail {
 
     static init(debug) {
         if (window.innerWidth > 768) {
             this.initDesktopSidebar();
+            desktopVersion = true;
         } else {
             this.initMobileSidebar();
+            desktopVersion = false;
         }
     }
 
@@ -68,4 +72,25 @@ export default class FancyDetail {
             }
         }
     }
+
+    static orientationChange() {
+        //const sidebar = document.querySelector('.fancy-detail__sidebar');
+        //if (desktopVersion) {
+        //    if (document.querySelector('.fancy-detail')) {
+        //        const sidebarClone = sidebar.cloneNode(true);
+        //        document.querySelector('.fancy-detail').appendChild(sidebarClone);
+        //        sidebar.remove();
+        //        desktopVersion = false;
+                
+        //    } 
+        //} else {
+        //    if (document.querySelector('.fancy-detail')) {
+        //        const sidebarClone = sidebar.cloneNode(true);
+        //        body.appendChild(sidebarClone);
+        //        sidebar.remove();
+        //        desktopVersione = true;
+        //    }
+        //}
+    }
+
 }

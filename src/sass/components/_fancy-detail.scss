@@ -221,6 +221,7 @@
 
 .fancy-detail__sidebar {
     position: fixed;
+    z-index: 1;
     top: 0;
     left: 0;
     width: 25vw;
@@ -246,7 +247,8 @@
         top: 40px;
 
         img {
-            width: 100px;
+            width: 100px; 
+            display: inline-block;
         }
     }
 

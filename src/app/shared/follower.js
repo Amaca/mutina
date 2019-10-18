@@ -94,30 +94,10 @@ export default class Follower {
             this.y2 += (this.mouse.y - this.y2) / friction2;
             this.div1.setAttribute('style', `opacity: 1; left:${this.x - this.s * 100}px; top:${this.y - this.s * 100}px;`);
             this.div2.setAttribute('style', `opacity: 1; left:${this.x2 - 2}px; top:${this.y2 - 2}px;`);
-            // this.div1.setAttribute('style', `opacity: ${this.o}; transform: translateX(${this.x + this.w / 2 - 50}px) translateY(${this.y + this.h / 2 - 50}px) scale3d(${this.s},${this.s},1.0);`);
-            // this.div2.setAttribute('style', `opacity: 1; transform: translateX(${this.x2}px) translateY(${this.y2}px);`);
-            /*
-            TweenMax.set(this.div1, {
-            	opacity: this.o,
-            	// transform: `translateX(${this.x + this.w / 2 - 50}px) translateY(${this.y + this.h / 2 - 50}px) scale3d(${this.w / 100},${this.h / 100},1.0)`,
-            	transform: `translateX(${this.x + this.w / 2 - 50}px) translateY(${this.y + this.h / 2 - 50}px) scale3d(${this.s},${this.s},1.0)`,
-            });
-            TweenMax.set(this.div2, {
-            	opacity: 1,
-            	transform: `translateX(${this.x2}px) translateY(${this.y2}px)`,
-            });
-            */
         } else {
             this.div1.setAttribute('style', `opacity: 0;`);
             this.div2.setAttribute('style', `opacity: 0;`);
-            /*
-            TweenMax.set(this.div1, {
-            	opacity: 0,
-            });
-            TweenMax.set(this.div2, {
-            	opacity: 0,
-            });
-            */
+
         }
     }
 
@@ -160,6 +140,8 @@ export default class Follower {
             }
             //console.log('removelistener', node);
         }
+
+        Follower.mouseLeave();
     }
 
     static mouseEnter(e) {
@@ -171,5 +153,4 @@ export default class Follower {
         const follower = document.querySelector('.follower');
         follower.style.opacity = 0;
     }
-
 }

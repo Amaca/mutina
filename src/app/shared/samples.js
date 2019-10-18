@@ -7,6 +7,7 @@ import LazyLoad from "./lazyload";
 import SamplesDetail from "./samples.detail";
 import SidePanel from "./side.panel";
 import Wishlist from "./wishlist";
+import Dom from './dom';
 
 let clickClose;
 let scrollWrapper;
@@ -85,6 +86,10 @@ export default class Samples {
 
             window.NoTrackHistory = false;
 
+            if (typeof Samples.onScroll === 'function' && Dom.fastscroll) {
+                document.querySelector('.full-samples-gallery__wrapper').removeEventListener('scroll', Samples.onScroll);
+            }
+
             e.preventDefault();
         };
         fullSamplesClose.addEventListener('click', clickClose);
@@ -105,12 +110,20 @@ export default class Samples {
         sidePanelButton = new SidePanel(fullSamplesHeaderButton, null, 'samples');
 
         body.classList.add('samples-gallery-open');
-        html.style.overflow = 'hidden';
+        if (Dom.fastscroll) {
+            body.style.cssText = 'overflow: hidden;';
+        } else {
+            html.style.cssText = 'overflow: hidden;';
+        }
 
         this.addCategories(fullSamplesCat);
         this.addImages(fullSamplesContainer);
 
-        FancyTransition.openLayer('fullSamplesGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, this.id);
+        FancyTransition.openLayer('fullSamplesGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, this.id, () => {
+            if (typeof Samples.onScroll === 'function' && Dom.fastscroll) {
+                Samples.onScroll();
+            }
+        });
 
         if (!window.NoTrackHistory)
             history.pushState({
@@ -119,7 +132,9 @@ export default class Samples {
 
         window.NoTrackHistory = false;
 
-        //https://gomakethings.com/how-to-update-a-url-without-reloading-the-page-using-vanilla-javascript/
+        if (typeof Samples.onScroll === 'function' && Dom.fastscroll) {
+            fullSamplesWrapper.addEventListener('scroll', Samples.onScroll);
+        }
     }
 
     addCategories(wrapper) {
@@ -238,9 +253,6 @@ export default class Samples {
 
     destroy() {
         this.node.removeEventListener('click', this.click);
-        if (document.querySelector('full-samples-gallery__wrapper')) {
-            document.querySelector('full-samples-gallery__wrapper').removeEventListener('scroll', scrollWrapper);
-        }
     }
 
     static scrollToColor(e) {

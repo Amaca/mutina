@@ -4,6 +4,7 @@
 import FancyTransition from './fancy.transition';
 import Follower from './follower';
 import Utils from './utils';
+import Dom from './dom';
 
 let clickClose;
 let clickSwitch;
@@ -128,12 +129,16 @@ export default class Fancy {
             const detailGallerySwitch = document.querySelector('.detail-gallery__cta');
             clickSwitch = (e) => {
                 Fancy.close(e, 'detailGallery', true, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, detailGallery);
-            };
+            }; 
             detailGallerySwitch.addEventListener('click', clickSwitch);
         }
 
         body.classList.add('detail-gallery-open');
-        html.style.overflow = 'hidden';
+        if (Dom.fastscroll) {
+            body.style.cssText = 'overflow: hidden;';
+        } else {
+            html.style.cssText = 'overflow: hidden;';
+        }
         Fancy.initSwiper('detailGallery', detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, id, groupId);
 
     }
@@ -245,8 +250,10 @@ export default class Fancy {
                     const groupCaptionWrapper = document.querySelector('.detail-gallery__group-caption');
                     const activateZoom = sliderItems[this.activeIndex].zoom;
                     firstLoad = true;
-                    captionWrapper.innerHTML = caption;
-                    if (groupCaptionWrapper) {
+                    if (captionWrapper && caption !== null) {
+                        captionWrapper.innerHTML = caption;
+                    }
+                    if (groupCaptionWrapper && groupCaption !== null) {
                         groupCaptionWrapper.innerHTML = groupCaption;
                     }
                     this.keyboard.enable();
@@ -272,14 +279,16 @@ export default class Fancy {
                         bottom: -captionWrapper.parentNode.offsetHeight,
                         ease: Expo.easeInOut,
                         onComplete: () => {
-                            captionWrapper.innerHTML = caption;
+                            if (captionWrapper && caption !== null) {
+                                captionWrapper.innerHTML = caption;
+                            }
                             TweenMax.to(captionWrapper, captionSpeed, {
                                 bottom: 0,
                                 ease: Expo.easeInOut
                             });
                         }
                     });
-                    if (groupCaptionWrapper) {
+                    if (groupCaptionWrapper && groupCaption !== null) {
                         groupCaptionWrapper.innerHTML = groupCaption;
                     }
                     if (activateZoom) {

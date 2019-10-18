@@ -131,6 +131,11 @@
                 width: 2px;
                 background: $dark;
             }
+
+            &:focus,
+            &:active {
+                color: $dark;
+            }
         }
     }
 }

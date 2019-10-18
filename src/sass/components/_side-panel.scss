@@ -87,7 +87,7 @@
     }
 }
 
-.side-panel__secondary {
+.side-panel__secondary, .side-panel__recover, .side-panel__reset {
     padding: 0 $col-gutter-half $col-gutter-half $col-gutter-half;
     flex: 0 0 100%;
     max-width: 100%;
@@ -222,6 +222,10 @@
     .side-panel__results {
         display: none;
     }
+
+    .side-panel__login {
+        display: none;
+    }
 }
 
 //side panel dealers
@@ -254,6 +258,7 @@
     }
 
     .side-panel__choices {
+        width: 100%;
         display: flex;
         flex-direction: column;
         text-align: center;
@@ -368,6 +373,10 @@
         flex-direction: column;
         align-items: center;
 
+        .contact-form {
+            width: 100%;
+        }
+
         .side-panel__title {
             margin-bottom: 40px;
 
@@ -408,6 +417,10 @@
         display: none;
     }
 
+    .side-panel__login {
+        display: none;
+    }
+
     .side-panel__footer {
         display: none;
     }
@@ -426,6 +439,101 @@
                 z-index: -1;
             }
         }
+    }
+}
+
+//side panel login
+.side-panel--login {
+
+    .side-panel__primary,
+    .side-panel__secondary {
+        display: none;
+    }
+
+    .side-panel__login {
+        padding: 0 2.083vw 2.083vw 2.083vw;
+        flex: 0 0 100%;
+        max-width: 100%;
+        overflow-y: auto;
+    }
+
+    .side-panel__login,
+    .side-panel__recover,
+    .side-panel__reset {
+        padding: $col-gutter-half;
+
+        @include xs-down {
+            padding: $col-gutter;
+        }
+    }
+
+    .cta {
+        margin-top: 10px;
+
+        .btn--primary {
+            padding: 18px 38px;
+        }
+    }
+
+    .side-panel__form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        h2, h5 {
+            margin-bottom: 40px;
+        }
+
+        .form {
+            margin-bottom: 80px;
+
+            input {
+                background-color: #fff;
+            }
+        }
+
+
+
+        .recovery, .register {
+            h4 {
+                margin-bottom: 10px;
+            }
+        }
+
+        .recovery {
+            margin-bottom: 40px;
+        }
+
+        .btn--inline-alt {
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 14px;
+        }
+    }
+
+    .side-panel__content {
+        background: #fff;
+        height: calc(100vh - #{$header-height});
+        height: calc(calc(var(--vh, 1vh) * 100) - #{$header-height});
+
+        @include sm-down {
+            height: calc(100vh - #{$header-height-mobile});
+            height: calc(calc(var(--vh, 1vh) * 100) - #{$header-height-mobile});
+        }
+    }
+
+
+
+    .side-panel__list {
+        display: none;
+    }
+
+    .side-panel__choices {
+        display: none;
+    }
+
+    .side-panel__footer {
+        display: none;
     }
 }
 

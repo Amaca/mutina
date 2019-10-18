@@ -4,6 +4,7 @@ import "gsap/ScrollToPlugin";
 import Samples from "./samples";
 import Utils from "./utils";
 import Wishlist from "./wishlist";
+import Dom from './dom';
 
 let clickTab;
 let scrollWrapper;
@@ -35,7 +36,8 @@ export default class SamplesDetail {
         const back = document.querySelector('.full-samples-gallery__back svg');
         const headerCat = document.querySelector('.full-samples-gallery__header-cat');
         const viewportWidth = window.innerWidth > 768 ? ((window.innerWidth * 8) / 10) : ((window.innerWidth * 6) / 10);
-
+        //document.querySelector('.full-samples-gallery__wrapper').style.cssText = 'overflow: hidden;';
+        
         clickBack = (e) => {
             SamplesDetail.closeLayer(wrapper, back, headerCat, viewportWidth);
             e.preventDefault();
@@ -69,7 +71,7 @@ export default class SamplesDetail {
     }
 
     static closeLayer(wrapper, back, headerCat, viewportWidth) {
-
+        //document.querySelector('.full-samples-gallery__wrapper').style.cssText = 'overflow-x: hidden; overflow-y: auto';
         TweenMax.set(wrapper, {
             bottom: 0,
         });
@@ -96,7 +98,7 @@ export default class SamplesDetail {
             ease: Expo.easeInOut,
             onComplete: () => {
                 SamplesDetail.destroyAll();
-                Samples.addTabsListeners();
+                Samples.addTabsListeners(); 
             }
         });
     }

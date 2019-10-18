@@ -49,6 +49,15 @@ export default class Tabs {
         this.contents.forEach(x => x.classList.remove('active'));
     }
 
+    static resetAll() {
+        setTimeout(() => {
+            Tabs.items.forEach(elem => {
+                elem.reset();
+                console.log('reset')
+            });
+        }, 500)
+    }
+
     static destroyAll() {
         Tabs.items.forEach(elem => {
             elem.destroy();
@@ -61,5 +70,4 @@ export default class Tabs {
             console.log('Tabs: ', Tabs.items);
         }
     }
-
 }

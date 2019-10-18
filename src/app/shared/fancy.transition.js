@@ -4,7 +4,8 @@
 import Fancy from './fancy';
 import FancyViewAll from './fancy.view-all';
 import SamplesDetail from './samples.detail';
-
+import Dom from './dom';
+ 
 const body = document.querySelector('body');
 const html = document.getElementsByTagName('html')[0];
 const slideAnimationSpeed = 1000;
@@ -12,7 +13,9 @@ const slideAnimationSpeed = 1000;
 export default class FancyTransition {
 
     //OPEN LAYER ON IMAGE CLICK
-    static openLayer(type, layer, close, wrapper, header, footer, id) {
+    static openLayer(type, layer, close, wrapper, header, footer, id, callback) {
+        callback = callback || (() => { });
+
         const closeHeight = 40;
         const footerHeight = footer ? footer.clientHeight : null;
         let wrapperHeight;
@@ -101,10 +104,16 @@ export default class FancyTransition {
                 bottom: footerHeight,
                 ease: Expo.easeIn
             });
-            TweenMax.to(close, 1, {
-                height: closeHeight,
-                ease: Expo.easeInOut
-            });
+            if (body.classList.contains('full-gallery-open')) {
+                TweenMax.set(close, {
+                    height: closeHeight
+                });
+            } else {
+                TweenMax.to(close, 1, {
+                    height: closeHeight,
+                    ease: Expo.easeInOut
+                });
+            }
             TweenMax.to(footer, 1, {
                 bottom: 0,
                 ease: Expo.easeInOut,
@@ -115,7 +124,10 @@ export default class FancyTransition {
             }).delay(0.5);
             TweenMax.to(arrowRight, 1, {
                 right: 0,
-                ease: Expo.easeInOut
+                ease: Expo.easeInOut,
+                onComplete: () => {
+                    callback();
+                }
             }).delay(0.5);
         } else if (isFullGallery) {
             TweenMax.to(wrapper, 0.8, {
@@ -124,7 +136,10 @@ export default class FancyTransition {
             });
             TweenMax.to(close, 1, {
                 height: closeHeight,
-                ease: Expo.easeInOut
+                ease: Expo.easeInOut,
+                onComplete: () => {
+                    callback();
+                }
             });
         } else if (isFullSamplesGallery) {
             const catHeader = document.querySelector('.full-samples-gallery__header-cat');
@@ -142,7 +157,10 @@ export default class FancyTransition {
             }).delay(0.5);
             TweenMax.to(catHeader, 1, {
                 transform: 'translateY(0)',
-                ease: Expo.easeInOut
+                ease: Expo.easeInOut,
+                onComplete: () => {
+                    callback();
+                }
             }).delay(0.5);
         } else {
             TweenMax.to(close, 1, {
@@ -175,21 +193,33 @@ export default class FancyTransition {
                 wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
                 delay = 500;
                 body.classList.remove('detail-gallery-open');
-                html.style.overflow = 'initial';
+                if (Dom.fastscroll) {
+                    body.style.cssText = 'overflow: initial;';
+                } else {
+                    html.style.cssText = 'overflow: initial;';
+                }
                 isDetailGallery = true;
                 break;
             case 'fullGallery':
                 wrapperHeight = wrapper ? window.innerHeight - footerHeight - 65 : null;
                 delay = 500;
                 body.classList.remove('full-gallery-open');
-                html.style.overflow = 'initial';
+                if (Dom.fastscroll) {
+                    body.style.cssText = 'overflow: initial;';
+                } else {
+                    html.style.cssText = 'overflow: initial;';
+                }
                 isFullGallery = true;
                 break;
             case 'fullSamplesGallery':
                 wrapperHeight = wrapper ? window.innerHeight - 81 : null;
                 delay = 500;
                 body.classList.remove('samples-gallery-open');
-                html.style.overflow = 'initial';
+                if (Dom.fastscroll) {
+                    body.style.cssText = 'overflow: initial;';
+                } else {
+                    html.style.cssText = 'overflow: initial;';
+                }
                 isFullSamplesGallery = true;
                 break;
             default:
@@ -264,7 +294,6 @@ export default class FancyTransition {
                     bottom: -wrapperHeight,
                     ease: Expo.easeIn
                 }).delay(0.1);
-
             }
 
             if (isFullSamplesGallery) {

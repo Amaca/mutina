@@ -30,18 +30,20 @@ import Wishlist from './shared/wishlist';
 //settings
 let scrollSpeed = 8;
 const activateIntro = false;
-const debug = false;
-let disableBarba = false;
+const debug = true;
+let disableBarba = false; 
 const breakTransition = false;
-const barbaDebug = debug;
+let smoothScroll = true;
+const disableRender = false;
 
+const barbaDebug = debug;
 let firstLoad = false;
 let scrollPosition = '';
 
 const userAgent = navigator.userAgent.toLowerCase();
 const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
 
-export default class App {
+export default class App { 
 
     constructor() {}
 
@@ -101,13 +103,25 @@ export default class App {
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
         }
+
+        if (this.body.classList.contains('safari')) {
+            smoothScroll = false;
+        }
+
+        if (!smoothScroll) {
+            Dom.fastscroll = true;
+            this.body.classList.add('fastscroll');
+        }
     }
 
     static initScript(data) {
-        var scripts = data.next.container.querySelectorAll('script[data-products]');
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(data.next.html, "text/html");
+
+        var scripts = doc.querySelectorAll('script[data-products]');
         if (scripts) {
             scripts.forEach(function (x) {
-                window.eval(x.innerHTML);
+                window.eval(x.innerHTML); 
             });
         }
     }
@@ -119,6 +133,7 @@ export default class App {
         const boxBack = document.querySelector('.transition__text .box--back');
         const line = document.querySelector('.transition__line');
         const page = this.page;
+
         if (!disableBarba) {
             barba.init({
                 cacheIgnore: true,
@@ -221,7 +236,6 @@ export default class App {
                                             ease: Expo.easeInOut,
                                             onComplete: () => {
                                                 if (index === logo.length - 1) {
-                                                    console.log('pageinit');
                                                     app.onPageInit();
                                                 }
                                             }
@@ -261,7 +275,7 @@ export default class App {
                             }
                         },
                         /////////////////////////////////////////////
-                        beforeLeave() {
+                    beforeLeave() {
                             LazyLoad.items = [];
                         },
                         leave(data) {
@@ -269,47 +283,54 @@ export default class App {
                             const done = this.async();
                             const title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'Mutina';
 
-                            textFront.innerHTML = '';
-                            textBack.innerHTML = '';
-                            textFront.innerHTML = title;
-                            textBack.innerHTML = title;
-                            Navigation.reset();
-                            TweenMax.set(transitionLayer, {
-                                backgroundColor: '#CFCFCF',
-                                width: window.innerWidth,
-                                bottom: 0,
-                                opacity: 1,
-                                top: 'auto',
-                                height: 0,
-                            });
-                            TweenMax.set(textFront, {
-                                transform: 'translateY(100%)',
-                                opacity: 1
-                            });
-                            TweenMax.set(textBack, {
-                                transform: 'translateY(0)',
-                            });
-                            TweenMax.set(boxBack, {
-                                width: 0,
-                            });
-                            TweenMax.set(line, {
-                                width: 0,
-                            });
-                            TweenMax.to(data.current.container, 1, {
-                                transform: 'translateY(-60px)',
-                                ease: Expo.easeInOut
-                            }).delay(0.3);
-                            TweenMax.to(transitionLayer, 1, {
-                                height: window.innerHeight,
-                                ease: Expo.easeInOut
-                            }).delay(0.3);
-                            TweenMax.to(textFront, 1, {
-                                transform: 'translateY(0)',
-                                ease: Expo.easeInOut,
-                                onComplete: (e) => {
-                                    done();
-                                }
-                            }).delay(0.4);
+                            let timeDelay = 0;
+                            if (data.trigger !== 'popstate' && data.trigger.getAttribute('data-origin') === 'panel') {
+                                timeDelay = 300;
+                            }
+                            
+                            setTimeout(() => {
+                                textFront.innerHTML = '';
+                                textBack.innerHTML = '';
+                                textFront.innerHTML = title;
+                                textBack.innerHTML = title;
+                                Navigation.reset();
+                                TweenMax.set(transitionLayer, {
+                                    backgroundColor: '#CFCFCF',
+                                    width: window.innerWidth,
+                                    bottom: 0,
+                                    opacity: 1,
+                                    top: 'auto',
+                                    height: 0,
+                                });
+                                TweenMax.set(textFront, {
+                                    transform: 'translateY(100%)',
+                                    opacity: 1
+                                });
+                                TweenMax.set(textBack, {
+                                    transform: 'translateY(0)',
+                                });
+                                TweenMax.set(boxBack, {
+                                    width: 0,
+                                });
+                                TweenMax.set(line, {
+                                    width: 0,
+                                });
+                                TweenMax.to(data.current.container, 1, {
+                                    transform: 'translateY(-60px)',
+                                    ease: Expo.easeInOut
+                                }).delay(0.3);
+                                TweenMax.to(transitionLayer, 1, {
+                                    height: window.innerHeight,
+                                    ease: Expo.easeInOut
+                                }).delay(0.3);
+                                TweenMax.to(textFront, 1, {
+                                    transform: 'translateY(0)',
+                                    ease: Expo.easeInOut,
+                                    onComplete: (e) => {
+                                        done();
+                                    }
+                                }).delay(0.4);
+                            }, timeDelay);
                         },
                         afterLeave(data) {
                             const done = this.async();
@@ -450,7 +471,11 @@ export default class App {
                             const done = this.async();
                             Navigation.reset();
                             //set scroll position
-                            scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
+                            if (Dom.fastscroll) {
+                                scrollPosition = window.pageYOffset;
+                            } else {
+                                scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
+                            }
                             TweenMax.set(line, {
                                 width: 0,
                             });
@@ -574,7 +599,11 @@ export default class App {
                             const done = this.async();
                             //scroll to scroll position
                             setTimeout(x => {
-                                app.scrollTo(Number(scrollPosition), true);
+                                if (Dom.fastscroll) {
+                                    app.scrollTo(scrollPosition, true);
+                                } else {
+                                    app.scrollTo(Number(scrollPosition), true);
+                                }
                                 scrollPosition = 0;
                             }, 100);
                             TweenMax.to(transitionLayer, 1, {
@@ -605,6 +634,7 @@ export default class App {
             const header = document.querySelector('header');
             header.style.top = top;
         }
+
         this.page.previousTop = top + 1;
     }
 
@@ -619,7 +649,6 @@ export default class App {
     }
 
     onPageInit() {
-        console.log('onPageInit');
 
         this.parallaxes = [].slice.call(document.querySelectorAll('[data-parallax]'));
         this.pictures = [].slice.call(document.querySelectorAll('.picture img'));
@@ -638,11 +667,17 @@ export default class App {
 
         LazyLoad.init(debug);
         Fancy.init(debug);
+        if (Dom.fastscroll) {
+            FancyViewAll.onScroll = () => { this.onScrollDidChange(); }; //per attivare lazyload senza smooth scroll su gallery
+        }
         FancyViewAll.init(debug);
         FancyDetail.init(debug);
         Sliders.init(debug);
         Anchors.init(document.querySelector('.anchors__wrapper'), 200, debug);
         ScrollAnchors.init(debug);
+        if (Dom.fastscroll) {
+            Samples.onScroll = () => { this.onScrollDidChange(); }; //per attivare lazyload senza smooth scroll su campioni
+        }
         Samples.init(debug);
         Utils.toggleGrid();
         if (typeof _products != 'undefined')
@@ -650,12 +685,12 @@ export default class App {
         ToggleSearch.init(debug);
         Grid.init(debug);
         SidePanel.init(debug);
-        // CustomSelect.init(debug);
+        CustomSelect.init(debug);
         Tabs.init(debug);
         Forms.init(debug);
         Wishlist.init(debug);
 
-        const fancyInTransition = [...document.querySelectorAll('.fancy-in-transition .picture img')];
+        const fancyInTransition = [...document.querySelectorAll('.fancy-in-transition img')];
         Follower.addMouseListener(fancyInTransition);
 
         let delay = firstLoad ? 0 : 600;
@@ -665,6 +700,11 @@ export default class App {
             this.appears = Appears.init();
             //if (window.innerWidth > 768) {
             window.Splitting();
+            if (document.querySelector('.cover .eyelet')) {
+                setTimeout(x => {
+                    document.querySelector('.cover .eyelet').classList.add('eyelet--loaded');
+                }, 1000)   
+            }
             //}
             if (Dom.fastscroll) {
                 app.onScrollDidChange();
@@ -684,13 +724,14 @@ export default class App {
         ToggleSearch.destroyAll();
         Grid.destroyAll();
         SidePanel.destroyAll();
-        // CustomSelect.destroyAll();
+        CustomSelect.destroyAll();
         Tabs.destroyAll(debug);
         Forms.destroyAll();
         Wishlist.destroyAll();
         LazyLoad.destroyAll();
         const fancyInTransition = [...document.querySelectorAll('.fancy-in-transition .picture img')];
         Follower.removeMouseListener(fancyInTransition);
+
         container.remove();
     }
 
@@ -698,20 +739,21 @@ export default class App {
         const coverVideo = document.querySelector('main.main--accents > .cover--video');
         const headerWrapper = document.querySelector('.header__wrapper');
         const video = document.querySelector('video');
-        const headerSearch = document.querySelector('.header__search input');
+        const headerSearch = document.querySelector('.header__search input.search-btn');
         const subnavs = [...document.querySelectorAll('.subnav')];
         const toggle = document.querySelector('.nav__toggle-bg');
 
         if (coverVideo) {
             this.body.classList.add('accents-page');
             const style = coverVideo.getAttribute('style');
-            this.header.style = style;
+            this.header.style.cssText = style;
             if (window.innerWidth <= 768) {
-                headerSearch.style = style;
-                headerWrapper.style = style;
-                toggle.style = style;
+                headerSearch.style.cssText = style;
+                headerWrapper.style.cssText = style;
+                toggle.style.cssText = style;
             }
-            subnavs.forEach(x => x.style = style);
+
+            subnavs.forEach(x => x.style.cssText = style);
             setTimeout(x => {
                 video.play();
                 if (debug) {
@@ -742,14 +784,15 @@ export default class App {
             this.onScroll();
         }, 1000 / 25));
 
-        /*
-        window.addEventListener('wheel', (e) => {
-            this.onWheel(e);
-        });
-        */
-
         window.addEventListener('mousemove', (e) => {
             this.onMouseMove(e);
+        });
+
+        window.addEventListener('orientationchange', (e) => {
+            this.checkDevice();
+            this.updateViewPortHeight();
+            FancyDetail.orientationChange();
+            Tabs.resetAll();
         });
     }
 
@@ -770,12 +813,13 @@ export default class App {
         this.windowRect.width = window.innerWidth;
         this.windowRect.height = window.innerHeight;
         this.windowRect.set(this.windowRect);
-        Navigation.reset();
+        this.checkDevice();
+        Navigation.reset(false);
         this.updateViewPortHeight();
     }
 
     onScroll(e) {
-        Navigation.reset();
+        Navigation.reset(false);
         this.updateViewPortHeight();
 
         // fastscroll mobile
@@ -783,7 +827,6 @@ export default class App {
         if (Dom.fastscroll) {
             const newTop = Math.round(scrollTop * 10) / 5;
             if (this.page.previousTop !== newTop) {
-                this.page.previousTop = newTop;
                 Dom.scrolling = true;
                 if (newTop > this.page.previousTop) {
                     this.body.classList.add('scroll-up');
@@ -792,6 +835,7 @@ export default class App {
                     this.body.classList.remove('scroll-up');
                     this.body.classList.add('scroll-down');
                 }
+                this.page.previousTop = newTop;
                 this.onScrollDidChange();
             } else {
                 Dom.scrolling = false;
@@ -829,34 +873,33 @@ export default class App {
                     anchorPanel.style.top = 0;
                 }
             }
-
-            // const filterPanel = document.querySelector('.filters');        
         }
 
     }
 
-    onWheel(e) {
-        if (e.deltaY > 0) {
-            this.body.classList.add('scroll-up');
-            this.body.classList.remove('scroll-down');
-        } else {
-            this.body.classList.remove('scroll-up');
-            this.body.classList.add('scroll-down');
+    checkDevice(e) {
+        if (Dom.mobile) {
+            const html = document.querySelector('html');
+            const orientation = window.orientation & 2;
+            if (orientation == 0) {
+                if (html.classList.contains('landscape')) {
+                    html.classList.remove('landscape')
+                }
+                html.classList.add('portrait')
+            } else if (orientation == 2) {
+                if (html.classList.contains('portrait')) {
+                    html.classList.remove('portrait')
+                }
+                html.classList.add('landscape')
+            }
         }
     }
 
     render() {
-
         // smoothscroll desktop
-        // if (!Dom.overscroll && !Dom.touch) {
         if (!Dom.fastscroll) {
             if (this.body.offsetHeight !== this.page.offsetHeight) {
                 this.body.setAttribute('style', `height: ${this.page.offsetHeight}px;`);
-                /*
-                TweenMax.set(this.body, {
-                	height: this.page.offsetHeight,
-                });
-                */
             }
             const scrollTop = Dom.scrollTop();
             let newTop = this.page.previousTop || 0;
@@ -866,13 +909,7 @@ export default class App {
             }
             if (newTop !== undefined && !Number.isNaN(newTop) && this.page.previousTop !== newTop) {
                 this.page.previousTop = newTop;
-                // this.page.setAttribute('style', `top: ${-newTop}px;`);
                 this.page.setAttribute('style', `transform: translateY(${-newTop}px);`);
-                /*
-                TweenMax.set(this.page, {
-                	y: -newTop,
-                });
-                */
                 Dom.scrolling = true;
             } else {
                 Dom.scrolling = false;
@@ -890,69 +927,25 @@ export default class App {
     onScrollDidChange() {
         // appears
         this.appears.forEach((node, i) => {
-            let rect = Rect.fromNode(node);
-            const intersection = rect.intersection(this.windowRect);
-            if (intersection.y > 0.0) {
-                if (!node.to) {
+            if (!node.to) {
+                let rect = Rect.fromNode(node);
+                const intersection = rect.intersection(this.windowRect);
+                if (intersection.y > 0.0) {
                     node.to = setTimeout(() => {
                         node.classList.add('appeared');
-                    }, 150 * node.appearingIndex);
+                    }, 150 * node.appearingIndex);                
+                } else {
+                    // if (node.classList.contains('appeared')) {
+                    //     node.to = null;
+                    //     node.classList.remove('appeared');
+                    // }
                 }
-            } else {
-                // if (node.classList.contains('appeared')) {
-                //     node.to = null;
-                //     node.classList.remove('appeared');
-                // }
             }
         });
 
         Anchors.onScroll();
         ScrollAnchors.onScroll();
         LazyLoad.render(this.windowRect);
-
-        //parallax
-        // this.parallaxes.forEach((node, i) => {
-        //     // const parallax = node.parallax || (node.parallax = parseInt(node.getAttribute('data-parallax')) || 5) * 3;
-        //     const parallax = node.parallax || 15;
-        //     // const direction = i % 2 === 0 ? 1 : -1;
-        //     const direction = 1;
-        //     let currentY = node.currentY || 0;
-        //     let rect = Rect.fromNode(node);
-        //     rect = new Rect({
-        //         top: rect.top,
-        //         left: rect.left,
-        //         width: rect.width,
-        //         height: rect.height,
-        //     });
-        //     if (direction === -1) {
-        //         node.parentNode.classList.add('reverse');
-        //     }
-        //     const intersection = rect.intersection(this.windowRect);
-        //     /*
-        //     if (fullHeight) {
-        //     	console.log(intersection);
-        //     }
-        //     */
-        //     if (intersection.y > 0) {
-        //         // const y = intersection.center.y; // Math.min(1, Math.max(-1, intersection.center.y));
-        //         const s = (100 + parallax * 2) / 100;
-        //         // currentY = ((-50) + (y * parallax * direction)).toFixed(3);
-        //         let y = (rect.top - window.innerHeight) / (window.innerHeight + rect.height);
-        //         //let y = (rect.top - window.innerHeight) / (window.innerHeight); // SCALE
-        //         y = Math.min(0, Math.max(-1, y));
-        //         // const y = 1 - (1 + Math.min(1, Math.max(-1, intersection.center.y))) / 2;
-        //         currentY = (y * parallax * direction).toFixed(3);
-        //         //currentY = 1 + (1 + y) * 0.1; // SCALE
-        //         //currentY = (y * direction * parallax).toFixed(3);
-        //         if (node.currentY !== currentY) {
-        //             node.currentY = currentY;
-        //             //node.setAttribute('style', `height: ${s * 100}%; top: 50%; left: 50%; transform: translateX(-50%) translateY(${currentY}%);`);
-        //             node.setAttribute('style', `transform: translateY(${currentY}%);`);
-        //             // console.log(currentY);
-        //             //node.setAttribute('style', `transform: scale(${currentY},${currentY});`); // SCALE
-        //         }
-        //     }
-        // });
     }
 
     onRequestAnimDidChange() {
@@ -962,12 +955,15 @@ export default class App {
     }
 
     loop() {
-        this.render();
-        if (this.playing) {
-            window.requestAnimationFrame(() => {
-                this.loop();
-            });
+        if (!disableRender) {
+            this.render();
+            if (this.playing) {
+                window.requestAnimationFrame(() => {
+                    this.loop();
+                });
+            }
         }
+
     }
 
     play() {

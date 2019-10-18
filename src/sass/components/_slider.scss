@@ -23,7 +23,9 @@
     }
 
     .swiper-button-prev,
-    .swiper-button-next {
+    .swiper-button-next,
+    .swiper-button-prev--full,
+    .swiper-button-next--full {
         position: absolute;
         margin: 0;
         top: 50%;
@@ -36,6 +38,14 @@
         align-items: center;
         justify-content: center;
         overflow: hidden;
+
+        &:focus {
+            outline: none;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
 
         @include xs-down {
             display: none;
@@ -53,8 +63,10 @@
     .swiper-lazy-preloader {
         width: 100px;
         height: 80px;
-        margin-left: -50px;
-        margin-top: -40px;
+        /*margin-left: -50px;
+        margin-top: -40px;*/
+        transform: translate(-50%, -50%);
+        margin: 0;
         animation: none;
 
         &:after {
@@ -63,6 +75,7 @@
     }
 
     .slider__picture {
+        position: relative;
         background: $light-grey;
 
         img.swiper-lazy {
@@ -469,7 +482,7 @@
         }
     }
 
-    .swiper-button-prev {
+    .swiper-button-prev--full {
         left: $col-gutter;
 
         @include sm-down {
@@ -485,12 +498,11 @@
             svg {
                 width: 20px;
                 height: 20px;
-
             }
         }
     }
 
-    .swiper-button-next {
+    .swiper-button-next--full {
         right: $col-gutter;
 
         @include sm-down {
@@ -506,7 +518,6 @@
             svg {
                 width: 20px;
                 height: 20px;
-
             }
         }
     }

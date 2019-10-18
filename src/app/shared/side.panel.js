@@ -1,7 +1,7 @@
-import Navigation from "./navigation";
-
 /* jshint esversion: 6 */
 
+import Navigation from "./navigation";
+import Dom from './dom';
 
 const body = document.querySelector('body');
 const html = document.getElementsByTagName('html')[0];
@@ -9,6 +9,7 @@ const header = document.querySelector('header');
 let clickToggle;
 let clickOutside;
 let clickNext;
+let clickLogin;
 let clickClose;
 
 export default class SidePanel {
@@ -18,9 +19,13 @@ export default class SidePanel {
         this.id = id;
         this.panel = document.querySelector('.side-panel');
         this.close = this.panel.querySelector('.side-panel__close');
+        this.closeLeave = this.panel.querySelector('.panel-close-leave');
         this.send = this.panel.querySelector('.cta--send');
         this.primaryPanel = this.panel.querySelector('.side-panel__primary');
         this.secondaryPanel = this.panel.querySelector('.side-panel__secondary');
+        this.loginPanel = this.panel.querySelector('.side-panel__login');
+        this.recoverPanel = this.panel.querySelector('.side-panel__recover');
+        this.resetPanel = this.panel.querySelector('.side-panel__reset');
         this.type = type;
         this.isSamples = false;
         this.isDealers = false;
@@ -35,6 +40,14 @@ export default class SidePanel {
                 this.parentClass = 'side-panel--dealers';
                 this.next = this.panel.querySelector('.cta--results');
                 this.isDealers = true;
+                break;
+            case 'login':
+                this.parentClass = 'side-panel--login';
+                this.login = this.panel.querySelector('.cta--login');
+                this.next = this.panel.querySelector('.cta--recover');
+                this.isLogin = true;
+                this.url = this.node.getAttribute('data-url');
+                this.isLogged = this.node.getAttribute('data-islogged') == '1';
                 break;
         }
 
@@ -70,6 +83,7 @@ export default class SidePanel {
         };
         this.clickClose = clickClose;
         this.close.addEventListener('click', this.clickClose);
+        this.closeLeave.addEventListener('click', this.clickClose);
 
         //click next
         clickNext = (e) => {
@@ -91,9 +105,15 @@ export default class SidePanel {
     }
 
     openPanel() {
-        this.addListener();
+        if (this.loginPanel && this.isLogged)
+            location.href = this.url;
 
-        html.style.overflow = 'hidden';
+        this.addListener();
+        if (Dom.fastscroll) {
+            body.style.cssText = 'overflow: hidden;';
+        } else {
+            html.style.cssText = 'overflow: hidden;';
+        }
         Navigation.closeNav();
         Navigation.closeSearch();
         this.panel.classList.add(this.parentClass);
@@ -111,10 +131,15 @@ export default class SidePanel {
         document.removeEventListener('click', this.clickOutside);
         this.close.removeEventListener('click', this.clickClose);
         this.next.removeEventListener('click', this.clickNext);
-        html.style.overflow = 'initial';
-
+        this.closeLeave.addEventListener('click', this.clickClose); 
+        if (Dom.fastscroll) {
+            body.style.cssText = 'overflow: initial;';
+        } else {
+            html.style.cssText = 'overflow: initial;';
+        }
         setTimeout(x => {
             body.classList.remove('side-panel-open');
+            document.querySelector(".side-panel__recover").style.display = "block";
         }, 400);
 
         TweenMax.to(this.panel, 0.8, {
@@ -135,6 +160,18 @@ export default class SidePanel {
                     TweenMax.set(this.send, {
                         transform: "translateY(0)",
                     });
+                };
+                if (this.isLogin) {
+                    TweenMax.set(this.loginPanel, {
+                        transform: "translateY(0)",
+                        ease: Expo.easeInOut
+                    });
+                    TweenMax.set(this.recoverPanel, {
+                        transform: "translateY(0)",
+                    });
+                    TweenMax.set(this.resetPanel, {
+                        transform: "translateY(0)",
+                    });
                 }
                 this.panel.classList.remove(this.parentClass);
                 this.primaryPanel.scrollTo(0, 0);
@@ -144,30 +181,66 @@ export default class SidePanel {
     }
 
     nextPanel() {
+        let transformRate = '';
+        if (body.classList.contains('ie11')) {
+            transformRate = 'translateX(-100%) translateX(-' + (window.innerWidth / 12) / 2 + 'px)';
+        } else {
+            transformRate = 'translateX(-100%)';
+        }
         TweenMax.to(this.primaryPanel, 0.8, {
-            transform: "translateX(-100%)",
+            transform: transformRate,
             ease: Expo.easeInOut
         });
         TweenMax.to(this.secondaryPanel, 0.8, {
-            transform: 'translateX(-100%)',
+            transform: transformRate,
             ease: Expo.easeInOut
         });
         if (this.isSamples) {
             TweenMax.to(this.next, 0.8, {
-                transform: "translateY(-100%)",
+                transform: transformRate,
                 ease: Expo.easeInOut
             });
             TweenMax.to(this.send, 0.8, {
-                transform: "translateY(-100%)",
+                transform: transformRate,
                 ease: Expo.easeInOut
             });
         }
+        if (this.isLogin) {
+
+            TweenMax.to(this.loginPanel, 0.8, {
+                transform: transformRate,
+                ease: Expo.easeInOut
+            });
+            TweenMax.to(this.recoverPanel, 0.8, {
+                transform: transformRate,
+                ease: Expo.easeInOut
+            });
+        }
+    }
+
+    static reset() {
+        document.querySelector(".side-panel__recover").style.display = "none";
+        let transformRate = '';
+        if (body.classList.contains('ie11')) {
+            transformRate = 'translateX(-100%) translateX(-' + (window.innerWidth / 12) / 2 + 'px)';
+        } else {
+            transformRate = 'translateX(-100%)';
+        }
+        TweenMax.to(document.querySelector('.side-panel__login'), 0.8, {
+            transform: transformRate,
+            ease: Expo.easeInOut
+        });
+        TweenMax.to(document.querySelector('.side-panel__reset'), 0.8, {
+            transform: transformRate,
+            ease: Expo.easeInOut
+        });
     }
 
     destroy() {
         this.panel.classList.remove(this.parentClass);
         this.node.removeEventListener('click', this.clickToggle);
         this.close.removeEventListener('click', this.clickClose);
+        this.closeLeave.addEventListener('click', this.clickClose);
         this.next.removeEventListener('click', this.clickNext);
         document.removeEventListener('click', this.clickOutside);
     }

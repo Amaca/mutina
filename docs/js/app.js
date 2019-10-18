@@ -9631,7 +9631,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 /*!
  * css-vars-ponyfill
- * v2.1.2
+ * v2.1.1
  * https://jhildenbiddle.github.io/css-vars-ponyfill/
  * (c) 2018-2019 John Hildenbiddle <http://hildenbiddle.com>
  * MIT license
@@ -10925,6 +10925,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }
 
     if (document.readyState !== "loading") {
+      var isShadowElm = Boolean(settings.shadowDOM || settings.rootElement.shadowRoot || settings.rootElement.host);
+
       if (isNativeSupport && settings.onlyLegacy) {
         if (settings.updateDOM) {
           var targetElm = settings.rootElement.host || (settings.rootElement === document ? document.documentElement : settings.rootElement);
@@ -10932,7 +10934,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
             targetElm.style.setProperty(key, settings.variables[key]);
           });
         }
-      } else if (!isShadowDOMReady && (settings.shadowDOM || settings.rootElement.shadowRoot || settings.rootElement.host)) {
+      } else if (isShadowElm && !isShadowDOMReady) {
         getCssData({
           rootElement: defaults.rootElement,
           include: defaults.include,
@@ -10987,7 +10989,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
                     removeComments: true
                   });
                   parseVars(cssTree, {
-                    parseHost: Boolean(settings.rootElement.host),
+                    parseHost: isShadowElm,
                     store: jobVars,
                     onWarning: handleWarning
                   });
@@ -11098,7 +11100,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
                 for (var i = 0, elm; elm = elms[i]; ++i) {
                   if (elm.shadowRoot && elm.shadowRoot.querySelector("style")) {
                     var shadowSettings = _extends({}, settings, {
-                      rootElement: elm.shadowRoot
+                      rootElement: elm.shadowRoot,
+                      variables: variableStore.dom
                     });
 
                     cssVars(shadowSettings);
@@ -15478,7 +15481,7 @@ function () {
               app.onPageInit();
               /*
               window.daraLayer.push({
-               })
+                })
               gtm.push({
                   title: document.title,
                   href: window.href

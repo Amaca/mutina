@@ -70,7 +70,7 @@
                 display: none;
             }
 
-            button.nav__search {
+            button.nav__search, button.nav__login {
 
                 svg {
                     display: block;
@@ -83,8 +83,18 @@
     }
 
     &.nav--secondary {
-        ul li .btn--split {
-            text-transform: none;
+        ul {
+            li {
+                padding: 0 17px;
+
+                &:last-child {
+                    padding-right: 27px;
+                }
+
+                .btn--split {
+                    text-transform: none;
+                }
+            }
         }
     }
 }
@@ -132,6 +142,30 @@
         z-index: 2;
         color: $white;
         text-align: center;
+    }
+}
+
+.nav__reserved-area {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    top: 20px;
+    right: 0;
+    width: 18px;
+    height: 18px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    @include sm-down {
+        display: flex;
+    }
+
+    svg {
+        display: block;
+        fill: #121212;
+        width: 18px;
+        height: 18px;
     }
 }
 
@@ -221,7 +255,7 @@ $subnav-bg-transition: all var(--close-nav-speed) cubic-bezier(0, 0.97, 0.43, 1)
         }
     }
 
-    .subnav__wrapper>a {
+    .subnav__wrapper > a {
         // flex: 0 0 25%;
         // max-width: 25%;
         padding: 0 $col-gutter-half;
@@ -320,7 +354,6 @@ body.subnav-open {
                         width: 100%;
                     }
                 }
-
             }
         }
     }
@@ -338,7 +371,7 @@ body.subnav-open {
 
             li {
                 display: block;
-                padding: 0;
+                padding: 0!important;
                 position: relative;
                 z-index: 1;
 
@@ -369,9 +402,9 @@ body.subnav-open {
 
         &.nav--primary {
 
-            &>ul {
+            & > ul {
 
-                &>li {
+                & > li {
                     position: relative;
                     z-index: 1;
 
@@ -396,13 +429,12 @@ body.subnav-open {
 
         &.nav--secondary {
 
-            &>ul {
-                &>li {
+            & > ul {
+                & > li {
                     .btn--split {
                         text-transform: none;
                         display: block;
                         padding: 14px 10px;
-
                     }
                 }
             }
@@ -516,7 +548,6 @@ body.subnav-open {
             transition: left 500ms $smooth 50ms;
         }
     }
-
     //animation
     body.nav-mobile-open {
 
@@ -525,6 +556,28 @@ body.subnav-open {
                 height: 75vh;
                 height: calc(var(--vh, 1vh) * 75);
                 pointer-events: all;
+
+                @include phone-landscape {
+                    height: calc((var(--vh, 1vh) * 100) - 58px);
+                    overflow-y: auto;
+                    overflow-x: hidden;
+
+                    &:after {
+                        display: none;
+                    }
+                }
+
+                .subnav {
+                    @include phone-landscape {
+                        height: calc((var(--vh, 1vh) * 100) - 58px);
+                        overflow-y: auto;
+                        overflow-x: hidden;
+
+                        &:after {
+                            display: none;
+                        }
+                    }
+                }
             }
         }
 

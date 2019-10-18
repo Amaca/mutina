@@ -129,7 +129,8 @@ $slider-arrow-close-zoom-fill: white;
         }
 
         @include xs-down {
-            display: none;
+            /*display: none;*/
+            left: 20px;
         }
     }
 

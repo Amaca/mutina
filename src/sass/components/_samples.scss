@@ -81,7 +81,7 @@ $slider-samples-arrow-close-zoom-fill: white;
     height: $header-height;
     background: $white;
     width: 100vw;
-    z-index: 2;
+    z-index: 3;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -204,7 +204,7 @@ $slider-samples-arrow-close-zoom-fill: white;
     z-index: 3;
     width: 100vw;
     height: calc(100vh - #{$header-height});
-    bottom: -100%;
+    /*bottom: -100%;*/
     left: 0;
     background: white;
     transition: all .6s $smooth;
@@ -272,7 +272,7 @@ $slider-samples-arrow-close-zoom-fill: white;
     width: 100vw;
     height: calc(100vh - #{$header-height});
     height: calc(calc(var(--vh, 1vh) * 100) - #{$header-height});
-    bottom: -100%;
+    /*bottom: -100%;*/
     left: 0;
     background: $detail-samples-wrapper-bg;
     //background: rgba(128, 128, 128, 0.509);

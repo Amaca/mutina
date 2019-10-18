@@ -152,7 +152,8 @@ $follower-width: 48px;
         .detail-gallery__swiper .swiper-lazy-loaded[data-fancy-zoom="true"],
         .full-samples-gallery__item img,
         .full-gallery__thumb .img,
-        .fancy-in-transition .picture img {
+        .fancy-in-transition .picture img,
+        .slider--carousel .slider__picture a {
             cursor: none !important;
         }
 

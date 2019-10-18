@@ -15,33 +15,71 @@
         cursor: pointer;
         width: 30px;
         height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         @include sm-down {
             transform: translate(-25%, -25%);
         }
 
+        &:hover {
+            &:after {
+                background: $white;
+                animation: none;
+                transform: scale(1.2);
+            }
+        }
+
         &:after {
+            position: static;
+            transform: none;
             content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             width: 11px;
             height: 11px;
             border: 2px solid $white;
             border-radius: 50%;
             // box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
-            
+            animation: tooltips 2s linear infinite;
+            transition: all linear .3s;
+
             @include sm-down {
                 width: 8px;
                 height: 8px;
             }
         }
-
     }
 }
 
+body.safari {
+    .tooltips .tooltips_item {
 
+        &:after {
+            animation: tooltips 2s linear infinite !important;
+            transform: none !important;
+        }
+    }
+}
+
+@keyframes tooltips {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.8;
+    }
+
+    25% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0.8);
+        opacity: 0.8;
+    }
+}
 
 .swiper-lazy+.tooltips {
     opacity: 0;

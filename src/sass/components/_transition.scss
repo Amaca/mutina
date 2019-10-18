@@ -124,6 +124,10 @@
                 @include xs-down {
                     font-size: 3.6rem;
                 }
+
+                @include xxs-down {
+                    font-size: 3rem;
+                }
             }
         }
 
@@ -148,6 +152,10 @@
 
                 @include xs-down {
                     font-size: 3.6rem;
+                }
+
+                @include xxs-down {
+                    font-size: 3rem;
                 }
             }
         }

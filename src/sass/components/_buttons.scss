@@ -22,6 +22,7 @@ button {
     border: none;
     outline: 0;
     -webkit-appearance: none;
+    font-size: 1rem;
 
     &:focus,
     &:active {
@@ -72,12 +73,6 @@ a {
 
 .btn {
     cursor: pointer;
-
-    @include sm-down {
-        display: block;
-        text-align: center;
-        width: 100%;
-    }
 
     &--split {
         display: inline-block;
@@ -135,11 +130,16 @@ a {
         @include font($style:heavy);
         font-size: 0.65rem;
         border: 2px solid $dark;
-        padding: 25px 38px;
+        padding: 20px 38px;
         text-transform: uppercase;
         transition: transform 1s $smooth, background 1s $smooth, border-color 1s $smooth;
         min-width: 200px;
         text-align: center;
+
+        @include sm-down {
+            text-align: center;
+            width: 100%;
+        }
 
         @include xs-down {
             display: block;
@@ -157,7 +157,7 @@ a {
             }
         }
 
-        &:hover {
+        &:hover, &:active, &:focus {
             border-color: $dark;
             background: none;
 
@@ -177,6 +177,19 @@ a {
                 width: 100%;
                 left: 0;
             }
+        }
+    }
+
+    &--loading {
+        pointer-events: none;
+        background-image: url(/assets/img/loading.gif);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+        background-color: #121212;
+
+        span {
+            opacity: 0;
         }
     }
 

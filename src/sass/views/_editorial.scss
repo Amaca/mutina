@@ -74,7 +74,9 @@
 
 .editorial--2col-img + .editorial--carousel,
 .editorial--1col-mid-text + .editorial--carousel,
-.editorial--1col-full-img-caption + .editorial--carousel{
+.editorial--1col-full-img-caption + .editorial--carousel,
+.editorial__2col-text-img + .editorial--carousel,
+.editorial__2col-text-img--switch + .editorial--carousel {
     .slider--carousel, .slider--categories {
         margin-top: 0;
     }
@@ -1035,15 +1037,18 @@
 
         .box {
             text-align: right;
+           
+            .h2 {
+                @include sm-down {
+                    font-size: 1.8rem;
+                    
+                }
+            }
         }
 
         .picture + .box {
             padding: 0 $col-gutter $col-gutter-half $col-gutter;
             max-width: none;
-
-            @include sm-down {
-                
-            }
         }
     }
 }

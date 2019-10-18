@@ -5,6 +5,7 @@ import Fancy from './fancy';
 import FancyTransition from "./fancy.transition";
 import LazyLoad from './lazyload';
 import Follower from './follower';
+import Dom from './dom';
 
 let clickClose;
 
@@ -18,7 +19,6 @@ export default class FancyViewAll {
     constructor(node, id) {
         this.node = node;
         this.id = id;
-
 
         this.addListener();
     }
@@ -76,6 +76,11 @@ export default class FancyViewAll {
             const images = [...document.querySelectorAll('.full-gallery__thumb img')];
             Follower.removeMouseListener(images);
             FancyTransition.closeLayer('fullGallery', false, fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, null, fullGallery);
+
+            if (typeof FancyViewAll.onScroll === 'function' && Dom.fastscroll) {
+                fullGalleryWrapper.removeEventListener('scroll', FancyViewAll.onScroll);
+            }
+
             e.preventDefault();
         };
         fullGalleryClose.addEventListener('click', clickClose);
@@ -87,11 +92,21 @@ export default class FancyViewAll {
         fullGalleryWrapper.appendChild(fullGalleryContainer);
 
         body.classList.add('full-gallery-open');
-        html.style.overflow = 'hidden';
+        if (Dom.fastscroll) {
+            body.style.cssText = 'overflow: hidden;';
+        } else {
+            html.style.cssText = 'overflow: hidden;';
+        }
         FancyViewAll.addImages(fullGalleryContainer);
+        FancyTransition.openLayer('fullGallery', fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, null, id, () => {
+            if (typeof FancyViewAll.onScroll === 'function' && Dom.fastscroll) {
+                FancyViewAll.onScroll();
+            }
+        }); 
 
-
-        FancyTransition.openLayer('fullGallery', fullGalleryBg, fullGalleryClose, fullGalleryWrapper, null, null, id);
+        if (typeof FancyViewAll.onScroll === 'function' && Dom.fastscroll) {
+            fullGalleryWrapper.addEventListener('scroll', FancyViewAll.onScroll);
+        }
     }
 
     static addImages(container) {

@@ -1,6 +1,19 @@
 @import "../mixins";
 @import "../variables";
 
+.grid {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.grid-col {
+    height: 100%;
+    width: $col-width;
+    background: rgba(red, 0.2);
+}
+
 .listing--grid {
     position: relative;
     margin: 0 -#{$col-gutter};
@@ -20,6 +33,10 @@
 
         img {
             max-width: 100%;
+        }
+
+        .picture {
+            @include aspect-clip(880, 550, 0);
         }
 
         a {
@@ -103,7 +120,7 @@
         width: 100%;
     }
 
-    .listing__wrapper>img {
+    .listing__wrapper > img {
         display: block;
     }
 
@@ -146,5 +163,4 @@
             font-size: 0.8rem;
         }
     }
-
 }

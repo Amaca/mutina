@@ -60,7 +60,7 @@ export default class Sliders {
                 grabCursor: true,
                 watchOverflow: true,
                 centeredSlides: false,
-                loop: true,
+                loop: false,
                 slidesPerView: 1,
                 spaceBetween: 60,
                 speed: 800,
@@ -68,8 +68,8 @@ export default class Sliders {
                 lazy: true,
                 autoHeight: true,
                 navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
+                    nextEl: '.swiper-button-next--full',
+                    prevEl: '.swiper-button-prev--full',
                 },
                 on: {
                     lazyImageReady: function (slideEl) {

@@ -26,16 +26,22 @@
     position: relative;
     width: 100%;
     padding-top: calc(#{$paddingTop} - #{$paddingTop} * #{$parallax});
-    overflow: hidden;
+    display: flex;
+    // overflow: hidden;
 
     img,
     video,
     canvas {
         position: absolute;
+        /*
         top: 50%;
         left: 50%;
         width: 100%;
         transform: translate(-50%, -50%);
+        */
+        object-fit: cover;
+        height: 100%;
+        top: 0;
 
         @include xs-down {
             max-width: none;

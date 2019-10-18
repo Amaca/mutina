@@ -35,11 +35,28 @@
         position: relative;
         z-index: 1;
 
+        .container--big {
+            max-width: none;
+        }
+
         .listing {
             @include sm-down {
                 flex-wrap: nowrap;
                 overflow-x: auto;
                 overflow-y: hidden;
+            }
+
+            .listing__item {
+                @include sm-down {
+                    flex: 0 0 40%;
+                    max-width: 40%;
+
+                    .picture--animate {
+                        opacity: 1;
+                        transform: translateY(0px);
+                        transition: all 1000ms cubic-bezier(0.32, 0, 0.29, 0.99) !important;
+                    }
+                }
             }
         }
     }

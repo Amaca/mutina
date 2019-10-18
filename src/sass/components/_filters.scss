@@ -566,10 +566,11 @@ $subfilters-bg-transition: all var(--close-filters-speed) cubic-bezier(0, 0.97, 
 .filters__tags {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     padding: 0 $col-gutter-half;
     margin: 0 -20px $col-gutter -20px;
 
-    &>div {
+    & > div {
         @include font($style:heavy);
         color: $dark;
         font-size: 0.75rem;
@@ -583,6 +584,10 @@ $subfilters-bg-transition: all var(--close-filters-speed) cubic-bezier(0, 0.97, 
             top: -1px;
             right: -8px;
         }
+
+        &:last-child {
+            margin-right: 50px;
+        }
     }
 
     .filters__tags-clear {
@@ -590,7 +595,14 @@ $subfilters-bg-transition: all var(--close-filters-speed) cubic-bezier(0, 0.97, 
         font-size: 0.55rem;
         color: #808080;
         text-transform: uppercase;
-        margin-left: 50px;
+        padding: 0 20px;
+    }
+}
+
+a[data-desc="Bianco"] {
+
+    .subfilters__color {
+        border: 2px solid $light-grey !important;
     }
 }
 

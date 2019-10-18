@@ -192,7 +192,7 @@
             padding: 10px 50px 10px 20px;
         }
     }
-}
+} 
 
 
 //nav mobile
@@ -201,7 +201,7 @@
         position: fixed;
         z-index: 2;
 
-        .header__wrapper {
+        .header__wrapper { 
             display: block;
             position: fixed;
             top: calc(#{$header-height-mobile} - 2px);

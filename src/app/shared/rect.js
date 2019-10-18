@@ -36,9 +36,10 @@ export default class Rect {
         if (node.getClientRects().length) {
             let boundingRect = node.getBoundingClientRect();
             // const defaultView = node.ownerDocument.defaultView;
-            node.rect.set(boundingRect);
+            // console.log('rect', node.getBoundingClientRect());
+            rect.set(boundingRect);
         }
-        return node.rect;
+        return rect;
         /*
         return new Rect({
             // top: rect.top + defaultView.pageYOffset,
@@ -53,7 +54,13 @@ export default class Rect {
 
     set(rect) {
         if (rect) {
-            Object.assign(this, rect);
+            // Object.assign(this, rect);
+            this.x = rect.x;
+            this.y = rect.y;
+            this.width = rect.width;
+            this.height = rect.height;
+            this.top = rect.top;
+            this.left = rect.left;
             this.right = this.left + this.width;
             this.bottom = this.top + this.height;
         }

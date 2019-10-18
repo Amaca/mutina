@@ -25,9 +25,9 @@ $form-white: $white;
 $form-red: $dark;
 
 /*--------------------------------------------------
-Form
+Form in right panel
 --------------------------------------------------*/
-.form {
+.form:not(.form-inpage) {
     line-height: 1.4;
     font-size: 1rem;
 
@@ -53,12 +53,13 @@ Form
         position: relative;
         z-index: 1;
 
-        input,
-        input[type="radio"] + label,
+
+        input, input[type="radio"] + label,
         input[type="checkbox"] + label:before,
         select option,
         select,
         textarea {
+            @include font($style:book);
             width: 100%;
             padding: 16px;
             line-height: 1.4;
@@ -90,6 +91,10 @@ Form
             font-weight: 600;
             font-size: 0.65rem;
             text-transform: uppercase;
+
+            a {
+                text-decoration: underline;
+            }
 
             em {
                 color: $form-main;
@@ -190,9 +195,10 @@ Form
         input[type="checkbox"] + label {
             position: relative;
             display: block;
-            padding-left: 1.6em;
+            padding-left: 2em;
             cursor: pointer;
             text-transform: none;
+            padding-top: 3px;
 
             @include xs-down {
                 margin: 0;
@@ -217,8 +223,8 @@ Form
         input[type="checkbox"] + label:after {
             content: '';
             position: absolute;
-            top: 0.2em;
-            left: 0;
+            top: 0.4em;
+            left: 0.15em;
             color: $form-main;
             width: 0;
             height: 0;
@@ -350,6 +356,13 @@ Form
         color: $form-red !important;
     }
 
+    .form-results {
+        font-size: 13px;
+        margin-top: 10px;
+        color: #ff0000;
+        border-bottom: 0px solid #d30000 !important;
+    }
+
     .form-group input:focus,
     .form-group textarea:focus,
     .form-group select:focus {
@@ -362,6 +375,11 @@ Form
     .form-row {
         zoom: 1;
         padding-bottom: 35px;
+
+        &.big-select {
+            position: relative;
+            z-index: 2;
+        }
 
         @include xs-down {
             padding-bottom: 0;
@@ -445,81 +463,391 @@ Form
     }
 }
 
+.side-panel__recover .form-group input,
+.side-panel__login .form-group input,
+.side-panel__reset .form-group input {
+    background-color: #fff !important;
+}
+
+
+/*--------------------------------------------------
+Form in page
+--------------------------------------------------*/
+.form-inpage {
+
+    .obbl_fields {
+        font-size: 0.7rem;
+        text-align: right;
+    }
+
+    .form-row {
+        margin-bottom: 50px;
+        display: flex;
+
+        @include xs-down {
+            display: block;
+            margin-bottom: 0;
+        }
+
+        .form-col-half {
+            margin-right: 60px;
+            width: calc(100% - 30px);
+
+            @include xs-down {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+
+        .form-col-full {
+            width: 100%;
+
+            @include xs-down {
+                margin-bottom: 20px;
+            }
+        }
+
+        input, input[type="radio"] + label,
+        select option,
+        select,
+        textarea {
+            @include font($style:book);
+            width: 100%;
+            line-height: 1.4;
+            border: 2px solid #e8eaea;
+            border-radius: 0;
+            font-size: 0.7rem;
+            transition: all 0.35s $smooth;
+            color: $dark;
+            cursor: pointer;
+            background-color: #fff;
+            font-weight: 500;
+            padding: 19px 16px;
+        }
+
+        .error {
+            border-bottom: 2px solid #d30000 !important;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 16px;
+
+            em {
+                color: $form-main;
+            }
+
+            span {
+                text-transform: none;
+                font-weight: normal;
+            }
+        }
+        //control radio btn
+        .control-radio-btn {
+
+            &:after {
+                @include clearfix;
+            }
+
+            input[type="radio"] {
+                display: none;
+            }
+
+            input[type="radio"] + label {
+                display: inline-block;
+                width: 50%;
+                text-align: center;
+                float: left;
+                border-radius: 0;
+            }
+
+
+            input[type="radio"] + label i {
+                padding-right: 0.4em;
+            }
+
+            input[type="radio"]:checked + label,
+            input:checked + label:before {
+                background-color: $form-main;
+                color: $form-white;
+                border-color: $form-main;
+            }
+        }
+        //control radio inline
+        .control-radio-inline {
+
+            input[type="radio"] {
+                display: none;
+            }
+
+            input[type="radio"] + label {
+                position: relative;
+                display: block;
+                padding-left: 1.6em;
+                cursor: pointer;
+                width: auto;
+                padding: 0;
+                background: transparent;
+                border: 0;
+
+                span {
+                    padding-left: 27px;
+                }
+            }
+
+            input[type="radio"] + label:before {
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: block;
+                width: 1em;
+                height: 1em;
+                padding: 0;
+                font-size: 1.1em;
+                font-family: FontAwesome;
+                content: '\f1db';
+                color: $form-main;
+            }
+
+            input[type="radio"] + label:after {
+                position: absolute;
+                top: 0.62em;
+                left: 0.4em;
+                font-size: 0.56em;
+                color: $form-main;
+                opacity: 0;
+                font-family: FontAwesome;
+                content: "\f111";
+            }
+
+            input[type="radio"]:checked + label:after {
+                opacity: 1;
+            }
+        }
+        //control checkbox
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        input[type="checkbox"] + label {
+            position: relative;
+            display: block;
+            cursor: pointer;
+            text-transform: none;
+            font-size: 0.85rem;
+            padding-left: 2.6em;
+
+            @include xs-down {
+                margin: 0;
+            }
+        }
+
+        input[type="checkbox"].error + label:before {
+            border: 2px solid #d30000;
+        }
+
+        input[type="checkbox"] + label:before {
+            position: absolute;
+            left: 0;
+            display: block;
+            width: 1em;
+            height: 1em;
+            content: '';
+            background-color: #fff;
+            padding: 0px;
+            top: 0.1em;
+            border: 2px solid #e8eaea;
+        }
+
+        input[type="checkbox"] + label:after {
+            content: '';
+            position: absolute;
+            top: 0.2em;
+            left: 0.1em;
+            color: $form-main;
+            width: 0;
+            height: 0;
+            background-size: 1em 1em;
+            background-image: url('../assets/img/icons/close.svg');
+            background-repeat: no-repeat;
+            transition: all .3s $smooth;
+        }
+
+        input:checked + label:after {
+            width: 1em;
+            height: 1em;
+        }
+
+        .control-checkbox {
+
+            a {
+                text-decoration: underline;
+            }
+
+            label {
+                font-weight: 500;
+            }
+        }
+
+        .cta {
+            .btn {
+                padding: 19px 38px;
+            }
+        }
+    }
+}
+
+
 //custom select
-.choices {
+.big-select {
 
-    .choices__inner {
-        border: 0;
-        border-radius: 0;
-        background: $light-grey;
-        text-align: left;
-        //padding: 8px 10px 2px 10px;
-        padding: 0;
-        font-size: 0.65rem;
-        text-transform: uppercase;
-        font-weight: 500;
-        vertical-align: unset;
-        min-height: 40px;
+    .choices {
+
+        .choices__placeholder {
+            opacity: 1;
+            color: $form-main;
+        }
+
+        .choices__inner {
+            background-color: #ffffff;
+            color: $dark;
+            padding: 0px 0px;
+            border-radius: 0;
+            font-weight: 500;
+            font-size: 0.7rem;
+            border: none;
+            /*min-height: 61px;*/
+        }
+
+        .choices__list--single {
+            padding: 14px 16px 0px 16px;
+            min-height: 57px;
+            border: 2px solid #e8eaea;
+
+            @include md-down {
+                padding-top: 18px;
+            }
+        }
+
+        &.is-focused {
+            .choices__inner {
+                border: none;
+
+                .choices__list--single {
+                    border-color: $form-main;
+                }
+            }
+        }
     }
 
-    .choices__list--single {
-        padding: 8px 10px 2px 10px;
-        border-bottom: 2px solid black;
+    .choices__list--dropdown {
+        background-color: #FFFFFF;
+        border: 2px solid $form-main;
+        margin-top: -2px;
     }
 
-    select.error + .choices__list--single {
-        border-bottom: 2px solid #d30000;
-    }
-
-    &[data-type*="select-one"] .choices__inner {
-        padding-bottom: 0;
-    }
-
-    &[data-type*="select-one"]:after {
-        width: 16px;
-        height: 16px;
-        background-size: 16px 16px;
-        background-image: url('../assets/img/icons/arrow_left.svg');
-        background-repeat: no-repeat;
-        border: 0;
+    .choices[data-type*="select-one"]:after {
+        content: "";
+        height: 0;
+        width: 0;
+        border-style: solid;
+        border-color: #333333 transparent transparent transparent;
+        border-width: 5px;
         position: absolute;
         right: 11.5px;
         top: 50%;
         margin-top: -2.5px;
         pointer-events: none;
-        right: 25px;
-        top: 50%;
-        margin-top: -12.5px;
-        pointer-events: none;
-        transform: rotate(90deg);
-        // transition: all .6s $smooth;
     }
-    // &[data-type*="select-one"].is-open:after {
-    //     transform: rotate(-90deg);
-    // }
-    .choices__list--dropdown {
-        top: 0;
-        border: 0;
-        border-radius: 0;
-        text-align: left;
 
-        .choices__item {
-            padding: 15px 25px;
+    .choices select.error + .choices__list--single {
+        border-bottom: 2px solid #d30000;
+    }
+}
+//light custom select (panel)
+.small-select {
+    .choices {
+
+        .choices__inner {
+            border: 0;
+            border-radius: 0;
+            background: $light-grey;
+            text-align: left;
+            //padding: 8px 10px 2px 10px;
+            padding: 0;
             font-size: 0.65rem;
             text-transform: uppercase;
             font-weight: 500;
+            vertical-align: unset;
+            min-height: 40px;
+        }
+
+        .choices__list--single {
+            padding: 8px 10px 2px 10px;
+            border-bottom: 2px solid black;
+        }
+
+        select.error + .choices__list--single {
+            border-bottom: 2px solid #d30000;
+        }
+
+        &[data-type*="select-one"] .choices__inner {
+            padding-bottom: 0;
+        }
+
+        &[data-type*="select-one"]:after {
+            width: 16px;
+            height: 16px;
+            background-size: 16px 16px;
+            background-image: url('../assets/img/icons/arrow_left.svg');
+            background-repeat: no-repeat;
+            border: 0;
+            position: absolute;
+            right: 11.5px;
+            top: 50%;
+            margin-top: -2.5px;
+            pointer-events: none;
+            right: 25px;
+            top: 50%;
+            margin-top: -12.5px;
+            pointer-events: none;
+            transform: rotate(90deg);
+            // transition: all .6s $smooth;
+        }
+        // &[data-type*="select-one"].is-open:after {
+        //     transform: rotate(-90deg);
+        // }
+        .choices__list--dropdown {
+            top: 0;
+            border: 0;
+            border-radius: 0;
+            text-align: left;
+
+            .choices__item {
+                padding: 15px 25px;
+                font-size: 0.65rem;
+                text-transform: uppercase;
+                font-weight: 500;
+            }
+        }
+
+        .is-flipped & {
+            top: auto;
+            bottom: auto;
+            margin-top: auto;
+            margin-bottom: auto;
+            border-radius: 0;
         }
     }
-
-    .is-flipped & {
-        top: auto;
-        bottom: auto;
-        margin-top: auto;
-        margin-bottom: auto;
-        border-radius: 0;
-    }
 }
-
 
 .form .form-group--select {
     position: relative;

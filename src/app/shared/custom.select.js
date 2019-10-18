@@ -9,7 +9,7 @@ export default class CustomSelect {
         this.node = node;
         this.id = id;
         this.instance = new Choices(node, {
-            searchEnabled: false,
+            searchEnabled: false, 
             itemSelectText: '',
             shouldSort: false
         });   
@@ -26,7 +26,7 @@ export default class CustomSelect {
     }
 
     static init(debug) {
-        CustomSelect.items = [...document.querySelectorAll('[data-select]')].map((node, id) => new CustomSelect(node, id));
+        CustomSelect.items = [...document.querySelectorAll('[data-select]:not(.choices__input)')].map((node, id) => new CustomSelect(node, id)); 
         if (debug) {
             console.log('CustomSelect: ', CustomSelect.items);
         }

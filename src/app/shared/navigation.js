@@ -220,11 +220,11 @@ export default class Navigation {
         }
     }
 
-    static reset() {
+    static reset(closeMobile = true) {
         if (window.innerWidth > 768) {
             Navigation.closeNav();
             Navigation.closeSearch();
-        } else {
+        } else if (closeMobile) {
             Navigation.closeMobileNav();
         }
     }
