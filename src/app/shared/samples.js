@@ -1,13 +1,70 @@
 /* jshint esversion: 6 */
 
 import "gsap/ScrollToPlugin";
+import Dom from './dom';
 import FancyTransition from "./fancy.transition";
 import Follower from "./follower";
 import LazyLoad from "./lazyload";
 import SamplesDetail from "./samples.detail";
 import SidePanel from "./side.panel";
 import Wishlist from "./wishlist";
-import Dom from './dom';
+
+export class CategoryItem {
+
+    constructor(index, data, parent, target, wrapper) {
+        const listItem = document.createElement('li');
+        const anchor = document.createElement('a');
+        this.index = index;
+        this.data = data;
+        this.id = data.id;
+        this.name = data.title;
+        this.target = target;
+        this.wrapper = wrapper;
+        this.offset = this.getOffset();
+        // debug__(this.offset);
+        listItem.className = 'category anchor-' + this.name.replace(/[^\w\s]/g, '').toLowerCase();
+        parent.appendChild(listItem);
+        anchor.textContent = this.name;
+        anchor.className = 'scroll-to-' + this.id;
+        anchor.setAttribute('href', '#');
+        listItem.appendChild(anchor);
+        this.anchor = anchor;
+        this.onClick = this.onClick.bind(this);
+        this.addListeners();
+        CategoryItem.disabled = false;
+    }
+
+    getOffset() {
+        return this.target.getBoundingClientRect().top + Dom.scrollPosition(this.wrapper);
+    }
+
+    onClick(e) {
+        if (!CategoryItem.disabled) {
+            const offsetTop = this.getOffset() - Samples.getGutter() + 1; // this.wrapper.scrollTo(0, this.getOffset() - Samples.getGutter() + 1);
+            TweenMax.to(this.wrapper, 0.8, {
+                scrollTo: {
+                    y: offsetTop,
+                    // offsetY: Samples.getGutter() + 1,
+                    ease: Expo.easeInOut
+                }
+            });
+            e.preventDefault();
+        }
+    }
+
+    addListeners() {
+        this.anchor.addEventListener('click', this.onClick);
+    }
+
+    removeListeners() {
+        this.anchor.removeEventListener('click', this.onClick);
+    }
+
+    destroy() {
+        this.removeListeners();
+    }
+
+}
 
 let clickClose;
 let scrollWrapper;
@@ -25,29 +82,17 @@ export default class Samples {
     constructor(node, index) {
         this.node = node;
         this.index = index;
-        this.init();
-    }
-
-    init() {
         this.jsonUrl = this.node.getAttribute('data-samples');
         this.images = [];
+        this.categories = [];
+        this.onClick = this.onClick.bind(this);
+        this.onClickClose = this.onClickClose.bind(this);
+        this.onClickDetail = this.onClickDetail.bind(this);
+        this.onScroll = this.onScroll.bind(this);
         this.addListeners();
     }
 
-    getData() {
-        let req = new XMLHttpRequest();
-        req.overrideMimeType("application/json");
-        req.open('GET', this.jsonUrl, true);
-        req.onload = () => {
-            let jsonResponse = JSON.parse(req.responseText);
-            this.data = jsonResponse;
-            this.initFullSamplesGallery();
-            Wishlist.init();
-        };
-        req.send(null);
-    }
-
-    initFullSamplesGallery() {
+    createSampleGallery() {
         let fullSamplesGallery = document.createElement('div');
         let fullSamplesHeader = document.createElement('div');
         let fullSamplesClose = document.createElement('div');
@@ -58,7 +103,6 @@ export default class Samples {
         let fullSamplesBg = document.createElement('div');
         let fullSamplesWrapper = document.createElement('div');
         let fullSamplesContainer = document.createElement('div');
-
         fullSamplesGallery.classList.add('full-samples-gallery');
         fullSamplesHeader.classList.add('full-samples-gallery__header');
         fullSamplesClose.classList.add('full-samples-gallery__close');
@@ -69,31 +113,8 @@ export default class Samples {
         fullSamplesBg.classList.add('full-samples-gallery__bg');
         fullSamplesWrapper.classList.add('full-samples-gallery__wrapper');
         fullSamplesContainer.classList.add('full-samples-gallery__container');
-
         fullSamplesClose.innerHTML = closeIcon;
         fullSamplesBack.innerHTML = backIcon;
-
-        clickClose = (e) => {
-            const imagesSamples = [...document.querySelectorAll('.full-samples-gallery__item img')];
-            Follower.removeMouseListener(imagesSamples);
-            FancyTransition.closeLayer('fullSamplesGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, fullSamplesGallery);
-            fullSamplesClose.removeEventListener('click', clickClose);
-
-            if (!window.NoTrackHistory)
-                history.pushState({
-                    samples: false
-                }, null, location.pathname);
-
-            window.NoTrackHistory = false;
-
-            if (typeof Samples.onScroll === 'function' && Dom.fastscroll) {
-                document.querySelector('.full-samples-gallery__wrapper').removeEventListener('scroll', Samples.onScroll);
-            }
-
-            e.preventDefault();
-        };
-        fullSamplesClose.addEventListener('click', clickClose);
-
         document.body.appendChild(fullSamplesGallery);
         fullSamplesGallery.appendChild(fullSamplesHeader);
         fullSamplesHeader.appendChild(fullSamplesClose);
@@ -104,56 +125,24 @@ export default class Samples {
         fullSamplesGallery.appendChild(fullSamplesBg);
         fullSamplesGallery.appendChild(fullSamplesWrapper);
         fullSamplesWrapper.appendChild(fullSamplesContainer);
-
         fullSamplesHeaderButton.innerHTML = ''; //`Samples (<span data-wishcount>0</span>)`;
-
         sidePanelButton = new SidePanel(fullSamplesHeaderButton, null, 'samples');
-
         body.classList.add('samples-gallery-open');
         if (Dom.fastscroll) {
             body.style.cssText = 'overflow: hidden;';
         } else {
             html.style.cssText = 'overflow: hidden;';
         }
-
-        this.addCategories(fullSamplesCat);
         this.addImages(fullSamplesContainer);
-
+        this.addCategories(fullSamplesCat, fullSamplesContainer, fullSamplesWrapper);
         FancyTransition.openLayer('fullSamplesGallery', fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, this.id, () => {
-            if (typeof Samples.onScroll === 'function' && Dom.fastscroll) {
-                Samples.onScroll();
-            }
+            this.addSampleGalleryListeners();
+            this.onScroll();
         });
-
-        if (!window.NoTrackHistory)
-            history.pushState({
-                samples: true
-            }, null, location.pathname + '?samples=open');
-
-        window.NoTrackHistory = false;
-
-        if (typeof Samples.onScroll === 'function' && Dom.fastscroll) {
-            fullSamplesWrapper.addEventListener('scroll', Samples.onScroll);
-        }
-    }
-
-    addCategories(wrapper) {
-        let categoriesHtml = '<ul>';
-        this.data.samples.forEach(category => {
-            categoriesHtml += `
-                <li><div data-sample-id="${category.id}">${category.title}</div></li>
-            `;
-        });
-        categoriesHtml += '</ul>';
-        wrapper.innerHTML = categoriesHtml;
-
-        Samples.addTabsListeners();
     }
 
     addImages(wrapper) {
-
         let containerHtml = '';
-
         this.data.samples.forEach(category => {
             let fullSamplesHtml = '';
             category.items.forEach(item => {
@@ -170,9 +159,7 @@ export default class Samples {
                     </div>
                 `;
             });
-
             containerHtml += `<div class="full-samples-gallery__category" data-scroll-area="${category.id}" data-sample-category="${category.id}">`;
-
             if (category.img && category.img !== null) {
                 containerHtml += `
                 <div class="full-samples-gallery__cover">
@@ -186,35 +173,15 @@ export default class Samples {
                     </div>
                 </div>`;
             }
-
             containerHtml += `<div class="full-samples-gallery__listing">${fullSamplesHtml}</div></div>`;
-
         });
-
         wrapper.innerHTML = containerHtml;
         LazyLoad.init();
-
-        const imagesSamples = [...document.querySelectorAll('.full-samples-gallery__item img')];
-        Follower.addMouseListener(imagesSamples);
-
-        const images = this.mapData();
-
-        clickDetailGallery = (e) => {
-            this.openDetailGallery(e, images);
-        };
-
-        images.forEach(image => {
-            image.node.querySelector('.img').addEventListener('click', clickDetailGallery);
-        });
+        const images = this.getSampleImages();
+        this.images = images;
     }
 
-    openDetailGallery(e, images) {
-        const wrapper = document.querySelector('.full-samples-gallery');
-        SamplesDetail.init(e, images, wrapper);
-        Samples.removeTabsListeners();
-    }
-
-    mapData() {
+    getSampleImages() {
         const thumbs = [...document.querySelectorAll('.full-samples-gallery__item')];
         const thumbsList = this.data.samples.map(category => {
             let categoryItems = [];
@@ -233,71 +200,171 @@ export default class Samples {
             });
             return categoryItems;
         });
-
         let flat = [];
         for (let i = 0; i < thumbsList.length; i++) {
             flat = flat.concat(thumbsList[i]);
         }
-
         return flat;
     }
 
-    addListeners() {
-        const click = (e) => {
-            this.getData();
-            e.preventDefault();
+    addCategories(fullSamplesCat, fullSamplesContainer, fullSamplesWrapper) {
+        /*
+        let categoriesHtml = '<ul>';
+        this.data.samples.forEach(category => {
+            categoriesHtml += `
+                <li><div data-sample-id="${category.id}">${category.title}</div></li>
+            `;
+        });
+        categoriesHtml += '</ul>';
+        fullSamplesCat.innerHTML = categoriesHtml;
+        Samples.addTabsListeners();
+        */
+        const ul = document.createElement('ul');
+        fullSamplesCat.appendChild(ul);
+        this.categories = [...fullSamplesContainer.querySelectorAll('.full-samples-gallery__category')].map((element, index) => new CategoryItem(index, this.data.samples[index], ul, element, fullSamplesWrapper));
+    }
+
+    onClick(e) {
+        let req = new XMLHttpRequest();
+        req.overrideMimeType("application/json");
+        req.open('GET', this.jsonUrl, true);
+        req.onload = () => {
+            let jsonResponse = JSON.parse(req.responseText);
+            this.data = jsonResponse;
+            this.createSampleGallery();
+            Wishlist.init();
         };
-        this.click = click;
-        this.node.addEventListener('click', this.click);
-    }
-
-    destroy() {
-        this.node.removeEventListener('click', this.click);
-    }
-
-    static scrollToColor(e) {
-        const id = e.target.getAttribute('data-sample-id');
-        const wrapper = document.querySelector('.full-samples-gallery__wrapper');
-        const category = [...wrapper.querySelectorAll('[data-sample-category]')].find(x => {
-            return x.attributes[1].value === id;
-        });
-        TweenMax.to(wrapper, 0.8, {
-            scrollTo: {
-                y: category.offsetTop,
-                offsetY: 36,
-                ease: Expo.easeInOut
-            }
-        });
-
-        //Utils.toggleClass(e.target, 'active');
+        req.send(null);
         e.preventDefault();
     }
 
-    static removeTabsListeners() {
-        [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
-            x.removeEventListener('click', this.scrollToColor);
+    onClickClose(e) {
+        const fullSamplesBg = document.querySelector('.full-samples-gallery__bg');
+        const fullSamplesClose = document.querySelector('.full-samples-gallery__close');
+        const fullSamplesWrapper = document.querySelector('.full-samples-gallery__wrapper');
+        const fullSamplesHeader = document.querySelector('.full-samples-gallery__header');
+        const fullSamplesGallery = document.querySelector('.full-samples-gallery');
+        FancyTransition.closeLayer('fullSamplesGallery', false, fullSamplesBg, fullSamplesClose, fullSamplesWrapper, fullSamplesHeader, null, fullSamplesGallery);
+        this.removeSampleGalleryListeners();
+        e.preventDefault();
+    }
+
+    onClickDetail(e) {
+        const wrapper = document.querySelector('.full-samples-gallery');
+        SamplesDetail.init(e, this.images, wrapper);
+        CategoryItem.disabled = true;
+        // Samples.removeTabsListeners();
+        e.preventDefault();
+    }
+
+    onSamplesDetailDidClose() {
+        CategoryItem.disabled = false;
+    }
+
+    onScroll() {
+        const categories = this.categories;
+        if (categories.length) {
+            const selectedCategory = categories.find((x, i) => {
+                const top = x.target.getBoundingClientRect().top;
+                const bottom = i < categories.length - 1 ? categories[i + 1].target.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
+                if ((top < Samples.getGutter() || i === 0) && bottom > Samples.getGutter()) {
+                    x.anchor.classList.add('active');
+                    return x;
+                }
+            });
+            if (this.currentCategory_ !== selectedCategory) {
+                this.currentCategory_ = selectedCategory;
+                categories.forEach((x) => {
+                    if (x === selectedCategory) {
+                        x.anchor.classList.add('active');
+                    } else {
+                        x.anchor.classList.remove('active');
+                    }
+                });
+            }
+            if (typeof Samples.onScroll === 'function' && Dom.fastscroll) {
+                Samples.onScroll();
+            }
+        }
+    }
+
+    addListeners() {
+        this.node.addEventListener('click', this.onClick);
+    }
+
+    removeListeners() {
+        this.node.removeEventListener('click', this.onClick);
+    }
+
+    setTrackHistory(samples) {
+        if (!window.NoTrackHistory) {
+            history.pushState({
+                samples: samples
+            }, null, location.pathname + (samples ? '?samples=open' : ''));
+        }
+        window.NoTrackHistory = false;
+    }
+
+    addSampleGalleryListeners() {
+        this.setTrackHistory(true);
+        const imagesSamples = [...document.querySelectorAll('.full-samples-gallery__item img')];
+        Follower.addMouseListener(imagesSamples);
+        const fullSamplesClose = document.querySelector('.full-samples-gallery__close');
+        fullSamplesClose.addEventListener('click', this.onClickClose);
+        const fullSamplesWrapper = document.querySelector('.full-samples-gallery__wrapper');
+        fullSamplesWrapper.addEventListener('scroll', this.onScroll);
+        this.images.forEach(image => {
+            image.node.querySelector('.img').addEventListener('click', this.onClickDetail);
         });
     }
 
-    static addTabsListeners() {
-        [...document.querySelectorAll('[data-sample-id]')].forEach(x => {
-            x.addEventListener('click', this.scrollToColor);
+    removeSampleGalleryListeners() {
+        this.setTrackHistory(false);
+        const imagesSamples = [...document.querySelectorAll('.full-samples-gallery__item img')];
+        Follower.removeMouseListener(imagesSamples);
+        /*
+        if (typeof Samples.onScroll === 'function' && Dom.fastscroll) {
+            document.querySelector('.full-samples-gallery__wrapper').removeEventListener('scroll', Samples.onScroll);
+        }
+        */
+        const fullSamplesClose = document.querySelector('.full-samples-gallery__close');
+        if (fullSamplesClose) {
+            fullSamplesClose.removeEventListener('click', this.onClickClose);
+        }
+        const fullSamplesWrapper = document.querySelector('.full-samples-gallery__wrapper');
+        if (fullSamplesWrapper) {
+            fullSamplesWrapper.removeEventListener('click', this.onScroll);
+        }
+        this.images.forEach(image => {
+            image.node.querySelector('.img').removeEventListener('click', this.onClickDetail);
         });
+        this.categories.forEach(x => x.destroy());
+    }
+
+    destroy() {
+        this.removeListeners();
+        this.removeSampleGalleryListeners();
+        this.images = [];
+        this.categories = [];
+    }
+
+    static getGutter() {
+        return window.innerWidth > 768 ? 100 : 100;
     }
 
     static destroyAll() {
-        if (Samples.items) {
-            Samples.items.forEach(sample => {
-                sample.destroy();
-            });
-        }
-        Samples.removeTabsListeners();
+        Samples.items.forEach(x => x.destroy());
     }
 
-    static init(debug) {
+    static init() {
         Samples.items = [...document.querySelectorAll('[data-samples]')].map((element, id) => new Samples(element, id));
-        if (debug) {
-            console.log('Samples: ', Samples.items);
-        }
+        debug__('Samples: ', Samples.items);
     }
+
+    static onSamplesDetailDidClose() {
+        Samples.items.forEach(x => x.onSamplesDetailDidClose());
+    }
+
 }
+
+Samples.items = [];

@@ -1,10 +1,12 @@
 /* jshint esversion: 6 */
 
-import Utils from './utils';
-import LazyLoad from './lazyload';
+import {
+    setTimeout
+} from 'timers';
 import Appears from './appears';
-import { setTimeout } from 'timers';
 import Follower from './follower';
+import LazyLoad from './lazyload';
+import Utils from './utils';
 
 const body = document.querySelector('body');
 let subFiltersOpen = false;
@@ -42,7 +44,11 @@ export default class Filters {
                 fl[prop].forEach(function (v) {
                     var el = document.querySelector('[data-name="' + prop + '"][data-value="' + v + '"]');
                     if (el) {
-                        tt.push({ name: prop, val: v, desc: el.attributes["data-desc"].value });
+                        tt.push({
+                            name: prop,
+                            val: v,
+                            desc: el.attributes["data-desc"].value
+                        });
                     }
                 });
             });
@@ -67,8 +73,7 @@ export default class Filters {
                 if (ok) this.productsFounded++;
                 if (ok && filtered.length < this.page * this.elementsInPage) filtered.push(p);
             })
-        }
-        else {
+        } else {
             filtered = [...this.products].slice(0, this.page * this.elementsInPage);
             this.productsFounded = _products.length;
         }
@@ -89,18 +94,22 @@ export default class Filters {
             if (!this.filter[k]) this.filter[k] = [];
             this.filter[k].push(v);
             if (this.tags.find(x => x.val === v) === undefined) {
-                this.tags.push({ name: k, val: v, desc: d });
+                this.tags.push({
+                    name: k,
+                    val: v,
+                    desc: d
+                });
             }
-        };
+        }
         this.filterProducts();
         e.preventDefault();
-    };
+    }
 
     incrementPage(e) {
         this.page++;
         this.filterProducts();
         e.preventDefault();
-    };
+    }
 
     reset(e) {
         this.filter = {};
@@ -120,7 +129,9 @@ export default class Filters {
         this.containerListDOM.innerHTML = template(data);
 
         template = Handlebars.compile(document.getElementById("list-tag-template").innerHTML);
-        this.containerTagDOM.innerHTML = template({ items: this.tags });
+        this.containerTagDOM.innerHTML = template({
+            items: this.tags
+        });
 
         if (this.productsFounded > this.page * this.elementsInPage) {
             this.loadMoreDOM.style.display = 'block';
@@ -227,16 +238,14 @@ export default class Filters {
         Follower.removeMouseListener([...document.querySelectorAll('.listing-follower .picture__container img')]);
     }
 
-    static init(debug) {
+    static init() {
         Handlebars.registerHelper('imageCollection', function (collection, highlight, collectionId) {
             var nameProp = 'i' + (highlight ? '2' : '1') + (collectionId ? '-' + collectionId : '');
             if (collectionId && collection[nameProp]) return collection[nameProp];
             return collection['i' + (highlight ? '2' : '1')];
         });
         Filters.items = [...document.querySelectorAll('[data-filters]')].map((element, id) => new Filters(element, id));
-        if (debug) {
-            console.log('Filters: ', Filters.items);
-        }
+        debug__('Filters: ', Filters.items);
     }
 
 }

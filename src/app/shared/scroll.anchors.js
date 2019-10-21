@@ -66,17 +66,24 @@ export default class ScrollAnchors {
     }
 
     onWrapperScroll(e) {
-        const anchor = this.areas.find((area, i) => {
+        const area = this.areas.find((area, i) => {
             const top = area.getBoundingClientRect().top;
             const bottom = i < this.areas.length - 1 ? this.areas[i + 1].getBoundingClientRect().top : Number.POSITIVE_INFINITY;
-            this.titles.forEach(title => {
-                title.classList.remove('active');
-            });
             if (top < this.offset && bottom > this.offset) {
-                this.titles[i].classList.add('active');
                 return area;
             }
         });
+        if (this.area_ !== area) {
+            this.area_ = area;
+            const areaIndex = this.areas.indexOf(area);
+            this.titles.forEach((title, i) => {
+                if (i === areaIndex) {
+                    title.classList.add('active');
+                } else {
+                    title.classList.remove('active');
+                }
+            });
+        }
     }
 
     onScroll(e) {
@@ -99,11 +106,9 @@ export default class ScrollAnchors {
         });
     }
 
-    static init(debug) {
+    static init() {
         ScrollAnchors.items = [...document.querySelectorAll('[data-scroll-anchors]')].map((node, id) => new ScrollAnchors(node, id, window));
-        if (debug) {
-            console.log('ScrollAnchors: ', ScrollAnchors.items);
-        }
+        debug__('ScrollAnchors: ', ScrollAnchors.items);
     }
 
     static onScroll(e) {

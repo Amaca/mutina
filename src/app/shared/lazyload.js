@@ -44,11 +44,9 @@ export default class LazyLoad {
     }
 
     //INIT
-    static init(debug) {
+    static init() {
         LazyLoad.items = [...document.querySelectorAll('[data-load]')].map((element, id) => new LazyLoad(element, id));
-        if (debug) {
-            console.log('Lazy load: ', LazyLoad.items);
-        }
+        debug__('Lazy load: ', LazyLoad.items);
     }
 
     static destroyAll() {

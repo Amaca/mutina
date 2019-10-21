@@ -1,6 +1,5 @@
 /* jshint esversion: 6 */
 
-
 export default class Dom {
 
     static detect(node) {
@@ -70,12 +69,12 @@ export default class Dom {
                     document.removeEventListener('scroll', onScroll);
                     Dom.fastscroll = true;
                     node.classList.add('fastscroll');
-                    console.log(`%c scroll ${diff}`, 'background: #222; color: #bada55');
+                    debug__(`%c scroll ${diff}`, 'background: #222; color: #bada55');
                 }
             }
             Dom.lastScrollTime = now;
         };
-        console.log('%c addOnScroll', 'background: #222; color: #bada55');
+        debug__('%c addOnScroll', 'background: #222; color: #bada55');
         document.addEventListener('scroll', onScroll);
         */
     }
@@ -90,6 +89,32 @@ export default class Dom {
 
     static scrollTop() {
         return document && document.defaultView ? document.defaultView.pageYOffset : 0;
+    }
+
+    static scrollPosition(target) {
+        if (target) {
+            return target.scrollTop;
+        } else if (Dom.fastscroll) {
+            return window.pageYOffset;
+        } else {
+            return Number(document.querySelector('.page').style.transform.replace(/[^\d.]/g, ''));
+        }
+    }
+
+    static freezeScroll() {
+        // pause scroll
+        // get scroll height
+        Dom.pause = true;
+        Dom.scrollPosition_ = Dom.scrollPosition();
+    }
+
+    static resumeScroll() {
+        // set scroll height
+        // resume scroll        
+        setTimeout(x => {
+            Dom.pause = false;
+            window.scrollTo(0, Dom.scrollPosition_);
+        }, 100);
     }
 
 }

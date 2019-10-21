@@ -76,10 +76,12 @@ export default class Utils {
     }
 
     static toggleClass(target, cssClass) {
-        if (target.classList.contains(cssClass)) {
-            target.classList.remove(cssClass);
-        } else {
-            target.classList.add(cssClass);
+        if (target) {
+            if (target.classList.contains(cssClass)) {
+                target.classList.remove(cssClass);
+            } else {
+                target.classList.add(cssClass);
+            }
         }
     }
 

@@ -1,5 +1,4 @@
 /* jshint esversion: 6 */
-import Utils from './utils';
 
 export default class Wishlist {
 
@@ -13,7 +12,7 @@ export default class Wishlist {
         Wishlist.attributeListSelector = 'input[data-wishlist]';
         Wishlist.localstorageKey = 'wishlist';
         Wishlist.containerSelector = '.side-panel__list';
-        Wishlist.requestBtnSelector = '.side-panel__footer .cta--next'; 
+        Wishlist.requestBtnSelector = '.side-panel__footer .cta--next';
         Wishlist.requestBtnClass = 'disable';
     }
 
@@ -21,7 +20,9 @@ export default class Wishlist {
         $.ajax({
             type: "POST",
             url: '/WS/wsWishlist.asmx/Html',
-            data: JSON.stringify({ listId: Wishlist.items }),
+            data: JSON.stringify({
+                listId: Wishlist.items
+            }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
@@ -29,7 +30,7 @@ export default class Wishlist {
                 Wishlist.buttons();
             },
             error: function (data) {
-                console.log(data);
+                error__('Wishlist.loadHtml', data);
             }
         });
     }
@@ -38,9 +39,10 @@ export default class Wishlist {
         var wishid = e.target.attributes[Wishlist.attribute].value;
         if (Wishlist.items && Wishlist.items.includes(wishid)) {
             e.target.innerHTML = Wishlist.lblAdd;
-            Wishlist.items = Wishlist.items.filter(function (v) { return v != wishid });
-        }
-        else {
+            Wishlist.items = Wishlist.items.filter(function (v) {
+                return v != wishid
+            });
+        } else {
             e.target.innerHTML = Wishlist.lblRemove;
             Wishlist.items.push(wishid);
         }
@@ -52,9 +54,9 @@ export default class Wishlist {
     static buttons() {
         document.querySelectorAll(Wishlist.attributeSelector)
             .forEach(e => {
-                e.innerHTML = (Wishlist.items.some(x => x == e.attributes[Wishlist.attribute].value))
-                    ? Wishlist.lblRemove
-                    : Wishlist.lblAdd;
+                e.innerHTML = (Wishlist.items.some(x => x == e.attributes[Wishlist.attribute].value)) ?
+                    Wishlist.lblRemove :
+                    Wishlist.lblAdd;
                 e.addEventListener('click', this.addOrRemove);
             });
         document.querySelectorAll(Wishlist.attributeCountSelector)
@@ -76,7 +78,7 @@ export default class Wishlist {
         }
     }
 
-    static init(debug) {
+    static init() {
         Wishlist.Config();
         Wishlist.checkCounter();
         if (localStorage.getItem(Wishlist.localstorageKey))

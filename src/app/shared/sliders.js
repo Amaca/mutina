@@ -222,11 +222,9 @@ export default class Sliders {
         this.swiperInstance.slideTo(Number(selectedParent.getAttribute('data-id')));
     }
 
-    static init(debug) {
+    static init() {
         Sliders.items = [...document.querySelectorAll('.swiper-container')].map((slider, index) => new Sliders(slider, index));
-        if (debug) {
-            console.log('Sliders: ', Sliders.items);
-        };
+        debug__('Sliders: ', Sliders.items);
     }
 
     static destroyAll() {

@@ -4,7 +4,6 @@ import "gsap/ScrollToPlugin";
 import Samples from "./samples";
 import Utils from "./utils";
 import Wishlist from "./wishlist";
-import Dom from './dom';
 
 let clickTab;
 let scrollWrapper;
@@ -36,15 +35,12 @@ export default class SamplesDetail {
         const back = document.querySelector('.full-samples-gallery__back svg');
         const headerCat = document.querySelector('.full-samples-gallery__header-cat');
         const viewportWidth = window.innerWidth > 768 ? ((window.innerWidth * 8) / 10) : ((window.innerWidth * 6) / 10);
-        //document.querySelector('.full-samples-gallery__wrapper').style.cssText = 'overflow: hidden;';
-        
+        //document.querySelector('.full-samples-gallery__wrapper').style.cssText = 'overflow: hidden;';        
         clickBack = (e) => {
             SamplesDetail.closeLayer(wrapper, back, headerCat, viewportWidth);
             e.preventDefault();
         };
-
         back.addEventListener('click', clickBack);
-
         TweenMax.set(wrapper, {
             bottom: -wrapper.offsetHeight,
         });
@@ -61,13 +57,13 @@ export default class SamplesDetail {
         TweenMax.to(back, 1, {
             transform: 'translateX(0)',
             ease: Expo.easeInOut
-        })
+        });
         TweenMax.to(headerCat, 1, {
             marginLeft: '146px',
             maxWidth: (viewportWidth - 146) + 'px',
             flex: '0 0 ' + (viewportWidth - 146) + 'px',
             ease: Expo.easeInOut
-        })
+        });
     }
 
     static closeLayer(wrapper, back, headerCat, viewportWidth) {
@@ -98,7 +94,7 @@ export default class SamplesDetail {
             ease: Expo.easeInOut,
             onComplete: () => {
                 SamplesDetail.destroyAll();
-                Samples.addTabsListeners(); 
+                Samples.onSamplesDetailDidClose();
             }
         });
     }
@@ -107,10 +103,8 @@ export default class SamplesDetail {
         const wrapper = document.querySelector('.detail-samples-gallery__wrapper');
         const back = document.querySelector('.full-samples-gallery__back svg');
         const tabs = [...document.querySelectorAll('.full-samples-gallery__header-cat ul li div')];
-
         body.classList.remove('detail-sample-gallery-open');
         //html.style.overflow = 'initial';
-
         tabs.forEach(tab => {
             tab.removeEventListener('click', clickTab);
         });

@@ -1,108 +1,118 @@
 /* jshint esversion: 6 */
 
+import Dom from './dom';
 
-const body = document.querySelector('body');
-const header = document.querySelector('header');
-const page = document.querySelector('.page');
-let destroyed = true;
-let topControl;
-export default class Anchors {
+export class AnchorItem {
 
-    constructor(node, wrapper, gutter, index) {
-        const list = document.querySelector('ul.anchor-nav');
-        const navItem = document.createElement('li');
+    constructor(index, parent, target) {
+        const listItem = document.createElement('li');
         const anchor = document.createElement('a');
-
         this.id = index;
-        this.node = node;
-        this.wrapper = wrapper;
-        this.gutter = window.innerWidth > 768 ? gutter : gutter / 2;
-        this.name = this.getName();
+        this.target = target;
+        this.name = this.target.getAttribute('data-anchor');
         this.offset = this.getOffset();
-
-        navItem.className = 'anchor-' + this.name.replace(/[^\w\s]/g, '').toLowerCase();
-        list.appendChild(navItem);
-
+        // debug__(this.offset);
+        listItem.className = 'anchor-' + this.name.replace(/[^\w\s]/g, '').toLowerCase();
+        parent.appendChild(listItem);
         anchor.textContent = this.name;
         anchor.className = 'scroll-to-' + this.id;
         anchor.setAttribute('href', '#');
-        navItem.appendChild(anchor);
-
+        listItem.appendChild(anchor);
         this.anchor = anchor;
-
+        this.onClick = this.onClick.bind(this);
         this.addListeners();
     }
 
+    getOffset() {
+        return this.target.getBoundingClientRect().top + Dom.scrollPosition();
+    }
+
+    onClick(e) {
+        window.scrollTo(0, this.getOffset() - Anchors.getGutter() + 1);
+        e.preventDefault();
+    }
+
     addListeners() {
-        const click = (e) => {
-            window.scrollTo(0, this.offset + this.gutter);
-            e.preventDefault();
-        };
-        this.click = click;
-        this.anchor.addEventListener('click', this.click);
+        this.anchor.addEventListener('click', this.onClick);
+    }
+
+    removeListeners() {
+        this.anchor.removeEventListener('click', this.onClick);
     }
 
     destroy() {
-        this.anchor.removeEventListener('click', this.click);
+        this.removeListeners();
     }
 
-    getName() {
-        return this.node.getAttribute('data-anchor');
-    }
+}
 
-    getOffset() {
-        return this.node.getBoundingClientRect().top;
-    }
+export default class Anchors {
 
-    static init(wrapper, gutter, debug) {
-        if (Anchors.items > 0) {
-            Anchors.destroyAll();
+    constructor(node) {
+        this.node = node;
+        const ul = document.createElement('ul');
+        ul.className = 'anchor-nav';
+        node.appendChild(ul);
+        this.ul = ul;
+        this.items = [...document.querySelectorAll('[data-anchor]')].map((element, index) => new AnchorItem(index, ul, element));
+        debug__('Anchors', this.items);
+        if (this.items.length > 0) {
+            node.parentElement.style.display = 'flex';
+            this.onScroll();
+        } else {
+            node.parentElement.style.display = 'none';
         }
-        if (wrapper) {
-            let list = document.createElement('ul');
-            Anchors.gutter = gutter;
-            list.className = 'anchor-nav';
-            wrapper.appendChild(list);
-            Anchors.items = [...document.querySelectorAll('[data-anchor]')].map((element, index) => new Anchors(element, wrapper, gutter, index));
-            if (debug) {
-                console.log('Anchors: ', Anchors.items);
-            }
-            if (Anchors.items.length > 0) {
-                wrapper.parentElement.style.display = 'flex';
-                destroyed = false;
-                Anchors.onScroll();
-            } else {
-                wrapper.parentElement.style.display = 'none';
-            }
+    }
 
+    onScroll() {
+        const anchors = this.items;
+        if (anchors.length) {
+            const selectedAnchor = anchors.find((x, i) => {
+                const top = x.target.getBoundingClientRect().top;
+                const bottom = i < anchors.length - 1 ? anchors[i + 1].target.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
+                if ((top < Anchors.getGutter() || i === 0) && bottom > Anchors.getGutter()) {
+                    x.anchor.classList.add('active');
+                    return x;
+                }
+            });
+            if (this.currentAnchor_ !== selectedAnchor) {
+                this.currentAnchor_ = selectedAnchor;
+                anchors.forEach((x) => {
+                    if (x === selectedAnchor) {
+                        x.anchor.classList.add('active');
+                    } else {
+                        x.anchor.classList.remove('active');
+                    }
+                });
+            }
         }
+    }
+
+    destroy() {
+        this.items.forEach(x => x.destroy());
+        this.items = [];
+        if (this.ul) {
+            this.ul.remove();
+        }
+    }
+
+    static getGutter() {
+        return window.innerWidth > 768 ? 200 : 100;
+    }
+
+    static init() {
+        Anchors.destroyAll();
+        Anchors.items = [...document.querySelectorAll('.anchors__wrapper')].map(x => new Anchors(x));
     }
 
     static onScroll() {
-        if (!destroyed) {
-            const anchor = Anchors.items.find((anchor, i, anchors) => {
-                const top = anchor.node.getBoundingClientRect().top;
-                const bottom = i < anchors.length - 1 ? anchors[i + 1].node.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
-                anchors.forEach((elem, i) => {
-                    elem.anchor.classList.remove('active');
-                });
-                if (top < Anchors.gutter && bottom > Anchors.gutter) {
-                    anchors[i].anchor.classList.add('active');
-                    return anchor;
-                }
-            });
-        }
+        Anchors.items.forEach(x => x.onScroll());
     }
 
     static destroyAll() {
-        if (Anchors.items) {
-            Anchors.items.forEach(anchor => {
-                anchor.destroy();
-            });
-        }
-        if (document.querySelector('ul.anchor-nav')) {
-            document.querySelector('ul.anchor-nav').remove();
-        }
-        destroyed = true;
+        Anchors.items.forEach(x => x.destroy());
+        Anchors.items = [];
     }
 }
+
+Anchors.items = [];

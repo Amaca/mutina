@@ -1,10 +1,10 @@
 /* jshint esversion: 6 */
 /* tweenmax & swiper needed */
 
+import Dom from './dom';
 import FancyTransition from './fancy.transition';
 import Follower from './follower';
 import Utils from './utils';
-import Dom from './dom';
 
 let clickClose;
 let clickSwitch;
@@ -53,11 +53,9 @@ export default class Fancy {
     }
 
     //INIT
-    static init(debug) {
+    static init() {
         Fancy.items = [...document.querySelectorAll('[data-fancy-img]')].map((element, id) => new Fancy(element, id));
-        if (debug) {
-            console.log('Fancy: ', Fancy.items);
-        }        
+        debug__('Fancy: ', Fancy.items);
     }
 
     //DESTROY ALL NODES AND CREATED CONTAINER ELEMENTS
@@ -129,7 +127,7 @@ export default class Fancy {
             const detailGallerySwitch = document.querySelector('.detail-gallery__cta');
             clickSwitch = (e) => {
                 Fancy.close(e, 'detailGallery', true, detailGalleryBg, detailGalleryClose, detailGalleryWrapper, null, detailGalleryFooter, detailGallery);
-            }; 
+            };
             detailGallerySwitch.addEventListener('click', clickSwitch);
         }
 
@@ -199,7 +197,7 @@ export default class Fancy {
 
         const images = [...document.querySelectorAll('.detail-gallery__swiper .swiper-lazy')].filter(x => x.getAttribute('data-fancy-zoom') === 'true');
 
-        Follower.addMouseListener(images); 
+        Follower.addMouseListener(images);
 
         let options = {
             watchOverflow: true,
@@ -331,7 +329,7 @@ export default class Fancy {
                 //     transform: 'scale(2)',
                 //     ease: Expo.easeInOut
                 // });
-                // console.log('attivo');
+                // debug__('attivo');
                 // e.target.addEventListener('dragstart', dragStart);
                 // e.target.addEventListener('drag', dragMove);
                 // e.target.addEventListener('dragend', dragEnd);
@@ -347,7 +345,7 @@ export default class Fancy {
                 //     transform: 'scale(1)',
                 //     ease: Expo.easeInOut
                 // });
-                // console.log('disattivo')
+                // debug__('disattivo')
                 // e.target.removeEventListener('dragstart', dragStart);
                 // e.target.removeEventListener('drag', dragMove);
                 // e.target.removeEventListener('dragend', dragEnd);

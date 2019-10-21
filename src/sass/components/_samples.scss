@@ -145,6 +145,35 @@ $slider-samples-arrow-close-zoom-fill: white;
             display: inline-block;
             padding: 0 20px;
 
+            a {
+                position: relative;
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    z-index: 2;
+                    width: 0;
+                    transition: all 1000ms cubic-bezier(0, 0.97, 0.43, 1);
+                    transform-origin: left;
+                    left: auto;
+                    right: 0;
+                    bottom: -3px;
+                    height: 2px;
+                    background: $dark;
+                }
+
+                &.active {
+                    color: $dark;
+
+                    &:before {
+                        right: auto;
+                        transform-origin: right;
+                        width: 100%;
+                        left: 0;
+                    }
+                }
+            }
+
             div {
                 cursor: pointer;
                 color: $grey;
@@ -263,7 +292,6 @@ $slider-samples-arrow-close-zoom-fill: white;
         }
     }
 }
-
 
 //FULL SAMPLES GALLERY
 .full-samples-gallery__wrapper {
@@ -419,7 +447,6 @@ $slider-samples-arrow-close-zoom-fill: white;
         }
     }
 }
-
 
 body.samples-gallery-open {
     overflow: hidden;

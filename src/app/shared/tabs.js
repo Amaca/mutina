@@ -53,9 +53,9 @@ export default class Tabs {
         setTimeout(() => {
             Tabs.items.forEach(elem => {
                 elem.reset();
-                console.log('reset')
+                // debug__('reset');
             });
-        }, 500)
+        }, 500);
     }
 
     static destroyAll() {
@@ -64,10 +64,8 @@ export default class Tabs {
         });
     }
 
-    static init(debug) {
+    static init() {
         Tabs.items = [...document.querySelectorAll('[data-tabs]')].map((node, index) => new Tabs(node, index));
-        if (debug) {
-            console.log('Tabs: ', Tabs.items);
-        }
+        debug__('Tabs: ', Tabs.items);
     }
 }

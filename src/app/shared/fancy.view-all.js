@@ -1,11 +1,11 @@
 /* jshint esversion: 6 */
 /* tweenmax & swiper needed */
 
+import Dom from './dom';
 import Fancy from './fancy';
 import FancyTransition from "./fancy.transition";
-import LazyLoad from './lazyload';
 import Follower from './follower';
-import Dom from './dom';
+import LazyLoad from './lazyload';
 
 let clickClose;
 
@@ -41,11 +41,9 @@ export default class FancyViewAll {
     }
 
     //INIT
-    static init(debug) {
+    static init() {
         FancyViewAll.items = [...document.querySelectorAll('[data-fancy-view-all]')].map((element, id) => new FancyViewAll(element, id));
-        if (debug) {
-            console.log('FancyViewAll: ', FancyViewAll.items);
-        }
+        debug__('FancyViewAll: ', FancyViewAll.items);
     }
 
     //DESTROY ALL NODES AND CREATED CONTAINER ELEMENTS
@@ -102,7 +100,7 @@ export default class FancyViewAll {
             if (typeof FancyViewAll.onScroll === 'function' && Dom.fastscroll) {
                 FancyViewAll.onScroll();
             }
-        }); 
+        });
 
         if (typeof FancyViewAll.onScroll === 'function' && Dom.fastscroll) {
             fullGalleryWrapper.addEventListener('scroll', FancyViewAll.onScroll);
@@ -130,7 +128,7 @@ export default class FancyViewAll {
         thumbItems.forEach(thumb => {
             thumbHtml += thumb.html;
         });
-               
+
         container.innerHTML = `<div class="full-gallery__list">${thumbHtml}</div>`;
 
         LazyLoad.init();

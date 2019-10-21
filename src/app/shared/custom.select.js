@@ -9,10 +9,10 @@ export default class CustomSelect {
         this.node = node;
         this.id = id;
         this.instance = new Choices(node, {
-            searchEnabled: false, 
+            searchEnabled: false,
             itemSelectText: '',
             shouldSort: false
-        });   
+        });
     }
 
     destroy() {
@@ -25,10 +25,8 @@ export default class CustomSelect {
         });
     }
 
-    static init(debug) {
-        CustomSelect.items = [...document.querySelectorAll('[data-select]:not(.choices__input)')].map((node, id) => new CustomSelect(node, id)); 
-        if (debug) {
-            console.log('CustomSelect: ', CustomSelect.items);
-        }
+    static init() {
+        CustomSelect.items = [...document.querySelectorAll('[data-select]:not(.choices__input)')].map((node, id) => new CustomSelect(node, id));
+        debug__('CustomSelect: ', CustomSelect.items);
     }
 }

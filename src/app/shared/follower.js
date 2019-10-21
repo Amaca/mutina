@@ -65,15 +65,15 @@ export default class Follower {
                 return p;
             }
         }, {
-                match: false,
-                x: this.mouse.x,
-                y: this.mouse.y,
-                width: size,
-                height: size,
-                radius: 75,
-                scale: 0.25,
-                opacity: 0.15,
-            });
+            match: false,
+            x: this.mouse.x,
+            y: this.mouse.y,
+            width: size,
+            height: size,
+            radius: 75,
+            scale: 0.25,
+            opacity: 0.15,
+        });
         this.magnet = magnet;
     }
 
@@ -109,7 +109,7 @@ export default class Follower {
                     image.addEventListener('mouseover', Follower.mouseEnter);
                     image.addEventListener('mouseout', Follower.mouseLeave);
                 }
-                //console.log('addevent foreach', image);
+                //debug__('addevent foreach', image);
             });
         }
 
@@ -118,7 +118,7 @@ export default class Follower {
                 node.addEventListener('mouseover', Follower.mouseEnter);
                 node.addEventListener('mouseout', Follower.mouseLeave);
             }
-            //console.log('addlistener', node);
+            //debug__('addlistener', node);
         }
     }
 
@@ -129,7 +129,7 @@ export default class Follower {
                     image.removeEventListener('mouseover', Follower.mouseEnter);
                     image.removeEventListener('mouseout', Follower.mouseLeave);
                 }
-                //console.log('removelistener foreach', image);
+                //debug__('removelistener foreach', image);
             });
         }
 
@@ -138,7 +138,7 @@ export default class Follower {
                 node.removeEventListener('mouseover', Follower.mouseEnter);
                 node.removeEventListener('mouseout', Follower.mouseLeave);
             }
-            //console.log('removelistener', node);
+            //debug__('removelistener', node);
         }
 
         Follower.mouseLeave();

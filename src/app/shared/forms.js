@@ -2,13 +2,14 @@
 import SidePanel from "./side.panel";
 
 $.validator.defaults.getDataToSend = function (form) {
-    return { data: GetJsonData(form) };
+    return {
+        data: GetJsonData(form)
+    };
 };
 $.validator.defaults.callbackHandler = function (data, form) {
     if (data.d.Status) {
         $(form).find(".form-results").removeClass("error");
-    }
-    else {
+    } else {
         $(form).find("[type=submit]").show();
         $(form).find(".form-results").addClass("error");
     }
@@ -18,7 +19,7 @@ $.validator.defaults.sendActionsToGTM = function (data, form) {
     if (data.d.Status && data.d.Actions)
         sendActionsToGTM(data.d.Actions);
 }
-$.validator.defaults.errorPlacement = function (label, element) { }
+$.validator.defaults.errorPlacement = function (label, element) {}
 
 $.validator.defaults.submitHandler = function () {
     var validator = this,
@@ -36,7 +37,7 @@ $.validator.defaults.submitHandler = function () {
         success: function (data) {
             try {
                 validator.settings.sendActionsToGTM(data, form);
-            } catch (ex) { }
+            } catch (ex) {}
             validator.settings.callbackHandler(data, form);
         },
         error: function (data) {
@@ -87,7 +88,7 @@ $.validator.addMethod('require-one', function (value, element) {
 function GetJsonData(formObj) {
     var d = {};
     var form = $(formObj);
-    var fields = form.find("input[name!=''][type!=submit][type!=reset]")/*.filter("[type=email], [type=text], [type=password], [type=checkbox], [type=radio], [type=hidden]")*/;
+    var fields = form.find("input[name!=''][type!=submit][type!=reset]") /*.filter("[type=email], [type=text], [type=password], [type=checkbox], [type=radio], [type=hidden]")*/ ;
 
     fields.each(function () {
         var
@@ -105,7 +106,9 @@ function GetJsonData(formObj) {
                     if (d[name]) return;
 
                     var values = [];
-                    list.each(function () { if ($(this).is(':checked')) values.push($(this).val()); });
+                    list.each(function () {
+                        if ($(this).is(':checked')) values.push($(this).val());
+                    });
                     value = values.join(',');
                 }
                 break;
@@ -138,9 +141,12 @@ function sendActionsToGTM(obj) {
             actions = obj;
 
         for (var i = 0; i < actions.length; i++) {
-            dataLayer.push({ "event": "Action Complete", "wsActionComplete": actions[i] });
+            dataLayer.push({
+                "event": "Action Complete",
+                "wsActionComplete": actions[i]
+            });
         }
-    } catch (ex) { }
+    } catch (ex) {}
 }
 
 export default class Forms {
@@ -195,8 +201,7 @@ export default class Forms {
         if (data.d.Status) {
             $(".nav__login").attr("data-islogged", 1);
             location.href = $(form).attr("data-reloadurl");
-        }
-        else {
+        } else {
             if (data.d.Props.DoReset) {
                 SidePanel.reset();
                 $(form).find("[type=submit]").css('pointer-events', 'unset');
@@ -241,7 +246,7 @@ export default class Forms {
         e.preventDefault();
     }
 
-    static init(debug) {
+    static init() {
         Forms.items = [...document.querySelectorAll('.contact-form')]
             .map((element, index) => new Forms(element, index));
 
@@ -251,14 +256,17 @@ export default class Forms {
         if (document.querySelector("#annulla-forgot-password"))
             document.querySelector("#annulla-forgot-password").addEventListener('click', this.viewLogin);
 
-        [...document.querySelectorAll('.btn-logout')].forEach(x => { x.addEventListener('click', this.logout); });
+        [...document.querySelectorAll('.btn-logout')].forEach(x => {
+            x.addEventListener('click', this.logout);
+        });
 
-        if (debug)
-            console.log('Forms: ', Forms.items);
+        debug__('Forms: ', Forms.items);
     }
 
     static destroyAll() {
-        Forms.items.forEach(form => { form.validator.destroy(); });
+        Forms.items.forEach(form => {
+            form.validator.destroy();
+        });
 
         if (document.querySelector("#lost-password-button"))
             document.querySelector("#lost-password-button").removeEventListener('click', this.viewPasswordRecovery);
@@ -266,7 +274,9 @@ export default class Forms {
         if (document.querySelector("#annulla-forgot-password"))
             document.querySelector("#annulla-forgot-password").removeEventListener('click', this.viewLogin);
 
-        [...document.querySelectorAll('.btn-logout')].forEach(x => { x.removeEventListener('click', this.logout); });
+        [...document.querySelectorAll('.btn-logout')].forEach(x => {
+            x.removeEventListener('click', this.logout);
+        });
 
     }
 

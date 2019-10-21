@@ -8,7 +8,7 @@ let desktopVersion;
 
 export default class FancyDetail {
 
-    static init(debug) {
+    static init() {
         if (window.innerWidth > 768) {
             this.initDesktopSidebar();
             desktopVersion = true;
@@ -81,7 +81,7 @@ export default class FancyDetail {
         //        document.querySelector('.fancy-detail').appendChild(sidebarClone);
         //        sidebar.remove();
         //        desktopVersion = false;
-                
+
         //    } 
         //} else {
         //    if (document.querySelector('.fancy-detail')) {

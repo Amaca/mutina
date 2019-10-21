@@ -36,7 +36,7 @@ export default class Rect {
         if (node.getClientRects().length) {
             let boundingRect = node.getBoundingClientRect();
             // const defaultView = node.ownerDocument.defaultView;
-            // console.log('rect', node.getBoundingClientRect());
+            // debug__('rect', node.getBoundingClientRect());
             rect.set(boundingRect);
         }
         return rect;

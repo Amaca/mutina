@@ -27,23 +27,36 @@ import ToggleSearch from './shared/toggle.search';
 import Utils from './shared/utils';
 import Wishlist from './shared/wishlist';
 
-//settings
+const debug = false;
+const barbaDebug = debug;
+
+window.debug__ = (...args) => {
+    if (debug) {
+        console.log(...args);
+    }
+};
+window.log__ = (...args) => {
+    console.log(...args);
+};
+window.error__ = (...args) => {
+    console.error(...args);
+};
+
+// settings
 let scrollSpeed = 8;
 const activateIntro = false;
-const debug = true;
-let disableBarba = false; 
+let disableBarba = false;
 const breakTransition = false;
 let smoothScroll = true;
 const disableRender = false;
 
-const barbaDebug = debug;
 let firstLoad = false;
 let scrollPosition = '';
 
 const userAgent = navigator.userAgent.toLowerCase();
 const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
 
-export default class App { 
+export default class App {
 
     constructor() {}
 
@@ -53,7 +66,7 @@ export default class App {
             cssVars();
             document.querySelector('body').classList.add('ie11');
         }
-        console.log('%c Coded by Websolute ', 'background: #01c0f6; color: #fff; border-radius: 20px; padding: 10px;');
+        log__('%c Coded by Websolute ', 'background: #01c0f6; color: #fff; border-radius: 20px; padding: 10px;');
         const body = document.querySelector('body');
         const page = document.querySelector('.page');
         const header = document.querySelector('.header');
@@ -97,7 +110,7 @@ export default class App {
         };
         firstLoad = true;
         Navigation.init();
-        CustomSelect.init(debug);
+        CustomSelect.init();
         body.classList.add('ready');
 
         if ('scrollRestoration' in history) {
@@ -121,9 +134,40 @@ export default class App {
         var scripts = doc.querySelectorAll('script[data-products]');
         if (scripts) {
             scripts.forEach(function (x) {
-                window.eval(x.innerHTML); 
+                window.eval(x.innerHTML);
             });
         }
+    }
+
+    animateTransitionLine(done) {
+        const line = document.querySelector('.transition__line');
+        const boxBack = document.querySelector('.transition__text .box--back');
+        let perfData = window.performance.timing,
+            EstimatedTime = -(perfData.loadEventEnd - perfData.navigationStart),
+            time = parseInt((EstimatedTime / 1000) % 60) * 100,
+            start = 0,
+            end = 100,
+            duration = time;
+        let range = end - start,
+            current = start,
+            increment = end > start ? 1 : -1,
+            stepTime = Math.abs(Math.floor(duration / range));
+        let timer = setInterval(function () {
+            current += increment;
+            TweenMax.to(line, time, {
+                width: current + '%',
+                ease: Expo.easeInOut,
+            });
+            TweenMax.to(boxBack, time, {
+                width: current + '%',
+                ease: Expo.easeInOut,
+            });
+            //debug__('current', current);
+            if (current == end) {
+                clearInterval(timer);
+                done();
+            }
+        }, stepTime);
     }
 
     transitions() {
@@ -144,151 +188,146 @@ export default class App {
                         name: 'default',
                         appear(data) {
                             const done = this.async();
-                            const transitionLayer = document.querySelector('.transition');
-                            const logoWrapper = document.querySelector('.transition .logo__wrapper');
-                            if (activateIntro) {
-                                let tl = new TimelineMax();
-                                const speed = 0.5;
-                                const transform = -10;
-                                tl.timeScale(0.9);
-
-                                const logo = [{
-                                        name: 'charM',
-                                        selector: document.querySelector('.logo__char-m'),
-                                        move: transform,
-                                        width: null,
-                                    },
-                                    {
-                                        name: 'charU',
-                                        selector: document.querySelector('.logo__char-u'),
-                                        move: transform,
-                                        width: null,
-                                    },
-                                    {
-                                        name: 'squarePrimary',
-                                        selector: document.querySelector('.logo__square-primary'),
-                                        width: document.querySelector('.logo__square-primary').width.baseVal.value,
-                                    },
-                                    {
-                                        name: 'charT',
-                                        selector: document.querySelector('.logo__char-t'),
-                                        move: transform,
-                                        width: null,
-                                    },
-                                    {
-                                        name: 'charI',
-                                        selector: document.querySelector('.logo__char-i'),
-                                        move: transform,
-                                        width: null,
-                                    },
-                                    {
-                                        name: 'squareSecondary',
-                                        selector: document.querySelector('.logo__square-secondary'),
-                                        move: transform,
-                                        width: document.querySelector('.logo__square-secondary').width.baseVal.value,
-                                    },
-                                    {
-                                        name: 'charN',
-                                        selector: document.querySelector('.logo__char-n'),
-                                        move: transform,
-                                        width: null,
-                                    },
-                                    {
-                                        name: 'groupA',
-                                        selector: document.querySelector('.logo__group-a'),
-                                        move: transform,
-                                        width: null,
-                                    }
-                                ];
-
-                                tl.set(transitionLayer, {
-                                    height: window.innerHeight + 2,
-                                });
-
-                                logo.forEach(item => {
-                                    if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
-                                        tl.set(item.selector, {
-                                            width: 0,
-                                            transform: 'translateX(' + item.move + 'px)',
-                                            opacity: 1
-                                        });
-                                    } else {
-                                        tl.set(item.selector, {
-                                            transform: 'translateX(' + item.move + 'px)',
-                                            opacity: 0
-                                        });
-                                    }
-                                });
-
-                                logo.forEach((item, index) => {
-                                    let delay = '-=0.4';
-                                    if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
-                                        tl.to(item.selector, speed, {
-                                            width: item.width,
-                                            transform: 'translateX(0px)',
-                                            opacity: 1,
-                                            ease: Expo.easeInOut
-                                        }, delay);
-                                    } else {
-                                        tl.to(item.selector, speed, {
-                                            transform: 'translateX(0px)',
-                                            opacity: 1,
-                                            ease: Expo.easeInOut,
-                                            onComplete: () => {
-                                                if (index === logo.length - 1) {
-                                                    app.onPageInit();
+                            try {
+                                const transitionLayer = document.querySelector('.transition');
+                                const logoWrapper = document.querySelector('.transition .logo__wrapper');
+                                if (activateIntro) {
+                                    let tl = new TimelineMax();
+                                    const speed = 0.5;
+                                    const transform = -10;
+                                    tl.timeScale(0.9);
+                                    const logo = [{
+                                            name: 'charM',
+                                            selector: document.querySelector('.logo__char-m'),
+                                            move: transform,
+                                            width: null,
+                                        },
+                                        {
+                                            name: 'charU',
+                                            selector: document.querySelector('.logo__char-u'),
+                                            move: transform,
+                                            width: null,
+                                        },
+                                        {
+                                            name: 'squarePrimary',
+                                            selector: document.querySelector('.logo__square-primary'),
+                                            width: document.querySelector('.logo__square-primary').width.baseVal.value,
+                                        },
+                                        {
+                                            name: 'charT',
+                                            selector: document.querySelector('.logo__char-t'),
+                                            move: transform,
+                                            width: null,
+                                        },
+                                        {
+                                            name: 'charI',
+                                            selector: document.querySelector('.logo__char-i'),
+                                            move: transform,
+                                            width: null,
+                                        },
+                                        {
+                                            name: 'squareSecondary',
+                                            selector: document.querySelector('.logo__square-secondary'),
+                                            move: transform,
+                                            width: document.querySelector('.logo__square-secondary').width.baseVal.value,
+                                        },
+                                        {
+                                            name: 'charN',
+                                            selector: document.querySelector('.logo__char-n'),
+                                            move: transform,
+                                            width: null,
+                                        },
+                                        {
+                                            name: 'groupA',
+                                            selector: document.querySelector('.logo__group-a'),
+                                            move: transform,
+                                            width: null,
+                                        }
+                                    ];
+                                    tl.set(transitionLayer, {
+                                        height: window.innerHeight + 2,
+                                    });
+                                    logo.forEach(item => {
+                                        if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
+                                            tl.set(item.selector, {
+                                                width: 0,
+                                                transform: 'translateX(' + item.move + 'px)',
+                                                opacity: 1
+                                            });
+                                        } else {
+                                            tl.set(item.selector, {
+                                                transform: 'translateX(' + item.move + 'px)',
+                                                opacity: 0
+                                            });
+                                        }
+                                    });
+                                    logo.forEach((item, index) => {
+                                        let delay = '-=0.4';
+                                        if (item.name === 'squarePrimary' || item.name === 'squareSecondary') {
+                                            tl.to(item.selector, speed, {
+                                                width: item.width,
+                                                transform: 'translateX(0px)',
+                                                opacity: 1,
+                                                ease: Expo.easeInOut
+                                            }, delay);
+                                        } else {
+                                            tl.to(item.selector, speed, {
+                                                transform: 'translateX(0px)',
+                                                opacity: 1,
+                                                ease: Expo.easeInOut,
+                                                onComplete: () => {
+                                                    if (index === logo.length - 1) {
+                                                        app.onPageInit();
+                                                    }
                                                 }
-                                            }
-                                        }, delay);
-                                    }
-                                });
-
-                                tl.to(logoWrapper, 0.8, {
-                                    height: 0,
-                                    ease: Expo.easeInOut,
-                                }, '+=0.5');
-
-                                tl.to(transitionLayer, 1, {
-                                    height: 2,
-                                    top: app.header.clientHeight - 2,
-                                    bottom: 'auto',
-                                    ease: Expo.easeInOut,
-                                    onComplete: function () {
-                                        transitionLayer.style.height = 0;
-                                        transitionLayer.classList.add('transition--no-top-line');
-                                        done();
-                                    }
-                                }, '-=0.6');
-                            } else {
-
-                                TweenMax.set(transitionLayer, {
-                                    height: 0,
-                                    top: 0,
-                                    bottom: 'auto',
-                                });
-                                TweenMax.set(logoWrapper, {
-                                    height: 0,
-                                });
-                                app.onPageInit();
-                                transitionLayer.classList.add('transition--no-top-line');
-                                done();
+                                            }, delay);
+                                        }
+                                    });
+                                    tl.to(logoWrapper, 0.8, {
+                                        height: 0,
+                                        ease: Expo.easeInOut,
+                                    }, '+=0.5');
+                                    tl.to(transitionLayer, 1, {
+                                        height: 2,
+                                        top: app.header.clientHeight - 2,
+                                        bottom: 'auto',
+                                        ease: Expo.easeInOut,
+                                        onComplete: function () {
+                                            transitionLayer.style.height = 0;
+                                            transitionLayer.classList.add('transition--no-top-line');
+                                            done();
+                                        }
+                                    }, '-=0.6');
+                                } else {
+                                    TweenMax.set(transitionLayer, {
+                                        height: 0,
+                                        top: 0,
+                                        bottom: 'auto',
+                                    });
+                                    TweenMax.set(logoWrapper, {
+                                        height: 0,
+                                    });
+                                    app.onPageInit();
+                                    transitionLayer.classList.add('transition--no-top-line');
+                                    done();
+                                }
+                            } catch (e) {
+                                error__(e);
                             }
                         },
                         /////////////////////////////////////////////
-                    beforeLeave() {
+                        beforeLeave() {
                             LazyLoad.items = [];
                         },
                         leave(data) {
-
                             const done = this.async();
-                            const title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'Mutina';
-
-                            let timeDelay = 0;
-                            if (data.trigger !== 'popstate' && data.trigger.getAttribute('data-origin') === 'panel') {
-                                timeDelay = 300;
-                            }
-                            
-                            setTimeout(() => {
+                            try {
+                                const title = data.trigger !== 'popstate' ? data.trigger.getAttribute('data-transition') : 'Mutina';
+                                let timeDelay = 0;
+                                if (data.trigger !== 'popstate' && data.trigger.getAttribute('data-origin') === 'panel') {
+                                    timeDelay = 300;
+                                }
+                                // setTimeout(() => {
                                 textFront.innerHTML = '';
                                 textBack.innerHTML = '';
                                 textFront.innerHTML = title;
@@ -330,92 +369,65 @@ export default class App {
                                         done();
                                     }
                                 }).delay(0.4);
-                            }, timeDelay);
+                                // }, timeDelay);
+                            } catch (e) {
+                                error__(e);
+                            }
                         },
                         afterLeave(data) {
                             const done = this.async();
-                            app.destroyAll(data.current.container);
+                            try {
+                                app.destroyAll(data.current.container);
+                            } catch (e) {
+                                error__(e);
+                            }
                             done();
                         },
                         beforeEnter(data) {
                             const done = this.async();
-                            App.initScript(data);
-                            if (breakTransition) {
-                                throw new Error('stop!');
+                            try {
+                                App.initScript(data);
+                                if (breakTransition) {
+                                    throw new Error('stop!');
+                                }
+                                app.animateTransitionLine(done);
+                                app.onPageInit();
+                                /*
+                                window.daraLayer.push({})
+                                gtm.push({
+                                    title: document.title,
+                                    href: window.href
+                                })
+                                */
+                            } catch (e) {
+                                error__(e);
                             }
-
-                            let perfData = window.performance.timing,
-                                EstimatedTime = -(perfData.loadEventEnd - perfData.navigationStart),
-                                time = parseInt((EstimatedTime / 1000) % 60) * 100,
-                                start = 0,
-                                end = 100,
-                                durataion = time;
-
-                            animateValue(start, end, durataion);
-
-                            function animateValue(start, end, duration) {
-
-                                let range = end - start,
-                                    current = start,
-                                    increment = end > start ? 1 : -1,
-                                    stepTime = Math.abs(Math.floor(duration / range));
-
-                                let timer = setInterval(function () {
-                                    current += increment;
-                                    TweenMax.to(line, time, {
-                                        width: current + '%',
-                                        ease: Expo.easeInOut,
-                                    });
-                                    TweenMax.to(boxBack, time, {
-                                        width: current + '%',
-                                        ease: Expo.easeInOut,
-                                    });
-
-                                    //console.log('current', current);
-
-                                    if (current == end) {
-                                        clearInterval(timer);
-
-                                        done();
-                                    }
-                                }, stepTime);
-                            }
-
-                            app.onPageInit();
-
-                            /*
-                            window.daraLayer.push({
-
-                            })
-                            gtm.push({
-                                title: document.title,
-                                href: window.href
-                            })
-                            */
-                            //done();
                         },
                         enter(data) {
                             const done = this.async();
-                            const header = document.querySelector('header');
-                            app.scrollTo(0, false);
-                            header.style.top = 0;
-                            TweenMax.to(textBack, 1, {
-                                transform: 'translateY(-100%)',
-                                ease: Expo.easeInOut,
-                            }).delay(0.1);
-                            TweenMax.to(textFront, 1, {
-                                transform: 'translateY(-100%)',
-                                ease: Expo.easeInOut,
-                            }).delay(0.1);
-                            TweenMax.to(transitionLayer, 1, {
-                                height: 0,
-                                top: 0,
-                                bottom: 'auto',
-                                ease: Expo.easeInOut,
-                                onComplete: (e) => {
-                                    done();
-                                }
-                            }).delay(0.3);
+                            try {
+                                app.scrollTo(0, false);
+                                app.header.style.top = 0;
+                                TweenMax.to(textBack, 1, {
+                                    transform: 'translateY(-100%)',
+                                    ease: Expo.easeInOut,
+                                }).delay(0.1);
+                                TweenMax.to(textFront, 1, {
+                                    transform: 'translateY(-100%)',
+                                    ease: Expo.easeInOut,
+                                }).delay(0.1);
+                                TweenMax.to(transitionLayer, 1, {
+                                    height: 0,
+                                    top: 0,
+                                    bottom: 'auto',
+                                    ease: Expo.easeInOut,
+                                    onComplete: (e) => {
+                                        done();
+                                    }
+                                }).delay(0.3);
+                            } catch (e) {
+                                error__(e);
+                            }
                         }
                         ////////////////////////////////////////////////////
                     },
@@ -429,6 +441,7 @@ export default class App {
                             },
                         },
                         beforeLeave() {
+                            Dom.freezeScroll();
                             const done = this.async();
                             LazyLoad.items = [];
                             done();
@@ -436,22 +449,37 @@ export default class App {
                         leave(data) {
                             const done = this.async();
                             //scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
-                            //console.log('SCROLLPOSITION'scrollPosition);
+                            //debug__('SCROLLPOSITION'scrollPosition);
                             done();
                         },
                         afterLeave(data) {
                             const done = this.async();
-                            app.destroyAll(data.current.container);
+                            try {
+                                app.destroyAll(data.current.container);
+                            } catch (e) {
+                                error__(e);
+                            }
                             done();
                         },
                         beforeEnter(data) {
                             const done = this.async();
-                            App.initScript(data);
-                            app.onPageInit();
+                            try {
+                                App.initScript(data);
+                                app.onPageInit();
+                            } catch (e) {
+                                error__(e);
+                            }
                             done();
                         },
                         enter(data) {
                             const done = this.async();
+                            try {
+                                // set scroll height
+                                // resume scroll
+                                Dom.resumeScroll();
+                            } catch (e) {
+                                error__(e);
+                            }
                             done();
                         }
                     },
@@ -469,69 +497,85 @@ export default class App {
                         },
                         leave(data) {
                             const done = this.async();
-                            Navigation.reset();
-                            //set scroll position
-                            if (Dom.fastscroll) {
-                                scrollPosition = window.pageYOffset;
-                            } else {
-                                scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
-                            }
-                            TweenMax.set(line, {
-                                width: 0,
-                            });
-                            TweenMax.set(transitionLayer, {
-                                backgroundColor: '#CFCFCF',
-                                bottom: 0,
-                                opacity: 1,
-                                top: 'auto',
-                                height: 0,
-                            });
-                            TweenMax.to(data.current.container, 1, {
-                                transform: 'translateY(-60px)',
-                                ease: Expo.easeInOut
-                            });
-                            TweenMax.to(transitionLayer, 1, {
-                                height: window.innerHeight,
-                                ease: Expo.easeInOut,
-                            });
-                            TweenMax.to(transitionLayer, 0.8, {
-                                backgroundColor: '#ffffff',
-                                ease: Power1.easeOut,
-                                onComplete: (e) => {
-                                    done();
+                            try {
+                                Navigation.reset();
+                                //set scroll position
+                                if (Dom.fastscroll) {
+                                    scrollPosition = window.pageYOffset;
+                                } else {
+                                    scrollPosition = document.querySelector('.page').style.transform.replace(/[^\d.]/g, '');
                                 }
-                            }).delay(0.4);
+                                TweenMax.set(line, {
+                                    width: 0,
+                                });
+                                TweenMax.set(transitionLayer, {
+                                    backgroundColor: '#CFCFCF',
+                                    bottom: 0,
+                                    opacity: 1,
+                                    top: 'auto',
+                                    height: 0,
+                                });
+                                TweenMax.to(data.current.container, 1, {
+                                    transform: 'translateY(-60px)',
+                                    ease: Expo.easeInOut
+                                });
+                                TweenMax.to(transitionLayer, 1, {
+                                    height: window.innerHeight,
+                                    ease: Expo.easeInOut,
+                                });
+                                TweenMax.to(transitionLayer, 0.8, {
+                                    backgroundColor: '#ffffff',
+                                    ease: Power1.easeOut,
+                                    onComplete: (e) => {
+                                        done();
+                                    }
+                                }).delay(0.4);
+                            } catch (e) {
+                                error__(e);
+                            }
                         },
                         afterLeave(data) {
                             const done = this.async();
-                            app.destroyAll(data.current.container);
+                            try {
+                                app.destroyAll(data.current.container);
+                            } catch (e) {
+                                error__(e);
+                            }
                             done();
                         },
                         beforeEnter(data) {
                             const done = this.async();
-                            App.initScript(data);
-                            app.onPageInit();
+                            try {
+                                App.initScript(data);
+                                app.onPageInit();
+                            } catch (e) {
+                                error__(e);
+                            }
                             done();
                         },
                         enter(data) {
                             const done = this.async();
-                            const sidebar = document.querySelector('.fancy-detail__sidebar');
-                            transitionLayer.style.pointerEvents = 'none';
-                            app.scrollTo(0, true);
-                            TweenMax.set(sidebar, {
-                                left: -sidebar.clientWidth
-                            });
-                            TweenMax.to(transitionLayer, 1, {
-                                opacity: 0,
-                                ease: Expo.easeInOut,
-                            });
-                            TweenMax.to(sidebar, 1.5, {
-                                left: 0,
-                                ease: Expo.easeInOut,
-                                onComplete: (e) => {
-                                    done();
-                                }
-                            });
+                            try {
+                                const sidebar = document.querySelector('.fancy-detail__sidebar');
+                                transitionLayer.style.pointerEvents = 'none';
+                                app.scrollTo(0, true);
+                                TweenMax.set(sidebar, {
+                                    left: -sidebar.clientWidth
+                                });
+                                TweenMax.to(transitionLayer, 1, {
+                                    opacity: 0,
+                                    ease: Expo.easeInOut,
+                                });
+                                TweenMax.to(sidebar, 1.5, {
+                                    left: 0,
+                                    ease: Expo.easeInOut,
+                                    onComplete: (e) => {
+                                        done();
+                                    }
+                                });
+                            } catch (e) {
+                                error__(e);
+                            }
                         }
                     },
                     {
@@ -548,80 +592,93 @@ export default class App {
                         },
                         leave(data) {
                             const done = this.async();
-                            const sidebar = document.querySelector('.fancy-detail__sidebar');
-                            const panel = document.querySelector('.fancy-detail__panel');
-                            transitionLayer.style.pointerEvents = 'all';
-                            if (window.innerWidth > 768) {
-                                TweenMax.to(sidebar, 1, {
-                                    left: -sidebar.clientWidth - 10,
-                                    ease: Expo.easeInOut,
-                                });
-                            } else {
-                                TweenMax.to(sidebar, 1, {
-                                    opacity: 0,
-                                    transform: 'translateY(60px)',
-                                    ease: Expo.easeInOut,
-                                });
-                                TweenMax.to(panel, 1, {
-                                    bottom: -panel.clientHeight,
-                                    ease: Expo.easeInOut,
-                                });
-                            }
-
-                            TweenMax.to(data.current.container, 1, {
-                                opacity: 0,
-                                transform: 'translateY(100px)',
-                                ease: Expo.easeInOut,
-                                onComplete: (e) => {
-                                    done();
+                            try {
+                                const sidebar = document.querySelector('.fancy-detail__sidebar');
+                                const panel = document.querySelector('.fancy-detail__panel');
+                                transitionLayer.style.pointerEvents = 'all';
+                                if (window.innerWidth > 768) {
+                                    TweenMax.to(sidebar, 1, {
+                                        left: -sidebar.clientWidth - 10,
+                                        ease: Expo.easeInOut,
+                                    });
+                                } else {
+                                    TweenMax.to(sidebar, 1, {
+                                        opacity: 0,
+                                        transform: 'translateY(60px)',
+                                        ease: Expo.easeInOut,
+                                    });
+                                    TweenMax.to(panel, 1, {
+                                        bottom: -panel.clientHeight,
+                                        ease: Expo.easeInOut,
+                                    });
                                 }
-                            });
+                                TweenMax.to(data.current.container, 1, {
+                                    opacity: 0,
+                                    transform: 'translateY(100px)',
+                                    ease: Expo.easeInOut,
+                                    onComplete: (e) => {
+                                        done();
+                                    }
+                                });
+                            } catch (e) {
+                                error__(e);
+                            }
                         },
                         afterLeave(data) {
                             const done = this.async();
-                            TweenMax.set(transitionLayer, {
-                                top: 'auto',
-                                bottom: 0,
-                                height: window.innerHeight,
-                                backgroundColor: '#ffffff',
-                                opacity: 1,
-                            });
-                            app.destroyAll(data.current.container);
+                            try {
+                                TweenMax.set(transitionLayer, {
+                                    top: 'auto',
+                                    bottom: 0,
+                                    height: window.innerHeight,
+                                    backgroundColor: '#ffffff',
+                                    opacity: 1,
+                                });
+                                app.destroyAll(data.current.container);
+                            } catch (e) {
+                                error__(e);
+                            }
                             done();
                         },
                         beforeEnter(data) {
                             const done = this.async();
-                            App.initScript(data);
-                            app.onPageInit();
+                            try {
+                                App.initScript(data);
+                                app.onPageInit();
+                            } catch (e) {
+                                error__(e);
+                            }
                             done();
                         },
                         enter(data) {
                             const done = this.async();
-                            //scroll to scroll position
-                            setTimeout(x => {
-                                if (Dom.fastscroll) {
-                                    app.scrollTo(scrollPosition, true);
-                                } else {
-                                    app.scrollTo(Number(scrollPosition), true);
-                                }
-                                scrollPosition = 0;
-                            }, 100);
-                            TweenMax.to(transitionLayer, 1, {
-                                height: 0,
-                                backgroundColor: '#CFCFCF',
-                                ease: Expo.easeInOut,
-                                onComplete: (e) => {
-                                    done();
-                                }
-                            });
+                            try {
+                                // scroll to scroll position
+                                setTimeout(x => {
+                                    if (Dom.fastscroll) {
+                                        app.scrollTo(scrollPosition, true);
+                                    } else {
+                                        app.scrollTo(Number(scrollPosition), true);
+                                    }
+                                    scrollPosition = 0;
+                                }, 100);
+                                TweenMax.to(transitionLayer, 1, {
+                                    height: 0,
+                                    backgroundColor: '#CFCFCF',
+                                    ease: Expo.easeInOut,
+                                    onComplete: (e) => {
+                                        done();
+                                    }
+                                });
+                            } catch (e) {
+                                error__(e);
+                            }
                         }
                     }
                 ],
             });
         } else {
-            if (debug) {
-                console.log('barba disabled');
-            }
+            debug__('barba disabled');
             const transition = document.querySelector('.transition');
             transition.remove();
             this.onPageInit();
@@ -631,10 +688,8 @@ export default class App {
     scrollTo(top, setHeader) {
         window.scrollTo(0, top);
         if (setHeader) {
-            const header = document.querySelector('header');
-            header.style.top = top;
+            this.header.style.top = top;
         }
-
         this.page.previousTop = top + 1;
     }
 
@@ -665,30 +720,35 @@ export default class App {
         this.accentsInit();
         this.updateViewPortHeight();
 
-        LazyLoad.init(debug);
-        Fancy.init(debug);
+        LazyLoad.init();
+        Fancy.init();
         if (Dom.fastscroll) {
-            FancyViewAll.onScroll = () => { this.onScrollDidChange(); }; //per attivare lazyload senza smooth scroll su gallery
+            FancyViewAll.onScroll = () => {
+                this.onScrollDidChange();
+            }; //per attivare lazyload senza smooth scroll su gallery
         }
-        FancyViewAll.init(debug);
-        FancyDetail.init(debug);
-        Sliders.init(debug);
-        Anchors.init(document.querySelector('.anchors__wrapper'), 200, debug);
-        ScrollAnchors.init(debug);
-        if (Dom.fastscroll) {
-            Samples.onScroll = () => { this.onScrollDidChange(); }; //per attivare lazyload senza smooth scroll su campioni
-        }
-        Samples.init(debug);
+        FancyViewAll.init();
+        FancyDetail.init();
+        Sliders.init();
+        Anchors.init();
+        ScrollAnchors.init();
+        Samples.onScroll = () => {
+            if (Dom.fastscroll) {
+                this.onScrollDidChange();
+            }
+        }; //per attivare lazyload senza smooth scroll su campioni
+        Samples.init();
         Utils.toggleGrid();
-        if (typeof _products != 'undefined')
-            Filters.init(debug);
-        ToggleSearch.init(debug);
-        Grid.init(debug);
-        SidePanel.init(debug);
-        CustomSelect.init(debug);
-        Tabs.init(debug);
-        Forms.init(debug);
-        Wishlist.init(debug);
+        if (typeof _products != 'undefined') {
+            Filters.init();
+        }
+        ToggleSearch.init();
+        Grid.init();
+        SidePanel.init();
+        CustomSelect.init();
+        Tabs.init();
+        Forms.init();
+        Wishlist.init();
 
         const fancyInTransition = [...document.querySelectorAll('.fancy-in-transition img')];
         Follower.addMouseListener(fancyInTransition);
@@ -703,7 +763,7 @@ export default class App {
             if (document.querySelector('.cover .eyelet')) {
                 setTimeout(x => {
                     document.querySelector('.cover .eyelet').classList.add('eyelet--loaded');
-                }, 1000)   
+                }, 1000)
             }
             //}
             if (Dom.fastscroll) {
@@ -714,18 +774,18 @@ export default class App {
 
     destroyAll(container) {
         Anchors.destroyAll();
+        ScrollAnchors.destroyAll();
         Sliders.destroyAll();
         Fancy.destroyAll();
         Samples.destroyAll();
         FancyViewAll.destroyAll();
         FancyDetail.destroyAll();
-        ScrollAnchors.destroyAll();
         Filters.destroyAll();
         ToggleSearch.destroyAll();
         Grid.destroyAll();
         SidePanel.destroyAll();
         CustomSelect.destroyAll();
-        Tabs.destroyAll(debug);
+        Tabs.destroyAll();
         Forms.destroyAll();
         Wishlist.destroyAll();
         LazyLoad.destroyAll();
@@ -756,9 +816,7 @@ export default class App {
             subnavs.forEach(x => x.style.cssText = style);
             setTimeout(x => {
                 video.play();
-                if (debug) {
-                    console.log('Video cover: play');
-                }
+                debug__('Video cover: play');
             }, 200);
         } else if (this.body.classList.contains('accents-page')) {
             this.body.classList.remove('accents-page');
@@ -851,27 +909,27 @@ export default class App {
             }
         }
 
-        //header animation
-        if (this.header && scrollTop > 300 && !this.body.classList.contains('nav-mobile-open')) {
+        // header animation
+        if (this.header && !this.body.classList.contains('nav-mobile-open')) {
             this.header.style.top = -this.header.clientHeight + 'px';
             this.header.style.transition = 'top .15s linear';
 
-            const anchorPanel = document.querySelector('.anchors');
-            if (anchorPanel) {
-                anchorPanel.style.top = -anchorPanel.clientHeight + 'px';
-                anchorPanel.style.transition = 'top .15s linear';
-            }
-
             if (this.body.classList.contains('scroll-down')) {
                 this.header.style.top = 0;
-                if (anchorPanel) {
-                    anchorPanel.style.top = -anchorPanel.clientHeight + 'px';
-                }
             } else {
                 this.header.style.top = -this.header.clientHeight + 'px';
-                if (anchorPanel) {
-                    anchorPanel.style.top = 0;
-                }
+            }
+        }
+
+        // anchorPanel animation
+        const anchorPanel = document.querySelector('.anchors');
+        if (anchorPanel) {
+            anchorPanel.style.top = -anchorPanel.clientHeight + 'px';
+            anchorPanel.style.transition = 'top .15s linear';
+            if (this.body.classList.contains('scroll-down') && scrollTop < 400) {
+                anchorPanel.style.top = -anchorPanel.clientHeight + 'px';
+            } else {
+                anchorPanel.style.top = 0;
             }
         }
 
@@ -901,20 +959,22 @@ export default class App {
             if (this.body.offsetHeight !== this.page.offsetHeight) {
                 this.body.setAttribute('style', `height: ${this.page.offsetHeight}px;`);
             }
-            const scrollTop = Dom.scrollTop();
-            let newTop = this.page.previousTop || 0;
-            newTop += (scrollTop - newTop) / scrollSpeed;
-            if (Math.abs(scrollTop - newTop) < 0.15) {
-                newTop = scrollTop;
+            if (!Dom.pause) {
+                const scrollTop = Dom.scrollTop();
+                let newTop = this.page.previousTop || 0;
+                newTop += (scrollTop - newTop) / scrollSpeed;
+                if (Math.abs(scrollTop - newTop) < 0.15) {
+                    newTop = scrollTop;
+                }
+                if (newTop !== undefined && !Number.isNaN(newTop) && this.page.previousTop !== newTop) {
+                    this.page.previousTop = newTop;
+                    this.page.setAttribute('style', `transform: translateY(${-newTop}px);`);
+                    Dom.scrolling = true;
+                } else {
+                    Dom.scrolling = false;
+                }
+                this.onScrollDidChange();
             }
-            if (newTop !== undefined && !Number.isNaN(newTop) && this.page.previousTop !== newTop) {
-                this.page.previousTop = newTop;
-                this.page.setAttribute('style', `transform: translateY(${-newTop}px);`);
-                Dom.scrolling = true;
-            } else {
-                Dom.scrolling = false;
-            }
-            this.onScrollDidChange();
 
         } else if (this.body.hasAttribute('style')) {
             this.body.removeAttribute('style');
@@ -933,7 +993,7 @@ export default class App {
                 if (intersection.y > 0.0) {
                     node.to = setTimeout(() => {
                         node.classList.add('appeared');
-                    }, 150 * node.appearingIndex);                
+                    }, 150 * node.appearingIndex);
                 } else {
                     // if (node.classList.contains('appeared')) {
                     //     node.to = null;
@@ -942,7 +1002,6 @@ export default class App {
                 }
             }
         });
-
         Anchors.onScroll();
         ScrollAnchors.onScroll();
         LazyLoad.render(this.windowRect);

@@ -22,11 +22,9 @@ export default class Grid {
         });
     }
 
-    static init(debug) {
+    static init() {
         Grid.items = [...document.querySelectorAll('.listing--grid')].map((node, index) => new Grid(node, index));
-        if (debug) {
-            console.log('Grid: ', Grid.items);
-        }
+        debug__('Grid: ', Grid.items);
     }
 
 }

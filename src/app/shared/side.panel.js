@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 
-import Navigation from "./navigation";
 import Dom from './dom';
+import Navigation from "./navigation";
 
 const body = document.querySelector('body');
 const html = document.getElementsByTagName('html')[0];
@@ -129,9 +129,11 @@ export default class SidePanel {
 
     closePanel() {
         document.removeEventListener('click', this.clickOutside);
-        this.close.removeEventListener('click', this.clickClose);
         this.next.removeEventListener('click', this.clickNext);
-        this.closeLeave.addEventListener('click', this.clickClose); 
+        this.close.removeEventListener('click', this.clickClose);
+        if (this.closeLeave) {
+            this.closeLeave.removeEventListener('click', this.clickClose);
+        }
         if (Dom.fastscroll) {
             body.style.cssText = 'overflow: initial;';
         } else {
@@ -239,9 +241,11 @@ export default class SidePanel {
     destroy() {
         this.panel.classList.remove(this.parentClass);
         this.node.removeEventListener('click', this.clickToggle);
-        this.close.removeEventListener('click', this.clickClose);
-        this.closeLeave.addEventListener('click', this.clickClose);
         this.next.removeEventListener('click', this.clickNext);
+        this.close.removeEventListener('click', this.clickClose);
+        if (this.closeLeave) {
+            this.closeLeave.addEventListener('click', this.clickClose);
+        }
         document.removeEventListener('click', this.clickOutside);
     }
 
@@ -251,10 +255,8 @@ export default class SidePanel {
         });
     }
 
-    static init(debug) {
+    static init() {
         SidePanel.items = [...document.querySelectorAll('[data-side-panel]')].map((node, id) => new SidePanel(node, id, node.getAttribute('data-side-panel')));
-        if (debug) {
-            console.log('SidePanel: ', SidePanel.items);
-        }
+        debug__('SidePanel: ', SidePanel.items);
     }
 }

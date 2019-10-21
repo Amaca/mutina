@@ -51,10 +51,8 @@ export default class ToggleSearch {
         });
     }
 
-    static init(debug) {
+    static init() {
         ToggleSearch.items = [...document.querySelectorAll('[data-toggle-search]')].map((node, id) => new ToggleSearch(node, id));
-        if (debug) {
-            console.log('ToggleSearch: ', ToggleSearch.items);
-        }
+        debug__('ToggleSearch: ', ToggleSearch.items);
     }
 }
