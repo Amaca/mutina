@@ -30,7 +30,7 @@
         "css-vars-ponyfill": "^2.1.1",
         "gsap": "2.0.2",
         "handlebars": "4.1.2",
-        "jquery": "3.3.1",
+        "jquery": "3.5.0",
         "jquery-validation": "1.19.0",
         "muuri": "^0.7.1",
         "splitting": "^1.0.6",
