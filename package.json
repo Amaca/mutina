@@ -29,7 +29,7 @@
         "choices.js": "^7.0.0",
         "css-vars-ponyfill": "^2.1.1",
         "gsap": "2.0.2",
-        "handlebars": "4.1.2",
+        "handlebars": "4.7.6",
         "jquery": "3.3.1",
         "jquery-validation": "1.19.0",
         "muuri": "^0.7.1",
